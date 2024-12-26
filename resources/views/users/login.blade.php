@@ -8,10 +8,16 @@
         <p class="text-center font-[Inter] text-[16px] font-[400] text-[#FFFFFF] leading-[19px] tracking-[-0.02em] ">Protect and Manage Your Trademarks, Patents, Design and Copyrights Seamlessly</p>
         <div class="max-w-[446px] mx-auto bg-[#FFFFFF] rounded-[20px] shadow-[0px_20px_80px_0px_#0000001A] py-[24px] px-[47px] ">
             <img src="{{asset('assets/images/logo.png')}}" alt="logo" class="mb-[23px] mx-auto ">
+            @if (session('error'))
+                <div class="alert alert-error">
+                    {{ session('error') }}
+                </div>
+            @endif
             <h2 class="font-[Inter] text-[20px] font-[500] text-[#13103A] leading-[24px] tracking-[-0.02em] mb-2 ">Log In</h2>
             <p class="font-[Inter] text-[14px] font-[400] text-[#13103A] leading-[16px]">Secure Access to Intellectual Property Management</p>
-
-            <form class="mt-[20px] space-y-[15px]">
+           
+            <form class="mt-[20px] space-y-[15px]" method="POST" action="{{ route('login') }}">
+                @csrf
                 <div>
                     <label for="email" class="block font-[Inter] text-[14px] font-[400] text-[#13103A] leading-[16px] mb-1">Email</label>
                     <input type="email" name="email" id="email" class="font-[Inter] text-[14px] font-[400] text-[#6F6F6F] leading-[16px] border-[1px] border-[#0000001A] rounded-[10px] h-[45px] px-[15px] p-[10px] w-full">

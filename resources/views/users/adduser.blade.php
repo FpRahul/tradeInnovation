@@ -1,4 +1,4 @@
 @extends('layouts.default')
 @section('content')
-This is add user page
+This is add user page 
 @endsection

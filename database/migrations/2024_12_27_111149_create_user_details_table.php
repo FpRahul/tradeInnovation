@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('menu_action', function (Blueprint $table) {
+        Schema::create('user_details', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable(true);
+            $table->integer('userId');
+            $table->integer('incorporationType')->default(0);
+            $table->string('registered')->nullable(true);
+            $table->integer('referralPartner')->default(0);
             $table->timestamps();
         });
     }
@@ -23,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('menu_action');
+        Schema::dropIfExists('user_details');
     }
 };

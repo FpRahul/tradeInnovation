@@ -17,7 +17,7 @@
         </li>
         <!-- Other Parents -->
         <li class="group">
-            <a href="#"
+            <a href="{{ route('users.listing')}}"
                 class="text-[#13103A] font-[Inter] text-[14px] font-[400] leading-[16px] flex items-center gap-[10px] 
                 group-[.active]:bg-[#13103A] group-[.active]:text-[#ffffff] group-[.active]:shadow-[0px_0px_6px_2px_#00000036] p-[3px] rounded-[10px] ">
                 <span class="w-[34px] h-[34px] rounded-[10px] inline-flex items-center justify-center bg-[#13103A] group-[.active]:bg-[#ffffff] ">
@@ -28,7 +28,7 @@
             </a>
         </li>
         <li class="group">
-            <a href="#"
+            <a href="{{ route('users.roles') }}"
                 class="text-[#13103A] font-[Inter] text-[14px] font-[400] leading-[16px] flex items-center gap-[10px] 
                 group-[.active]:bg-[#13103A] group-[.active]:text-[#ffffff] group-[.active]:shadow-[0px_0px_6px_2px_#00000036] p-[3px] rounded-[10px]]">
                 <span class="w-[34px] h-[34px] rounded-[10px] inline-flex items-center justify-center bg-[#13103A] group-[.active]:bg-[#ffffff] ">

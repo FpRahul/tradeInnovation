@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Models\UserDetail;
 
 class UsersController extends Controller
 {
@@ -19,7 +21,7 @@ class UsersController extends Controller
                 $request->session()->regenerate();
                 $user = Auth::user();
               
-                return redirect()->route('admin.dashboard')->withSuccess('You have successfully logged in!');
+                return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
             }
 
             return back()->with('error','The provided credentials do not match our records.');
@@ -37,10 +39,45 @@ class UsersController extends Controller
     }
 
     public function index(){
-        return view('users/users-listing');
+        return view('users/listing');
     }
 
-    public function addUser(){
+    public function addUser(Request $request){
+        // UserDetails
+        if($request->isMethod('POST')){
+            $credentials = $request->validate([
+                'name' => 'required',
+                'role' => 'required',
+                'email' => 'required|email|unique:users,email',
+                'number' => 'required|digits:10',
+                'companyname' => 'required',
+                'address' => 'required',
+                'incorporationType' => 'required',
+                'registered' => 'required',
+                'referralpartner' => 'required',
+            ]);
+            $newUser = new User();
+            $newUser->name = $credentials->name;
+            $newUser->role = $credentials->role;
+            $newUser->email = $credentials->email;
+            $newUser->mobile = $credentials->number;
+            $newUser->companyName = $credentials->companyname;
+            $newUser->address = $credentials->address;
+            if($newUser->save()){
+                $newUserDetails = new UserDetails();
+                $newUserDetails->userId =$newUser->id;
+                $newUserDetails->incorporationType = $credentials->incorporationtype;
+                $newUserDetails->registered = $credentials->registered;
+                $newUserDetails->referralPartner = $credentials->referralpartner;   
+                if($newUserDetails->save()){
+                    return redirect()->route('users.listing')->withSuccess('User is successfully inserted!');
+                }else{
+                    return back()->with('error','Some error is occur.'); 
+                }
+            }else{
+                return back()->with('error','Some error is occur.');
+            }
+        }
         return view('users/add-user');
     }
 }

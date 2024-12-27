@@ -23,7 +23,7 @@
             <div class="admin-header">
                 @include('layouts.header')
             </div>
-            <div class="main-right-content">
+            <div class="main-right-content pr-[22px] pt-[23px]">
                 @yield('content')
             </div>
         </div>

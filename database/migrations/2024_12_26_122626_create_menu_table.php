@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('menu', function (Blueprint $table) {
             $table->id();
-            $table->integer('roleId')->default(0);
-            $table->string('menuName')->nullable(true);   
+            $table->integer('parentId')->nullable(0); 
+            $table->string('menuName')->nullable(true);     
             $table->string('icon')->nullable(true);       
             $table->timestamps();
         });

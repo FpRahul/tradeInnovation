@@ -15,8 +15,8 @@
 </head>
 
 <body class="bg-white dark:bg-black dark:text-white/50">
-    <div class="flex flex-wrap gap-x-[30px] h-[100vh]">
-        <div class="w-[210px] py-[14px] px-[18px] space-y-[24px] h-[calc(100vh-54px)] max-h-[calc(100vh-54px)] overflow-y-auto">
+    <div class="flex flex-wrap gap-x-[40px] h-[100vh]">
+        <div class="w-[230px] py-[14px] px-[18px] space-y-[24px] h-[calc(100vh-54px)] max-h-[calc(100vh-54px)] overflow-y-auto">
             @include('layouts.sidebar')
         </div>
         <div class="w-[calc(100%-270px)]">

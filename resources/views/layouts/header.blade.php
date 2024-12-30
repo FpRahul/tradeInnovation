@@ -1,6 +1,6 @@
 <div class="flex justify-between items-center py-[15px] pr-[22px] ">
-    <div class="dropdown">
-        <div class="flex items-center gap-[10px] shadow-[0px_0px_6px_2px_#00000036] rounded-[10px] p-[3px] ">
+    <div class="dropdown relative">
+        <div type="button" class="button flex items-center gap-[10px] shadow-[0px_0px_6px_2px_#00000036] rounded-[10px] p-[3px] cursor-pointer	">
             <img src="{{asset('assets/images/profile-img.png')}}" alt="profile" class="w-[33px] h-[33px] rounded-[9px] object-cover border-[1px] border-[#13103A] ">
             <div class="pr-[7px]">
                 <strong class="flex items-center gap-[10px] text-[13px] font-[500] leading-[15px] text-[#13103A] tracking-[0.01em] capitalize mb-[2px]">
@@ -10,6 +10,14 @@
                     </svg>
                 </strong>
                 <span class="block text-[10px] font-[500] leading-[12px] text-[#5F5F66] tracking-[0.01em]">Admin</span>
+            </div>
+        </div>
+        <div class="dropdown_menu absolute right-0 z-10 mt-2 w-[200px] origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+            <div class="py-1" role="none">
+                <!-- Active: "bg-gray-100 text-gray-900 outline-none", Not Active: "text-gray-700" -->
+                <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-0">Settings</a>
+                <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-1">My Profile</a>
+                <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="menu-item-2">Logout</a>
             </div>
         </div>
     </div>

@@ -13,7 +13,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/', 'index')->name('users.listing');
         Route::get('/roles', 'roles')->name('users.roles');
         Route::get('/add-role', 'addRole')->name('users.addrole');
-        Route::match(['POST', 'GET'], '/add-user', 'addUser')->name('users.adduser');
+        Route::match(['POST', 'GET'], '/add-user/{id?}', 'addUser')->name('users.adduser');
     });
 
     // Dashboard Routes

@@ -1,9 +1,14 @@
 <div class="">
     <img src="{{asset('assets/images/logo.png')}}" alt="logo" class="mx-auto">
 </div>
+
 <div>
     <ul class="space-y-[12px]">
-        <!-- Active Parent -->
+        @php 
+            foreach ($systemMenus as $menyKey => $menuValue) {
+               
+            }
+        @endphp
         <li class="active group">
             <a href="#"
                 class="text-[#13103A] font-[Inter] text-[14px] font-[400] leading-[16px] flex items-center gap-[10px] 

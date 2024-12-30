@@ -21,7 +21,15 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $systemMenus = Menu::get();
-        
+        $serializeMenus = [];
+        if($systemMenus->isNotEmpty()){
+            foreach($systemMenus as $k =>$v){
+                if($v->parentId==0){
+
+                }
+                //if(!isset($serializeMenus[$v->]))
+            }
+        }
         View::share('systemMenus', $systemMenus);
     }
 }

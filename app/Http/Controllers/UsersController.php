@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\UserDetail;
 
@@ -42,33 +43,38 @@ class UsersController extends Controller
         return view('users/listing');
     }
 
-    public function addUser(Request $request){
-        // UserDetails
-        if($request->isMethod('POST')){
+    public function addUser(Request $request, $id=null){
+        if($id > 0){
+            $data = User::with('userdetail')->find($id);            
+        }
+        if($request->isMethod('POST')){           
+            $randomNumber = random_int(100000, 999999);
+            $hashedPassword = Hash::make($randomNumber);
             $credentials = $request->validate([
                 'name' => 'required',
                 'role' => 'required',
                 'email' => 'required|email|unique:users,email',
-                'number' => 'required|digits:10',
+                'number' => 'required',
                 'companyname' => 'required',
                 'address' => 'required',
-                'incorporationType' => 'required',
                 'registered' => 'required',
-                'referralpartner' => 'required',
             ]);
             $newUser = new User();
-            $newUser->name = $credentials->name;
-            $newUser->role = $credentials->role;
-            $newUser->email = $credentials->email;
-            $newUser->mobile = $credentials->number;
-            $newUser->companyName = $credentials->companyname;
-            $newUser->address = $credentials->address;
+            $newUser->name = $request->name;
+            $newUser->role = $request->role;
+            $newUser->email = $request->email;
+            $newUser->mobile = $request->number;
+            $newUser->companyName = $request->companyname;
+            $newUser->address = $request->address;
+            $newUser->password = $hashedPassword;
+
             if($newUser->save()){
-                $newUserDetails = new UserDetails();
+                // mail($request->email,'subject',$randomNumber);
+                $newUserDetails = new UserDetail();
                 $newUserDetails->userId =$newUser->id;
-                $newUserDetails->incorporationType = $credentials->incorporationtype;
-                $newUserDetails->registered = $credentials->registered;
-                $newUserDetails->referralPartner = $credentials->referralpartner;   
+                $newUserDetails->incorporationType = $request->incorporationtype;
+                $newUserDetails->registered = $request->registered;
+                $newUserDetails->referralPartner = $request->referralpartner;   
                 if($newUserDetails->save()){
                     return redirect()->route('users.listing')->withSuccess('User is successfully inserted!');
                 }else{
@@ -78,6 +84,9 @@ class UsersController extends Controller
                 return back()->with('error','Some error is occur.');
             }
         }
-        return view('users/add-user');
+        return view('users.add-user', ['data' => $data]);
     }
+
+
+    
 }

@@ -23,6 +23,9 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/associates', 'associates')->name('associate.listing');
         Route::match(['POST', 'GET'], '/add-associate/{id?}', 'addAssociate')->name('users.addassociate');
+
+        Route::post('/delete', 'deleteEmployee')->name('users.delete');
+
     });
 
     //Settings Routes

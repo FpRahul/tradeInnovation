@@ -8,7 +8,7 @@
     <div class="shadow-[0px_0px_13px_5px_#0000000f] rounded-[20px] mb-[30px]">
         <form method="POST" action="" class="py-[25px] px-[30px] space-y-[20px]">
 
-            <input type="hidden" name="role" id="role" value="">
+            <input type="hidden" name="role" id="role" value="3">
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Name</label>

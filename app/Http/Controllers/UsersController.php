@@ -32,27 +32,41 @@ class UsersController extends Controller
     }
 
     public function index(){
-        return view('users/listing');
+        $employeeData = User::with('userdetail')->where('role',2)->where('archive',1)->get();
+        return view('users/listing',compact('employeeData'));
     }
 
     public function addUser(Request $request, $id=null){
-        $data = new User();
         if($id > 0){
-            $data = User::with('userdetail')->find($id);            
+            $newUser = User::find($id);  
+            $newUserDetails = UserDetail::where('userId',$id)->first();
+            $email = "'email' => 'required|email";
+
+        }else{
+            $newUser = new User();
+            $newUserDetails = new UserDetail();
+            $email = "'email' => 'required|email|unique:users,email'";
+
         }
-        if($request->isMethod('POST')){           
+        if($request->isMethod('POST')){  
+            if($request->registered == 'on'){
+                $registered = 1;
+            }else{
+                $registered = 0;
+            }
+         
             $randomNumber = random_int(100000, 999999);
             $hashedPassword = Hash::make($randomNumber);
             $credentials = $request->validate([
                 'name' => 'required',
                 'role' => 'required',
-                'email' => 'required|email|unique:users,email',
+                $email,
                 'number' => 'required',
                 'companyname' => 'required',
                 'address' => 'required',
                 'registered' => 'required',
             ]);
-            $newUser = new User();
+            // dd($id);
             $newUser->name = $request->name;
             $newUser->role = $request->role;
             $newUser->email = $request->email;
@@ -60,13 +74,10 @@ class UsersController extends Controller
             $newUser->companyName = $request->companyname;
             $newUser->address = $request->address;
             $newUser->password = $hashedPassword;
-
-            if($newUser->save()){
-                // mail($request->email,'subject',$randomNumber);
-                $newUserDetails = new UserDetail();
+            if($newUser->save()){               
                 $newUserDetails->userId =$newUser->id;
                 $newUserDetails->incorporationType = $request->incorporationtype;
-                $newUserDetails->registered = $request->registered;
+                $newUserDetails->registered = $registered;
                 $newUserDetails->referralPartner = $request->referralpartner;   
                 if($newUserDetails->save()){
                     return redirect()->route('users.listing')->withSuccess('User is successfully inserted!');
@@ -77,7 +88,16 @@ class UsersController extends Controller
                 return back()->with('error','Some error is occur.');
             }
         }
-        return view('users.add-user',compact('data'));
+        return view('users.add-user',compact('newUser','newUserDetails'));
+    }
+    
+    public function deleteEmployee(Request $request){
+       $employeeId = $request->employeeId;
+       $employeeData = User::where('id',$employeeId)->first();
+         $employeeData->archive = 0;
+         if($employeeData->save()){
+            echo "deleted";die;
+         }
     }
 
     public function clients(){

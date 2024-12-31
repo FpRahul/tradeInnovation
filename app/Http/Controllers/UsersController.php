@@ -84,7 +84,23 @@ class UsersController extends Controller
                 return back()->with('error','Some error is occur.');
             }
         }
-        return view('users.add-user', ['data' => $data]);
+        return view('users.add-user',compact('data'));
+    }
+
+    public function clients(){
+        return view('users/client-listing');
+    }
+
+    public function addClient(){
+        return view('users.add-client');
+    }
+
+    public function associates(){
+        return view('users/associate-listing');
+    }
+
+    public function addAssociate(){
+        return view('users/add-associate');
     }
 
 

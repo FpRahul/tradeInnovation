@@ -11,9 +11,16 @@ Route::middleware('auth')->group(function () {
     // Users Routes
     Route::prefix('users')->controller(UsersController::class)->group(function () {
         Route::get('/', 'index')->name('users.listing');
+        Route::match(['POST', 'GET'], '/add-user/{id?}', 'addUser')->name('users.adduser');
+
+        Route::get('/clients', 'clients')->name('client.listing');
+        Route::match(['POST', 'GET'], '/add-client/{id?}', 'addClient')->name('users.addclient');
+
+        Route::get('/associates', 'associates')->name('associate.listing');
+        Route::match(['POST', 'GET'], '/add-associate/{id?}', 'addAssociate')->name('users.addassociate');
+
         Route::get('/roles', 'roles')->name('users.roles');
         Route::get('/add-role', 'addRole')->name('users.addrole');
-        Route::match(['POST', 'GET'], '/add-user/{id?}', 'addUser')->name('users.adduser');
     });
 
     // Dashboard Routes

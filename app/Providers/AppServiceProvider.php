@@ -34,8 +34,18 @@ class AppServiceProvider extends ServiceProvider
                     $serializeMenus[$v->parentId]['subMenu'][$v->id]['name'] = $v->menuName;
                     $serializeMenus[$v->parentId]['subMenu'][$v->id]['url'] = $v->url;
                     $serializeMenus[$v->parentId]['subMenu'][$v->id]['icon'] = $v->icon;
-                    $menuSubMenuRoutes[$v->parentId][] = $v->url;
                 }
+
+                //Grouping routes per menu for active class
+                if($v->parentId>0){
+                    $groupedRoutes = explode(',',$v->actionRoutes);
+                    if(!empty($groupedRoutes)){
+                        foreach($groupedRoutes as $groupedRoute){
+                            $menuSubMenuRoutes[$v->parentId][] = $groupedRoute;
+                        }
+                    }
+                }
+                //End
             }
         }
         View::share(compact('serializeMenus','menuSubMenuRoutes'));

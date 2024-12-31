@@ -7,7 +7,7 @@
         @foreach ($serializeMenus as $menuKey => $menuValue)
         @if (!isset($menuValue['subMenu']))
         <li class="group {{ Route::currentRouteName() === $menuValue['menu']['url'] ? 'active' : '' }} ">
-            <a href="{{ route($menuValue['menu']['url']) }}"
+            <a href="{{ route($menuValue['menu']['url']) }}" 
                 class="text-[#13103A] font-[Inter] text-[14px] font-[400] leading-[16px] flex items-center gap-[10px] 
                     group-[.active]:bg-[#13103A] group-[.active]:text-[#ffffff] group-[.active]:shadow-[0px_0px_6px_2px_#00000036] p-[3px] rounded-[10px]">
                 <span class="w-[34px] h-[34px] rounded-[10px] inline-flex items-center justify-center bg-[#13103A] group-[.active]:bg-[#ffffff]">
@@ -16,10 +16,10 @@
                 </span>
                 {{ $menuValue['menu']['name'] }}
             </a>
-        </li>
+        </li> 
         @elseif(isset($menuValue['subMenu']))
         @php $activeSubMenu = ''; @endphp
-        @if(Route::currentRouteName() === 'users.listing' || Route::currentRouteName() === 'users.adduser')
+        @if(in_array(Route::currentRouteName(),$menuSubMenuRoutes[$menuKey]))
         @php $activeSubMenu = 'active'; @endphp
         @endif
         <li class="item group has-submenu {{ $activeSubMenu }}">

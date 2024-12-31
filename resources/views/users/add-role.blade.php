@@ -12,7 +12,7 @@
                 <input type="text" name="rolename" id="rolename" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[18px] py-[14px] rounded-[10px] !outline-none" placeholder="Enter Role Name">
             </div>
             <div class="px-[20px] flex flex-col md:flex-row gap-[30px]">
-                <div class="w-[230px] max-h-[350px] overflow-y-auto ">
+                <div class="w-[230px] max-h-[450px] overflow-y-auto ">
                     <ul class="accordian space-y-[7px]">
                         <li class="item">
                             <a href="javascript:void(0)" data-id="tab1" class="text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center justify-between p-[15px] bg-[#f7f7f7] ">

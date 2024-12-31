@@ -18,12 +18,24 @@
     });
 
     jQuery(document).on('click', '.accordian .item>a', function() {
-        jQuery(this).parent().find('.accordian_body').slideDown();
-        jQuery(this).parent().siblings().find('.accordian_body').slideUp();
+        
+        if (!jQuery(this).hasClass('nav-link')) {
+            jQuery(this).parent().find('.accordian_body').slideDown();
+            jQuery(this).parent().siblings().find('.accordian_body').slideUp();
+            let tabId = jQuery(this).attr('data-id');
+            console.log(tabId);
+            jQuery(`#${tabId}`).removeClass('hidden');
+            jQuery(`#${tabId}`).siblings().addClass('hidden');
+        } else {
+            jQuery(this).parent().find('.accordian_body').slideToggle();
+            jQuery(this).parent().siblings().find('.accordian_body').slideUp();
+        }
 
-        let tabId = jQuery(this).attr('data-id');
-        console.log(tabId);
-        jQuery(`#${tabId}`).removeClass('hidden');
-        jQuery(`#${tabId}`).siblings().addClass('hidden');
+    })
+
+    // jQuery('').append()
+
+    jQuery(document).on('click', '.has-submenu > a', function(){
+        
     })
 </script>

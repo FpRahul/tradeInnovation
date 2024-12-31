@@ -1,7 +1,7 @@
 <p class="text-center font-[Inter] text-[13px] font-[400] text-[#FFFFFF] leading-[19px] tracking-[-0.02em]">Copyright®2024 Company All right Reserved</p>
 
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
+<<<<<<< HEAD
 <script>
     jQuery(document).on('click', '.dropdown .button', function() {
         console.log('askjdhjksahdfkj');
@@ -80,3 +80,6 @@
 
     })
 </script>
+=======
+
+>>>>>>> 685460e8dd024503cd7623437357071232b4d136

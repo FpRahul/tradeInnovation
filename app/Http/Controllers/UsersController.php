@@ -44,6 +44,7 @@ class UsersController extends Controller
     }
 
     public function addUser(Request $request, $id=null){
+        $data = new User();
         if($id > 0){
             $data = User::with('userdetail')->find($id);            
         }

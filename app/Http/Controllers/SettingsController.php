@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Role;
+use App\Models\Menu;
 use Illuminate\Http\Request;
 
 class SettingsController extends Controller

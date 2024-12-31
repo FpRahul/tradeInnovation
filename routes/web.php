@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LeadsController;
+use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\SettingsController;
 
 //Users Routes
@@ -35,6 +36,12 @@ Route::middleware('auth')->group(function () {
     Route::prefix('leads')->controller(LeadsController::class)->group(function () {
         Route::get('/', 'index')->name('leads.index');
         Route::get('/add', 'add')->name('leads.add');
+    });
+
+    //Services Routes
+    Route::prefix('services')->controller(ServicesController::class)->group(function () {
+        Route::get('/', 'index')->name('services.index');
+        Route::get('/add', 'add')->name('services.add');
     });
     
 });

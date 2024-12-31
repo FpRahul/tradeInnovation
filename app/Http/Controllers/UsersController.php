@@ -31,14 +31,6 @@ class UsersController extends Controller
         return view('users/login');
     }
 
-    public function roles(){
-        return view('users/roles');
-    }
-
-    public function addRole(){
-        return view('users/add-role');
-    }
-
     public function index(){
         return view('users/listing');
     }

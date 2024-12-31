@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LeadsController;
 use App\Http\Controllers\SettingsController;
 
 //Users Routes
@@ -28,6 +29,12 @@ Route::middleware('auth')->group(function () {
     Route::prefix('settings')->controller(SettingsController::class)->group(function () {
         Route::get('/roles', 'roles')->name('settings.roles');
         Route::get('/add-role', 'addRole')->name('settings.addrole');
+    });
+
+    //Leads Routes
+    Route::prefix('leads')->controller(LeadsController::class)->group(function () {
+        Route::get('/', 'index')->name('leads.index');
+        Route::get('/add', 'add')->name('leads.add');
     });
     
 });

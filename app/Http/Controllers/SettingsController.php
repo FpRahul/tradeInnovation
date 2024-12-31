@@ -1,13 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Role;
 use Illuminate\Http\Request;
 
 class SettingsController extends Controller
 {
     public function roles(){
-        return view('settings/roles');
+        $allRoles = Role::get();
+        return view('settings/roles',compact('allRoles'));
     }
 
     public function addRole(){

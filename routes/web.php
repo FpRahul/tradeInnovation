@@ -9,7 +9,7 @@ use App\Http\Controllers\SettingsController;
 
 //Users Routes
 Route::match(['get','post'],'/', [UsersController::class,'login'])->name('login');
-
+Route::match(['get','post'],'/forget_password', [UsersController::class,'forgetPassword'])->name('forgetPassword');
 Route::middleware('auth')->group(function () {
     //Dashboard Routes
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -18,15 +18,16 @@ Route::middleware('auth')->group(function () {
     Route::prefix('users')->controller(UsersController::class)->group(function () {
         Route::get('/', 'index')->name('users.listing');
         Route::match(['POST', 'GET'], '/add-user/{id?}', 'addUser')->name('users.adduser');
+        Route::post('/delete', 'deleteEmployee')->name('users.delete');
 
         Route::get('/clients', 'clients')->name('client.listing');
         Route::match(['POST', 'GET'], '/add-client/{id?}', 'addClient')->name('users.addclient');
 
+
         Route::get('/associates', 'associates')->name('associate.listing');
         Route::match(['POST', 'GET'], '/add-associate/{id?}', 'addAssociate')->name('users.addassociate');
 
-        Route::post('/delete', 'deleteEmployee')->name('users.delete');
-
+        Route::post('/userstatus','userStatus')->name('users.status');
     });
 
     //Settings Routes

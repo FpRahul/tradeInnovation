@@ -34,7 +34,7 @@
                     </div>
                 </div>
                 <div>
-                    <a href="#" class="font-[Inter] text-[14px] font-[400] text-[#13103A] leading-[16px]">Forgot your Password ?</a>
+                    <a href="{{ route('forgetPassword')}}" class="font-[Inter] text-[14px] font-[400] text-[#13103A] leading-[16px]">Forgot your Password ?</a>
                 </div>
                 <div>
                     <button class="font-[Inter] text-[16px] font-[500] text-[#FFFFFF] leading-[19.36px] tracking-[-0.02em] rounded-[10px] px-[10px] py-[14px] border-[1px] border-[#13103A] bg-[#13103A] hover:bg-transparent hover:text-[#13103A] shadow-[0px_0px_6px_2px_#00000036] w-full ">

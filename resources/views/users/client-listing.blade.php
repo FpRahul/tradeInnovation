@@ -2,7 +2,7 @@
 @section('content')
 <div>
     <div class="flex items-center justify-between mb-[20px]">
-        <h3 class="text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">Manage Users</h3>
+        <h3 class="text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">Manage Client</h3>
         <a href="{{ route('users.addclient')}}" class=" inline-flex items-center gap-[10px] text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px] ">
             <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M8.75 5.625H5.625V8.75C5.625 9.09375 5.34375 9.375 5 9.375C4.65625 9.375 4.375 9.09375 4.375 8.75V5.625H1.25C0.90625 5.625 0.625 5.34375 0.625 5C0.625 4.65625 0.90625 4.375 1.25 4.375H4.375V1.25C4.375 0.90625 4.65625 0.625 5 0.625C5.34375 0.625 5.625 0.90625 5.625 1.25V4.375H8.75C9.09375 4.375 9.375 4.65625 9.375 5C9.375 5.34375 9.09375 5.625 8.75 5.625Z" fill="white" />
@@ -52,19 +52,28 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach ($clientData as $clientDetails)                        
+                    
                     <tr>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
-                            Rahul
+                          {{$clientDetails->name}}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
-                            9949490404
+                            {{$clientDetails->mobile}}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                            @if ($clientDetails->status == 1)
                             <span class="text-[#13103A] bg-[#99F98C] inline-block text-center min-w-[100px] py-[5px] px-[10px] rounded-[5px] ">Active</span>
+                            @else
+                            <span class="text-[#13103A] bg-[#f98c8c] inline-block text-center min-w-[100px] py-[5px] px-[10px] rounded-[5px] ">Inactive</span>
+                            @endif
+                           
+                            
+                            
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] py-[12px] px-[15px]">
                             <div class="flex items-center flex-wrap gap-[7px]">
-                                <button class="bg-[#13103A] w-[27px] h-[27px] rounded-[100%] text-center border-none p-0 ">
+                                <a href="{{route('users.addclient',['id'=>$clientDetails->id])}}" class="bg-[#13103A] w-[27px] h-[27px] rounded-[100%] text-center border-none p-0 ">
                                     <svg class="mx-auto" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <g clip-path="url(#clip0_455_4936)">
                                             <path d="M6.89951 2.69995H2.69951C2.38125 2.69995 2.07603 2.82638 1.85098 3.05142C1.62594 3.27647 1.49951 3.58169 1.49951 3.89995V12.3C1.49951 12.6182 1.62594 12.9234 1.85098 13.1485C2.07603 13.3735 2.38125 13.5 2.69951 13.5H11.0995C11.4178 13.5 11.723 13.3735 11.948 13.1485C12.1731 12.9234 12.2995 12.6182 12.2995 12.3V8.09995" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
@@ -76,65 +85,68 @@
                                             </clipPath>
                                         </defs>
                                     </svg>
-                                </button>
-                                <button class="bg-[red] w-[27px] h-[27px] rounded-[100%] text-center border-none p-0">
+                                </a>
+                                <button data-id ="{{$clientDetails->id}}" class="delete_client bg-[red] w-[27px] h-[27px] rounded-[100%] text-center border-none p-0">
                                     <svg class="mx-auto w-[15px] h-[15px]" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M2.66666 12C2.29999 12 1.98621 11.8696 1.72532 11.6087C1.46443 11.3478 1.33377 11.0338 1.33332 10.6667V2H0.666656V0.666667H3.99999V0H7.99999V0.666667H11.3333V2H10.6667V10.6667C10.6667 11.0333 10.5362 11.3473 10.2753 11.6087C10.0144 11.87 9.70043 12.0004 9.33332 12H2.66666ZM3.99999 9.33333H5.33332V3.33333H3.99999V9.33333ZM6.66666 9.33333H7.99999V3.33333H6.66666V9.33333Z" fill="white" />
                                     </svg>
                                 </button>
                                 <!-- Checkbox Switch -->
                                 <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer !outline-none !shadow-none ">
+                                    <input type="checkbox" data-id="{{$clientDetails->id}}" class="client_status sr-only peer !outline-none !shadow-none " {{$clientDetails->status ? 'checked':''}}>
                                     <div class=" w-10 h-6 bg-gray-300 rounded-full peer peer-checked:bg-green-500 transition-all"></div>
                                     <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow transform peer-checked:translate-x-4 transition-transform"></div>
                                 </label>
                             </div>
                         </td>
                     </tr>
-                    <tr>
-                        <td class=" text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
-                            Rahul
-                        </td>
-                        <td class=" text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
-                            9949490404
-                        </td>
-                        <td class=" text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
-                            <span class="text-[#13103A] bg-[#FF8E8E] inline-block text-center min-w-[100px] py-[5px] px-[10px] rounded-[5px] ">Inactive</span>
-                        </td>
-                        <td class=" py-[12px] px-[15px]">
-                            <div class="flex items-center flex-wrap gap-[7px]">
-                                <button class="bg-[#13103A] w-[27px] h-[27px] rounded-[100%] text-center border-none p-0 ">
-                                    <svg class="mx-auto" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <g clip-path="url(#clip0_455_4936)">
-                                            <path d="M6.89951 2.69995H2.69951C2.38125 2.69995 2.07603 2.82638 1.85098 3.05142C1.62594 3.27647 1.49951 3.58169 1.49951 3.89995V12.3C1.49951 12.6182 1.62594 12.9234 1.85098 13.1485C2.07603 13.3735 2.38125 13.5 2.69951 13.5H11.0995C11.4178 13.5 11.723 13.3735 11.948 13.1485C12.1731 12.9234 12.2995 12.6182 12.2995 12.3V8.09995" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
-                                            <path d="M11.3996 1.80004C11.6383 1.56134 11.962 1.42725 12.2996 1.42725C12.6372 1.42725 12.9609 1.56134 13.1996 1.80004C13.4383 2.03873 13.5724 2.36247 13.5724 2.70004C13.5724 3.0376 13.4383 3.36134 13.1996 3.60004L7.49961 9.30004L5.09961 9.90004L5.69961 7.50004L11.3996 1.80004Z" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
-                                        </g>
-                                        <defs>
-                                            <clipPath id="clip0_455_4936">
-                                                <rect width="14.4" height="14.4" fill="white" transform="translate(0.299805 0.300049)" />
-                                            </clipPath>
-                                        </defs>
-                                    </svg>
-                                </button>
-                                <button class="bg-[red] w-[27px] h-[27px] rounded-[100%] text-center border-none p-0">
-                                    <svg class="mx-auto w-[15px] h-[15px]" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M2.66666 12C2.29999 12 1.98621 11.8696 1.72532 11.6087C1.46443 11.3478 1.33377 11.0338 1.33332 10.6667V2H0.666656V0.666667H3.99999V0H7.99999V0.666667H11.3333V2H10.6667V10.6667C10.6667 11.0333 10.5362 11.3473 10.2753 11.6087C10.0144 11.87 9.70043 12.0004 9.33332 12H2.66666ZM3.99999 9.33333H5.33332V3.33333H3.99999V9.33333ZM6.66666 9.33333H7.99999V3.33333H6.66666V9.33333Z" fill="white" />
-                                    </svg>
-                                </button>
-                                <!-- Checkbox Switch -->
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer !outline-none !shadow-none ">
-                                    <div class=" w-10 h-6 bg-gray-300 rounded-full peer peer-checked:bg-green-500 transition-all"></div>
-                                    <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow transform peer-checked:translate-x-4 transition-transform"></div>
-                                </label>
-                            </div>
-                        </td>
-                    </tr>
+                    @endforeach
 
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-
+<script>
+    $(document).on('click','.delete_client',function(){
+        var employeeId = $(this).data('id');
+        if(confirm('Are you sure want to delete?')){
+            $.ajax({
+                method:'POST',
+                url:'{{ route('users.delete')}}',
+                data:{
+                    employeeId:employeeId,
+                    _token: '{{ csrf_token() }}'
+                },
+                success:function(res){
+                    if(res == 'deleted'){
+                        window.location.reload();
+                    }
+                }
+            })
+        }
+    });
+    $(document).on('click','.client_status',function(){
+        var userId = $(this).data('id');
+        if($(this).is(':checked')){
+            var statusVal = 1;
+        }else{
+            var statusVal = 0;
+        }
+        $.ajax({
+            method:'POST',
+            url:'{{ route('users.status')}}',
+            data:{
+                _token:'{{csrf_token()}}',
+                statusVal:statusVal,
+                userId:userId
+            },
+            success:function(res){
+               if(res == 'status changed'){
+                window.location.reload();
+               }
+            }
+        })
+    });
+</script>
 @stop

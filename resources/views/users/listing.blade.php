@@ -63,8 +63,11 @@
                             {{$employeeListing->mobile}}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                            @if ($employeeListing->status == 1)
                             <span class="text-[#13103A] bg-[#99F98C] inline-block text-center min-w-[100px] py-[5px] px-[10px] rounded-[5px] ">Active</span>
-                        </td>
+                            @else
+                            <span class="text-[#13103A] bg-[#f98c8c] inline-block text-center min-w-[100px] py-[5px] px-[10px] rounded-[5px] ">Inactive</span>
+                            @endif                        </td>
                         <td class="border-b-[1px] border-[#0000001A] py-[12px] px-[15px]">
                             <div class="flex items-center flex-wrap gap-[7px]">
                                 <a href="{{ route('users.adduser', ['id' => $employeeListing->id]) }}" class="bg-[#13103A] w-[27px] h-[27px] rounded-[100%] text-center border-none p-0 ">
@@ -87,7 +90,7 @@
                                 </button>
                                 <!-- Checkbox Switch -->
                                 <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" class="sr-only peer !outline-none !shadow-none ">
+                                    <input type="checkbox" data-id="{{$employeeListing->id}}" class="client_status sr-only peer !outline-none !shadow-none " {{$employeeListing->status ? 'checked':''}}>
                                     <div class=" w-10 h-6 bg-gray-300 rounded-full peer peer-checked:bg-green-500 transition-all"></div>
                                     <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow transform peer-checked:translate-x-4 transition-transform"></div>
                                 </label>
@@ -120,6 +123,28 @@
             })
         }
         
+    });
+    $(document).on('click','.client_status',function(){
+        var userId = $(this).data('id');
+        if($(this).is(':checked')){
+            var statusVal = 1;
+        }else{
+            var statusVal = 0;
+        }
+        $.ajax({
+            method:'POST',
+            url:'{{ route('users.status')}}',
+            data:{
+                _token:'{{csrf_token()}}',
+                statusVal:statusVal,
+                userId:userId
+            },
+            success:function(res){
+               if(res == 'status changed'){
+                window.location.reload();
+               }
+            }
+        })
     });
 </script>
 @endsection

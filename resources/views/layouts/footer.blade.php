@@ -1,7 +1,7 @@
 <p class="text-center font-[Inter] text-[13px] font-[400] text-[#FFFFFF] leading-[19px] tracking-[-0.02em]">Copyright®2024 Company All right Reserved</p>
 
 
-<<<<<<< HEAD
+{{-- <<<<<<< HEAD --}}
 <script>
     jQuery(document).on('click', '.dropdown .button', function() {
         console.log('askjdhjksahdfkj');
@@ -58,21 +58,21 @@
         }
     });
 
-    jQuery(document).on('click', '.accordian .item>a', function() {
+    // jQuery(document).on('click', '.accordian .item>a', function() {
 
-        if (!jQuery(this).hasClass('nav-link')) {
-            jQuery(this).parent().find('.accordian_body').slideDown();
-            jQuery(this).parent().siblings().find('.accordian_body').slideUp();
-            let tabId = jQuery(this).attr('data-id');
-            console.log(tabId);
-            jQuery(`#${tabId}`).removeClass('hidden');
-            jQuery(`#${tabId}`).siblings().addClass('hidden');
-        } else {
-            jQuery(this).parent().find('.accordian_body').slideToggle();
-            jQuery(this).parent().siblings().find('.accordian_body').slideUp();
-        }
+    //     if (!jQuery(this).hasClass('nav-link')) {
+    //         jQuery(this).parent().find('.accordian_body').slideDown();
+    //         jQuery(this).parent().siblings().find('.accordian_body').slideUp();
+    //         let tabId = jQuery(this).attr('data-id');
+    //         console.log(tabId);
+    //         jQuery(`#${tabId}`).removeClass('hidden');
+    //         jQuery(`#${tabId}`).siblings().addClass('hidden');
+    //     } else {
+    //         jQuery(this).parent().find('.accordian_body').slideToggle();
+    //         jQuery(this).parent().siblings().find('.accordian_body').slideUp();
+    //     }
 
-    })
+    // })
 
     // jQuery('').append()
 
@@ -80,6 +80,6 @@
 
     })
 </script>
-=======
+{{-- =======
 
->>>>>>> 685460e8dd024503cd7623437357071232b4d136
+>>>>>>> 685460e8dd024503cd7623437357071232b4d136 --}}

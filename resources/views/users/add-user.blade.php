@@ -41,6 +41,9 @@
                             <option value="6" {{ $newUserDetails->incorporationType == '6' ? 'selected' : '' }}>Trust</option>
                             <option value="7" {{ $newUserDetails->incorporationType == '7' ? 'selected' : '' }}>HUF</option>
                     </select>
+                    @error('incorporationtype')
+                        <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
+                    @enderror
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="number" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Number</label>
@@ -70,6 +73,9 @@
                         <option value="5" {{ $newUserDetails->referralPartner == '5' ? 'selected':''}}>Newspaper</option>
                         <option value="6" {{ $newUserDetails->referralPartner == '6' ? 'selected':''}}>Client Referral</option>
                     </select>
+                    @error('referralpartner')
+                        <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
+                    @enderror
                 </div>
             </div>
             <div class="">

@@ -25,7 +25,10 @@ class User extends Authenticatable
         'mobile',
         'companyName',
         'address',
-        'archive'
+        'archive',
+        'altNumber',
+        'altEmail',
+        'communicationAdress'
     ];
 
     /**

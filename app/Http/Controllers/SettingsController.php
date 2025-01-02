@@ -8,11 +8,15 @@ use Illuminate\Http\Request;
 class SettingsController extends Controller
 {
     public function roles(){
+        $header_title_name="Setting";
         $allRoles = Role::get();
-        return view('settings/roles',compact('allRoles'));
+        $moduleName="Manage Roles";
+        return view('settings/roles',compact('allRoles','header_title_name','moduleName'));
     }
 
     public function addRole(){
-        return view('settings/add-role');
+        $header_title_name="Setting";
+        $moduleName="Create Role";
+        return view('settings/add-role',compact('header_title_name','moduleName'));
     }
 }

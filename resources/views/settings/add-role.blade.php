@@ -20,7 +20,7 @@ use App\Models\MenuAction;
                         <li class="item">
                             <a href="javascript:void(0)" data-id="tab{{ $menuKey }}" class="text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center justify-between p-[15px] bg-[#f7f7f7] ">
                                 <span class="inline-flex items-center gap-[7px] ">
-                                    <input type="checkbox" class="w-[15px] h-[15px]">
+                                    <input type="checkbox" class="w-[15px] h-[15px] parent-element" @if($menuKey==1) {{ 'disabled checked'; }} @endif>
                                     {{ $menu['menu']['name'] }}
                                 </span>
                                 @if (isset($menu['subMenu']))
@@ -31,11 +31,11 @@ use App\Models\MenuAction;
                             </a>
                             @if (isset($menu['subMenu']))
                             <ul class="accordian_body pl-[20px]">
-                                @foreach($menu['subMenu'] as $subMenu)
+                                @foreach($menu['subMenu'] as $smid => $subMenu)
                                 <li>
                                     <a href="javascript:void(0)" class="text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center justify-between p-[10px] ">
                                         <span class="inline-flex items-center gap-[7px] ">
-                                            <input type="checkbox" name="" id="" class="w-[15px] h-[15px]">
+                                            <input type="checkbox" name="" id="sub-menu-id-{{ $smid }}" class="w-[15px] h-[15px] parent-sub-element">
                                             {{ $subMenu['name'] }}
                                         </span>
                                     </a>
@@ -58,7 +58,7 @@ use App\Models\MenuAction;
                             <div class="flex flex-wrap gap-[10px]">
                                 @foreach($menuAction as $acKey =>$acVal)
                                 <label class="border-[1px] border-[#0000001A] rounded-[10px] text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center gap-[7px] py-[5px] px-[10px] ">
-                                    <input type="checkbox" class="w-[15px] h-[15px]">
+                                    <input type="checkbox" class="w-[15px] h-[15px] sub-menu-actions" sub-menu-id="{{ $subMenuKey }}" menu-id="{{ $menuKey }}">
                                     {{ $acVal->actionName }}
                                 </label>
                                 @endforeach
@@ -91,5 +91,44 @@ use App\Models\MenuAction;
         </form>
     </div>
 </div>
+
+<script>
+    $(document).on('click','.parent-element',function (){
+        if($(this).is(':checked')){
+            $(this).parent().parent().parent().find('input:checkbox').prop('checked',true);
+        }else{
+            $(this).parent().parent().parent().find('input:checkbox').prop('checked',false);
+        }
+    })
+
+    $(document).on('click','.parent-sub-element',function (){
+        if($(this).is(':checked')){
+            $(this).parent().parent().parent().parent().parent().find('input:checkbox.parent-element').prop('checked',true);
+        }else{
+            if($(this).parent().parent().parent().parent().find('input:checkbox:checked').length>0){
+
+            }else{
+                $(this).parent().parent().parent().parent().parent().find('input:checkbox.parent-element').prop('checked',false);
+            }
+        }
+    });
+
+    $(document).on('click','.sub-menu-actions',function(){
+        if($(this).is(':checked')){
+            if($('#sub-menu-id-'+$(this).attr('sub-menu-id')).is(':checked')){
+
+            }else{
+                $('#sub-menu-id-'+$(this).attr('sub-menu-id')).trigger('click');
+            }
+        }else{
+            if($(this).parent().parent().find('input:checkbox:checked').length>0){
+
+            }else{
+                $('#sub-menu-id-'+$(this).attr('sub-menu-id')).trigger('click');
+            }
+        }
+        //sub-menu-id-
+    })
+</script>
 
 @endsection

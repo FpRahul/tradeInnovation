@@ -7,10 +7,14 @@ use Illuminate\Http\Request;
 class ServicesController extends Controller
 {
     public function index(){
-        return view('services/index');
+        $header_title_name="Service";
+        $moduleName="Manage Services";
+        return view('services/index',compact('header_title_name','moduleName'));
     }
 
     public function add(){
-        return view('services/add');
+        $header_title_name="Service";
+        $moduleName="Create Service";
+        return view('services/add',compact('header_title_name','moduleName'));
     }
 }

@@ -25,7 +25,7 @@ class UsersController extends Controller
                 return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
             }
 
-            return back()->with('error','The provided credentials do not match our records.');
+            return redirect()->back()->with('error','The provided credentials do not match our records.');
         }
        
         return view('users/login');
@@ -33,20 +33,32 @@ class UsersController extends Controller
 
     public function forgetPassword(Request $request){
         if($request->isMethod('POST')){
-            $randomNumber = random_int(100000, 999999);
-            $hashedPassword = Hash::make($randomNumber);
-            $updatePass = User::where('email',$request->email);
-            $updatePass->password = $hashedPassword;
-            if($updatePass->save()){
-                return redirect()->route('login')->withSuccess('Password is successfully updated! '); 
+            $credentials = $request->validate([
+                'email'=>'required|email',                
+            ]);
+            $updatePass = User::where('email',$request->email)->first();
+            if($updatePass){
+                $randomNumber = random_int(100000, 999999);
+                $hashedPassword = Hash::make($randomNumber);
+                $updatePass->password = $hashedPassword;
+                
+                if($updatePass->save()){
+                    return redirect()->route('login')->withSuccess('Password is successfully updated! '); 
+                }else{
+                    return back()->with('error','Some error is occur.'); 
+                }
             }else{
-                return back()->with('error','Some error is occur.'); 
+                return back()->with('error','Email does not exist!'); 
             }
+            
         }
+        return view('users/forgetPassword');
     }
     public function index(){
         $employeeData = User::with('userdetail')->where('role',2)->where('archive',1)->get();
-        return view('users/listing',compact('employeeData'));
+        $header_title_name = 'User';
+        $moduleName="Manage Employees";
+        return view('users/listing',compact('employeeData','header_title_name','moduleName'));
     }
 
     public function addUser(Request $request, $id=null){
@@ -55,13 +67,16 @@ class UsersController extends Controller
             $newUserDetails = UserDetail::where('userId',$id)->first();
             $email = "required|email";
             $hashedPassword = $newUser->password;
+            $successMessage = "User is successfully updated!";
+            $moduleName="Update Employee";
         }else{
             $newUser = new User();
             $newUserDetails = new UserDetail();
-            $email = "required|email|unique:users,email'";
+            $email = "required|email|unique:users,email";
             $randomNumber = random_int(100000, 999999);
             $hashedPassword = Hash::make($randomNumber);
-
+            $successMessage = "User is successfully inserted!";
+            $moduleName="Create Employee";
         }
         if($request->isMethod('POST')){  
             if($request->registered == 'on'){
@@ -74,7 +89,7 @@ class UsersController extends Controller
             $credentials = $request->validate([
                 'name' => 'required',
                 'role' => 'required',
-                'email'=>$email,
+                'email'=> $email,
                 'number' => 'required',
                 'companyname' => 'required',
                 'address' => 'required',
@@ -96,7 +111,7 @@ class UsersController extends Controller
                 $newUserDetails->registered = $registered;
                 $newUserDetails->referralPartner = $request->referralpartner;   
                 if($newUserDetails->save()){
-                    return redirect()->route('users.listing')->withSuccess('User is successfully inserted!');
+                    return redirect()->route('users.listing')->withSuccess($successMessage);
                 }else{
                     return back()->with('error','Some error is occur.'); 
                 }
@@ -104,7 +119,8 @@ class UsersController extends Controller
                 return back()->with('error','Some error is occur.');
             }
         }
-        return view('users.add-user',compact('newUser','newUserDetails'));
+        $header_title_name = 'User';
+        return view('users.add-user',compact('newUser','newUserDetails','header_title_name','moduleName'));
     }
     
     public function deleteEmployee(Request $request){
@@ -118,7 +134,10 @@ class UsersController extends Controller
 
     public function clients(){
         $clientData = User::with('userdetail')->where('role',3)->where('archive',1)->orderBy('id','desc')->get();
-        return view('users/client-listing',compact('clientData'));
+        $header_title_name = 'User';
+        $moduleName="Manage Clients";
+
+        return view('users/client-listing',compact('clientData','header_title_name','moduleName'));
     }
 
     public function addClient(Request $request,$id=null){
@@ -127,13 +146,15 @@ class UsersController extends Controller
             $newClientDetails = UserDetail::where('userId',$id)->first();
             $hashedPassword = $newClient->password;
             $email = "'email' => 'required|email";
+            $moduleName="Update Client";
+
         }else{
             $newClient = new User();
             $newClientDetails = new UserDetail();
             $randomNumber = random_int(100000, 999999);
             $hashedPassword = Hash::make($randomNumber);
             $email = "'email' => 'required|email|unique:users,email'";
-
+            $moduleName="Add Client";
         }
         if($request->isMethod('POST')){
             
@@ -178,12 +199,15 @@ class UsersController extends Controller
                 return back()->with('error','Some error is occur.'); 
             }
         }
-        return view('users.add-client',compact('newClient','newClientDetails'));
+        $header_title_name = 'User';
+        return view('users.add-client',compact('newClient','newClientDetails','header_title_name','moduleName'));
     }
 
     public function associates(){
         $associateData = User::with('userdetail')->where('role',4)->where('archive',1)->orderBy('id','desc')->get();
-        return view('users/associate-listing',compact('associateData'));
+        $header_title_name = 'User';
+        $moduleName="Manage Associates";
+        return view('users/associate-listing',compact('associateData','header_title_name','moduleName'));
     }
 
     public function addAssociate(Request $request,$id=null){
@@ -191,11 +215,14 @@ class UsersController extends Controller
             $newAssociate = User::find($id);
             $hashedPassword = $newAssociate->password;
             $email = "'email' => 'required|email";
+            $moduleName="Update Associate";
+
         }else{
             $newAssociate = new User();
             $randomNumber = random_int(100000, 999999);
             $hashedPassword = Hash::make($randomNumber);
             $email = "'email' => 'required|email|unique:users,email'";
+            $moduleName="Add Associate";
 
         }
         if($request->isMethod('POST')){
@@ -227,7 +254,8 @@ class UsersController extends Controller
             }
             
         }
-        return view('users/add-associate',compact('newAssociate'));
+        $header_title_name = 'User';
+        return view('users/add-associate',compact('newAssociate','header_title_name','moduleName'));
     }
 
     public function userStatus(Request $request){

@@ -9,7 +9,7 @@ use App\Http\Controllers\SettingsController;
 
 //Users Routes
 Route::match(['get','post'],'/', [UsersController::class,'login'])->name('login');
-Route::match(['get','post'],'/forget_password', [UsersController::class,'forgetPassword'])->name('forgetPassword');
+Route::match(['get','post'],'forget_password', [UsersController::class,'forgetPassword'])->name('forgetPassword');
 Route::middleware('auth')->group(function () {
     //Dashboard Routes
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

@@ -17,4 +17,16 @@ class LeadsController extends Controller
         $moduleName = "Add Leads";
         return view('leads/add',compact('header_title_name','moduleName'));
     }
+
+    public function sendQuote(){
+        $header_title_name = 'Lead';
+        $moduleName = "Quote";
+        return view('leads/sendquote', compact('header_title_name', 'moduleName'));
+    }
+    public function leadLogs()
+    {
+        $header_title_name = 'Lead';
+        $moduleName = "Logs";
+        return view('leads/logs', compact('header_title_name', 'moduleName'));
+    }
 }

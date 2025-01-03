@@ -25,7 +25,7 @@
             </div>
             <div>
                 <div class="mb-[10px] flex items-end justify-between">
-                    <label class="text-[14px] font-[400] leading-[16px] text-[#000000] mb-0">services</label>
+                    <label class="text-[14px] font-[400] leading-[16px] text-[#000000] mb-0">Services</label>
                     <button class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Add More</button>
                 </div>
                 <div class="border border-[#0000001A] p-[15px] rounded-[10px]">

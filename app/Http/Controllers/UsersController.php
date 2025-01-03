@@ -54,11 +54,29 @@ class UsersController extends Controller
         }
         return view('users/forgetPassword');
     }
-    public function index(){
-        $employeeData = User::with('userdetail')->where('role',2)->where('archive',1)->get();
+    public function index(Request $request){
+        $employeeData = User::with('userdetail')->where('role', 2)->where('archive', 1);
+
+        if ($request->isMethod('POST')) {
+            $key = $request->input('key');
+            if ($key) {
+                $employeeData->where(function ($query) use ($key) {
+                    $query->where('name', 'LIKE', $key . '%')
+                        ->orWhere('mobile', 'LIKE', $key . '%');
+                });
+            }
+            $employeeData = $employeeData->get();
+            dd($employeeData);
+        }
+
+     
+        $employeeData = $employeeData->paginate(1);
+        
         $header_title_name = 'User';
         $moduleName="Manage Employees";
-        return view('users/listing',compact('employeeData','header_title_name','moduleName'));
+        return view('users.listing', array_merge(
+            compact('employeeData', 'header_title_name', 'moduleName')
+        ));
     }
 
     public function addUser(Request $request, $id=null){
@@ -133,7 +151,7 @@ class UsersController extends Controller
     }
 
     public function clients(){
-        $clientData = User::with('userdetail')->where('role',3)->where('archive',1)->orderBy('id','desc')->get();
+        $clientData = User::with('userdetail')->where('role',3)->where('archive',1)->orderBy('id','desc')->paginate(1);
         $header_title_name = 'User';
         $moduleName="Manage Clients";
 
@@ -204,7 +222,7 @@ class UsersController extends Controller
     }
 
     public function associates(){
-        $associateData = User::with('userdetail')->where('role',4)->where('archive',1)->orderBy('id','desc')->get();
+        $associateData = User::with('userdetail')->where('role',4)->where('archive',1)->orderBy('id','desc')->paginate(1);
         $header_title_name = 'User';
         $moduleName="Manage Associates";
         return view('users/associate-listing',compact('associateData','header_title_name','moduleName'));

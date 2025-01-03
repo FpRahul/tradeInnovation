@@ -8,10 +8,14 @@ use App\Models\MenuAction;
         <h3 class="text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">{{$moduleName}}</h3>
     </div>
     <div class="shadow-[0px_0px_13px_5px_#0000000f] rounded-[20px] mb-[30px]">
-        <form>
+        <form method="POST">
+            @csrf
             <div class="py-[25px] px-[20px]">
                 <label for="rolename" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Role Name</label>
-                <input type="text" name="rolename" id="rolename" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[18px] py-[14px] rounded-[10px] !outline-none" placeholder="Enter Role Name">
+                <input type="text" required name="rolename" id="rolename" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[18px] py-[14px] rounded-[10px] !outline-none" placeholder="Enter Role Name">
+                @error('rolename')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
             </div>
             <div class="px-[20px] flex flex-col md:flex-row gap-[30px]">
                 <div class="w-[230px] max-h-[450px] overflow-y-auto ">
@@ -20,7 +24,7 @@ use App\Models\MenuAction;
                         <li class="item">
                             <a href="javascript:void(0)" data-id="tab{{ $menuKey }}" class="text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center justify-between p-[15px] bg-[#f7f7f7] ">
                                 <span class="inline-flex items-center gap-[7px] ">
-                                    <input type="checkbox" class="w-[15px] h-[15px] parent-element" @if($menuKey==1) {{ 'disabled checked'; }} @endif>
+                                    <input type="checkbox" class="w-[15px] h-[15px] parent-element" name="permission[{{ $menuKey }}]" @if($menuKey==1) {{ 'disabled checked'; }} @endif>
                                     {{ $menu['menu']['name'] }}
                                 </span>
                                 @if (isset($menu['subMenu']))
@@ -35,7 +39,7 @@ use App\Models\MenuAction;
                                 <li>
                                     <a href="javascript:void(0)" class="text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center justify-between p-[10px] ">
                                         <span class="inline-flex items-center gap-[7px] ">
-                                            <input type="checkbox" name="" id="sub-menu-id-{{ $smid }}" class="w-[15px] h-[15px] parent-sub-element">
+                                            <input type="checkbox" name="permission[{{ $menuKey }}][{{ $smid }}]" id="sub-menu-id-{{ $smid }}" subid="{{ $smid }}" class="w-[15px] h-[15px] parent-sub-element">
                                             {{ $subMenu['name'] }}
                                         </span>
                                     </a>
@@ -55,10 +59,10 @@ use App\Models\MenuAction;
                         @php $menuAction = MenuAction::where('menuId',$subMenuKey)->get(); @endphp
                         <div>
                             <h4 class="font-semibold text-[15px] mb-[7px]">{{ $subMenu['name'] }}</h4>
-                            <div class="flex flex-wrap gap-[10px]">
+                            <div class="flex flex-wrap gap-[10px]" id="actions-of-{{ $subMenuKey }}">
                                 @foreach($menuAction as $acKey =>$acVal)
                                 <label class="border-[1px] border-[#0000001A] rounded-[10px] text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center gap-[7px] py-[5px] px-[10px] ">
-                                    <input type="checkbox" class="w-[15px] h-[15px] sub-menu-actions" sub-menu-id="{{ $subMenuKey }}" menu-id="{{ $menuKey }}">
+                                    <input type="checkbox" name="permission[{{ $menuKey }}][{{ $subMenuKey }}][{{ $acVal->id }}]" class="w-[15px] h-[15px] sub-menu-actions" sub-menu-id="{{ $subMenuKey }}" menu-id="{{ $menuKey }}">
                                     {{ $acVal->actionName }}
                                 </label>
                                 @endforeach
@@ -72,7 +76,8 @@ use App\Models\MenuAction;
                             <div class="flex flex-wrap gap-[10px]">
                                 @foreach($menuAction as $acKey =>$acVal)
                                 <label class="border-[1px] border-[#0000001A] rounded-[10px] text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center gap-[7px] py-[5px] px-[10px] ">
-                                    <input type="checkbox" class="w-[15px] h-[15px]">
+                                    {{-- <input type="checkbox" name="permission[action][{{ $menuKey }}][{{ $subMenuKey }}][{{ $acVal->id }}]" class="w-[15px] h-[15px]"> --}}
+                                    <input type="checkbox" name="permission[{{ $menuKey }}][menu][{{ $acVal->id }}]" class="w-[15px] h-[15px] sub-menu-actions" sub-menu-id="{{ $menuKey }}" menu-id="{{ $menuKey }}">
                                     {{ $acVal->actionName }}
                                 </label>
                                 @endforeach
@@ -110,6 +115,7 @@ use App\Models\MenuAction;
             }else{
                 $(this).parent().parent().parent().parent().parent().find('input:checkbox.parent-element').prop('checked',false);
             }
+            $('#actions-of-'+$(this).attr('subid')).find('input:checkbox').prop('checked',false);
         }
     });
 

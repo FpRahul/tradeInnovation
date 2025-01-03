@@ -105,6 +105,9 @@
 
                 </tbody>
             </table>
+            <div style="margin-top: 20px;">
+                {{ $associateData }}
+            </div>
         </div>
     </div>
 </div>

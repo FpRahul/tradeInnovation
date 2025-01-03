@@ -16,7 +16,7 @@ Route::middleware('auth')->group(function () {
 
     //Users Routes
     Route::prefix('users')->controller(UsersController::class)->group(function () {
-        Route::get('/', 'index')->name('users.listing');
+        Route::match(['POST','GET'],'/', 'index')->name('users.listing');
         Route::match(['POST', 'GET'], '/add-user/{id?}', 'addUser')->name('users.adduser');
         Route::post('/delete', 'deleteEmployee')->name('users.delete');
 

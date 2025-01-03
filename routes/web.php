@@ -40,6 +40,8 @@ Route::middleware('auth')->group(function () {
     Route::prefix('leads')->controller(LeadsController::class)->group(function () {
         Route::get('/', 'index')->name('leads.index');
         Route::get('/add', 'add')->name('leads.add');
+        Route::get('/sendquote', 'sendquote')->name('leads.quote');
+        Route::get('/logs', 'leadLogs')->name('leads.logs');
     });
 
     //Services Routes

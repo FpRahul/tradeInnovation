@@ -26,3 +26,5 @@ input:-webkit-autofill:active {
 ::-webkit-scrollbar-thumb {
     background: #13103A;
 }
+
+select{-webkit-appearance: none;-moz-appearance: none;background-image: url('../../public/assets/images/select-arrow.png') !important;background-position: right 10px center !important; background-repeat: no-repeat !important;}

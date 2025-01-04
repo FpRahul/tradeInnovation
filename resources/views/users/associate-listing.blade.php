@@ -71,32 +71,22 @@
                             
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] py-[12px] px-[15px]">
-                            <div class="flex items-center flex-wrap gap-[7px]">
-                                <a href="{{route('users.addassociate',['id'=>$associateDetails->id])}}" class="bg-[#13103A] w-[27px] h-[27px] rounded-[100%] text-center border-none p-0 ">
-                                    <svg class="mx-auto" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <g clip-path="url(#clip0_455_4936)">
-                                            <path d="M6.89951 2.69995H2.69951C2.38125 2.69995 2.07603 2.82638 1.85098 3.05142C1.62594 3.27647 1.49951 3.58169 1.49951 3.89995V12.3C1.49951 12.6182 1.62594 12.9234 1.85098 13.1485C2.07603 13.3735 2.38125 13.5 2.69951 13.5H11.0995C11.4178 13.5 11.723 13.3735 11.948 13.1485C12.1731 12.9234 12.2995 12.6182 12.2995 12.3V8.09995" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
-                                            <path d="M11.3996 1.80004C11.6383 1.56134 11.962 1.42725 12.2996 1.42725C12.6372 1.42725 12.9609 1.56134 13.1996 1.80004C13.4383 2.03873 13.5724 2.36247 13.5724 2.70004C13.5724 3.0376 13.4383 3.36134 13.1996 3.60004L7.49961 9.30004L5.09961 9.90004L5.69961 7.50004L11.3996 1.80004Z" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
-                                        </g>
-                                        <defs>
-                                            <clipPath id="clip0_455_4936">
-                                                <rect width="14.4" height="14.4" fill="white" transform="translate(0.299805 0.300049)" />
-                                            </clipPath>
-                                        </defs>
+                            <div class="dropdown inline-block relative ml-[auto] mr-[20px] ">
+                                <a href="javascript:void(0)" type="button" class="button">
+                                    <svg width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M4 2C4 2.53043 3.78929 3.03914 3.41421 3.41421C3.03914 3.78929 2.53043 4 2 4C1.46957 4 0.960859 3.78929 0.585786 3.41421C0.210714 3.03914 0 2.53043 0 2C0 1.46957 0.210714 0.96086 0.585786 0.585787C0.960859 0.210714 1.46957 0 2 0C2.53043 0 3.03914 0.210714 3.41421 0.585787C3.78929 0.96086 4 1.46957 4 2ZM11 2C11 2.53043 10.7893 3.03914 10.4142 3.41421C10.0391 3.78929 9.53043 4 9 4C8.46957 4 7.96086 3.78929 7.58579 3.41421C7.21071 3.03914 7 2.53043 7 2C7 1.46957 7.21071 0.96086 7.58579 0.585787C7.96086 0.210714 8.46957 0 9 0C9.53043 0 10.0391 0.210714 10.4142 0.585787C10.7893 0.96086 11 1.46957 11 2ZM18 2C18 2.53043 17.7893 3.03914 17.4142 3.41421C17.0391 3.78929 16.5304 4 16 4C15.4696 4 14.9609 3.78929 14.5858 3.41421C14.2107 3.03914 14 2.53043 14 2C14 1.46957 14.2107 0.96086 14.5858 0.585787C14.9609 0.210714 15.4696 0 16 0C16.5304 0 17.0391 0.210714 17.4142 0.585787C17.7893 0.96086 18 1.46957 18 2Z" fill="black" />
                                     </svg>
                                 </a>
-                                <button data-id ="{{$associateDetails->id}}" class="delete_associate bg-[red] w-[27px] h-[27px] rounded-[100%] text-center border-none p-0">
-                                    <svg class="mx-auto w-[15px] h-[15px]" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M2.66666 12C2.29999 12 1.98621 11.8696 1.72532 11.6087C1.46443 11.3478 1.33377 11.0338 1.33332 10.6667V2H0.666656V0.666667H3.99999V0H7.99999V0.666667H11.3333V2H10.6667V10.6667C10.6667 11.0333 10.5362 11.3473 10.2753 11.6087C10.0144 11.87 9.70043 12.0004 9.33332 12H2.66666ZM3.99999 9.33333H5.33332V3.33333H3.99999V9.33333ZM6.66666 9.33333H7.99999V3.33333H6.66666V9.33333Z" fill="white" />
-                                    </svg>
-                                </button>
-                                <!-- Checkbox Switch -->
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" data-id="{{$associateDetails->id}}" class="associate_status sr-only peer !outline-none !shadow-none " {{$associateDetails->status ? 'checked':''}}>
-                                    <div class=" w-10 h-6 bg-gray-300 rounded-full peer peer-checked:bg-green-500 transition-all"></div>
-                                    <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow transform peer-checked:translate-x-4 transition-transform"></div>
-                                </label>
-                            </div>
+                                <div class="dropdown_menus absolute right-0 z-10 mt-2 w-[100px] origin-top-right rounded-md bg-white shadow-md ring-1 ring-black/5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                                    <div class="text-start" role="none">
+                                        <a href="{{ route('users.addassociate', ['id' => $associateDetails->id]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Edit</a>
+                                        <a href="#" data-id="{{$associateDetails->id}}" class="delete_associate block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Delete</a>
+                                        <a href="#" data-id="{{$associateDetails->id}}" data-val="{{$associateDetails->status}}" class="associate_status block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">{{$associateDetails->status ? 'Inactive':'Active'}}</a>
+                                    </div>
+                                </div>
+                            </div>  
+
+                            
                         </td>
                     </tr>
                     @endforeach
@@ -132,17 +122,18 @@
     });
     $(document).on('click','.associate_status',function(){
         var userId = $(this).data('id');
-        if($(this).is(':checked')){
-            var statusVal = 1;
+        var val = $(this).data('val');
+        if(val){
+            val = 0;
         }else{
-            var statusVal = 0;
+            val = 1;
         }
         $.ajax({
             method:'POST',
             url:'{{ route('users.status')}}',
             data:{
                 _token:'{{csrf_token()}}',
-                statusVal:statusVal,
+                val:val,
                 userId:userId
             },
             success:function(res){

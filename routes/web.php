@@ -12,6 +12,9 @@ Route::match(['get','post'],'/', [UsersController::class,'login'])->name('login'
 Route::match(['get','post'],'forget_password', [UsersController::class,'forgetPassword'])->name('forgetPassword');
 Route::middleware('auth')->group(function () {
     //Dashboard Routes
+    Route::get('/logout',[UsersController::class,'logout'])->name('user.logout');
+    Route::match(['POST','GET'],'/myprofile',[UsersController::class,'myprofile'])->name('user.myprofile');
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     //Users Routes

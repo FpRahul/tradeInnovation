@@ -54,6 +54,14 @@ class UsersController extends Controller
         }
         return view('users/forgetPassword');
     }
+
+    public function logout(Request $request){
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect()->route('login')->withSuccess('You have been logged out successfully!');
+    }
+
     public function index(Request $request){
         $employeeData = User::with('userdetail')->where('role', 2)->where('archive', 1);
 
@@ -232,7 +240,7 @@ class UsersController extends Controller
         if($id > 0){
             $newAssociate = User::find($id);
             $hashedPassword = $newAssociate->password;
-            $email = "'email' => 'required|email";
+            $email = "'email' => 'required|email'";
             $moduleName="Update Associate";
 
         }else{
@@ -279,11 +287,39 @@ class UsersController extends Controller
     public function userStatus(Request $request){
         if($request->isMethod('POST')){
             $existedUser = User::where('id',$request->userId)->first();
-            $existedUser->status = $request->statusVal;
+            $existedUser->status = $request->val;
             if($existedUser->save()){
                 echo "status changed";die;
             }
         }
+    }
+
+    public function myprofile(Request $request,$id = null){
+        $user = Auth::user();
+        $userData = User::where('id',$user->id)->first();
+        if($request->isMethod('POST')){
+            $credentials = $request->validate([
+                'name' => 'required',
+                'email' => 'required|email',
+                'pasword' => 'required',                
+            ]);
+                if(!empty($request->password)){
+                    $password =  Hash::make($request->password);
+                }else{
+                    $password = $request->password;
+                }
+                dd($userData);
+               $userData->name=$request->name;
+               $userData->email=$request->email; 
+               $userData->password=$password;
+               if($userData->save()){
+                return redirect()->route('dashboard')->withSuccess('Profile is successfully updated!');
+               }        
+        }
+        $header_title_name = 'My Profile';
+        $moduleName="Update Profile";
+        
+        return view('users/myprofile',compact('userData','header_title_name','moduleName'));
     }
 
     

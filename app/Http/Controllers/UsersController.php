@@ -7,11 +7,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\UserDetail;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 class UsersController extends Controller
 {
     
-    public function login(Request $request){
+    public function login(Request $request){       
+        
         if($request->isMethod('post')){
             $credentials = $request->validate([
                 'email' => 'required|email',
@@ -64,27 +67,28 @@ class UsersController extends Controller
 
     public function index(Request $request){
         $employeeData = User::with('userdetail')->where('role', 2)->where('archive', 1);
-
-        if ($request->isMethod('POST')) {
-            $key = $request->input('key');
-            if ($key) {
-                $employeeData->where(function ($query) use ($key) {
-                    $query->where('name', 'LIKE', $key . '%')
-                        ->orWhere('mobile', 'LIKE', $key . '%');
-                });
-            }
-            $employeeData = $employeeData->get();
-            dd($employeeData);
+        $searchKey = $request->input('key') ?? '';
+        $requestType = $request->input('requestType') ?? '';
+        if ($searchKey) {
+            $employeeData->where(function ($query) use ($searchKey) {
+                $query->where('name', 'LIKE', $searchKey . '%')
+                    ->orWhere('mobile', 'LIKE', $searchKey . '%');
+            });
         }
-
-     
         $employeeData = $employeeData->paginate(1);
-        
-        $header_title_name = 'User';
-        $moduleName="Manage Employees";
-        return view('users.listing', array_merge(
-            compact('employeeData', 'header_title_name', 'moduleName')
-        ));
+
+        if (empty($requestType)) {    
+            $header_title_name = 'User';
+            $moduleName="Manage Employees";
+            return view('users.listing', compact('employeeData', 'header_title_name', 'moduleName','searchKey'));       
+        }else{
+            $trData = view('users/employee-page-search-data', compact('employeeData','searchKey'))->render();
+            $dataArray = [
+                'trData' => $trData,
+            ];
+            return response()->json($dataArray);
+        }
+            
     }
 
     public function addUser(Request $request, $id=null){
@@ -158,12 +162,29 @@ class UsersController extends Controller
          }
     }
 
-    public function clients(){
-        $clientData = User::with('userdetail')->where('role',3)->where('archive',1)->orderBy('id','desc')->paginate(1);
-        $header_title_name = 'User';
-        $moduleName="Manage Clients";
+    public function clients(Request $request){
+        $clientData = User::with('userdetail')->where('role', 3)->where('archive', 1);
+        $searchKey = $request->input('key') ?? '';
+        $requestType = $request->input('requestType') ?? '';
+        if ($searchKey) {
+            $clientData->where(function ($query) use ($searchKey) {
+                $query->where('name', 'LIKE', $searchKey . '%')
+                    ->orWhere('mobile', 'LIKE', $searchKey . '%');
+            });
+        }
+        $clientData = $clientData->paginate(1);
 
-        return view('users/client-listing',compact('clientData','header_title_name','moduleName'));
+        if (empty($requestType)) {    
+            $header_title_name = 'User';
+            $moduleName="Manage Clients";
+            return view('users/client-listing', compact('clientData', 'header_title_name', 'moduleName','searchKey'));       
+        }else{
+            $trData = view('users/client-page-search-data', compact('clientData','searchKey'))->render();
+            $dataArray = [
+                'trData' => $trData,
+            ];
+            return response()->json($dataArray);
+        }
     }
 
     public function addClient(Request $request,$id=null){
@@ -229,11 +250,29 @@ class UsersController extends Controller
         return view('users.add-client',compact('newClient','newClientDetails','header_title_name','moduleName'));
     }
 
-    public function associates(){
-        $associateData = User::with('userdetail')->where('role',4)->where('archive',1)->orderBy('id','desc')->paginate(1);
-        $header_title_name = 'User';
-        $moduleName="Manage Associates";
-        return view('users/associate-listing',compact('associateData','header_title_name','moduleName'));
+    public function associates(Request $request){
+        $associateData = User::with('userdetail')->where('role', 4)->where('archive', 1);
+        $searchKey = $request->input('key') ?? '';
+        $requestType = $request->input('requestType') ?? '';
+        if ($searchKey) {
+            $associateData->where(function ($query) use ($searchKey) {
+                $query->where('name', 'LIKE', $searchKey . '%')
+                    ->orWhere('mobile', 'LIKE', $searchKey . '%');
+            });
+        }
+        $associateData = $associateData->paginate(1);
+
+        if (empty($requestType)) {    
+            $header_title_name = 'User';
+            $moduleName="Manage Associates";
+            return view('users/associate-listing', compact('associateData', 'header_title_name', 'moduleName','searchKey'));       
+        }else{
+            $trData = view('users/associate-page-search-data', compact('associateData','searchKey'))->render();
+            $dataArray = [
+                'trData' => $trData,
+            ];
+            return response()->json($dataArray);
+        }
     }
 
     public function addAssociate(Request $request,$id=null){
@@ -285,11 +324,18 @@ class UsersController extends Controller
     }
 
     public function userStatus(Request $request){
-        if($request->isMethod('POST')){
-            $existedUser = User::where('id',$request->userId)->first();
-            $existedUser->status = $request->val;
+        if($request->isMethod('GET')){
+            if($request->val){
+                $status = 0;
+            }else{
+                $status = 1;
+            }
+            $existedUser = User::where('id',$request->id)->first();
+            $existedUser->status = $status;
             if($existedUser->save()){
-                echo "status changed";die;
+                return redirect()->back()->with('success', 'Your status is successfully updated!');
+            }else{
+                return back()->withError('Some error is occur');
             }
         }
     }

@@ -57,7 +57,7 @@ use App\Models\MenuAction;
                     @if (isset($menu['subMenu']))
                         @foreach($menu['subMenu'] as $subMenuKey => $subMenu)
                         @php $menuAction = MenuAction::where('menuId',$subMenuKey)->get(); @endphp
-                        <div>
+                        <div class="">
                             <h4 class="font-semibold text-[15px] mb-[7px]">{{ $subMenu['name'] }}</h4>
                             <div class="flex flex-wrap gap-[10px]" id="actions-of-{{ $subMenuKey }}">
                                 @foreach($menuAction as $acKey =>$acVal)
@@ -71,7 +71,7 @@ use App\Models\MenuAction;
                         @endforeach
                     @else
                         @php $menuAction = MenuAction::where('menuId',$menuKey)->get(); @endphp
-                        <div>
+                        <div class="">
                             <h4 class="font-semibold text-[15px] mb-[7px]">{{ $menu['menu']['name'] }}</h4>
                             <div class="flex flex-wrap gap-[10px]">
                                 @foreach($menuAction as $acKey =>$acVal)

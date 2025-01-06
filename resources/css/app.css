@@ -28,3 +28,25 @@ input:-webkit-autofill:active {
 }
 
 select{-webkit-appearance: none;-moz-appearance: none;background-image: url('../../public/assets/images/select-arrow.png') !important;background-position: right 10px center !important; background-repeat: no-repeat !important;}
+
+.alert-danger {
+    color: red;
+}
+
+.alert-success {
+    color: green;
+}
+
+.alert {
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.toast {
+    opacity: 1 !important;
+}
+
+span[aria-current="page"] span {
+    background-color: #13103a !important;
+    color: #fff !important;
+}

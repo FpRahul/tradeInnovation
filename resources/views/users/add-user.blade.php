@@ -46,7 +46,7 @@
                     @enderror
                 </div>
                 <div class="w-full md:w-1/2">
-                    <label for="number" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Number</label>
+                    <label for="number" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mobile Number</label>
                     <input type="text" name="number" id="number" value="{{ $newUser->mobile }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Number">
                     @error('number')
                     <div class="alert alert-danger">{{ $message }}</div>

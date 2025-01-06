@@ -26,3 +26,25 @@ input:-webkit-autofill:active {
 ::-webkit-scrollbar-thumb {
     background: #13103A;
 }
+
+.alert-danger {
+    color: red;
+}
+
+.alert-success {
+    color: green;
+}
+
+.alert {
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.toast {
+    opacity: 1 !important;
+}
+
+span[aria-current="page"] span {
+    background-color: #13103a !important;
+    color: #fff !important;
+}

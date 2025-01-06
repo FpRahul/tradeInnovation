@@ -23,14 +23,14 @@ Route::middleware('auth')->group(function () {
         Route::match(['POST', 'GET'], '/add-user/{id?}', 'addUser')->name('users.adduser');
         Route::post('/delete', 'deleteEmployee')->name('users.delete');
 
-        Route::get('/clients', 'clients')->name('client.listing');
+        Route::match(['POST','GET'],'/client', 'clients')->name('client.listing');
         Route::match(['POST', 'GET'], '/add-client/{id?}', 'addClient')->name('users.addclient');
 
 
-        Route::get('/associates', 'associates')->name('associate.listing');
+        Route::match(['POST','GET'],'/associates', 'associates')->name('associate.listing');
         Route::match(['POST', 'GET'], '/add-associate/{id?}', 'addAssociate')->name('users.addassociate');
 
-        Route::post('/userstatus','userStatus')->name('users.status');
+        Route::get('/userstatus','userStatus')->name('users.status');
     });
 
     //Settings Routes

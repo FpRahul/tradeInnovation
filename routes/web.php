@@ -16,6 +16,7 @@ Route::middleware('auth')->group(function () {
     Route::match(['POST','GET'],'/myprofile',[UsersController::class,'myprofile'])->name('user.myprofile');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/chart-data', [DashboardController::class, 'chartData'])->name('chart.data');
 
     //Users Routes
     Route::prefix('users')->controller(UsersController::class)->group(function () {

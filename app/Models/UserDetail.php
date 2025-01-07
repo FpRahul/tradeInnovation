@@ -9,6 +9,18 @@ class UserDetail extends Model
 {
     protected $fillable = [
         'userId',
+        'fatherHusbandName',
+        'qualification',
+        'skills',
+        'keyResponsibilityArea',
+        'keyPerformanceIndicator',
+        'emergencyContactDetails',
+        'currentAddress',
+        'permanentAddress',
+        'uploadPhotograph',
+        'uploadPan',
+        'uploadAadhar',
+        'uploadDrivingLicence',
         'incorporationType',
         'registered	',
         'referralPartner',        

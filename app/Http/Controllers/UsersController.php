@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\UserDetail;
+use App\Models\UserExperience;
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -95,6 +97,7 @@ class UsersController extends Controller
         if($id > 0){
             $newUser = User::find($id);  
             $newUserDetails = UserDetail::where('userId',$id)->first();
+            $newUserExperiences = UserExperience::where('userId',$id)->first();
             $email = "required|email";
             $hashedPassword = $newUser->password;
             $successMessage = "User is successfully updated!";
@@ -102,44 +105,63 @@ class UsersController extends Controller
         }else{
             $newUser = new User();
             $newUserDetails = new UserDetail();
+            $newUserExperiences = new UserExperience();
             $email = "required|email|unique:users,email";
             $randomNumber = random_int(100000, 999999);
             $hashedPassword = Hash::make($randomNumber);
             $successMessage = "User is successfully inserted!";
             $moduleName="Create Employee";
         }
-        if($request->isMethod('POST')){  
-            if($request->registered == 'on'){
-                $registered = 1;
-            }else{
-                $registered = 0;
-            }
-         
+        if($request->isMethod('POST')){ 
             
             $credentials = $request->validate([
                 'name' => 'required',
                 'role' => 'required',
                 'email'=> $email,
-                'number' => 'required',
-                'companyname' => 'required',
-                'address' => 'required',
-                'registered' => 'required',
-                'referralpartner'=> 'required',
-                'incorporationtype'=> 'required'
+                'mobileNumber' => 'required',
+                'altMobile' => 'required',
+                'fatherHusbandName' => 'required',
+                'qualification' => 'required',
+                'skill' => 'required',
+                'keyResponsibilityArea' => 'required',
+                'keyPerformanceIndicator' => 'required',
+                'emergencyContactDetails' => 'required',
+                'currentAddress' => 'required',
+                'permanentAddress' => 'required',
+                'employeePhoto' => 'required',
+                'uploadPan' => 'required',
+                'uploadAadhar' => 'required',
+                'uploadDrivingLicence' => 'required',
             ]);
-            // dd($id);
             $newUser->name = $request->name;
             $newUser->role = $request->role;
             $newUser->email = $request->email;
-            $newUser->mobile = $request->number;
-            $newUser->companyName = $request->companyname;
-            $newUser->address = $request->address;
+            $newUser->mobile = $request->mobileNumber;
+            $newUser->altNumber = $request->altNumber;
             $newUser->password = $hashedPassword;
-            if($newUser->save()){               
+            if($newUser->save()){     
+                foreach($request->experince as $exKey => $exVal){
+                    $newUserExperiences->userId = $newUser->id;
+                    $newUserExperiences->employerName = $exVal['employerName'];
+                    $newUserExperiences->startDate = $exVal['startDate'];
+                    $newUserExperiences->endDate = $exVal['endDate'];
+                    $newUserExperiences->save();
+                }         
                 $newUserDetails->userId =$newUser->id;
-                $newUserDetails->incorporationType = $request->incorporationtype;
-                $newUserDetails->registered = $registered;
-                $newUserDetails->referralPartner = $request->referralpartner;   
+                $newUserDetails->fatherHusbandName =$request->fatherHusbandName;
+                $newUserDetails->qualification =$request->qualification;
+                $newUserDetails->skills = $request->skill;
+                $newUserDetails->keyResponsibilityArea = $request->keyResponsibilityArea;
+                $newUserDetails->keyPerformanceIndicator = $request->keyPerformanceIndicator;
+                $newUserDetails->emergencyContactDetails = $request->emergencyContactDetails;
+                $newUserDetails->currentAddress = $request->currentAddress;
+                $newUserDetails->permanentAddress = $request->permanentAddress;
+
+                $newUserDetails->uploadPhotograph =$request->employeePhoto;
+                $newUserDetails->uploadPan = $request->uploadPan;
+                $newUserDetails->uploadAadhar = $request->uploadAadhar;
+                $newUserDetails->uploadDrivingLicence = $request->uploadDrivingLicence;
+
                 if($newUserDetails->save()){
                     return redirect()->route('users.listing')->withSuccess($successMessage);
                 }else{
@@ -150,7 +172,7 @@ class UsersController extends Controller
             }
         }
         $header_title_name = 'User';
-        return view('users.add-user',compact('newUser','newUserDetails','header_title_name','moduleName'));
+        return view('users.add-user',compact('newUser','newUserDetails','newUserExperiences','header_title_name','moduleName'));
     }
     
     public function deleteEmployee(Request $request){

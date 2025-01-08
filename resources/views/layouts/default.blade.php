@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="{{asset('assets/images/favicon.ico')}}">
 
     <title>Trade Innovation</title>
 
@@ -13,7 +14,7 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" />
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> --}}
@@ -30,14 +31,16 @@
 
 <body class="bg-white dark:bg-black dark:text-white/50">
     <div class="flex flex-wrap gap-x-[40px] h-[100vh]">
-        <div class="w-[230px] py-[14px] px-[18px] space-y-[24px] h-[calc(100vh-54px)] max-h-[calc(100vh-54px)] overflow-y-auto">
-            @include('layouts.sidebar')
+        <div id="sidebar" class="hidden xl:block bg-white shadow-lg xl:shadow-none w-[230px]  transform transition-transform duration-500 ease-in-out -translate-x-full xl:translate-x-0 fixed xl:relative top-0 left-0 z-[9]">
+            <div class="space-y-[24px] h-[100vh] lg:h-[calc(100vh-54px)] max-h-[100vh] lg:max-h-[calc(100vh-54px)] px-[18px] py-[14px] overflow-y-auto ">
+                @include('layouts.sidebar')
+            </div>
         </div>
-        <div class="w-[calc(100%-270px)]">
-            <div class="admin-header pl-[30px]">
+        <div class="w-full xl:w-[calc(100%-270px)]">
+            <div class="admin-header">
                 @include('layouts.header')
             </div>
-            <div class="main-right-content pr-[22px] py-[23px] h-[calc(100vh-129px)] max-h-[calc(100vh-129px)] overflow-y-auto pl-[30px]">
+            <div class="main-right-content h-[calc(100vh-129px)] max-h-[calc(100vh-129px)] overflow-y-auto py-[23px] px-[15px] xl:pr-[22px] xl:pl-[30px]">
                 @yield('content')
             </div>
         </div>
@@ -46,20 +49,42 @@
         </div>
     </div>
     <script>
-        $(document).ready(function(){
+        jQuery(document).on('click', '#toggle_btn', function() {
+            if (jQuery('#sidebar').hasClass('hidden')) {
+                jQuery('#sidebar').removeClass('hidden');
+                jQuery('#sidebar').removeClass('-translate-x-full');
+            } else {
+                jQuery('#sidebar').addClass('hidden');
+                jQuery('#sidebar').addClass('-translate-x-full');
+            }
+        });
+
+        jQuery(document).click(function(e) {
+            e.stopPropagation();
+            var container = jQuery("#sidebar");
+            var container2 = jQuery("#toggle_btn");
+
+            //check if the clicked area is dropDown or not
+            if (container.has(e.target).length === 0 && container2.has(e.target).length === 0) {
+                jQuery('#sidebar').addClass('hidden');
+                jQuery('#sidebar').addClass('-translate-x-full');
+            }
+        })
+
+        $(document).ready(function() {
             $('.select2').select2({
                 tags: true,
-                multiple:true
+                multiple: true
             });
         })
-        $(document).ready(function () {
+        $(document).ready(function() {
             $('.repeater').repeater({
                 initEmpty: false,
-                show: function () {
+                show: function() {
                     $(this).slideDown();
                 },
-                hide: function (deleteElement) {
-                    if(confirm('Are you sure you want to delete this element?')) {
+                hide: function(deleteElement) {
+                    if (confirm('Are you sure you want to delete this element?')) {
                         $(this).slideUp(deleteElement);
                     }
                 },

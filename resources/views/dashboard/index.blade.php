@@ -43,13 +43,13 @@
             </div>
         </div>
     </div>
-    <div class="flex flex-col md:flex-row gap-[30px] mb-[30px]">
-        <div class="w-full w-[75%]">
-            <div class="shadow-[0px_0px_13px_5px_#0000000f] rounded-[20px]  p-6">
+    <div class="flex flex-col lg:flex-row gap-[30px] mb-[30px]">
+        <div class="w-full lg:w-[75%]">
+            <div class="shadow-[0px_0px_13px_5px_#0000000f] rounded-[20px] p-0 md:p-6">
                 <canvas id="roundedLineChart" width="400" height="200"></canvas>
             </div>
         </div>
-        <div class="w-full w-[25%]">
+        <div class="w-full lg:w-[25%]">
             <div class="shadow-[0px_0px_13px_5px_#0000000f] rounded-[20px] p-6">
                 <h4 class="text-[14px] leading-[16px] text-[#000000] font-[500] tracking-[0.04em] mb-3">Status Matrix</h4>
                 <ul class="flex flex-col gap-[10px]">
@@ -98,12 +98,12 @@
         </div>
     </div>
 
-    <div class="shadow-[0px_0px_13px_5px_#0000000f] rounded-[20px] ">
+    <div class="shadow-[0px_0px_13px_5px_#0000000f] rounded-[20px] overflow-hidden">
         <div class="py-[25px] px-[20px] flex items-center justify-between">
             <h4 class="text-[14px] leading-[16px] text-[#000000] font-[500] tracking-[0.04em] ">Recent Activity</h4>
         </div>
         <div class="overflow-x-auto ">
-            <table width="100%" cellpadding="0" cellspacing="0" class="min-w-[700px]">
+            <table width="100%" cellpadding="0" cellspacing="0" class="min-w-[900px]">
                 <thead>
                     <tr>
                         <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">

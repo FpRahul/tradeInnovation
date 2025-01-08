@@ -8,9 +8,10 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\UserDetail;
 use App\Models\UserExperience;
-
+use Illuminate\Support\Str;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use Illuminate\Validation\Rule;
 
 class UsersController extends Controller
 {
@@ -77,7 +78,7 @@ class UsersController extends Controller
                     ->orWhere('mobile', 'LIKE', $searchKey . '%');
             });
         }
-        $employeeData = $employeeData->paginate(1);
+        $employeeData = $employeeData->paginate(2);
 
         if (empty($requestType)) {    
             $header_title_name = 'User';
@@ -97,7 +98,7 @@ class UsersController extends Controller
         if($id > 0){
             $newUser = User::find($id);  
             $newUserDetails = UserDetail::where('userId',$id)->first();
-            $newUserExperiences = UserExperience::where('userId',$id)->first();
+            $newUserExperiences = UserExperience::where('userId',$id)->get();
             $email = "required|email";
             $hashedPassword = $newUser->password;
             $successMessage = "User is successfully updated!";
@@ -105,7 +106,7 @@ class UsersController extends Controller
         }else{
             $newUser = new User();
             $newUserDetails = new UserDetail();
-            $newUserExperiences = new UserExperience();
+            $newUserExperiences = [];
             $email = "required|email|unique:users,email";
             $randomNumber = random_int(100000, 999999);
             $hashedPassword = Hash::make($randomNumber);
@@ -113,22 +114,14 @@ class UsersController extends Controller
             $moduleName="Create Employee";
         }
         if($request->isMethod('POST')){ 
-            
-            $credentials = $request->validate([
-                'name' => 'required',
-                'role' => 'required',
+           
+            $credentials = $request->validate([               
                 'email'=> $email,
-                'mobileNumber' => 'required',
-                'altMobile' => 'required',
-                'fatherHusbandName' => 'required',
-                'qualification' => 'required',
-                'skill' => 'required',
-                'keyResponsibilityArea' => 'required',
-                'keyPerformanceIndicator' => 'required',
-                'emergencyContactDetails' => 'required',
-                'currentAddress' => 'required',
-                'permanentAddress' => 'required',
-                'employeePhoto' => 'required',
+                'employeePhoto' => [
+                    'required',
+                    'uploadPhotograph', // Custom validation rule
+                    Rule::unique('user_details', 'employeePhoto')->ignore($request->userId, 'userId'),
+                ],             
                 'uploadPan' => 'required',
                 'uploadAadhar' => 'required',
                 'uploadDrivingLicence' => 'required',
@@ -137,16 +130,9 @@ class UsersController extends Controller
             $newUser->role = $request->role;
             $newUser->email = $request->email;
             $newUser->mobile = $request->mobileNumber;
-            $newUser->altNumber = $request->altNumber;
+            $newUser->altNumber = $request->altMobile;
             $newUser->password = $hashedPassword;
-            if($newUser->save()){     
-                foreach($request->experince as $exKey => $exVal){
-                    $newUserExperiences->userId = $newUser->id;
-                    $newUserExperiences->employerName = $exVal['employerName'];
-                    $newUserExperiences->startDate = $exVal['startDate'];
-                    $newUserExperiences->endDate = $exVal['endDate'];
-                    $newUserExperiences->save();
-                }         
+            if($newUser->save()){             
                 $newUserDetails->userId =$newUser->id;
                 $newUserDetails->fatherHusbandName =$request->fatherHusbandName;
                 $newUserDetails->qualification =$request->qualification;
@@ -157,12 +143,48 @@ class UsersController extends Controller
                 $newUserDetails->currentAddress = $request->currentAddress;
                 $newUserDetails->permanentAddress = $request->permanentAddress;
 
-                $newUserDetails->uploadPhotograph =$request->employeePhoto;
-                $newUserDetails->uploadPan = $request->uploadPan;
-                $newUserDetails->uploadAadhar = $request->uploadAadhar;
-                $newUserDetails->uploadDrivingLicence = $request->uploadDrivingLicence;
+                if($request->hasFile('employeePhoto'))
+                {
+                    $image_name = $request->employeePhoto;
+                    $imageName = rand(100000, 999999) . '.' . $image_name->getClientOriginalExtension();
+                    $image_name->move(public_path('Image'), $imageName);
+                    $newUserDetails->uploadPhotograph = $imageName;
+                }
+                if($request->hasFile('uploadPan')){
+                    $image_name = $request->uploadPan;
+                    $imageName = rand(100000, 999999) . '.' . $image_name->getClientOriginalExtension();
+                    $image_name->move(public_path('Image'),$imageName);
+                    $newUserDetails->uploadPan = $imageName;
+                }
+                if($request->hasFile('uploadAadhar')){
+                    $image_name = $request->uploadAadhar;
+                    $imageName = rand(100000, 999999) . '.' . $image_name->getClientOriginalExtension();
+                    $image_name->move(public_path('Image'),$imageName);
+                    $newUserDetails->uploadAadhar = $imageName;
+                }
+                if($request->hasFile('uploadDrivingLicence')){
+                    $image_name = $request->uploadDrivingLicence;
+                    $imageName = rand(100000, 999999) . '.' . $image_name->getClientOriginalExtension();
+                    $image_name->move(public_path('Image'),$imageName);
+                    $newUserDetails->uploadDrivingLicence = $imageName;
 
+                }
+                
+                foreach($request->experince as $exKey => $exVal){
+                   if($exVal['experience_id'] > 0){                   
+                        $newUserExperiences = UserExperience::where('id',$exVal['experience_id'])->first();
+                   }else{
+                        $newUserExperiences = new UserExperience();
+                   }
+                    $newUserExperiences->userId = $newUser->id;
+                    $newUserExperiences->employerName = $exVal['employerName'];
+                    $newUserExperiences->startDate = $exVal['startDate'];
+                    $newUserExperiences->endDate = $exVal['endDate'];
+
+                    $newUserExperiences->save();
+                } 
                 if($newUserDetails->save()){
+                   
                     return redirect()->route('users.listing')->withSuccess($successMessage);
                 }else{
                     return back()->with('error','Some error is occur.'); 
@@ -171,6 +193,8 @@ class UsersController extends Controller
                 return back()->with('error','Some error is occur.');
             }
         }
+        
+       
         $header_title_name = 'User';
         return view('users.add-user',compact('newUser','newUserDetails','newUserExperiences','header_title_name','moduleName'));
     }

@@ -24,7 +24,7 @@ use App\Models\MenuAction;
                         <li class="item">
                             <a href="javascript:void(0)" data-id="tab{{ $menuKey }}" class="text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center justify-between p-[15px] bg-[#f7f7f7] ">
                                 <span class="inline-flex items-center gap-[7px] ">
-                                    <input type="checkbox" class="w-[15px] h-[15px] parent-element" name="permission[{{ $menuKey }}]" @if($menuKey==1) {{ 'disabled checked'; }} @endif>
+                                    <input type="checkbox" class="w-[15px] h-[15px] parent-element" m-id="{{ $menuKey }}" id="main-menu-id-{{ $menuKey }}" name="permission[{{ $menuKey }}]" @if($menuKey==1) {{ 'disabled checked'; }} @endif>
                                     {{ $menu['menu']['name'] }}
                                 </span>
                                 @if (isset($menu['subMenu']))
@@ -77,7 +77,7 @@ use App\Models\MenuAction;
                                 @foreach($menuAction as $acKey =>$acVal)
                                 <label class="border-[1px] border-[#0000001A] rounded-[10px] text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center gap-[7px] py-[5px] px-[10px] ">
                                     {{-- <input type="checkbox" name="permission[action][{{ $menuKey }}][{{ $subMenuKey }}][{{ $acVal->id }}]" class="w-[15px] h-[15px]"> --}}
-                                    <input type="checkbox" name="permission[{{ $menuKey }}][menu][{{ $acVal->id }}]" class="w-[15px] h-[15px] sub-menu-actions" sub-menu-id="{{ $menuKey }}" menu-id="{{ $menuKey }}">
+                                    <input type="checkbox" name="permission[{{ $menuKey }}][menu][{{ $acVal->id }}]" class="w-[15px] h-[15px] main-menu-actions" menu-id="{{ $menuKey }}">
                                     {{ $acVal->actionName }}
                                 </label>
                                 @endforeach
@@ -103,6 +103,7 @@ use App\Models\MenuAction;
             $(this).parent().parent().parent().find('input:checkbox').prop('checked',true);
         }else{
             $(this).parent().parent().parent().find('input:checkbox').prop('checked',false);
+            $('#tab'+$(this).attr('m-id')).find('input:checkbox').prop('checked',false);
         }
     })
 
@@ -121,19 +122,40 @@ use App\Models\MenuAction;
 
     $(document).on('click','.sub-menu-actions',function(){
         if($(this).is(':checked')){
-            if($('#sub-menu-id-'+$(this).attr('sub-menu-id')).is(':checked')){
+            if ($('#sub-menu-id-'+$(this).attr('sub-menu-id')).length) {
+                if($('#sub-menu-id-'+$(this).attr('sub-menu-id')).is(':checked')){
 
-            }else{
-                $('#sub-menu-id-'+$(this).attr('sub-menu-id')).trigger('click');
+                }else{
+                    $('#sub-menu-id-'+$(this).attr('sub-menu-id')).trigger('click');
+                }
             }
         }else{
             if($(this).parent().parent().find('input:checkbox:checked').length>0){
 
             }else{
-                $('#sub-menu-id-'+$(this).attr('sub-menu-id')).trigger('click');
+                if($('#sub-menu-id-'+$(this).attr('sub-menu-id')).is(':checked')){
+                    $('#sub-menu-id-'+$(this).attr('sub-menu-id')).trigger('click');
+                }
             }
         }
-        //sub-menu-id-
+    });
+
+    $(document).on('click','.main-menu-actions',function(){
+        if($(this).is(':checked')){
+            if($('#main-menu-id-'+$(this).attr('menu-id')).is(':checked')){
+
+            }else{
+                $('#main-menu-id-'+$(this).attr('menu-id')).trigger('click');
+            }
+        }else{
+            if($(this).parent().parent().find('input:checkbox:checked').length>0){
+
+            }else{
+                if($('#main-menu-id-'+$(this).attr('menu-id')).is(':checked')){
+                    $('#main-menu-id-'+$(this).attr('menu-id')).trigger('click');
+                }
+            }
+        }
     })
 </script>
 

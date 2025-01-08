@@ -5,7 +5,7 @@
         </svg>
     </button>
     <h3 class="hidden xl:block text-[20px] font-[600] leading-[24px] text-[#13103A] tracking-[0.02em]">{{$header_title_name}}</h3>
-    <div class="dropdown relative ml-[auto] mr-[20px] ">
+    <div class="dropdown relative ml-[auto] mr-[10px] md:mr-[20px] ">
         <div type="button" class="button flex items-center gap-[10px] shadow-[0px_0px_6px_2px_#00000036] rounded-[10px] p-[3px] cursor-pointer	">
             <img src="{{asset('assets/images/profile-img.png')}}" alt="profile" class="w-[33px] h-[33px] rounded-[9px] object-cover border-[1px] border-[#13103A] ">
             <div class="pr-[7px]">

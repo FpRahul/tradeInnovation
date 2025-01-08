@@ -3,8 +3,8 @@
 
 
 
-<div class="py-[30px] w-full min-h-[100vh] bg-cover bg-center bg-no-repeat bg-fixed" style="background-image: url('assets/images/login-bg.jpg');">
-    <div class="max-w-[1200px] mx-auto h-full flex flex-col items-center justify-between">
+<div class="bg-cover bg-center bg-no-repeat bg-fixed" style="background-image: url('assets/images/login-bg.jpg');">
+    <div class="max-w-[1200px] py-[30px] px-[15px] mx-auto w-full min-h-[100vh] flex flex-col items-center justify-between">
         <p class="text-center font-[Inter] text-[16px] font-[400] text-[#FFFFFF] leading-[19px] tracking-[-0.02em] ">Protect and Manage Your Trademarks, Patents, Design and Copyrights Seamlessly</p>
         <div class="max-w-[446px] mx-auto my-8 bg-[#FFFFFF] rounded-[20px] shadow-[0px_20px_80px_0px_#0000001A] py-[24px] px-[47px] ">
             <img src="{{asset('assets/images/logo.png')}}" alt="logo" class="mb-[23px] mx-auto ">

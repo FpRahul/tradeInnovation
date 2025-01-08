@@ -50,3 +50,10 @@ span[aria-current="page"] span {
     background-color: #13103a !important;
     color: #fff !important;
 }
+
+.note-editor.note-airframe,
+.note-editor.note-frame,
+.note-editor.note-airframe .note-statusbar,
+.note-editor.note-frame .note-statusbar {
+    border-color: #0000001A !important;
+}

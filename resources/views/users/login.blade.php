@@ -3,22 +3,22 @@
 
 
 
-<div class="py-[30px] w-full h-[100vh] bg-cover bg-center bg-no-repeat" style="background-image: url('assets/images/login-bg.jpg');">
+<div class="py-[30px] w-full min-h-[100vh] bg-cover bg-center bg-no-repeat bg-fixed" style="background-image: url('assets/images/login-bg.jpg');">
     <div class="max-w-[1200px] mx-auto h-full flex flex-col items-center justify-between">
         <p class="text-center font-[Inter] text-[16px] font-[400] text-[#FFFFFF] leading-[19px] tracking-[-0.02em] ">Protect and Manage Your Trademarks, Patents, Design and Copyrights Seamlessly</p>
-        <div class="max-w-[446px] mx-auto bg-[#FFFFFF] rounded-[20px] shadow-[0px_20px_80px_0px_#0000001A] py-[24px] px-[47px] ">
+        <div class="max-w-[446px] mx-auto my-8 bg-[#FFFFFF] rounded-[20px] shadow-[0px_20px_80px_0px_#0000001A] py-[24px] px-[47px] ">
             <img src="{{asset('assets/images/logo.png')}}" alt="logo" class="mb-[23px] mx-auto ">
-           
+
             <h2 class="font-[Inter] text-[20px] font-[500] text-[#13103A] leading-[24px] tracking-[-0.02em] mb-2 ">Log In</h2>
             <p class="font-[Inter] text-[14px] font-[400] text-[#13103A] leading-[16px]">Secure Access to Intellectual Property Management</p>
-           
+
             <form class="mt-[20px] space-y-[15px]" method="POST" action="{{ route('login') }}">
                 @csrf
                 <div>
                     <label for="email" class="block font-[Inter] text-[14px] font-[400] text-[#13103A] leading-[16px] mb-1">Email</label>
                     <input type="email" name="email" id="email" class="font-[Inter] text-[14px] font-[400] text-[#6F6F6F] leading-[16px] border-[1px] border-[#0000001A] rounded-[10px] h-[45px] px-[15px] p-[10px] w-full">
                     @error('email')
-                        <div class="alert alert-danger">{{ $message }}</div>
+                    <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div>
@@ -26,7 +26,7 @@
                     <div class="relative">
                         <input type="password" name="password" id="password" class="font-[Inter] text-[14px] font-[400] text-[#6F6F6F] leading-[16px] border-[1px] border-[#0000001A] rounded-[10px] h-[45px] px-[15px] p-[10px] w-full">
                         @error('password')
-                            <div class="alert alert-danger">{{ $message }}</div>
+                        <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                         <button id="eyeBtn" class="absolute top-[50%] right-[15px] translate-y-[-50%] bg-transparent border-none ">
                             <svg class="passEye" width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">

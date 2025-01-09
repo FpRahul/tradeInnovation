@@ -37,10 +37,10 @@
             </div>
         </div>
         <div class="w-full xl:w-[calc(100%-270px)]">
-            <div class="admin-header">
+            <div class="admin-header sticky top-0 bg-white">
                 @include('layouts.header')
             </div>
-            <div class="main-right-content h-[calc(100vh-129px)] max-h-[calc(100vh-129px)] overflow-y-auto py-[23px] px-[15px] xl:pr-[22px] xl:pl-[30px]">
+            <div class="main-right-content xl:h-[calc(100vh-129px)] xl:max-h-[calc(100vh-129px)] overflow-y-auto py-[23px] px-[15px] xl:pr-[22px] xl:pl-[30px]">
                 @yield('content')
             </div>
         </div>

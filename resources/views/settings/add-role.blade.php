@@ -42,7 +42,26 @@ use App\Models\MenuAction;
                                             <input type="checkbox" name="permission[{{ $menuKey }}][{{ $smid }}]" id="sub-menu-id-{{ $smid }}" subid="{{ $smid }}" class="w-[15px] h-[15px] parent-sub-element">
                                             {{ $subMenu['name'] }}
                                         </span>
+                                        @if(isset($menu['subSubMenu'][$smid]))
+                                        <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M0.451987 1.57999L1.51299 0.519991L7.29199 6.29699C7.38514 6.38956 7.45907 6.49963 7.50952 6.62088C7.55997 6.74213 7.58594 6.87216 7.58594 7.00349C7.58594 7.13482 7.55997 7.26485 7.50952 7.3861C7.45907 7.50735 7.38514 7.61742 7.29199 7.70999L1.51299 13.49L0.452987 12.43L5.87699 7.00499L0.451987 1.57999Z" fill="#000000" />
+                                        </svg>
+                                        @endif
                                     </a>
+                                    @if(isset($menu['subSubMenu'][$smid]))
+                                    <ul class="accordian_body pl-[20px]">
+                                        @foreach($menu['subSubMenu'][$smid] as $ssubmid => $subSubMenu)
+                                        <li class="item">
+                                            <a href="javascript:void(0)" data-id="tab{{ $smid }}" class="text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center justify-between p-[15px] bg-[#f7f7f7] ">
+                                                <span class="inline-flex items-center gap-[7px] ">
+                                                    <input type="checkbox" class="parent-sub-sub-element w-[15px] h-[15px]" m-id="{{ $menuKey }}" id="main-menu-id-{{ $menuKey }}" name="permission[{{ $menuKey }}][{{ $smid }}][{{ $ssubmid }}]" @if($menuKey==1) {{ 'disabled checked'; }} @endif>
+                                                    {{ $subSubMenu['name'] }}
+                                                </span>
+                                            </a>
+                                        </li>
+                                        @endforeach
+                                    </ul>
+                                    @endif
                                 </li>
                                 @endforeach
                             </ul>
@@ -110,11 +129,30 @@ use App\Models\MenuAction;
     $(document).on('click','.parent-sub-element',function (){
         if($(this).is(':checked')){
             $(this).parent().parent().parent().parent().parent().find('input:checkbox.parent-element').prop('checked',true);
+            if($(this).parent().parent().parent().find('ul').length>0){
+                $(this).parent().parent().parent().find('ul').find('input:checkbox.parent-sub-sub-element').prop('checked',true);
+            }
+        }else{
+            if($(this).parent().parent().parent().parent().find('input:checkbox:checked').length>0){
+                $(this).parent().parent().parent().parent().find('input:checkbox.parent-element').prop('checked',false);
+                if($(this).parent().parent().parent().find('ul').length>0){
+                    $(this).parent().parent().parent().find('ul').find('input:checkbox.parent-sub-sub-element').prop('checked',false);
+                }
+            }else{
+                $(this).parent().parent().parent().parent().parent().find('input:checkbox.parent-element').prop('checked',false);
+            }
+            $('#actions-of-'+$(this).attr('subid')).find('input:checkbox').prop('checked',false);
+        }
+    });
+
+    $(document).on('click','.parent-sub-sub-element',function (){
+        if($(this).is(':checked')){
+            $(this).parent().parent().parent().parent().parent().find('input:checkbox.parent-sub-element').prop('checked',true);
         }else{
             if($(this).parent().parent().parent().parent().find('input:checkbox:checked').length>0){
 
             }else{
-                $(this).parent().parent().parent().parent().parent().find('input:checkbox.parent-element').prop('checked',false);
+                $(this).parent().parent().parent().parent().parent().find('input:checkbox.parent-sub-element').prop('checked',false);
             }
             $('#actions-of-'+$(this).attr('subid')).find('input:checkbox').prop('checked',false);
         }

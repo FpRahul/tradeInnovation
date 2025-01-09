@@ -31,6 +31,10 @@ Route::middleware('auth')->group(function () {
         Route::match(['POST','GET'],'/associates', 'associates')->name('associate.listing');
         Route::match(['POST', 'GET'], '/add-associate/{id?}', 'addAssociate')->name('users.addassociate');
 
+        Route::match(['POST', 'GET'], '/user-professions/{id?}', 'userProfessions')->name('users.settings.professions');
+        Route::match(['POST', 'GET'], '/user-incorporation/{id?}', 'userIncorporation')->name('users.settings.incorporation');
+        Route::match(['POST', 'GET'], '/user-referral/{id?}', 'userReferral')->name('users.settings.referral');
+
         Route::get('/userstatus','userStatus')->name('users.status');
     });
 

@@ -12,14 +12,14 @@
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Name</label>
-                    <input type="text" name="name" id="name" value="{{$newClient->name}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Name">
+                    <input type="text" name="name" id="name" value="{{$newClient->name}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Name" required>
                     @error('name')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="companyname" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Company Name</label>
-                    <input type="text" name="companyname" id="companyname" value="{{$newClient->companyName}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Company Name">
+                    <input type="text" name="companyname" id="companyname" value="{{$newClient->companyName}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Company Name" required>
                     @error('companyname')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -41,7 +41,7 @@
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="number" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mobile Number</label>
-                    <input type="text" name="number" id="number" value="{{$newClient->mobile}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Number">
+                    <input type="text" name="number" id="number" value="{{$newClient->mobile}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Number" required>
                     @error('number')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -50,7 +50,7 @@
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="address" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Address </label>
-                    <input type="text" name="address" id="address" value="{{$newClient->address}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                    <input type="text" name="address" id="address" value="{{$newClient->address}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                     @error('address')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -66,7 +66,7 @@
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Email-Id</label>
-                    <input type="text" name="email" id="email" value="{{$newClient->email}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Email">
+                    <input type="text" name="email" id="email" value="{{$newClient->email}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Email" required>
                     @error('email')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -82,14 +82,14 @@
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="communi_address" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Communication address</label>
-                    <input type="text" name="communi_address" id="communi_address" value="{{$newClient->communicationAdress}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <input type="text" name="communi_address" id="communi_address" value="{{$newClient->communicationAdress}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                     @error('communi_address')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="referralPartner" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Referral Partner</label>
-                    <select name="referralPartner" id="referralPartner" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <select name="referralPartner" id="referralPartner" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                         <option value=""  >Select Referral Partner</option>
                         <option value="1" {{$newClientDetails->referralPartner == 1 ?'selected':''}}>Associate</option>
                         <option value="2" {{$newClientDetails->referralPartner == 2 ?'selected':''}}>Employee</option>
@@ -104,11 +104,11 @@
                 <label for="referralPartner" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Registered under Startup scheme</label>
                 <div class="flex flex-wrap gap-[20px]">
                     <div>
-                        <input type="radio" name="registered" id="registered" {{$newClientDetails->registered == 1 ?'checked':''}} >
+                        <input type="radio" name="registered" id="registered" value='1' {{$newClientDetails->registered == 1 ?'checked':''}} >
                         <label for="registered" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Yes</label>
                     </div>
                     <div>
-                        <input type="radio" name="registered" id="registered2" {{$newClientDetails->registered == 0 ?'checked':''}} >
+                        <input type="radio" name="registered" id="registered2" value='0' {{$newClientDetails->registered == 0 ?'checked':''}} >
                         <label for="registered2" class="text-[12px] font-[400] leading-[14px] text-[#000000]">No</label>
                     </div>
                 </div>

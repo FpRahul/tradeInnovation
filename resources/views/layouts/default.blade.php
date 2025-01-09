@@ -31,16 +31,16 @@
 
 <body class="bg-white dark:bg-black dark:text-white/50">
     <div class="flex flex-wrap gap-x-[40px] h-[100vh]">
-        <div id="sidebar" class="hidden xl:block bg-white shadow-lg xl:shadow-none w-[230px]  transform transition-transform duration-500 ease-in-out -translate-x-full xl:translate-x-0 fixed xl:relative top-0 left-0 z-[9]">
+        <div id="sidebar" class="hidden xl:block bg-white shadow-lg xl:shadow-none w-[230px]  transform transition-transform duration-500 ease-in-out -translate-x-full xl:translate-x-0 fixed xl:relative top-0 left-0 z-[99]">
             <div class="space-y-[24px] h-[100vh] lg:h-[calc(100vh-54px)] max-h-[100vh] lg:max-h-[calc(100vh-54px)] px-[18px] py-[14px] overflow-y-auto ">
                 @include('layouts.sidebar')
             </div>
         </div>
         <div class="w-full xl:w-[calc(100%-270px)]">
-            <div class="admin-header sticky top-0 bg-white">
+            <div class="admin-header sticky top-0 bg-white z-[9]">
                 @include('layouts.header')
             </div>
-            <div class="main-right-content xl:h-[calc(100vh-129px)] xl:max-h-[calc(100vh-129px)] overflow-y-auto py-[23px] px-[15px] xl:pr-[22px] xl:pl-[30px]">
+            <div class="main-right-content xl:h-[calc(100vh-129px)] xl:max-h-[calc(100vh-129px)] overflow-y-auto py-[23px] px-[15px] xl:pr-[22px] xl:pl-[30px] overflow-hidden">
                 @yield('content')
             </div>
         </div>

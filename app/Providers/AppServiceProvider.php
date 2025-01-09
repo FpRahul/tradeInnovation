@@ -31,9 +31,18 @@ class AppServiceProvider extends ServiceProvider
                     $serializeMenus[$v->id]['menu']['icon'] = $v->icon;
                 }
                 if($v->parentId>0){
-                    $serializeMenus[$v->parentId]['subMenu'][$v->id]['name'] = $v->menuName;
-                    $serializeMenus[$v->parentId]['subMenu'][$v->id]['url'] = $v->url;
-                    $serializeMenus[$v->parentId]['subMenu'][$v->id]['icon'] = $v->icon;
+                    //Check if it is sub menu or sub sub menu
+                    $checkLinkedMenus = Menu::find($v->parentId);
+                    if($checkLinkedMenus->parentId>0){
+                        //it is sub sub menu
+                        $serializeMenus[$checkLinkedMenus->parentId]['subSubMenu'][$checkLinkedMenus->id][$v->id]['name'] = $v->menuName;
+                        $serializeMenus[$checkLinkedMenus->parentId]['subSubMenu'][$checkLinkedMenus->id][$v->id]['url'] = $v->url;
+                        $serializeMenus[$checkLinkedMenus->parentId]['subSubMenu'][$checkLinkedMenus->id][$v->id]['icon'] = $v->icon;
+                    }else{
+                        $serializeMenus[$v->parentId]['subMenu'][$v->id]['name'] = $v->menuName;
+                        $serializeMenus[$v->parentId]['subMenu'][$v->id]['url'] = $v->url;
+                        $serializeMenus[$v->parentId]['subMenu'][$v->id]['icon'] = $v->icon;
+                    }
                 }
 
                 //Grouping routes per menu for active class
@@ -48,6 +57,7 @@ class AppServiceProvider extends ServiceProvider
                 //End
             }
         }
+        
         View::share(compact('serializeMenus','menuSubMenuRoutes'));
     }
 }

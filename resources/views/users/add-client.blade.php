@@ -5,11 +5,11 @@
     <div class="flex items-center justify-between mb-[20px]">
         <h3 class="text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">{{$moduleName}}</h3>
     </div>
-    <div class="shadow-[0px_0px_13px_5px_#0000000f] rounded-[20px] mb-[30px]">
-        <form method="POST" action="{{ route('users.addclient',['id' => $newClient->id])}}" class="py-[25px] px-[30px] space-y-[20px]">
+    <div class="shadow-[0px_0px_13px_5px_#0000000f] rounded-[20px]">
+        <form method="POST" action="{{ route('users.addclient',['id' => $newClient->id])}}" class="py-[15px] md:py-[25px] px-[15px] md:px-[30px] space-y-[20px]">
             @csrf
             <input type="hidden" name="role" id="role" value="3">
-            <div class="flex flex-col md:flex-row gap-[20px]">
+            <div class="flex flex-col md:flex-row gap-[20px] !mt-0">
                 <div class="w-full md:w-1/2">
                     <label for="name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Name</label>
                     <input type="text" name="name" id="name" value="{{$newClient->name}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Name">

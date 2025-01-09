@@ -5,8 +5,8 @@
     <div class="flex items-center justify-between mb-[20px]">
         <h3 class="text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">{{$moduleName}}</h3>
     </div>
-    <div class="shadow-[0px_0px_13px_5px_#0000000f] rounded-[20px] mb-[30px]">
-        <form method="POST" action="{{ route('users.addassociate',['id'=>$newAssociate->id])}}" class="py-[25px] px-[30px] space-y-[20px]">
+    <div class="shadow-[0px_0px_13px_5px_#0000000f] rounded-[20px]">
+        <form method="POST" action="{{ route('users.addassociate',['id'=>$newAssociate->id])}}" class="py-[15px] md:py-[25px] px-[15px] md:px-[30px] space-y-[20px]">
             @csrf
             <input type="hidden" name="role" id="role" value="4">
             <div class="flex flex-col md:flex-row gap-[20px]">
@@ -53,7 +53,7 @@
                     <input type="text" name="alternateEmail" value="{{$newAssociate->altEmail}}" id="alternateEmail" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Email">
                 </div>
             </div>
-            
+
             <div class="">
                 <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
             </div>

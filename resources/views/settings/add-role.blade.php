@@ -54,7 +54,7 @@ use App\Models\MenuAction;
                                         <li class="item">
                                             <a href="javascript:void(0)" data-id="tab{{ $smid }}" class="text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center justify-between p-[15px] bg-[#f7f7f7] ">
                                                 <span class="inline-flex items-center gap-[7px] ">
-                                                    <input type="checkbox" class="parent-sub-sub-element w-[15px] h-[15px]" m-id="{{ $menuKey }}" id="main-menu-id-{{ $menuKey }}" name="permission[{{ $menuKey }}][{{ $smid }}][{{ $ssubmid }}]" @if($menuKey==1) {{ 'disabled checked'; }} @endif>
+                                                    <input type="checkbox" class="parent-sub-sub-element w-[15px] h-[15px]" m-id="{{ $menuKey }}" id="sub-sub-menu-id-{{ $ssubmid }}" name="permission[{{ $menuKey }}][{{ $smid }}][{{ $ssubmid }}]" @if($menuKey==1) {{ 'disabled checked'; }} @endif>
                                                     {{ $subSubMenu['name'] }}
                                                 </span>
                                             </a>
@@ -78,6 +78,19 @@ use App\Models\MenuAction;
                         @php $menuAction = MenuAction::where('menuId',$subMenuKey)->get(); @endphp
                         <div class="">
                             <h4 class="font-semibold text-[15px] mb-[7px]">{{ $subMenu['name'] }}</h4>
+                            @if(isset($menu['subSubMenu'][$subMenuKey]))
+                            @foreach ($menu['subSubMenu'][$subMenuKey] as $subsKey =>$subsVal)
+                            <h4 class="font-semibold text-[15px] mb-[7px]">{{ $subsVal['name'] }}</h4>
+                            <div class="flex flex-wrap gap-[10px]" id="actions-of-{{ $subsKey }}">
+                                @php $menuSubAction = MenuAction::where('menuId',$subsKey)->get(); @endphp
+                                @foreach($menuSubAction as $acKey =>$acVal)
+                                <label class="border-[1px] border-[#0000001A] rounded-[10px] text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center gap-[7px] py-[5px] px-[10px] ">
+                                    <input type="checkbox" name="permission[{{ $menuKey }}][{{ $subMenuKey }}][{{ $subsKey }}][{{ $acVal->id }}]" class="w-[15px] h-[15px] sub-sub-menu-actions" sub-menu-id="{{ $subMenuKey }}" sub-sub-menu-id="{{ $subsKey }}" menu-id="{{ $menuKey }}">
+                                    {{ $acVal->actionName }}
+                                </label>
+                                @endforeach
+                            </div>
+                            @endforeach
                             <div class="flex flex-wrap gap-[10px]" id="actions-of-{{ $subMenuKey }}">
                                 @foreach($menuAction as $acKey =>$acVal)
                                 <label class="border-[1px] border-[#0000001A] rounded-[10px] text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center gap-[7px] py-[5px] px-[10px] ">
@@ -86,6 +99,17 @@ use App\Models\MenuAction;
                                 </label>
                                 @endforeach
                             </div>
+                            @else
+                            <div class="flex flex-wrap gap-[10px]" id="actions-of-{{ $subMenuKey }}">
+                                @foreach($menuAction as $acKey =>$acVal)
+                                <label class="border-[1px] border-[#0000001A] rounded-[10px] text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center gap-[7px] py-[5px] px-[10px] ">
+                                    <input type="checkbox" name="permission[{{ $menuKey }}][{{ $subMenuKey }}][{{ $acVal->id }}]" class="w-[15px] h-[15px] sub-menu-actions" sub-menu-id="{{ $subMenuKey }}" menu-id="{{ $menuKey }}">
+                                    {{ $acVal->actionName }}
+                                </label>
+                                @endforeach
+                            </div>
+                            @endif
+                            
                         </div>
                         @endforeach
                     @else
@@ -148,11 +172,13 @@ use App\Models\MenuAction;
     $(document).on('click','.parent-sub-sub-element',function (){
         if($(this).is(':checked')){
             $(this).parent().parent().parent().parent().parent().find('input:checkbox.parent-sub-element').prop('checked',true);
+            $(this).parent().parent().parent().parent().parent().parent().parent().find('input:checkbox.parent-element').prop('checked',true);
         }else{
             if($(this).parent().parent().parent().parent().find('input:checkbox:checked').length>0){
 
             }else{
                 $(this).parent().parent().parent().parent().parent().find('input:checkbox.parent-sub-element').prop('checked',false);
+                // $(this).parent().parent().parent().parent().parent().parent().parent().find('input:checkbox.parent-element').prop('checked',false);
             }
             $('#actions-of-'+$(this).attr('subid')).find('input:checkbox').prop('checked',false);
         }
@@ -173,6 +199,26 @@ use App\Models\MenuAction;
             }else{
                 if($('#sub-menu-id-'+$(this).attr('sub-menu-id')).is(':checked')){
                     $('#sub-menu-id-'+$(this).attr('sub-menu-id')).trigger('click');
+                }
+            }
+        }
+    });
+
+    $(document).on('click','.sub-sub-menu-actions',function(){
+        if($(this).is(':checked')){
+            if ($('#sub-sub-menu-id-'+$(this).attr('sub-sub-menu-id')).length) {
+                if($('#sub-sub-menu-id-'+$(this).attr('sub-sub-menu-id')).is(':checked')){
+
+                }else{
+                    $('#sub-sub-menu-id-'+$(this).attr('sub-sub-menu-id')).trigger('click');
+                }
+            }
+        }else{
+            if($(this).parent().parent().find('input:checkbox:checked').length>0){
+
+            }else{
+                if($('#sub-sub-menu-id-'+$(this).attr('sub-sub-menu-id')).is(':checked')){
+                    $('#sub-sub-menu-id-'+$(this).attr('sub-sub-menu-id')).trigger('click');
                 }
             }
         }

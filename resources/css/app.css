@@ -57,3 +57,11 @@ span[aria-current="page"] span {
 .note-editor.note-frame .note-statusbar {
     border-color: #0000001A !important;
 }
+
+
+
+@media (max-width: 767px){
+.employee_repeater_wrapper .repeater-default > div > div:first-child { flex-direction: column; } 
+.employee_repeater_wrapper .repeater-default > div > div:first-child > div { width: 100% !important; }
+.employee_repeater_wrapper .repeater-default > div > div { background: #f7f7f7; padding: 10px;border-radius: 10px; } 
+}

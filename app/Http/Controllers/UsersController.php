@@ -199,12 +199,11 @@ class UsersController extends Controller
         return view('users.add-user',compact('newUser','newUserDetails','newUserExperiences','header_title_name','moduleName'));
     }
     
-    public function deleteEmployee(Request $request){
-       $employeeId = $request->employeeId;
-       $employeeData = User::where('id',$employeeId)->first();
+    public function deleteUser(Request $request,$id=null){        
+       $employeeData = User::where('id',$id)->first();
          $employeeData->archive = 0;
          if($employeeData->save()){
-            echo "deleted";die;
+           return redirect()->back()->with('success','Your data is successfully deleted');
          }
     }
 
@@ -238,7 +237,7 @@ class UsersController extends Controller
             $newClient = User::find($id);
             $newClientDetails = UserDetail::where('userId',$id)->first();
             $hashedPassword = $newClient->password;
-            $email = "'email' => 'required|email";
+            $email = "required|email";
             $moduleName="Update Client";
 
         }else{
@@ -246,25 +245,13 @@ class UsersController extends Controller
             $newClientDetails = new UserDetail();
             $randomNumber = random_int(100000, 999999);
             $hashedPassword = Hash::make($randomNumber);
-            $email = "'email' => 'required|email|unique:users,email'";
+            $email = "required|email|unique:users,email";
             $moduleName="Add Client";
         }
         if($request->isMethod('POST')){
-            
             $credentials = $request->validate([
-                'name' => 'required',
-                'role' => 'required',
-                $email,
-                'number' => 'required',
-                'companyname' => 'required',
-                'address' => 'required',
-                'registered' => 'required',
-            ]);
-            if($request->registered == 'on'){
-                $registered = 1;
-            }else{
-                $registered = 0;
-            }
+               'email' => $email,
+            ]);            
             
             $newClient->name = $request->name ;
             $newClient->role = $request->role ;
@@ -280,7 +267,7 @@ class UsersController extends Controller
                 
                 $newClientDetails->userId = $newClient->id;
                 $newClientDetails->incorporationType = $request->incorporationtype;
-                $newClientDetails->registered = $registered;
+                $newClientDetails->registered = $request->registered;
                 $newClientDetails->referralPartner = $request->referralPartner;
                 if($newClientDetails->save()){
                     return redirect()->route('client.listing')->withSuccess('Client is successfully inserted!');
@@ -306,8 +293,8 @@ class UsersController extends Controller
                     ->orWhere('mobile', 'LIKE', $searchKey . '%');
             });
         }
-        $associateData = $associateData->paginate(1);
 
+        $associateData = $associateData->paginate(1);
         if (empty($requestType)) {    
             $header_title_name = 'User';
             $moduleName="Manage Associates";
@@ -325,27 +312,21 @@ class UsersController extends Controller
         if($id > 0){
             $newAssociate = User::find($id);
             $hashedPassword = $newAssociate->password;
-            $email = "'email' => 'required|email'";
+            $email = "required|email";
             $moduleName="Update Associate";
 
         }else{
             $newAssociate = new User();
             $randomNumber = random_int(100000, 999999);
             $hashedPassword = Hash::make($randomNumber);
-            $email = "'email' => 'required|email|unique:users,email'";
+            $email = "required|email|unique:users,email";
             $moduleName="Add Associate";
 
         }
         if($request->isMethod('POST')){
             $credentials = $request->validate([
-                'name' => 'required',
-                'role' => 'required',
-                $email,
-                'number' => 'required',
-                'firmName' => 'required',
-                'address' => 'required',
-            ]);
-            
+               'email' =>  $email,
+            ]);            
             
             $newAssociate->name = $request->name ;
             $newAssociate->Profession = $request->profession ;

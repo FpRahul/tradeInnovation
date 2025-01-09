@@ -409,5 +409,17 @@ class UsersController extends Controller
         return view('users/myprofile',compact('userData','header_title_name','moduleName'));
     }
 
+    public function userProfessions(){
+        $header_title_name = 'User';
+        return view('users.professions',compact('header_title_name'));
+    }
+    public function userIncorporation(){
+        $header_title_name = 'User';
+        return view('users.incorporation',compact('header_title_name'));
+    }
+    public function userReferral(){
+        $header_title_name = 'User';
+        return view('users.referral',compact('header_title_name'));
+    }
     
 }

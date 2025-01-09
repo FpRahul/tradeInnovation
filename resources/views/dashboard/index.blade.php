@@ -5,7 +5,7 @@
     <div class="flex items-center justify-between mb-[20px]">
         <h3 class="text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">Dashboard</h3>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[20px] mb-[30px]">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[10px] md:gap-[20px] mb-[30px]">
         <div class="flex shadow-[0px_0px_14px_2px_#0000001F] border border-[#0000001A] rounded-[10px] overflow-hidden">
             <div class="bg-[#F5F5F5] w-[76px] min-h-[64px] flex justify-center items-center">
                 <img src="{{asset('assets/images/dash_icon1.png')}}" alt="icon">

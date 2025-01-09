@@ -19,14 +19,15 @@ class SettingsController extends Controller
         $header_title_name="Setting";
         $moduleName="Create Role";
         if($id>0){
-            $roleData = new Role();
-        }else{
             $roleData = Role::find($id);
+        }else{
+            $roleData = new Role();
         }
         if($request->isMethod('post')){
             $credentials = $request->validate([
                 'rolename' => 'required|unique:roles,name'
             ]);
+
             //Saving Role
             $roleData->name = $request->rolename;
             $roleData->save();
@@ -40,23 +41,30 @@ class SettingsController extends Controller
                     ],
                 ],
             ];
-
-            foreach($allSavedPermissions['permission'] as $menuId => $menuItems){
+           
+            foreach($allSavedPermissions as $menuId => $menuItems){
                 $roleMenuPermission = new RoleMenu();
                 $roleMenuPermission->roleId = $roleData->id;
                 $roleMenuPermission->menuId = $menuId;
                 $roleMenuPermission->permission = NULL;
                 $roleMenuPermission->save();
                 foreach($menuItems as $subMenuId => $subMenuItems){
-                    foreach($subMenuItems as $actionId => $subMenuItems){
-                        
-
+                    $allActions = [];
+                    if($subMenuItems!='on'){
+                        foreach($subMenuItems as $actionId => $subMenuItems){
+                            $allActions[] = $actionId;
+                        }
+                    }
+                    if($subMenuId!='menu'){
+                        $roleMenuPermission = new RoleMenu();
+                        $roleMenuPermission->roleId = $roleData->id;
+                        $roleMenuPermission->menuId = $subMenuId;
+                        $roleMenuPermission->permission = implode(',',$allActions);
+                        $roleMenuPermission->save();
                     }
                 }
-                $roleMenuPermission['menu'][] = $menuId;
             }
-            
-            
+            return redirect()->back()->withSuccess('Permission updated successfully.');
         }
         return view('settings/add-role',compact('header_title_name','moduleName','roleData'));
     }

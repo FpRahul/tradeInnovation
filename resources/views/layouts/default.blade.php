@@ -85,7 +85,26 @@
                 },
                 hide: function(deleteElement) {
                     if (confirm('Are you sure you want to delete this element?')) {
-                        $(this).slideUp(deleteElement);
+                        var deleteId = $(this).find('.deleteRepeaterRow').data('id');
+                        $.ajax({
+                            method:'POST',
+                            url:"{{ route('users.deleterepeater') }}",
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            data:{
+                                id:deleteId
+                            },
+                            success:function(res){
+                                if(res == 1){
+                                    $(this).slideUp(deleteElement);
+                                }
+                            },
+                            error:function(err){
+                                alert(err);
+                            }
+                        })
+                        
                     }
                 },
                 isFirstItemUndeletable: true

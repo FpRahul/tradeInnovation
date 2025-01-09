@@ -23,7 +23,7 @@ Route::middleware('auth')->group(function () {
         Route::match(['POST','GET'],'/', 'index')->name('users.listing');
         Route::match(['POST', 'GET'], '/add-user/{id?}', 'addUser')->name('users.adduser');
         Route::get('/delete/{id?}', 'deleteUser')->name('users.delete');
-
+        Route::post('/deleterepeater', 'deleteRepeaterUser')->name('users.deleterepeater');
         Route::match(['POST','GET'],'/client', 'clients')->name('client.listing');
         Route::match(['POST', 'GET'], '/add-client/{id?}', 'addClient')->name('users.addclient');
 

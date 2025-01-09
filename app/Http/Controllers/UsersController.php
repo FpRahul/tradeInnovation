@@ -99,6 +99,10 @@ class UsersController extends Controller
             $newUser = User::find($id);  
             $newUserDetails = UserDetail::where('userId',$id)->first();
             $newUserExperiences = UserExperience::where('userId',$id)->get();
+            $eImage = !empty($newUserDetails['uploadPhotograph']) ? '':'required|mimes:jpeg,png,jpg,pdf|max:2048';           
+            $pImage = !empty($newUserDetails['uploadPan']) ? '':'required|mimes:jpeg,png,jpg,pdf|max:2048';
+            $aImage = !empty($newUserDetails['uploadAadhar']) ? '':'required|mimes:jpeg,png,jpg,pdf|max:2048';
+            $dImage = !empty($newUserDetails['uploadDrivingLicence']) ? '':'required|mimes:jpeg,png,jpg,pdf|max:2048';
             $email = "required|email";
             $hashedPassword = $newUser->password;
             $successMessage = "User is successfully updated!";
@@ -106,6 +110,10 @@ class UsersController extends Controller
         }else{
             $newUser = new User();
             $newUserDetails = new UserDetail();
+            $eImage = "required|mimes:jpeg,png,jpg,pdf|max:2048";            
+            $pImage = "required|mimes:jpeg,png,jpg,pdf|max:2048";
+            $aImage = "required|mimes:jpeg,png,jpg,pdf|max:2048";
+            $dImage = "required|mimes:jpeg,png,jpg,pdf|max:2048";
             $newUserExperiences = [];
             $email = "required|email|unique:users,email";
             $randomNumber = random_int(100000, 999999);
@@ -117,14 +125,10 @@ class UsersController extends Controller
            
             $credentials = $request->validate([               
                 'email'=> $email,
-                'employeePhoto' => [
-                    'required',
-                    'uploadPhotograph', // Custom validation rule
-                    Rule::unique('user_details', 'employeePhoto')->ignore($request->userId, 'userId'),
-                ],             
-                'uploadPan' => 'required',
-                'uploadAadhar' => 'required',
-                'uploadDrivingLicence' => 'required',
+                'employeePhoto' => $eImage,             
+                'uploadPan' => $pImage,
+                'uploadAadhar' => $aImage,
+                'uploadDrivingLicence' => $dImage,
             ]);
             $newUser->name = $request->name;
             $newUser->role = $request->role;
@@ -169,20 +173,19 @@ class UsersController extends Controller
                     $newUserDetails->uploadDrivingLicence = $imageName;
 
                 }
-                
                 foreach($request->experince as $exKey => $exVal){
                    if($exVal['experience_id'] > 0){                   
-                        $newUserExperiences = UserExperience::where('id',$exVal['experience_id'])->first();
+                        $newUserExperiences = UserExperience::find($exVal['experience_id']);                       
                    }else{
-                        $newUserExperiences = new UserExperience();
+                        $newUserExperiences = new UserExperience();                        
                    }
                     $newUserExperiences->userId = $newUser->id;
                     $newUserExperiences->employerName = $exVal['employerName'];
                     $newUserExperiences->startDate = $exVal['startDate'];
                     $newUserExperiences->endDate = $exVal['endDate'];
-
                     $newUserExperiences->save();
                 } 
+
                 if($newUserDetails->save()){
                    
                     return redirect()->route('users.listing')->withSuccess($successMessage);
@@ -205,6 +208,17 @@ class UsersController extends Controller
          if($employeeData->save()){
            return redirect()->back()->with('success','Your data is successfully deleted');
          }
+    }
+
+    public function deleteRepeaterUser(Request $request){
+       
+        $experienceData = UserExperience::where('id',$request->id);
+        if($experienceData->delete()){
+            echo "1";
+        }else{
+            echo "0";
+        }
+
     }
 
     public function clients(Request $request){

@@ -46,12 +46,14 @@
                         @if ($newUserDetails->uploadPhotograph)
                         <img src="{{asset('Image/'.$newUserDetails->uploadPhotograph)}}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
                         @endif
-                        <label for="employeePhoto" class="cursor-pointer w-[83px] h-[45px] rounded-[10px] flex items-center justify-center border border-dashed border-[#13103a4d] ">
-                            <svg class="cursor-pointer" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M13.9395 8.95044H8.93945V13.9504C8.93945 14.5004 8.48945 14.9504 7.93945 14.9504C7.38945 14.9504 6.93945 14.5004 6.93945 13.9504V8.95044H1.93945C1.38945 8.95044 0.939453 8.50044 0.939453 7.95044C0.939453 7.40044 1.38945 6.95044 1.93945 6.95044H6.93945V1.95044C6.93945 1.40044 7.38945 0.950439 7.93945 0.950439C8.48945 0.950439 8.93945 1.40044 8.93945 1.95044V6.95044H13.9395C14.4895 6.95044 14.9395 7.40044 14.9395 7.95044C14.9395 8.50044 14.4895 8.95044 13.9395 8.95044Z" fill="#13103A" />
-                            </svg>
-                        </label>
-                        <input type="file" name="employeePhoto" id="employeePhoto" class="opacity-0 absolute top-0 left-0">
+                        <div class="relative">
+                            <label for="employeePhoto" class="cursor-pointer w-[83px] h-[45px] rounded-[10px] flex items-center justify-center border border-dashed border-[#13103a4d] ">
+                                <svg class="cursor-pointer" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M13.9395 8.95044H8.93945V13.9504C8.93945 14.5004 8.48945 14.9504 7.93945 14.9504C7.38945 14.9504 6.93945 14.5004 6.93945 13.9504V8.95044H1.93945C1.38945 8.95044 0.939453 8.50044 0.939453 7.95044C0.939453 7.40044 1.38945 6.95044 1.93945 6.95044H6.93945V1.95044C6.93945 1.40044 7.38945 0.950439 7.93945 0.950439C8.48945 0.950439 8.93945 1.40044 8.93945 1.95044V6.95044H13.9395C14.4895 6.95044 14.9395 7.40044 14.9395 7.95044C14.9395 8.50044 14.4895 8.95044 13.9395 8.95044Z" fill="#13103A" />
+                                </svg>
+                            </label>
+                            <input type="file" name="employeePhoto" id="employeePhoto" class="w-0 opacity-0 absolute top-0 left-0">
+                        </div>
                     </div>
                     @error('employeePhoto')
                     <div class="alert alert-danger">{{ $message }}</div>
@@ -177,7 +179,7 @@
 
                     </div>
                     <div class="mt-[20px]">
-                        <a data-repeater-create class="inline-block text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]"> Add More </a>
+                        <a href="javascript:void(0)" data-repeater-create class="inline-block text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]"> Add More </a>
                     </div>
                 </div>
             </div>
@@ -241,12 +243,14 @@
                         @if ($newUserDetails->uploadPhotograph)
                         <img src="{{asset('Image/'.$newUserDetails->uploadPan)}}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
                         @endif
-                        <label for="uploadPan" class="cursor-pointer w-[83px] h-[45px] rounded-[10px] flex items-center justify-center border border-dashed border-[#13103a4d] ">
-                            <svg class="cursor-pointer" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M13.9395 8.95044H8.93945V13.9504C8.93945 14.5004 8.48945 14.9504 7.93945 14.9504C7.38945 14.9504 6.93945 14.5004 6.93945 13.9504V8.95044H1.93945C1.38945 8.95044 0.939453 8.50044 0.939453 7.95044C0.939453 7.40044 1.38945 6.95044 1.93945 6.95044H6.93945V1.95044C6.93945 1.40044 7.38945 0.950439 7.93945 0.950439C8.48945 0.950439 8.93945 1.40044 8.93945 1.95044V6.95044H13.9395C14.4895 6.95044 14.9395 7.40044 14.9395 7.95044C14.9395 8.50044 14.4895 8.95044 13.9395 8.95044Z" fill="#13103A" />
-                            </svg>
-                        </label>
-                        <input type="file" name="uploadPan" id="uploadPan" class="opacity-0 absolute top-0 left-0">
+                        <div class="relative">
+                            <label for="uploadPan" class="cursor-pointer w-[83px] h-[45px] rounded-[10px] flex items-center justify-center border border-dashed border-[#13103a4d] ">
+                                <svg class="cursor-pointer" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M13.9395 8.95044H8.93945V13.9504C8.93945 14.5004 8.48945 14.9504 7.93945 14.9504C7.38945 14.9504 6.93945 14.5004 6.93945 13.9504V8.95044H1.93945C1.38945 8.95044 0.939453 8.50044 0.939453 7.95044C0.939453 7.40044 1.38945 6.95044 1.93945 6.95044H6.93945V1.95044C6.93945 1.40044 7.38945 0.950439 7.93945 0.950439C8.48945 0.950439 8.93945 1.40044 8.93945 1.95044V6.95044H13.9395C14.4895 6.95044 14.9395 7.40044 14.9395 7.95044C14.9395 8.50044 14.4895 8.95044 13.9395 8.95044Z" fill="#13103A" />
+                                </svg>
+                            </label>
+                            <input type="file" name="uploadPan" id="uploadPan" class="w-0 opacity-0 absolute top-0 left-0">
+                        </div>
                     </div>
                     @error('uploadPan')
                     <div class="alert alert-danger">{{ $message }}</div>
@@ -258,12 +262,14 @@
                         @if ($newUserDetails->uploadAadhar)
                         <img src="{{asset('Image/'.$newUserDetails->uploadAadhar)}}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
                         @endif
-                        <label for="uploadAadhar" class="cursor-pointer w-[83px] h-[45px] rounded-[10px] flex items-center justify-center border border-dashed border-[#13103a4d] ">
-                            <svg class="cursor-pointer" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M13.9395 8.95044H8.93945V13.9504C8.93945 14.5004 8.48945 14.9504 7.93945 14.9504C7.38945 14.9504 6.93945 14.5004 6.93945 13.9504V8.95044H1.93945C1.38945 8.95044 0.939453 8.50044 0.939453 7.95044C0.939453 7.40044 1.38945 6.95044 1.93945 6.95044H6.93945V1.95044C6.93945 1.40044 7.38945 0.950439 7.93945 0.950439C8.48945 0.950439 8.93945 1.40044 8.93945 1.95044V6.95044H13.9395C14.4895 6.95044 14.9395 7.40044 14.9395 7.95044C14.9395 8.50044 14.4895 8.95044 13.9395 8.95044Z" fill="#13103A" />
-                            </svg>
-                        </label>
-                        <input type="file" name="uploadAadhar" id="uploadAadhar" class="opacity-0 absolute top-0 left-0">
+                        <div class="relative">
+                            <label for="uploadAadhar" class="cursor-pointer w-[83px] h-[45px] rounded-[10px] flex items-center justify-center border border-dashed border-[#13103a4d] ">
+                                <svg class="cursor-pointer" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M13.9395 8.95044H8.93945V13.9504C8.93945 14.5004 8.48945 14.9504 7.93945 14.9504C7.38945 14.9504 6.93945 14.5004 6.93945 13.9504V8.95044H1.93945C1.38945 8.95044 0.939453 8.50044 0.939453 7.95044C0.939453 7.40044 1.38945 6.95044 1.93945 6.95044H6.93945V1.95044C6.93945 1.40044 7.38945 0.950439 7.93945 0.950439C8.48945 0.950439 8.93945 1.40044 8.93945 1.95044V6.95044H13.9395C14.4895 6.95044 14.9395 7.40044 14.9395 7.95044C14.9395 8.50044 14.4895 8.95044 13.9395 8.95044Z" fill="#13103A" />
+                                </svg>
+                            </label>
+                            <input type="file" name="uploadAadhar" id="uploadAadhar" class="w-0 opacity-0 absolute top-0 left-0">
+                        </div>
                     </div>
                     @error('uploadAadhar')
                     <div class="alert alert-danger">{{ $message }}</div>
@@ -275,12 +281,14 @@
                         @if ($newUserDetails->uploadDrivingLicence)
                         <img src="{{asset('Image/'.$newUserDetails->uploadDrivingLicence)}}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
                         @endif
-                        <label for="uploadDrivingLicence" class="cursor-pointer w-[83px] h-[45px] rounded-[10px] flex items-center justify-center border border-dashed border-[#13103a4d] ">
-                            <svg class="cursor-pointer" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M13.9395 8.95044H8.93945V13.9504C8.93945 14.5004 8.48945 14.9504 7.93945 14.9504C7.38945 14.9504 6.93945 14.5004 6.93945 13.9504V8.95044H1.93945C1.38945 8.95044 0.939453 8.50044 0.939453 7.95044C0.939453 7.40044 1.38945 6.95044 1.93945 6.95044H6.93945V1.95044C6.93945 1.40044 7.38945 0.950439 7.93945 0.950439C8.48945 0.950439 8.93945 1.40044 8.93945 1.95044V6.95044H13.9395C14.4895 6.95044 14.9395 7.40044 14.9395 7.95044C14.9395 8.50044 14.4895 8.95044 13.9395 8.95044Z" fill="#13103A" />
-                            </svg>
-                        </label>
-                        <input type="file" name="uploadDrivingLicence" id="uploadDrivingLicence" class="opacity-0 absolute top-0 left-0">
+                        <div class="relative">
+                            <label for="uploadDrivingLicence" class="cursor-pointer w-[83px] h-[45px] rounded-[10px] flex items-center justify-center border border-dashed border-[#13103a4d] ">
+                                <svg class="cursor-pointer" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M13.9395 8.95044H8.93945V13.9504C8.93945 14.5004 8.48945 14.9504 7.93945 14.9504C7.38945 14.9504 6.93945 14.5004 6.93945 13.9504V8.95044H1.93945C1.38945 8.95044 0.939453 8.50044 0.939453 7.95044C0.939453 7.40044 1.38945 6.95044 1.93945 6.95044H6.93945V1.95044C6.93945 1.40044 7.38945 0.950439 7.93945 0.950439C8.48945 0.950439 8.93945 1.40044 8.93945 1.95044V6.95044H13.9395C14.4895 6.95044 14.9395 7.40044 14.9395 7.95044C14.9395 8.50044 14.4895 8.95044 13.9395 8.95044Z" fill="#13103A" />
+                                </svg>
+                            </label>
+                            <input type="file" name="uploadDrivingLicence" id="uploadDrivingLicence" class="w-0 opacity-0 absolute top-0 left-0">
+                        </div>
                     </div>
                     @error('uploadDrivingLicence')
                     <div class="alert alert-danger">{{ $message }}</div>

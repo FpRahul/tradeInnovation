@@ -187,15 +187,15 @@
         jQuery(document).on('click', '.accordian .item>a', function() {
 
             if (!jQuery(this).hasClass('nav-link')) {
-                jQuery(this).parent().find('.accordian_body').slideDown();
-                jQuery(this).parent().siblings().find('.accordian_body').slideUp();
+                jQuery(this).parent().children('.accordian_body').slideDown();
+                jQuery(this).parent().siblings().children('.accordian_body').slideUp();
                 let tabId = jQuery(this).attr('data-id');
                 console.log(tabId);
                 jQuery(`#${tabId}`).removeClass('hidden');
                 jQuery(`#${tabId}`).siblings().addClass('hidden');
             } else {
-                jQuery(this).parent().find('.accordian_body').slideToggle();
-                jQuery(this).parent().siblings().find('.accordian_body').slideUp();
+                jQuery(this).parent().children('.accordian_body').slideToggle();
+                jQuery(this).parent().siblings().children('.accordian_body').slideUp();
             }
 
         })

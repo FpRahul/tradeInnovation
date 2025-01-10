@@ -17,8 +17,8 @@
             Add Users
         </a>
     </div>
-    <div class="shadow-[0px_0px_13px_5px_#0000000f] rounded-[20px] ">
-        <div class="py-[25px] px-[20px] flex items-center justify-between">
+    <div class="shadow-[0px_0px_13px_5px_#0000000f] rounded-[20px] overflow-hidden">
+        <div class="py-[15px] md:py-[25px] px-[15px] md:px-[20px] flex items-center justify-between">
 
             <div class="relative w-[217px]">
                 <svg class="absolute top-[50%] left-[13px] translate-y-[-50%]" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -28,7 +28,7 @@
             </div>
         </div>
         <div class="overflow-x-auto " id="search_table_data">
-            <table width="100%" cellpadding="0" cellspacing="0" class="min-w-[700px]">
+            <table width="100%" cellpadding="0" cellspacing="0" class="min-w-[600px]">
                 <thead>
                     <tr>
                         <th width="25%" class="text-start w-[200px] bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
@@ -50,20 +50,20 @@
                         @foreach ($employeeData as $employeeListing)
 
                             <tr>
-                                <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
+                                <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
                                     {{$employeeListing->name}}
                                 </td>
-                                <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                                <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                                     {{$employeeListing->mobile}}
                                 </td>
-                                <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                                <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                                     @if ($employeeListing->status == 1)
                                     <span class="text-[#13103A] bg-[#99F98C] inline-block text-center min-w-[100px] py-[5px] px-[10px] rounded-[5px] ">Active</span>
                                     @else
                                     <span class="text-[#13103A] bg-[#f98c8c] inline-block text-center min-w-[100px] py-[5px] px-[10px] rounded-[5px] ">Inactive</span>
                                     @endif
                                 </td>
-                                <td class="border-b-[1px] border-[#0000001A] py-[12px] px-[15px]">
+                                <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] py-[12px] px-[15px]">
                                     <div class="dropdown inline-block relative ml-[auto] mr-[20px] ">
                                         <a href="javascript:void(0)" type="button" class="button">
                                             <svg width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">

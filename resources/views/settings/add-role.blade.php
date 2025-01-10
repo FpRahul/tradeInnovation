@@ -18,7 +18,7 @@ use App\Models\MenuAction;
                 @enderror
             </div>
             <div class="px-[20px] flex flex-col md:flex-row gap-[30px]">
-                <div class="w-[230px] max-h-[450px] overflow-y-auto ">
+                <div class="w-[230px] max-h-[100%] overflow-y-auto ">
                     <ul class="accordian space-y-[7px]">
                     @foreach($serializeMenus as $menuKey => $menu)
                         <li class="item">
@@ -72,23 +72,27 @@ use App\Models\MenuAction;
                 </div>
                 <div class="w-[calc(100%-260px)]">
                 @foreach($serializeMenus as $menuKey => $menu)
-                    <div id="tab{{ $menuKey }}" class="space-y-[30px]">
+                    <div id="tab{{ $menuKey }}" class="space-y-[15px] hidden">
                     @if (isset($menu['subMenu']))
+                    
+                    <h4 class="aa font-semibold text-[20px] mb-[7px] main-heading-itm">{{ $menu['menu']['name'] }}</h4>
                         @foreach($menu['subMenu'] as $subMenuKey => $subMenu)
                         @php $menuAction = MenuAction::where('menuId',$subMenuKey)->get(); @endphp
                         <div class="">
-                            <h4 class="font-semibold text-[15px] mb-[7px]">{{ $subMenu['name'] }}</h4>
+                            <h4 class="font-semibold text-[15px] mb-[15px]">{{ $subMenu['name'] }}</h4>
                             @if(isset($menu['subSubMenu'][$subMenuKey]))
                             @foreach ($menu['subSubMenu'][$subMenuKey] as $subsKey =>$subsVal)
-                            <h4 class="font-semibold text-[15px] mb-[7px]">{{ $subsVal['name'] }}</h4>
-                            <div class="flex flex-wrap gap-[10px]" id="actions-of-{{ $subsKey }}">
-                                @php $menuSubAction = MenuAction::where('menuId',$subsKey)->get(); @endphp
-                                @foreach($menuSubAction as $acKey =>$acVal)
-                                <label class="border-[1px] border-[#0000001A] rounded-[10px] text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center gap-[7px] py-[5px] px-[10px] ">
-                                    <input type="checkbox" name="permission[{{ $menuKey }}][{{ $subMenuKey }}][{{ $subsKey }}][{{ $acVal->id }}]" class="w-[15px] h-[15px] sub-sub-menu-actions" sub-menu-id="{{ $subMenuKey }}" sub-sub-menu-id="{{ $subsKey }}" menu-id="{{ $menuKey }}">
-                                    {{ $acVal->actionName }}
-                                </label>
-                                @endforeach
+                            <div class="pl-[20px] mt-3">
+                                <h4 class="font-semibold text-[#242323] text-[14px] mb-[7px]">{{ $subsVal['name'] }}</h4>
+                                <div class=" flex flex-wrap gap-[10px]" id="actions-of-{{ $subsKey }}">
+                                    @php $menuSubAction = MenuAction::where('menuId',$subsKey)->get(); @endphp
+                                    @foreach($menuSubAction as $acKey =>$acVal)
+                                    <label class="border-[1px] border-[#0000001A] rounded-[10px] text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center gap-[7px] py-[5px] px-[10px] ">
+                                        <input type="checkbox" name="permission[{{ $menuKey }}][{{ $subMenuKey }}][{{ $subsKey }}][{{ $acVal->id }}]" class="w-[15px] h-[15px] sub-sub-menu-actions" sub-menu-id="{{ $subMenuKey }}" sub-sub-menu-id="{{ $subsKey }}" menu-id="{{ $menuKey }}">
+                                        {{ $acVal->actionName }}
+                                    </label>
+                                    @endforeach
+                                </div>
                             </div>
                             @endforeach
                             <div class="flex flex-wrap gap-[10px]" id="actions-of-{{ $subMenuKey }}">
@@ -114,8 +118,8 @@ use App\Models\MenuAction;
                         @endforeach
                     @else
                         @php $menuAction = MenuAction::where('menuId',$menuKey)->get(); @endphp
-                        <div class="">
-                            <h4 class="font-semibold text-[15px] mb-[7px]">{{ $menu['menu']['name'] }}</h4>
+                        <div class="mt-3">
+                            <h4 class="font-semibold text-[18px] mb-[7px] main-heading-itm">{{ $menu['menu']['name'] }}</h4>
                             <div class="flex flex-wrap gap-[10px]">
                                 @foreach($menuAction as $acKey =>$acVal)
                                 <label class="border-[1px] border-[#0000001A] rounded-[10px] text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center gap-[7px] py-[5px] px-[10px] ">

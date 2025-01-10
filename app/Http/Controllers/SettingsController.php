@@ -27,40 +27,46 @@ class SettingsController extends Controller
             $credentials = $request->validate([
                 'rolename' => 'required|unique:roles,name'
             ]);
-
+            echo "<pre>"; print_R($request->all());die;
             //Saving Role
             $roleData->name = $request->rolename;
             $roleData->save();
 
             //Saving Role Permission
             $allSavedPermissions = $request->permission;
-            $roleMenuPermission = [
-                'menu' => [
-                    'submenu' => [
-                        'action' => []
-                    ],
-                ],
-            ];
-           
+            $roleMenuPermission = [];
+            $recordCounter = 0;
             foreach($allSavedPermissions as $menuId => $menuItems){
-                $roleMenuPermission = new RoleMenu();
-                $roleMenuPermission->roleId = $roleData->id;
-                $roleMenuPermission->menuId = $menuId;
-                $roleMenuPermission->permission = NULL;
-                $roleMenuPermission->save();
+                if($menuItems=='on'){
+                    $roleMenuPermission[$recordCounter]['roleId'] = $roleData->id;
+                    $roleMenuPermission[$recordCounter]['menuId'] = $menuId;
+                    $roleMenuPermission[$recordCounter]['permission'] = NULL;
+                    $recordCounter++;
+                }
                 foreach($menuItems as $subMenuId => $subMenuItems){
-                    $allActions = [];
-                    if($subMenuItems!='on'){
+                    if($subMenuId=='menu'){
+                        $allActions = [];
                         foreach($subMenuItems as $actionId => $subMenuItems){
                             $allActions[] = $actionId;
                         }
-                    }
-                    if($subMenuId!='menu'){
-                        $roleMenuPermission = new RoleMenu();
-                        $roleMenuPermission->roleId = $roleData->id;
-                        $roleMenuPermission->menuId = $subMenuId;
-                        $roleMenuPermission->permission = implode(',',$allActions);
-                        $roleMenuPermission->save();
+                        $roleMenuPermission[$recordCounter]['roleId'] = $roleData->id;
+                        $roleMenuPermission[$recordCounter]['menuId'] = $menuId;
+                        $roleMenuPermission[$recordCounter]['permission'] = implode(',',$allActions);
+                        $recordCounter++;
+                    }else{
+                        $allActions = [];
+                        if($subMenuItems!='on'){
+                            foreach($subMenuItems as $actionId => $subMenuItems){
+                                $allActions[] = $actionId;
+                            }
+                        }
+                        if($subMenuId!='menu'){
+                            $roleMenuPermission = new RoleMenu();
+                            $roleMenuPermission->roleId = $roleData->id;
+                            $roleMenuPermission->menuId = $subMenuId;
+                            $roleMenuPermission->permission = implode(',',$allActions);
+                            $roleMenuPermission->save();
+                        }
                     }
                 }
             }

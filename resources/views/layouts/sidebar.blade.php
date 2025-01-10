@@ -61,7 +61,7 @@
                                 <li class="item group has-sub-submenu {{ $activeSubSubMenu }}">
                                     <a href="javascript:void(0);"
                                         class="button nav-link flex items-center justify-between text-[#13103A] font-[Inter] text-[14px] font-[400] leading-[16px] 
-                                            group-[.active]:bg-[#13103A] group-[.active]:text-[#ffffff] group-[.active]:shadow-[0px_0px_6px_2px_#00000036] p-[3px] rounded-[10px]">
+                                            group-[.active]:bg-[#13103A] group-[.active]:text-[#ffffff] group-[.active]:shadow-[0px_0px_6px_2px_#00000036] p-[10px] rounded-[10px]">
                                         <span class="flex items-center gap-[10px] ">
                                             {{ $subMenu['name'] }}
                                         </span>

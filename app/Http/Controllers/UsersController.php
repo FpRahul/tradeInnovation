@@ -248,6 +248,10 @@ class UsersController extends Controller
     }
 
     public function addClient(Request $request,$id=null){
+        $incorporationDataList = '';
+        $referDataList = '';
+        // CategoryOption::where('status',1)->where('type',2)->pluck('value', 'key');
+        // CategoryOption::where('status',1)->where('type',3)->pluck('value', 'key');
         if($id > 0){
             $newClient = User::find($id);
             $newClientDetails = UserDetail::where('userId',$id)->first();
@@ -264,6 +268,7 @@ class UsersController extends Controller
             $moduleName="Add Client";
         }
         if($request->isMethod('POST')){
+           
             $credentials = $request->validate([
                'email' => $email,
             ]);            
@@ -295,7 +300,7 @@ class UsersController extends Controller
             }
         }
         $header_title_name = 'User';
-        return view('users.add-client',compact('newClient','newClientDetails','header_title_name','moduleName'));
+        return view('users.add-client',compact('newClient','newClientDetails','header_title_name','moduleName','incorporationDataList','referDataList'));
     }
 
     public function associates(Request $request){

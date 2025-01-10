@@ -91,12 +91,7 @@
                     <label for="referralPartner" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Referral Partner</label>
                     <select name="referralPartner" id="referralPartner" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                         <option value=""  >Select Referral Partner</option>
-                        <option value="1" {{$newClientDetails->referralPartner == 1 ?'selected':''}}>Associate</option>
-                        <option value="2" {{$newClientDetails->referralPartner == 2 ?'selected':''}}>Employee</option>
-                        <option value="3" {{$newClientDetails->referralPartner == 3 ?'selected':''}}>Goggle</option>
-                        <option value="4" {{$newClientDetails->referralPartner == 4 ?'selected':''}}>Fackbook</option>
-                        <option value="5" {{$newClientDetails->referralPartner == 5 ?'selected':''}}>Newspaper</option>
-                        <option value="6" {{$newClientDetails->referralPartner == 6 ?'selected':''}}>Client Referral</option>
+                        {{$referDataList}}
                     </select>
                 </div>
             </div>

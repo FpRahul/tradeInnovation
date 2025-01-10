@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\UserDetail;
+use App\Models\CategoryOption;
 use App\Models\UserExperience;
 use Illuminate\Support\Str;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -409,17 +410,109 @@ class UsersController extends Controller
         return view('users/myprofile',compact('userData','header_title_name','moduleName'));
     }
 
-    public function userProfessions(){
+    public function userProfessions(Request $request,$id=null){
+        $categoryData = CategoryOption::where('type',1)->paginate(1);
+        if($request->profession_id > 0){
+            $newCategory = CategoryOption::find($request->profession_id)->first();
+        }else{
+            $newCategory = new CategoryOption;
+        }
+        if($request->isMethod('POST')){
+            $authUser = Auth::user();
+            $newCategory->authId = $authUser->id;
+            $newCategory->type = $request->type;
+            $newCategory->name = $request->name;
+
+           if($newCategory->save()){
+            if($request->profession_id > 0){
+                return redirect()->back()->with('success','Your data is successfully updated');
+            }else{
+                return redirect()->back()->with('success','Your data is successfully inserted');
+            }
+           }else{
+                return back()->with('error','some error is occurring');
+           }
+        }
         $header_title_name = 'User';
-        return view('users.professions',compact('header_title_name'));
+        return view('users.professions',compact('header_title_name','newCategory','categoryData'));
     }
-    public function userIncorporation(){
-        $header_title_name = 'User';
-        return view('users.incorporation',compact('header_title_name'));
+    public function categoryStatus(Request $request,$id=null){
+        $categoryData = CategoryOption::find($id);
+        if($request->val){
+            $categoryData->status = 0;
+        }else{
+            $categoryData->status = 1;
+        }
+
+        if($categoryData->save()){
+            return redirect()->back()->with('success','Status is successfully updated!');
+        }else{
+            return redirect()->back()->with('error','Some error is occur!');
+        }
+
     }
-    public function userReferral(){
+
+    public function categoryDelete($id=null){
+        $categoryData = CategoryOption::find($id);
+        if($categoryData->delete()){
+            return redirect()->back()->with('success','Your data is successfully deleted!');
+        }else{
+            return redirect()->back()->with('error','Some error is occur!');
+        }
+    }
+    public function userIncorporation(Request $request,$id=null){
+        $categoryData = CategoryOption::where('type',2)->paginate(1);
+        if($request->incorporation_id > 0){
+            $newCategory = CategoryOption::where('id',$request->incorporation_id)->first();
+        }else{
+            $newCategory = new CategoryOption;
+        }
+        if($request->isMethod('POST')){
+            $authUser = Auth::user();
+            $newCategory->authId = $authUser->id;
+            $newCategory->type = $request->type;
+            $newCategory->name = $request->name;
+
+             if($newCategory->save()){
+                if($request->incorporation_id > 0){
+                    return redirect()->back()->with('success','Your data is successfully updated');
+                }else{
+                    return redirect()->back()->with('success','Your data is successfully inserted');
+                }
+            }else{
+                return back()->with('error','some error is occurring');
+            }
+        }
         $header_title_name = 'User';
-        return view('users.referral',compact('header_title_name'));
+        return view('users.incorporation',compact('header_title_name','newCategory','categoryData'));
+       
+    }
+    public function userReferral(Request $request,$id=null){
+        $categoryData = CategoryOption::where('type',3)->paginate(1);
+        if($request->referral_id > 0){
+            $newCategory = CategoryOption::where('id',$request->referral_id)->first();
+        }else{
+            $newCategory = new CategoryOption;
+        }
+        if($request->isMethod('POST')){
+            $authUser = Auth::user();
+            $newCategory->authId = $authUser->id;
+            $newCategory->type = $request->type;
+            $newCategory->name = $request->name;
+
+             if($newCategory->save()){
+                if($request->referral_id > 0){
+                    return redirect()->back()->with('success','Your data is successfully updated');
+                }else{
+                    return redirect()->back()->with('success','Your data is successfully inserted');
+                }
+            }else{
+                return back()->with('error','some error is occurring');
+            }
+        }
+        $header_title_name = 'User';
+        return view('users.referral',compact('header_title_name','newCategory','categoryData'));
+
     }
     
 }

@@ -45,7 +45,7 @@ Route::middleware('auth')->group(function () {
     //Settings Routes
     Route::prefix('settings')->controller(SettingsController::class)->group(function () {
         Route::get('/roles', 'roles')->name('settings.roles');
-        Route::match(['POST','GET'],'/add-role', 'addRole')->name('settings.addrole');
+        Route::match(['POST','GET'],'/add-role/{id?}', 'addRole')->name('settings.addrole');
     });
 
     //Leads Routes

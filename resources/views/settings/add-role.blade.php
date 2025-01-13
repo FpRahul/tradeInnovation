@@ -12,7 +12,7 @@ use App\Models\MenuAction;
             @csrf
             <div class="py-[25px] px-[20px]">
                 <label for="rolename" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Role Name</label>
-                <input type="text" required name="rolename" id="rolename" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[18px] py-[14px] rounded-[10px] !outline-none" placeholder="Enter Role Name">
+                <input type="text" required name="rolename" id="rolename" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[18px] py-[14px] rounded-[10px] !outline-none" placeholder="Enter Role Name" value="{{ $roleData->name }}">
                 @error('rolename')
                     <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
@@ -24,7 +24,16 @@ use App\Models\MenuAction;
                         <li class="item">
                             <a href="javascript:void(0)" data-id="tab{{ $menuKey }}" class="text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center justify-between p-[15px] bg-[#f7f7f7] ">
                                 <span class="inline-flex items-center gap-[7px] ">
-                                    <input type="checkbox" class="w-[15px] h-[15px] parent-element" m-id="{{ $menuKey }}" id="main-menu-id-{{ $menuKey }}" name="permission[{{ $menuKey }}]" @if($menuKey==1) {{ 'disabled checked'; }} @endif>
+                                    @if($menuKey==1)
+                                        @php $isChecked = 'disabled checked';  @endphp
+                                    @else
+                                        @if (isset($menuAddedAction[$menuKey]))
+                                            @php $isChecked = 'checked';  @endphp
+                                        @else
+                                            @php $isChecked = '';  @endphp
+                                        @endif
+                                    @endif
+                                    <input type="checkbox" class="w-[15px] h-[15px] parent-element" m-id="{{ $menuKey }}" id="main-menu-id-{{ $menuKey }}" name="permission[mainMenu][{{ $menuKey }}]" {{ $isChecked }}>
                                     {{ $menu['menu']['name'] }}
                                 </span>
                                 @if (isset($menu['subMenu']))
@@ -36,10 +45,15 @@ use App\Models\MenuAction;
                             @if (isset($menu['subMenu']))
                             <ul class="accordian_body pl-[20px]">
                                 @foreach($menu['subMenu'] as $smid => $subMenu)
+                                @if (isset($menuAddedAction[$smid]))
+                                    @php $isChecked = 'checked';  @endphp
+                                @else
+                                    @php $isChecked = '';  @endphp
+                                @endif
                                 <li>
                                     <a href="javascript:void(0)" class="text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center justify-between p-[10px] ">
                                         <span class="inline-flex items-center gap-[7px] ">
-                                            <input type="checkbox" name="permission[{{ $menuKey }}][{{ $smid }}]" id="sub-menu-id-{{ $smid }}" subid="{{ $smid }}" class="w-[15px] h-[15px] parent-sub-element">
+                                            <input type="checkbox" name="permission[mainMenu][{{ $menuKey }}][subMenu][{{ $smid }}]" id="sub-menu-id-{{ $smid }}" subid="{{ $smid }}" class="w-[15px] h-[15px] parent-sub-element" {{ $isChecked }}>
                                             {{ $subMenu['name'] }}
                                         </span>
                                         @if(isset($menu['subSubMenu'][$smid]))
@@ -51,10 +65,15 @@ use App\Models\MenuAction;
                                     @if(isset($menu['subSubMenu'][$smid]))
                                     <ul class="accordian_body pl-[20px]">
                                         @foreach($menu['subSubMenu'][$smid] as $ssubmid => $subSubMenu)
+                                        @if (isset($menuAddedAction[$ssubmid]))
+                                            @php $isChecked = 'checked';  @endphp
+                                        @else
+                                            @php $isChecked = '';  @endphp
+                                        @endif
                                         <li class="item">
                                             <a href="javascript:void(0)" data-id="tab{{ $smid }}" class="text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center justify-between p-[15px] bg-[#f7f7f7] ">
                                                 <span class="inline-flex items-center gap-[7px] ">
-                                                    <input type="checkbox" class="parent-sub-sub-element w-[15px] h-[15px]" m-id="{{ $menuKey }}" id="sub-sub-menu-id-{{ $ssubmid }}" name="permission[{{ $menuKey }}][{{ $smid }}][{{ $ssubmid }}]" @if($menuKey==1) {{ 'disabled checked'; }} @endif>
+                                                    <input type="checkbox" class="parent-sub-sub-element w-[15px] h-[15px]" m-id="{{ $menuKey }}" id="sub-sub-menu-id-{{ $ssubmid }}" name="permission[mainMenu][{{ $menuKey }}][subMenu][{{ $smid }}][subSubMenu][{{ $ssubmid }}]" {{ $isChecked }}>
                                                     {{ $subSubMenu['name'] }}
                                                 </span>
                                             </a>
@@ -78,6 +97,7 @@ use App\Models\MenuAction;
                     <h4 class="aa font-semibold text-[20px] mb-[7px] main-heading-itm">{{ $menu['menu']['name'] }}</h4>
                         @foreach($menu['subMenu'] as $subMenuKey => $subMenu)
                         @php $menuAction = MenuAction::where('menuId',$subMenuKey)->get(); @endphp
+                        
                         <div class="">
                             <h4 class="font-semibold text-[15px] mb-[15px]">{{ $subMenu['name'] }}</h4>
                             @if(isset($menu['subSubMenu'][$subMenuKey]))
@@ -87,8 +107,13 @@ use App\Models\MenuAction;
                                 <div class=" flex flex-wrap gap-[10px]" id="actions-of-{{ $subsKey }}">
                                     @php $menuSubAction = MenuAction::where('menuId',$subsKey)->get(); @endphp
                                     @foreach($menuSubAction as $acKey =>$acVal)
+                                    @if (isset($menuAddedAction[$subsKey]) && in_array($acVal->id,$menuAddedAction[$subsKey]))
+                                        @php $isChecked = 'checked';  @endphp
+                                    @else
+                                        @php $isChecked = '';  @endphp
+                                    @endif
                                     <label class="border-[1px] border-[#0000001A] rounded-[10px] text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center gap-[7px] py-[5px] px-[10px] ">
-                                        <input type="checkbox" name="permission[{{ $menuKey }}][{{ $subMenuKey }}][{{ $subsKey }}][{{ $acVal->id }}]" class="w-[15px] h-[15px] sub-sub-menu-actions" sub-menu-id="{{ $subMenuKey }}" sub-sub-menu-id="{{ $subsKey }}" menu-id="{{ $menuKey }}">
+                                        <input type="checkbox" name="permission[mainMenu][{{ $menuKey }}][subMenu][{{ $subMenuKey }}][subSubMenu][{{ $subsKey }}][action][{{ $acVal->id }}]" class="w-[15px] h-[15px] sub-sub-menu-actions" sub-menu-id="{{ $subMenuKey }}" sub-sub-menu-id="{{ $subsKey }}" menu-id="{{ $menuKey }}" {{ $isChecked }}>
                                         {{ $acVal->actionName }}
                                     </label>
                                     @endforeach
@@ -97,8 +122,13 @@ use App\Models\MenuAction;
                             @endforeach
                             <div class="flex flex-wrap gap-[10px]" id="actions-of-{{ $subMenuKey }}">
                                 @foreach($menuAction as $acKey =>$acVal)
+                                @if (isset($menuAddedAction[$subMenuKey]) && in_array($acVal->id,$menuAddedAction[$subMenuKey]))
+                                    @php $isChecked = 'checked';  @endphp
+                                @else
+                                    @php $isChecked = '';  @endphp
+                                @endif
                                 <label class="border-[1px] border-[#0000001A] rounded-[10px] text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center gap-[7px] py-[5px] px-[10px] ">
-                                    <input type="checkbox" name="permission[{{ $menuKey }}][{{ $subMenuKey }}][{{ $acVal->id }}]" class="w-[15px] h-[15px] sub-menu-actions" sub-menu-id="{{ $subMenuKey }}" menu-id="{{ $menuKey }}">
+                                    <input type="checkbox" name="permission[mainMenu][{{ $menuKey }}][subMenu][{{ $subMenuKey }}][action][{{ $acVal->id }}]" class="w-[15px] h-[15px] sub-menu-actions" sub-menu-id="{{ $subMenuKey }}" menu-id="{{ $menuKey }}" {{ $isChecked }}>
                                     {{ $acVal->actionName }}
                                 </label>
                                 @endforeach
@@ -106,8 +136,13 @@ use App\Models\MenuAction;
                             @else
                             <div class="flex flex-wrap gap-[10px]" id="actions-of-{{ $subMenuKey }}">
                                 @foreach($menuAction as $acKey =>$acVal)
+                                @if (isset($menuAddedAction[$subMenuKey]) && in_array($acVal->id,$menuAddedAction[$subMenuKey]))
+                                    @php $isChecked = 'checked';  @endphp
+                                @else
+                                    @php $isChecked = '';  @endphp
+                                @endif
                                 <label class="border-[1px] border-[#0000001A] rounded-[10px] text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center gap-[7px] py-[5px] px-[10px] ">
-                                    <input type="checkbox" name="permission[{{ $menuKey }}][{{ $subMenuKey }}][{{ $acVal->id }}]" class="w-[15px] h-[15px] sub-menu-actions" sub-menu-id="{{ $subMenuKey }}" menu-id="{{ $menuKey }}">
+                                    <input type="checkbox" name="permission[mainMenu][{{ $menuKey }}][subMenu][{{ $subMenuKey }}][action][{{ $acVal->id }}]" class="w-[15px] h-[15px] sub-menu-actions" sub-menu-id="{{ $subMenuKey }}" menu-id="{{ $menuKey }}" {{ $isChecked }}>
                                     {{ $acVal->actionName }}
                                 </label>
                                 @endforeach
@@ -122,9 +157,14 @@ use App\Models\MenuAction;
                             <h4 class="font-semibold text-[18px] mb-[7px] main-heading-itm">{{ $menu['menu']['name'] }}</h4>
                             <div class="flex flex-wrap gap-[10px]">
                                 @foreach($menuAction as $acKey =>$acVal)
+                                @if (isset($menuAddedAction[$menuKey]) && in_array($acVal->id,$menuAddedAction[$menuKey]))
+                                    @php $isChecked = 'checked';  @endphp
+                                @else
+                                    @php $isChecked = '';  @endphp
+                                @endif
                                 <label class="border-[1px] border-[#0000001A] rounded-[10px] text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center gap-[7px] py-[5px] px-[10px] ">
                                     {{-- <input type="checkbox" name="permission[action][{{ $menuKey }}][{{ $subMenuKey }}][{{ $acVal->id }}]" class="w-[15px] h-[15px]"> --}}
-                                    <input type="checkbox" name="permission[{{ $menuKey }}][menu][{{ $acVal->id }}]" class="w-[15px] h-[15px] main-menu-actions" menu-id="{{ $menuKey }}">
+                                    <input type="checkbox" name="permission[mainMenu][{{ $menuKey }}][action][{{ $acVal->id }}]" class="w-[15px] h-[15px] main-menu-actions" menu-id="{{ $menuKey }}" {{ $isChecked }}>
                                     {{ $acVal->actionName }}
                                 </label>
                                 @endforeach

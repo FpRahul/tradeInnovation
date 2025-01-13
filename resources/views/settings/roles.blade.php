@@ -1,6 +1,8 @@
 @extends('layouts.default')
 @section('content')
-
+@php
+    use App\Models\Menu;
+@endphp
 <div class="space-y-[20px]">
     <div class="flex items-center justify-between">
         <h3 class="text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">{{$moduleName}}</h3>
@@ -43,19 +45,29 @@
                 <tbody>
                 @if($allRoles->isNotEmpty())
                     @foreach($allRoles as $role)
+                    
                     <tr>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
                             {{ $role->name }}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start py-[12px] px-[15px]">
                             <div>
-                                <span class="text-[14px] font-[400] leading-[16px] text-[#ffffff] capitalize bg-[#13103A] rounded-[10px] px-[15px] py-[7px] ">dashboard</span>
-                                <span class="text-[14px] font-[400] leading-[16px] text-[#ffffff] capitalize bg-[#13103A] rounded-[10px] px-[15px] py-[7px] ">Leads</span>
-                                <span class="text-[14px] font-[400] leading-[16px] text-[#ffffff] capitalize bg-[#13103A] rounded-[10px] px-[15px] py-[7px] ">Tasks</span>
+                            @if($role->roleMenus->isNotEmpty())
+                                @foreach ($role->roleMenus as $menuName )
+                                    @php
+                                        $MenuDetail = Menu::find($menuName->id);
+                                    @endphp
+                                    @if($MenuDetail->parentId==0)
+                                    <span class="text-[14px] font-[400] leading-[16px] text-[#ffffff] capitalize bg-[#13103A] rounded-[10px] px-[15px] py-[7px] ">
+                                        {{ $MenuDetail->menuName }}
+                                    </span>
+                                    @endif
+                                @endforeach
+                            @endif
                             </div>
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] py-[12px] px-[15px]">
-                            <button class="bg-[#13103A] w-[27px] h-[27px] rounded-[100%] text-center border-none p-0 ">
+                            <a href="{{ route('settings.addrole',['id'=>$role->id]) }}" class="bg-[#13103A] w-[27px] h-[27px] rounded-[100%] text-center border-none p-0 ">
                                 <svg class="mx-auto" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g clip-path="url(#clip0_455_4936)">
                                         <path d="M6.89951 2.69995H2.69951C2.38125 2.69995 2.07603 2.82638 1.85098 3.05142C1.62594 3.27647 1.49951 3.58169 1.49951 3.89995V12.3C1.49951 12.6182 1.62594 12.9234 1.85098 13.1485C2.07603 13.3735 2.38125 13.5 2.69951 13.5H11.0995C11.4178 13.5 11.723 13.3735 11.948 13.1485C12.1731 12.9234 12.2995 12.6182 12.2995 12.3V8.09995" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
@@ -67,7 +79,7 @@
                                         </clipPath>
                                     </defs>
                                 </svg>
-                            </button>
+                            </a>
                         </td>
                     </tr>
                     @endforeach

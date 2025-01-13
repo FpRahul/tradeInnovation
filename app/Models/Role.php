@@ -10,4 +10,9 @@ class Role extends Model
         'name'
     ];
 
+    public function roleMenus()
+    {
+        return $this->hasMany(RoleMenu::class, 'roleId', 'id');
+    }
+
 }

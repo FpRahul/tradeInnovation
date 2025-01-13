@@ -37,7 +37,7 @@
             </div>
         </div>
         <div class="w-full xl:w-[calc(100%-270px)]">
-            <div class="admin-header sticky top-0 z-[9] px-[15px] md:px-[30px] py-[15px] ">
+            <div class="bg-[#F1F2F4] admin-header sticky top-0 z-[9] px-[15px] md:px-[30px] py-[15px] ">
                 @include('layouts.header')
             </div>
             <div class="main-right-content xl:h-[calc(100vh-153px)] xl:max-h-[calc(100vh-129px)] overflow-y-auto py-[23px] pt-[14px] overflow-hidden px-[15px] md:px-[30px]">

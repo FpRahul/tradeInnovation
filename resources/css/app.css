@@ -57,8 +57,25 @@ span[aria-current="page"] span {
 .note-editor.note-frame .note-statusbar {
     border-color: #0000001A !important;
 }
-
-
+input[type="date"]{
+    position: relative;
+    background-image: url('../../public/assets/images/calendar-icon2.png');
+    background-position: right 15px center;
+    background-repeat: no-repeat;
+    /* background-size: 20px; */
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+    background: transparent;
+    bottom: 0;
+    color: transparent;
+    cursor: pointer;
+    height: auto;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+}
 
 @media (max-width: 767px){
 .employee_repeater_wrapper .repeater-default > div > div:first-child { flex-direction: column; } 

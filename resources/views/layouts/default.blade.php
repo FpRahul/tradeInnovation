@@ -29,18 +29,18 @@
 
 </head>
 
-<body class="bg-white dark:bg-black dark:text-white/50">
-    <div class="flex flex-wrap gap-x-[40px] h-[100vh]">
-        <div id="sidebar" class="hidden xl:block bg-white shadow-lg xl:shadow-none w-[230px]  transform transition-transform duration-500 ease-in-out -translate-x-full xl:translate-x-0 fixed xl:relative top-0 left-0 z-[99]">
-            <div class="space-y-[24px] h-[100vh] lg:h-[calc(100vh-54px)] max-h-[100vh] lg:max-h-[calc(100vh-54px)] px-[18px] py-[14px] overflow-y-auto ">
+<body class="bg-[#F1F2F4] ">
+    <div class="flex flex-wrap h-[100vh]">
+        <div id="sidebar" class="hidden xl:block bg-white shadow-lg xl:shadow-none w-[270px]  transform transition-transform duration-500 ease-in-out -translate-x-full xl:translate-x-0 fixed xl:relative top-0 left-0 z-[99] border-r-[1px] border-[#0000001A] ">
+            <div class="space-y-[24px] h-[100vh] lg:h-[calc(100vh-54px)] max-h-[100vh] lg:max-h-[calc(100vh-54px)] px-[18px] md:px-[25px] py-[14px] overflow-y-auto ">
                 @include('layouts.sidebar')
             </div>
         </div>
         <div class="w-full xl:w-[calc(100%-270px)]">
-            <div class="admin-header sticky top-0 bg-white z-[9]">
+            <div class="bg-[#F1F2F4] admin-header sticky top-0 z-[9] px-[15px] md:px-[30px] py-[15px] ">
                 @include('layouts.header')
             </div>
-            <div class="main-right-content xl:h-[calc(100vh-129px)] xl:max-h-[calc(100vh-129px)] overflow-y-auto py-[23px] px-[15px] xl:pr-[22px] xl:pl-[30px] overflow-hidden">
+            <div class="main-right-content xl:h-[calc(100vh-153px)] xl:max-h-[calc(100vh-129px)] overflow-y-auto py-[23px] pt-[14px] overflow-hidden px-[15px] md:px-[30px]">
                 @yield('content')
             </div>
         </div>
@@ -87,24 +87,24 @@
                     if (confirm('Are you sure you want to delete this element?')) {
                         var deleteId = $(this).find('.deleteRepeaterRow').data('id');
                         $.ajax({
-                            method:'POST',
-                            url:"{{ route('users.deleterepeater') }}",
+                            method: 'POST',
+                            url: "{{ route('users.deleterepeater') }}",
                             headers: {
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
                             },
-                            data:{
-                                id:deleteId
+                            data: {
+                                id: deleteId
                             },
-                            success:function(res){
-                                if(res == 1){
+                            success: function(res) {
+                                if (res == 1) {
                                     $(this).slideUp(deleteElement);
                                 }
                             },
-                            error:function(err){
+                            error: function(err) {
                                 alert(err);
                             }
                         })
-                        
+
                     }
                 },
                 isFirstItemUndeletable: true

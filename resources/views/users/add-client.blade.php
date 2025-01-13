@@ -5,7 +5,7 @@
     <div class="flex items-center justify-between mb-[20px]">
         <h3 class="text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">{{$moduleName}}</h3>
     </div>
-    <div class="shadow-[0px_0px_13px_5px_#0000000f] rounded-[20px]">
+    <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px]">
         <form method="POST" action="{{ route('users.addclient',['id' => $newClient->id])}}" class="py-[15px] md:py-[25px] px-[15px] md:px-[30px] space-y-[20px]">
             @csrf
             <input type="hidden" name="role" id="role" value="3">

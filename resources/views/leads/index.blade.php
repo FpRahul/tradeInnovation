@@ -12,7 +12,7 @@
         </a>
     </div>
 
-    <div class="shadow-[0px_0px_13px_5px_#0000000f] rounded-[20px] overflow-hidden ">
+    <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] overflow-hidden ">
         <div class="py-[15px] md:py-[25px] px-[15px] md:px-[20px] gap-[10px] flex flex-col md:flex-row items-center justify-between">
             <div class="flex flex-col md:flex-row md:flex-wrap gap-[10px] w-full">
                 <select name="sorting" id="sorting" class="!outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
@@ -110,7 +110,7 @@
                                         <a href="#" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Archive</a>
                                         <a href="{{ route('leads.quote')}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Send Quote</a>
                                         <a href="{{ route('leads.logs')}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Logs</a>
-                                        <a href="#" class=" px-3 py-1 text-[12px] hover:bg-[#f7f7f7] text-gray-700">Delete</a>
+                                        <a href="#" class="block px-3 py-1 text-[12px] hover:bg-[#f7f7f7] text-gray-700">Delete</a>
                                     </div>
                                 </div>
                             </div>

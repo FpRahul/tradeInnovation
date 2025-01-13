@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LeadsController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\TasksController;
 
 //Users Routes
 Route::match(['get','post'],'/', [UsersController::class,'login'])->name('login');
@@ -53,6 +54,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/add', 'add')->name('leads.add');
         Route::get('/sendquote', 'sendquote')->name('leads.quote');
         Route::get('/logs', 'leadLogs')->name('leads.logs');
+    });
+
+    //Tasks Routes
+    Route::prefix('tasks')->controller(TasksController::class)->group(function () {
+        Route::get('/', 'index')->name('task.index');
+        Route::get('/logs', 'logs')->name('task.log');
+        Route::get('/details', 'detail')->name('task.detail');
     });
 
     //Services Routes

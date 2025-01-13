@@ -5,7 +5,7 @@
         <h3 class="text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">Lead logs timeline</h3>
     </div>
 
-    <div class="shadow-[0px_0px_13px_5px_#0000000f] rounded-[20px] p-[23px]">
+    <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] p-[23px]">
         <div>
             <ul>
                 <li class="py-[6px] pt-0 flex items-start flex-wrap gap-[16px] relative">

@@ -77,6 +77,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     width: auto;
 }
 
+.toast {
+    font-size: 14px;
+    background-size: 18px;
+    padding-left: 45px !important;
+}
+
+
 @media (max-width: 767px){
 .employee_repeater_wrapper .repeater-default > div > div:first-child { flex-direction: column; } 
 .employee_repeater_wrapper .repeater-default > div > div:first-child > div { width: 100% !important; }

@@ -18,8 +18,11 @@
                 <div class="w-full md:w-1/2">
                     <label for="profession" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Profession</label>
                     <select name="profession" id="profession" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
-                        <option value="1" {{$newAssociate->Profession == 1 ? 'selected':''}}>CA</option>
-                        <option value="2" {{$newAssociate->Profession == 2 ? 'selected':''}}>Developer</option>
+                        @if (count($professionDataList) > 0)
+                            @foreach ($professionDataList as $professionDataListDetails)  
+                                <option value="{{$professionDataListDetails->id}}">{{$professionDataListDetails->name}}</option>                      
+                            @endforeach                                                            
+                        @endif
                     </select>
                 </div>
             </div>

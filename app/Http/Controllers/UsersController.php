@@ -248,10 +248,9 @@ class UsersController extends Controller
     }
 
     public function addClient(Request $request,$id=null){
-        $incorporationDataList = '';
-        $referDataList = '';
-        // CategoryOption::where('status',1)->where('type',2)->pluck('value', 'key');
-        // CategoryOption::where('status',1)->where('type',3)->pluck('value', 'key');
+        $incorporationDataList = CategoryOption::where('status',1)->where('type',2)->get();
+        $referDataList = CategoryOption::where('status',1)->where('type',3)->get();
+        
         if($id > 0){
             $newClient = User::find($id);
             $newClientDetails = UserDetail::where('userId',$id)->first();
@@ -329,6 +328,8 @@ class UsersController extends Controller
     }
 
     public function addAssociate(Request $request,$id=null){
+        $professionDataList = CategoryOption::where('status',1)->where('type',1)->get();
+
         if($id > 0){
             $newAssociate = User::find($id);
             $hashedPassword = $newAssociate->password;
@@ -367,7 +368,7 @@ class UsersController extends Controller
             
         }
         $header_title_name = 'User';
-        return view('users/add-associate',compact('newAssociate','header_title_name','moduleName'));
+        return view('users/add-associate',compact('newAssociate','header_title_name','moduleName','professionDataList'));
     }
 
     public function userStatus(Request $request){

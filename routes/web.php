@@ -65,8 +65,9 @@ Route::middleware('auth')->group(function () {
 
     //Services Routes
     Route::prefix('services')->controller(ServicesController::class)->group(function () {
-        Route::get('/', 'index')->name('services.index');
+        Route::match(['POST','GET'],'/', 'index')->name('services.index');
         Route::get('/add', 'add')->name('services.add');
+        Route::get('/delete','serviceDelete/{id?}')->name('services.delete');
     });
     
 });

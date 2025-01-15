@@ -30,13 +30,11 @@
                     <label for="incorporationtype" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Incorporation type</label>
                     <select name="incorporationtype" id="incorporationtype" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                         <option value="">Select Incorporation Type</option>
-                        <option value="1" {{$newClientDetails->incorporationType == 1 ?'selected':''}}>Individual / Sole Proprietor</option>
-                        <option value="2" {{$newClientDetails->incorporationType == 2 ?'selected':''}}>Partnership</option>
-                        <option value="3" {{$newClientDetails->incorporationType == 3 ?'selected':''}}>LLP</option>
-                        <option value="4" {{$newClientDetails->incorporationType == 4 ?'selected':''}}>Company</option>
-                        <option value="5" {{$newClientDetails->incorporationType == 5 ?'selected':''}}>Society</option>
-                        <option value="6" {{$newClientDetails->incorporationType == 6 ?'selected':''}}>Trust</option>
-                        <option value="7" {{$newClientDetails->incorporationType == 7 ?'selected':''}}>HUF</option>
+                        @if (count($incorporationDataList) > 0)
+                            @foreach ($incorporationDataList as $incorporationDataListDetails)  
+                            <option value="{{$incorporationDataListDetails->id}}">{{$incorporationDataListDetails->name}}</option>                      
+                            @endforeach                                                            
+                        @endif
                     </select>
                 </div>
                 <div class="w-full md:w-1/2">
@@ -91,7 +89,11 @@
                     <label for="referralPartner" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Referral Partner</label>
                     <select name="referralPartner" id="referralPartner" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                         <option value=""  >Select Referral Partner</option>
-                        {{$referDataList}}
+                        @if (count($referDataList) > 0)
+                            @foreach ($referDataList as $referDataListDetails)  
+                            <option value="{{$referDataListDetails->id}}">{{$referDataListDetails->name}}</option>                      
+                            @endforeach                                                            
+                        @endif
                     </select>
                 </div>
             </div>

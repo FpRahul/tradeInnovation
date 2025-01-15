@@ -51,13 +51,16 @@ class AppServiceProvider extends ServiceProvider
                     if(!empty($groupedRoutes)){
                         foreach($groupedRoutes as $groupedRoute){
                             $menuSubMenuRoutes[$v->parentId][] = $groupedRoute;
+                            if($v->url=='javascript:void(0);'){
+                                $menuSubMenuRoutes[$v->parentId][$v->id][] = $groupedRoute;
+                            }
                         }
                     }
                 }
                 //End
             }
         }
-        
+       
         View::share(compact('serializeMenus','menuSubMenuRoutes'));
     }
 }

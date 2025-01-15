@@ -70,10 +70,11 @@
                                 <div class="dropdown_menus absolute right-0 z-10 mt-2 w-[100px] origin-top-right rounded-md bg-white shadow-md ring-1 ring-black/5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                                     <div class="text-start" role="none">
                                         <a href="javascript:void(0)" data-modal-target="serviceModal" data-modal-toggle="serviceModal" data-name="{{$serviceListing->serviceName}}" data-des="{{$serviceListing->serviceDescription}}" data-id="{{$serviceListing->id}}" class="openModalServices block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Edit</a>
-                                        <a href="#" data-id="{{$serviceListing->id}}" class="delete_service block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Delete</a>
-                                        <a href="{{ route('users.status', ['id' => $serviceListing->id, 'val' => $serviceListing->status]) }}" class="client_status block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">
+                                        <a href="{{ route('service.change.status', ['id' => $serviceListing->id, 'val' => $serviceListing->status]) }}" class="client_status block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">
                                             {{ $serviceListing->status ? 'Inactive' : 'Active' }}
                                         </a>
+                                        <a href="{{ route('services.subService.add')}}/{{$serviceListing->id}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Sub-Service</a>
+
                                     </div>
                                 </div>
                             </div>
@@ -141,7 +142,7 @@
         var key = $(this).val();
         $.ajax({
             method: 'POST',
-            url: "{{ route('users.listing')}}",
+            url: "{{ route('services.index')}}",
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
@@ -157,12 +158,7 @@
         })
     });
 
-    $(document).on('click', '.delete_service', function() {
-        var employeeId = $(this).data('id');
-        if (confirm('Are you sure want to delete?')) {
-            window.location.href = `{{ route('services.delete', ['id' => ':id']) }}/${employeeId}`;
-        }
-    });
+   
     $(document).on('click','.openModalServices',function(){
         let name = $(this).attr('data-name');
         let des = $(this).attr('data-des');

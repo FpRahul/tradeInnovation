@@ -16,7 +16,7 @@
             Add Incorporation
         </a>
     </div>
-    <div class="shadow-[0px_0px_13px_5px_#0000000f] rounded-[20px] ">
+    <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] ">
         <div class="py-[25px] px-[20px] flex items-center justify-between">
 
             <div class="relative w-[217px]">

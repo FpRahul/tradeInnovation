@@ -33,11 +33,10 @@ Route::middleware('auth')->group(function () {
         Route::match(['POST', 'GET'], '/add-associate/{id?}', 'addAssociate')->name('users.addassociate');
 
         Route::match(['POST', 'GET'], '/user-professions/{id?}', 'userProfessions')->name('users.settings.professions');
-        Route::get('/category-status/{id?}', 'categoryStatus')->name('users.category.status');
-        Route::get('/category-delete/{id?}', 'categoryDelete')->name('users.category.delete');
-
         Route::match(['POST', 'GET'], '/user-incorporation/{id?}', 'userIncorporation')->name('users.settings.incorporation');
         Route::match(['POST', 'GET'], '/user-referral/{id?}', 'userReferral')->name('users.settings.referral');
+        Route::get('/category-status/{id?}', 'categoryStatus')->name('users.category.status');
+        Route::get('/category-delete/{id?}', 'categoryDelete')->name('users.category.delete');
 
         Route::get('/userstatus','userStatus')->name('users.status');
     });

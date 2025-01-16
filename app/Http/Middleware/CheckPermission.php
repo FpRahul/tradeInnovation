@@ -9,18 +9,22 @@ use Illuminate\Support\Facades\Auth;
 
 class CheckPermission
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
     public function handle(Request $request, Closure $next): Response
     {
+        // Ensure user is authenticated
         $user = Auth::user();
-        $routeName = $request->route()->getName(); 
-        if (!$user->hasPermission($routeName)) {
+        if (!$user) {
             abort(403, 'Unauthorized action.');
         }
+
+        // Get the current route name
+        $routeName = $request->route()->getName();
+
+        // Example permission check: Check if user has permission for this route
+        if (!$user->hasPermission($routeName)) {
+            abort(403, 'You do not have permission to access this page.');
+        }
+
         return $next($request);
     }
 }

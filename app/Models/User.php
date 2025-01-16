@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\UserDetail;
+use App\Models\RoleMenu;
+use App\Models\Menu;
+use Illuminate\Support\Facades\Auth;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -52,6 +55,29 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function hasPermission($routeName)
+    {
+        return true;
+        $user = Auth::user();
+        if($user->role==1){
+            return true;
+        }
+        $permissions = RoleMenu::where('roleId',$user->role)->with('menu')->get();
+        echo "<pre>"; print_R($permissions);die;
+        if(!$permissions && $permissions->isNotEmpty()){
+            foreach($permissions as $permission){
+
+            }
+        }
+        echo "<pre>"; print_R($permission);die;
+        return in_array($routeName, $permissions);
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
     }
 
     public function userdetail(){

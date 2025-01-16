@@ -78,7 +78,7 @@
             });
         })
         $(document).ready(function() {
-            $('.repeater').repeater({
+            $('.userExperienceRepeater').repeater({
                 initEmpty: false,
                 show: function() {
                     $(this).slideDown();
@@ -86,24 +86,29 @@
                 hide: function(deleteElement) {
                     if (confirm('Are you sure you want to delete this element?')) {
                         var deleteId = $(this).find('.deleteRepeaterRow').data('id');
-                        $.ajax({
-                            method: 'POST',
-                            url: "{{ route('users.deleterepeater') }}",
-                            headers: {
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            data: {
-                                id: deleteId
-                            },
-                            success: function(res) {
-                                if (res == 1) {
-                                    $(this).slideUp(deleteElement);
+                        if(deleteId > 0){
+                            $.ajax({
+                                method: 'POST',
+                                url: "{{ route('users.deleterepeater') }}",
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                data: {
+                                    id: deleteId
+                                },
+                                success: function(res) {
+                                    if (res == 1) {
+                                        $(this).slideUp(deleteElement);
+                                    }
+                                },
+                                error: function(err) {
+                                    alert(err);
                                 }
-                            },
-                            error: function(err) {
-                                alert(err);
-                            }
-                        })
+                            })
+                        }else{
+                            $(this).slideUp(deleteElement);
+                        }
+                        
 
                     }
                 },
@@ -118,7 +123,29 @@
                 },
                 hide: function(deleteElement) {
                     if (confirm('Are you sure you want to delete this element?')) {
-                        $(this).slideUp(deleteElement);
+                        var deleteId = $(this).find('.deleteRepeaterRow').data('id');
+                        if(deleteId > 0){
+                            $.ajax({
+                                method: 'POST',
+                                url: "{{ route('subservice.deleterepeater') }}",
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                data: {
+                                    id: deleteId
+                                },
+                                success: function(res) {
+                                    if (res == 1) {
+                                        $(this).slideUp(deleteElement);
+                                    }
+                                },
+                                error: function(err) {
+                                    alert(err);
+                                }
+                            })
+                        }else{
+                            $(this).slideUp(deleteElement);
+                        }
 
                     }
                 },

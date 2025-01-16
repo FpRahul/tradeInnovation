@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\UserDetail;
 use App\Models\CategoryOption;
 use App\Models\UserExperience;
+use App\Models\Role;
 use Illuminate\Support\Str;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -70,6 +71,7 @@ class UsersController extends Controller
     }
 
     public function index(Request $request){
+       
         $employeeData = User::with('userdetail')->where('role', 2)->where('archive', 1);
         $searchKey = $request->input('key') ?? '';
         $requestType = $request->input('requestType') ?? '';
@@ -96,6 +98,7 @@ class UsersController extends Controller
     }
 
     public function addUser(Request $request, $id=null){
+        $roleData = Role::where('id', '!=', 1)->get();
         if($id > 0){
             $newUser = User::find($id);  
             $newUserDetails = UserDetail::where('userId',$id)->first();
@@ -200,7 +203,7 @@ class UsersController extends Controller
         
        
         $header_title_name = 'User';
-        return view('users.add-user',compact('newUser','newUserDetails','newUserExperiences','header_title_name','moduleName'));
+        return view('users.add-user',compact('roleData','newUser','newUserDetails','newUserExperiences','header_title_name','moduleName'));
     }
     
     public function deleteUser(Request $request,$id=null){        
@@ -391,18 +394,25 @@ class UsersController extends Controller
     public function myprofile(Request $request,$id = null){
         $user = Auth::user();
         $userData = User::where('id',$user->id)->first();
+        $newUserDetails = UserDetail::where('userId',$user->id)->first();
         if($request->isMethod('POST')){
             $credentials = $request->validate([
                 'name' => 'required',
                 'email' => 'required|email',
-                'pasword' => 'required',                
             ]);
                 if(!empty($request->password)){
                     $password =  Hash::make($request->password);
                 }else{
-                    $password = $request->password;
+                    $password = $user->password;
                 }
-                dd($userData);
+                if($request->hasFile('profilePic')){                   
+                    $image_name = $request->profilePic;
+                    $imageName = rand(100000, 999999).'.'.$image_name->getClientOriginalExtension();
+                    $image_name->move(public_path('Image'),$imageName);
+                    $newUserDetails->uploadPhotograph = $imageName;
+                    $newUserDetails->save();
+                }
+                
                $userData->name=$request->name;
                $userData->email=$request->email; 
                $userData->password=$password;
@@ -413,7 +423,7 @@ class UsersController extends Controller
         $header_title_name = 'My Profile';
         $moduleName="Update Profile";
         
-        return view('users/myprofile',compact('userData','header_title_name','moduleName'));
+        return view('users/myprofile',compact('newUserDetails','userData','header_title_name','moduleName'));
     }
 
     public function userProfessions(Request $request,$id=null){
@@ -442,6 +452,7 @@ class UsersController extends Controller
         $header_title_name = 'User';
         return view('users.professions',compact('header_title_name','newCategory','categoryData'));
     }
+
     public function categoryStatus(Request $request,$id=null){
         $categoryData = CategoryOption::find($id);
         if($request->val){

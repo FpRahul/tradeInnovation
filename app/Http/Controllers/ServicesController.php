@@ -9,22 +9,20 @@ use App\Models\SubService;
 class ServicesController extends Controller
 {
     public function index(Request $request){
-        $serviceData = Service::paginate(2);
-        $searchKey='';
-        // $searchKey = $request->input('key') ?? '';
-        // $requestType = $request->input('requestType') ?? '';
-        // if ($searchKey) {
-        //     $serviceData->where(function ($query) use ($searchKey) {
-        //         $query->where('serviceName', 'LIKE', $searchKey . '%');
-        //     });
-        // }
+        $serviceData = Service::paginate(10);
+        $searchKey = $request->input('key') ?? '';       
         if($request->isMethod('POST')){
             if($request->requestType == 'ajax'){    // search filter
-                $searchKey = $request->input('key') ?? '';
+               
                 if ($searchKey) {
-                    $serviceData = Service::where('serviceName', 'like', "%{$searchKey}%")->get();         
+                    $serviceData = Service::where('serviceName', 'like', "%{$searchKey}%")->paginate(10);         
                 }
-            }else{                                  // form submittion
+                $trData = view('services/service-page-search-data', compact('serviceData','searchKey'))->render();
+                $dataArray = [
+                    'trData' => $trData,
+                ];
+                return response()->json($dataArray);
+            }else{    //............................. form submittion
                 if($request->service_id > 0){
                     $serviceData = Service::find($request->service_id);
                 }else{
@@ -40,23 +38,11 @@ class ServicesController extends Controller
                     }
                     
                 }
-            }
-           
-
+            }      
         }
-       
-        if (empty($requestType)) {    
-            $header_title_name = 'Services';
-            $moduleName="Manage Services";
-            return view('services.index', compact('serviceData', 'header_title_name', 'moduleName','searchKey'));       
-        }else{
-            $trData = view('services/service-page-search-data.blade', compact('serviceData','searchKey'))->render();
-            $dataArray = [
-                'trData' => $trData,
-            ];
-            return response()->json($dataArray);
-        }
-        
+        $header_title_name = 'Services';
+        $moduleName="Manage Services";
+        return view('services.index', compact('serviceData', 'header_title_name', 'moduleName','searchKey'));         
     }
 
     public function addSubService(Request $request,$id=null){
@@ -100,4 +86,12 @@ class ServicesController extends Controller
        }
     }
    
+    public function deleteRepeaterSubserv(Request $request){
+        $subServiceDel = SubService::where('id',$request->id);
+        if($subServiceDel->delete()){
+            echo "1";
+        }else{
+            echo "0";
+        }
+    }
 }

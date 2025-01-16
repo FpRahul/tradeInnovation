@@ -50,7 +50,7 @@
             </div>
         </div>
         <div class="w-full lg:w-[25%]">
-            <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] p-6">
+            <div class="shadow-[0px_0px_13px_5px_#0000000f] h-full bg-white rounded-[20px] p-6">
                 <h4 class="text-[14px] leading-[16px] text-[#000000] font-[500] tracking-[0.04em] mb-3">Status Matrix</h4>
                 <ul class="flex flex-col gap-[10px]">
                     <li class="bg-[#F4F4F4] text-[#13103A] text-[14px] leading-[16px] font-[400] rounded-[7px] overflow-hidden pl-[10px] flex justify-between items-center ">
@@ -290,6 +290,11 @@
 
                 </tbody>
             </table>
+        </div>
+        <div class="text-center p-[20px] border-t-[1px] border-[#0000001A]">
+            <a href="#" class=" inline-flex items-center gap-[10px] text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px] ">
+                View More
+            </a>
         </div>
     </div>
 </div>

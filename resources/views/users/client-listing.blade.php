@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] ">
-        <div class="py-[15px] md:py-[25px] px-[15px] md:px-[20px] flex items-center justify-between">
+        <div class="py-[15px] md:py-[25px] px-[15px] md:px-[20px] flex items-center justify-end">
 
             <div class="relative w-full md:w-[217px]">
                 <svg class="absolute top-[50%] left-[13px] translate-y-[-50%]" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -90,10 +90,11 @@
                     @endif
                 </tbody>
             </table>
+            <div class="py-[15px] px-[20px]">
+                {{ $clientData->appends(['key' => $searchKey])->links() }}
+            </div>
         </div>
-        <div class="py-[15px] px-[20px]">
-            {{ $clientData->appends(['key' => $searchKey])->links() }}
-        </div>
+        
     </div>
 </div>
 <script>

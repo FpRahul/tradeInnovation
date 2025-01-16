@@ -66,7 +66,9 @@ Route::middleware('auth')->group(function () {
     Route::prefix('services')->controller(ServicesController::class)->group(function () {
         Route::match(['POST','GET'],'/', 'index')->name('services.index');
         Route::match(['POST','GET'],'/subservice/{id?}', 'addSubService')->name('services.subService.add');
-        Route::match(['POST','GET'],'/changestatus/{id?}','serviceStatus')->name('service.change.status');
+        Route::match(['POST','GET'],'/changestatus/{id?}','serviceStatus')->name('service.status');
+        Route::post('/deleterepeater', 'deleteRepeaterSubserv')->name('subservice.deleterepeater');
+
     });
     
 });

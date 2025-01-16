@@ -23,8 +23,11 @@
                     <label for="role" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Role</label>
                     <select name="role" id="role" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                         <option value="">Select Role</option>
-                        <option value="2" {{$newUser->role == 2 ? 'selected':''}}>Employee</option>
-                        <option value="5" {{$newUser->role == 5 ? 'selected':''}}>Project Manager</option>
+                        @if (count($roleData) > 0)
+                            @foreach ($roleData as $roles)
+                                <option value="{{$roles->id}}" {{$newUser->role == $roles->id ? 'selected':''}}>{{$roles->name}}</option>
+                            @endforeach
+                        @endif
                     </select>
                     @error('role')
                     <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
@@ -92,7 +95,9 @@
                     @enderror
                 </div>
             </div>
-            <div class="repeater employee_repeater_wrapper">
+            <div>
+                <label class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Experience</label>
+            <div class="userExperienceRepeater md:border-[1px] border-[#0000001A] rounded-[10px] md:p-[20px] employee_repeater_wrapper">
                 <div class="repeater-default">
                     <div data-repeater-list="experince" class="flex flex-col gap-[20px]">
                         @if (count($newUserExperiences)>0)
@@ -178,6 +183,7 @@
                         <a href="javascript:void(0)" data-repeater-create class="inline-block text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]"> Add More </a>
                     </div>
                 </div>
+            </div>
             </div>
 
             <div class="flex flex-col md:flex-row gap-[20px]">

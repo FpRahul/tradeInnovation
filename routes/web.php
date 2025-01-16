@@ -7,11 +7,12 @@ use App\Http\Controllers\LeadsController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TasksController;
+use App\Http\Middleware\CheckPermission;
 
 //Users Routes
 Route::match(['get','post'],'/', [UsersController::class,'login'])->name('login');
 Route::match(['get','post'],'forget_password', [UsersController::class,'forgetPassword'])->name('forgetPassword');
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', CheckPermission::class])->group(function () {
     //Dashboard Routes
     Route::get('/logout',[UsersController::class,'logout'])->name('user.logout');
     Route::match(['POST','GET'],'/myprofile',[UsersController::class,'myprofile'])->name('user.myprofile');
@@ -27,7 +28,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/deleterepeater', 'deleteRepeaterUser')->name('users.deleterepeater');
         Route::match(['POST','GET'],'/client', 'clients')->name('client.listing');
         Route::match(['POST', 'GET'], '/add-client/{id?}', 'addClient')->name('users.addclient');
-
 
         Route::match(['POST','GET'],'/associates', 'associates')->name('associate.listing');
         Route::match(['POST', 'GET'], '/add-associate/{id?}', 'addAssociate')->name('users.addassociate');

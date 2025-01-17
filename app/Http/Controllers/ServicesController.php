@@ -12,8 +12,7 @@ class ServicesController extends Controller
         $serviceData = Service::paginate(10);
         $searchKey = $request->input('key') ?? '';       
         if($request->isMethod('POST')){
-            if($request->requestType == 'ajax'){    // search filter
-               
+            if($request->requestType == 'ajax'){    // search filter               
                 if ($searchKey) {
                     $serviceData = Service::where('serviceName', 'like', "%{$searchKey}%")->paginate(10);         
                 }
@@ -23,26 +22,30 @@ class ServicesController extends Controller
                 ];
                 return response()->json($dataArray);
             }else{    //............................. form submittion
-                if($request->service_id > 0){
-                    $serviceData = Service::find($request->service_id);
-                }else{
-                    $serviceData = new Service();
-                }
-                $serviceData->serviceName = $request->name;
-                $serviceData->serviceDescription = $request->description;
-                if($serviceData->save()){
-                    if($request->service_id > 0){
-                        return redirect()->route('services.index')->withSuccess('Your data is successfully updated!');
-                    }else{
-                        return redirect()->route('services.index')->withSuccess('Your data is successfully inserted!');
-                    }
-                    
-                }
+                
             }      
         }
         $header_title_name = 'Services';
         $moduleName="Manage Services";
         return view('services.index', compact('serviceData', 'header_title_name', 'moduleName','searchKey'));         
+    }
+
+    public function addService(Request $request){
+        if($request->service_id > 0){
+            $serviceData = Service::find($request->service_id);
+        }else{
+            $serviceData = new Service();
+        }
+        $serviceData->serviceName = $request->name;
+        $serviceData->serviceDescription = $request->description;
+        if($serviceData->save()){
+            if($request->service_id > 0){
+                return redirect()->route('services.index')->withSuccess('Your data is successfully updated!');
+            }else{
+                return redirect()->route('services.index')->withSuccess('Your data is successfully inserted!');
+            }            
+        }
+        return view('services.index', compact('serviceData'));         
     }
 
     public function addSubService(Request $request,$id=null){

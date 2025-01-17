@@ -114,7 +114,7 @@
             </div>
             <!-- Modal body -->
             <div class="p-[20px]">
-                <form method="POST" action={{ route('professions.index')}} class="space-y-[20px]">
+                <form method="POST" action={{ route('professions.add')}} class="space-y-[20px]">
                     @csrf
                     <input type="hidden" name="type" id="type" value="1">
                     <input type="hidden" name="profession_id" id="profession_id" value="">

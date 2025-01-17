@@ -114,7 +114,7 @@
             </div>
             <!-- Modal body -->
             <div class="p-[20px]">
-                <form method="POST" action={{ route('referral.index')}} class="space-y-[20px]">
+                <form method="POST" action={{ route('referral.add')}} class="space-y-[20px]">
                     @csrf
                     <input type="hidden" name="type" id="type" value="3">
                     <input type="hidden" name="referral_id" id="referral_id" value="">

@@ -16,10 +16,8 @@ use PHPMailer\PHPMailer\Exception;
 use Illuminate\Validation\Rule;
 
 class UsersController extends Controller
-{
-    
-    public function login(Request $request){       
-        
+{    
+    public function login(Request $request){        
         if($request->isMethod('post')){
             $credentials = $request->validate([
                 'email' => 'required|email',
@@ -28,14 +26,11 @@ class UsersController extends Controller
             if(Auth::attempt($credentials))
             {
                 $request->session()->regenerate();
-                $user = Auth::user();
-              
+                $user = Auth::user();              
                 return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
             }
-
             return redirect()->back()->with('error','The provided credentials do not match our records.');
-        }
-       
+        }       
         return view('users/login');
     }
 
@@ -48,8 +43,7 @@ class UsersController extends Controller
             if($updatePass){
                 $randomNumber = random_int(100000, 999999);
                 $hashedPassword = Hash::make($randomNumber);
-                $updatePass->password = $hashedPassword;
-                
+                $updatePass->password = $hashedPassword;                
                 if($updatePass->save()){
                     return redirect()->route('login')->withSuccess('Password is successfully updated! '); 
                 }else{
@@ -426,10 +420,15 @@ class UsersController extends Controller
         return view('users/myprofile',compact('newUserDetails','userData','header_title_name','moduleName'));
     }
 
-    public function userProfessions(Request $request,$id=null){
-        $categoryData = CategoryOption::where('type',1)->paginate(1);
+    public function userProfessions(){
+        $categoryData = CategoryOption::where('type',1)->paginate(10);
+        $header_title_name = 'User';
+        return view('users.professions',compact('header_title_name','categoryData'));
+    }
+
+    public function addProfessions(Request $request){
         if($request->profession_id > 0){
-            $newCategory = CategoryOption::find($request->profession_id)->first();
+            $newCategory = CategoryOption::where('id',$request->profession_id)->first();
         }else{
             $newCategory = new CategoryOption;
         }
@@ -449,8 +448,7 @@ class UsersController extends Controller
                 return back()->with('error','some error is occurring');
            }
         }
-        $header_title_name = 'User';
-        return view('users.professions',compact('header_title_name','newCategory','categoryData'));
+        return view('users.professions',compact('newCategory'));
     }
 
     public function categoryStatus(Request $request,$id=null){
@@ -477,8 +475,14 @@ class UsersController extends Controller
             return redirect()->back()->with('error','Some error is occur!');
         }
     }
-    public function userIncorporation(Request $request,$id=null){
-        $categoryData = CategoryOption::where('type',2)->paginate(1);
+
+    public function userIncorporation(){
+        $categoryData = CategoryOption::where('type',2)->paginate(10);        
+        $header_title_name = 'User';
+        return view('users.incorporation',compact('header_title_name','categoryData'));       
+    }
+
+    public function addIncorporation(Request $request){
         if($request->incorporation_id > 0){
             $newCategory = CategoryOption::where('id',$request->incorporation_id)->first();
         }else{
@@ -500,12 +504,16 @@ class UsersController extends Controller
                 return back()->with('error','some error is occurring');
             }
         }
-        $header_title_name = 'User';
-        return view('users.incorporation',compact('header_title_name','newCategory','categoryData'));
-       
+        return view('users.incorporation',compact('newCategory'));       
     }
-    public function userReferral(Request $request,$id=null){
-        $categoryData = CategoryOption::where('type',3)->paginate(1);
+
+    public function userReferral(){
+        $categoryData = CategoryOption::where('type',3)->paginate(10);        
+        $header_title_name = 'User';
+        return view('users.referral',compact('header_title_name','categoryData'));
+    }
+    
+    public function addReferral(Request $request){
         if($request->referral_id > 0){
             $newCategory = CategoryOption::where('id',$request->referral_id)->first();
         }else{
@@ -516,7 +524,6 @@ class UsersController extends Controller
             $newCategory->authId = $authUser->id;
             $newCategory->type = $request->type;
             $newCategory->name = $request->name;
-
              if($newCategory->save()){
                 if($request->referral_id > 0){
                     return redirect()->back()->with('success','Your data is successfully updated');
@@ -527,9 +534,6 @@ class UsersController extends Controller
                 return back()->with('error','some error is occurring');
             }
         }
-        $header_title_name = 'User';
-        return view('users.referral',compact('header_title_name','newCategory','categoryData'));
-
+        return view('users.referral',compact('newCategory'));
     }
-    
 }

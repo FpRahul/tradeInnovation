@@ -12,7 +12,7 @@ class LeadsController extends Controller
         return view('leads/index',compact('header_title_name','moduleName'));
     }
 
-    public function add(){
+    public function add(Request $request,$id=null){
         $header_title_name = 'Lead';
         $moduleName = "Add Leads";
         return view('leads/add',compact('header_title_name','moduleName'));

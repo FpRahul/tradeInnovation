@@ -5,7 +5,12 @@
     <ul class="space-y-[12px] accordian ">
         @foreach ($serializeMenus as $menuKey => $menuValue)
             @if (!isset($menuValue['subMenu']))
-                <li class="group {{ Route::currentRouteName() === $menuValue['menu']['url'] ? 'active' : '' }} ">
+                @if(in_array(Route::currentRouteName(),explode(',',$menuValue['menu']['groupedRoutes'])))
+                    @php $activeMen = 'active'; @endphp
+                @else
+                    @php $activeMen = ''; @endphp
+                @endif
+                <li class="group {{ $activeMen }} ">
                     <a href="{{ route($menuValue['menu']['url']) }}" 
                         class="text-[#13103A] font-[Inter] text-[14px] font-[400] leading-[16px] flex items-center gap-[10px] 
                             group-[.active]:bg-[#13103A] group-[.active]:text-[#ffffff] group-[.active]:shadow-[0px_0px_6px_2px_#00000036] p-[3px] rounded-[10px]">

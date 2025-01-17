@@ -44,6 +44,9 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/category-status/{id?}', 'categoryStatus')->name('users.category.status');
         Route::get('/category-delete/{id?}', 'categoryDelete')->name('users.category.delete');
 
+        Route::get('/panel-logs', 'panelLogs')->name('logs.index');
+        Route::get('/view-logs', 'viewLogs')->name('logs.view');
+
         Route::get('/userstatus','userStatus')->name('users.status');
     });
 

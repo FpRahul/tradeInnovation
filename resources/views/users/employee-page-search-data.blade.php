@@ -32,7 +32,7 @@
                         <span class="text-[#13103A] bg-[#f98c8c] inline-block text-center min-w-[100px] py-[5px] px-[10px] rounded-[5px] ">Inactive</span>
                         @endif
                     </td>
-                    <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] py-[12px] px-[15px]">
+                    <td class="border-b-[1px] border-[#0000001A] py-[12px] px-[15px]">
                         @if((in_array('users.adduser',$permissionDetails['accessableRoutes']) || in_array('users.status',$permissionDetails['accessableRoutes']) || in_array('users.delete',$permissionDetails['accessableRoutes'])) || auth()->user()->role==1)
                         <div class="dropdown inline-block relative ml-[auto] mr-[20px] ">
                             <a href="javascript:void(0)" type="button" class="button">

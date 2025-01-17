@@ -10,6 +10,7 @@ use App\Models\UserDetail;
 use App\Models\CategoryOption;
 use App\Models\UserExperience;
 use App\Models\Role;
+use App\View\Components\LogActivity;
 use Illuminate\Support\Str;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -25,8 +26,14 @@ class UsersController extends Controller
             ]);
             if(Auth::attempt($credentials))
             {
-                $request->session()->regenerate();
-                $user = Auth::user();              
+                $request->session()->regenerate();    
+                $logActivity[] = [
+                    'user_id' => auth()->user()->id,
+                    'title' => 'Login',
+                    'description' => auth()->user()->name.' logged into portal'
+                ];
+                $logActivity = new LogActivity($logActivity);
+                $logActivity->log();
                 return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
             }
             return redirect()->back()->with('error','The provided credentials do not match our records.');
@@ -45,6 +52,13 @@ class UsersController extends Controller
                 $hashedPassword = Hash::make($randomNumber);
                 $updatePass->password = $hashedPassword;                
                 if($updatePass->save()){
+                    $logActivity[] = [
+                        'user_id' => $updatePass->id,
+                        'title' => 'Forgot Password',
+                        'description' => $updatePass->name.' requested for new password'
+                    ];
+                    $logActivity = new LogActivity($logActivity);
+                    $logActivity->log();
                     return redirect()->route('login')->withSuccess('Password is successfully updated! '); 
                 }else{
                     return back()->with('error','Some error is occur.'); 
@@ -66,7 +80,7 @@ class UsersController extends Controller
 
     public function index(Request $request){
        
-        $employeeData = User::with('userdetail')->where('role', 2)->where('archive', 1);
+        $employeeData = User::with('userdetail')->where('role','>','3')->where('archive', 1);
         $searchKey = $request->input('key') ?? '';
         $requestType = $request->input('requestType') ?? '';
         if ($searchKey) {
@@ -96,8 +110,7 @@ class UsersController extends Controller
         if($id > 0){
             $newUser = User::find($id);  
             $newUserDetails = UserDetail::where('userId',$id)->first();
-            $newUserExperiences = UserExperience::where('userId',$id)->get();
-            $eImage = !empty($newUserDetails['uploadPhotograph']) ? '':'required|mimes:jpeg,png,jpg,pdf|max:2048';           
+            $newUserExperiences = UserExperience::where('userId',$id)->get();           
             $pImage = !empty($newUserDetails['uploadPan']) ? '':'required|mimes:jpeg,png,jpg,pdf|max:2048';
             $aImage = !empty($newUserDetails['uploadAadhar']) ? '':'required|mimes:jpeg,png,jpg,pdf|max:2048';
             $dImage = !empty($newUserDetails['uploadDrivingLicence']) ? '':'required|mimes:jpeg,png,jpg,pdf|max:2048';
@@ -105,10 +118,10 @@ class UsersController extends Controller
             $hashedPassword = $newUser->password;
             $successMessage = "User is successfully updated!";
             $moduleName="Update Employee";
+            $logAct = 'updated';
         }else{
             $newUser = new User();
-            $newUserDetails = new UserDetail();
-            $eImage = "required|mimes:jpeg,png,jpg,pdf|max:2048";            
+            $newUserDetails = new UserDetail();   
             $pImage = "required|mimes:jpeg,png,jpg,pdf|max:2048";
             $aImage = "required|mimes:jpeg,png,jpg,pdf|max:2048";
             $dImage = "required|mimes:jpeg,png,jpg,pdf|max:2048";
@@ -118,12 +131,12 @@ class UsersController extends Controller
             $hashedPassword = Hash::make($randomNumber);
             $successMessage = "User is successfully inserted!";
             $moduleName="Create Employee";
+            $logAct = 'added';
         }
         if($request->isMethod('POST')){ 
            
             $credentials = $request->validate([               
-                'email'=> $email,
-                'employeePhoto' => $eImage,             
+                'email'=> $email,           
                 'uploadPan' => $pImage,
                 'uploadAadhar' => $aImage,
                 'uploadDrivingLicence' => $dImage,
@@ -185,7 +198,13 @@ class UsersController extends Controller
                 } 
 
                 if($newUserDetails->save()){
-                   
+                    $logActivity[] = [
+                        'user_id' => auth()->user()->id,
+                        'title' => 'Add/Edit User',
+                        'description' => auth()->user()->name.' has '.$logAct.' user '.$newUser->name.' ('.$newUser->id.')'
+                    ];
+                    $logActivity = new LogActivity($logActivity);
+                    $logActivity->log();
                     return redirect()->route('users.listing')->withSuccess($successMessage);
                 }else{
                     return back()->with('error','Some error is occur.'); 
@@ -200,10 +219,17 @@ class UsersController extends Controller
         return view('users.add-user',compact('roleData','newUser','newUserDetails','newUserExperiences','header_title_name','moduleName'));
     }
     
-    public function deleteUser(Request $request,$id=null){        
-       $employeeData = User::where('id',$id)->first();
-         $employeeData->archive = 0;
-         if($employeeData->save()){
+    public function deleteUser($id=null){        
+        $employeeData = User::where('id',$id)->first();
+        $employeeData->archive = 0;
+        if($employeeData->save()){
+            $logActivity[] = [
+                'user_id' => auth()->user()->id,
+                'title' => 'Archive User',
+                'description' => auth()->user()->name.' has deleted user '.$employeeData->name.' ('.$employeeData->id.')'
+            ];
+            $logActivity = new LogActivity($logActivity);
+            $logActivity->log();
            return redirect()->back()->with('success','Your data is successfully deleted');
          }
     }
@@ -225,8 +251,7 @@ class UsersController extends Controller
         $requestType = $request->input('requestType') ?? '';
         if ($searchKey) {
             $clientData->where(function ($query) use ($searchKey) {
-                $query->where('name', 'LIKE', $searchKey . '%')
-                    ->orWhere('mobile', 'LIKE', $searchKey . '%');
+                $query->where('name', 'LIKE', $searchKey . '%')->orWhere('mobile', 'LIKE', $searchKey . '%');
             });
         }
         $clientData = $clientData->paginate(1);
@@ -254,7 +279,7 @@ class UsersController extends Controller
             $hashedPassword = $newClient->password;
             $email = "required|email";
             $moduleName="Update Client";
-
+            $logAct = 'updated';
         }else{
             $newClient = new User();
             $newClientDetails = new UserDetail();
@@ -262,6 +287,7 @@ class UsersController extends Controller
             $hashedPassword = Hash::make($randomNumber);
             $email = "required|email|unique:users,email";
             $moduleName="Add Client";
+            $logAct = 'added';
         }
         if($request->isMethod('POST')){
            
@@ -280,12 +306,18 @@ class UsersController extends Controller
             $newClient->communicationAdress = $request->communi_address ;
             $newClient->password = $hashedPassword ;
             if($newClient->save()){
-                
                 $newClientDetails->userId = $newClient->id;
                 $newClientDetails->incorporationType = $request->incorporationtype;
                 $newClientDetails->registered = $request->registered;
                 $newClientDetails->referralPartner = $request->referralPartner;
                 if($newClientDetails->save()){
+                    $logActivity[] = [
+                        'user_id' => auth()->user()->id,
+                        'title' => 'Add/Edit Client',
+                        'description' => auth()->user()->name.' has '.$logAct.' user '.$newClient->name.' ('.$newClient->id.')'
+                    ];
+                    $logActivity = new LogActivity($logActivity);
+                    $logActivity->log();
                     return redirect()->route('client.listing')->withSuccess('Client is successfully inserted!');
                 }else{
                     return back()->with('error','Some error is occur.'); 
@@ -305,8 +337,7 @@ class UsersController extends Controller
         $requestType = $request->input('requestType') ?? '';
         if ($searchKey) {
             $associateData->where(function ($query) use ($searchKey) {
-                $query->where('name', 'LIKE', $searchKey . '%')
-                    ->orWhere('mobile', 'LIKE', $searchKey . '%');
+                $query->where('name', 'LIKE', $searchKey . '%')->orWhere('mobile', 'LIKE', $searchKey . '%');
             });
         }
 
@@ -332,14 +363,14 @@ class UsersController extends Controller
             $hashedPassword = $newAssociate->password;
             $email = "required|email";
             $moduleName="Update Associate";
-
+            $logAct = 'updated';
         }else{
             $newAssociate = new User();
             $randomNumber = random_int(100000, 999999);
             $hashedPassword = Hash::make($randomNumber);
             $email = "required|email|unique:users,email";
             $moduleName="Add Associate";
-
+            $logAct = 'added';
         }
         if($request->isMethod('POST')){
             $credentials = $request->validate([
@@ -356,7 +387,14 @@ class UsersController extends Controller
             $newAssociate->companyName = $request->firmName ;
             $newAssociate->address = $request->address ;
             $newAssociate->password = $hashedPassword ;
-            if($newAssociate->save()){               
+            if($newAssociate->save()){    
+                $logActivity[] = [
+                    'user_id' => auth()->user()->id,
+                    'title' => 'Add/Edit Associate',
+                    'description' => auth()->user()->name.' has '.$logAct.' user '.$newAssociate->name.' ('.$newAssociate->id.')'
+                ];
+                $logActivity = new LogActivity($logActivity);
+                $logActivity->log();           
                 return redirect()->route('associate.listing')->withSuccess('Associate is successfully inserted!');
             }else{
                 return back()->with('error','Some error is occur.'); 
@@ -378,6 +416,13 @@ class UsersController extends Controller
             $existedUser = User::where('id',$request->id)->first();
             $existedUser->status = $status;
             if($existedUser->save()){
+                $logActivity[] = [
+                    'user_id' => auth()->user()->id,
+                    'title' => 'Update User Status',
+                    'description' => auth()->user()->name.' has changed status of '.$existedUser->name.' ('.$existedUser->id.')'
+                ];
+                $logActivity = new LogActivity($logActivity);
+                $logActivity->log(); 
                 return redirect()->back()->with('success', 'Your status is successfully updated!');
             }else{
                 return back()->withError('Some error is occur');
@@ -394,25 +439,25 @@ class UsersController extends Controller
                 'name' => 'required',
                 'email' => 'required|email',
             ]);
-                if(!empty($request->password)){
-                    $password =  Hash::make($request->password);
-                }else{
-                    $password = $user->password;
-                }
-                if($request->hasFile('profilePic')){                   
-                    $image_name = $request->profilePic;
-                    $imageName = rand(100000, 999999).'.'.$image_name->getClientOriginalExtension();
-                    $image_name->move(public_path('Image'),$imageName);
-                    $newUserDetails->uploadPhotograph = $imageName;
-                    $newUserDetails->save();
-                }
-                
-               $userData->name=$request->name;
-               $userData->email=$request->email; 
-               $userData->password=$password;
-               if($userData->save()){
+            if(!empty($request->password)){
+                $password =  Hash::make($request->password);
+            }else{
+                $password = $user->password;
+            }
+            if($request->hasFile('profilePic')){                   
+                $image_name = $request->profilePic;
+                $imageName = rand(100000, 999999).'.'.$image_name->getClientOriginalExtension();
+                $image_name->move(public_path('Image'),$imageName);
+                $newUserDetails->uploadPhotograph = $imageName;
+                $newUserDetails->save();
+            }
+            
+            $userData->name=$request->name;
+            $userData->email=$request->email; 
+            $userData->password=$password;
+            if($userData->save()){
                 return redirect()->route('dashboard')->withSuccess('Profile is successfully updated!');
-               }        
+            }        
         }
         $header_title_name = 'My Profile';
         $moduleName="Update Profile";
@@ -438,15 +483,15 @@ class UsersController extends Controller
             $newCategory->type = $request->type;
             $newCategory->name = $request->name;
 
-           if($newCategory->save()){
-            if($request->profession_id > 0){
-                return redirect()->back()->with('success','Your data is successfully updated');
+            if($newCategory->save()){
+                if($request->profession_id > 0){
+                    return redirect()->back()->with('success','Your data is successfully updated');
+                }else{
+                    return redirect()->back()->with('success','Your data is successfully inserted');
+                }
             }else{
-                return redirect()->back()->with('success','Your data is successfully inserted');
-            }
-           }else{
                 return back()->with('error','some error is occurring');
-           }
+            }
         }
         return view('users.professions',compact('newCategory'));
     }
@@ -535,5 +580,11 @@ class UsersController extends Controller
             }
         }
         return view('users.referral',compact('newCategory'));
+    }
+
+    public function panelLogs(){
+        $header_title_name = 'System Logs';
+        $employeeData = [];
+        return view('users.logs',compact('header_title_name','employeeData'));
     }
 }

@@ -83,6 +83,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     padding-left: 45px !important;
 }
 
+.employee_repeater_wrapper > div > div > div:first-child > div {
+    width: 100% !important;
+}
+.employee_repeater_wrapper > div > div > div:first-child > div:last-child {
+    display: none;
+}
+
 
 @media (max-width: 767px){
 .employee_repeater_wrapper .repeater-default > div > div:first-child { flex-direction: column; } 

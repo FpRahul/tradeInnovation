@@ -38,7 +38,7 @@
                     <div class="dropdown_menus absolute right-0 z-10 mt-2 w-[100px] origin-top-right rounded-md bg-white shadow-md ring-1 ring-black/5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                         <div class="text-start" role="none">
                             <a href="javascript:void(0)" data-modal-target="serviceModal" data-modal-toggle="serviceModal" data-name="{{$serviceListing->serviceName}}" data-des="{{$serviceListing->serviceDescription}}" data-id="{{$serviceListing->id}}" class="openModalServices block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Edit</a>
-                            <a href="{{ route('service.change.status', ['id' => $serviceListing->id, 'val' => $serviceListing->status]) }}" class="client_status block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">
+                            <a href="{{ route('service.status', ['id' => $serviceListing->id, 'val' => $serviceListing->status]) }}" class="client_status block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">
                                 {{ $serviceListing->status ? 'Inactive' : 'Active' }}
                             </a>
                             <a href="{{ route('services.subService.add')}}/{{$serviceListing->id}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Sub-Service</a>
@@ -56,7 +56,6 @@
         @endif
     </tbody>
 </table>
-
 <div id="dynamic-pagination" class="py-[15px] px-[20px]">
     {{ $serviceData->appends(['key' => $searchKey])->links() }}
 </div>

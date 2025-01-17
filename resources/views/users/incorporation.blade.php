@@ -19,7 +19,7 @@
         @endif
     </div>
     <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] ">
-        <div class="py-[25px] px-[20px] flex items-center justify-between">
+        <div class="py-[25px] px-[20px] flex items-center justify-end">
 
             <div class="relative w-[217px]">
                 <svg class="absolute top-[50%] left-[13px] translate-y-[-50%]" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -97,10 +97,10 @@
                     @endif
                 </tbody>
             </table>
-            <!-- Pagination Links -->
-            <div id="dynamic-pagination" style="margin-top: 20px;">
-                {{ $categoryData}}
-            </div>
+        </div>
+        <!-- Pagination Links -->
+        <div id="dynamic-pagination" class="py-[15px] px-[20px]">
+            {{ $categoryData}}
         </div>
     </div>
 </div>
@@ -124,7 +124,7 @@
             </div>
             <!-- Modal body -->
             <div class="p-[20px]">
-                <form method="POST" action={{ route('incorporation.index')}} class="space-y-[20px]">
+                <form method="POST" action={{ route('incorporation.add')}} class="space-y-[20px]">
                     @csrf
                     <input type="hidden" name="type" id="type" value="2">
                     <input type="hidden" name="incorporation_id" id="incorporation_id" value="">

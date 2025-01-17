@@ -114,7 +114,7 @@
             </div>
             <!-- Modal body -->
             <div class="p-[20px]">
-                <form method="POST" action={{ route('users.settings.incorporation')}} class="space-y-[20px]">
+                <form method="POST" action={{ route('incorporation.index')}} class="space-y-[20px]">
                     @csrf
                     <input type="hidden" name="type" id="type" value="2">
                     <input type="hidden" name="incorporation_id" id="incorporation_id" value="">

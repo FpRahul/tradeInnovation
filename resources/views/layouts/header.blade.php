@@ -1,3 +1,9 @@
+<?php
+    use App\Models\Role;
+    use App\Models\User;
+    use App\Models\UserDetail;
+
+?>
 <div class="bg-white rounded-[10px] flex justify-between items-center py-[15px] px-[15px] xl:px-[22px] ">
     <button id="toggle_btn" class="bg-transparent border-none p-0 inline-block xl:hidden mr-4">
         <svg class="w-[28px]" width="32" height="24" viewBox="0 0 32 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -7,15 +13,24 @@
     <h3 class="hidden xl:block text-[20px] font-[600] leading-[24px] text-[#13103A] tracking-[0.02em] capitalize">{{$header_title_name}}</h3>
     <div class="dropdown relative ml-[auto] mr-[10px] md:mr-[20px] ">
         <div type="button" class="button flex items-center gap-[10px] shadow-[0px_0px_6px_2px_#00000036] rounded-[10px] p-[3px] cursor-pointer	">
-            <img src="{{asset('assets/images/profile-img.png')}}" alt="profile" class="w-[33px] h-[33px] rounded-[9px] object-cover border-[1px] border-[#13103A] ">
+            @php
+                $userDetails = UserDetail::where('userId',auth()->user()->id)->first();
+            @endphp
+            <img src="{{asset($userDetails['uploadPhotograph'] ? 'Image/'.$userDetails['uploadPhotograph'] : 'assets/images/noimage.png')}}"            
+             alt="profile" class="w-[33px] h-[33px] rounded-[9px] object-cover border-[1px] border-[#13103A] ">
             <div class="pr-[7px]">
                 <strong class="flex items-center gap-[10px] text-xs md:text-[13px] font-[500] leading-[15px] text-[#13103A] tracking-[0.01em] capitalize mb-[2px]">
-                    Hi,rajodiya infotech!
+                    Hi, @php echo auth()->user()->name; @endphp
                     <svg width="9" height="5" viewBox="0 0 9 5" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M7.94 1.41753e-05L8.64667 0.707347L4.79533 4.56001C4.73362 4.62212 4.66024 4.6714 4.5794 4.70504C4.49857 4.73867 4.41188 4.75598 4.32433 4.75598C4.23678 4.75598 4.1501 4.73867 4.06926 4.70504C3.98843 4.6714 3.91505 4.62212 3.85333 4.56001L1.76971e-07 0.707347L0.706667 0.000680478L4.32333 3.61668L7.94 1.41753e-05Z" fill="#13103A" />
                     </svg>
                 </strong>
-                <span class="block text-[10px] font-[500] leading-[12px] text-[#5F5F66] tracking-[0.01em]">Admin</span>
+                <span class="block text-[10px] font-[500] leading-[12px] text-[#5F5F66] tracking-[0.01em]">
+                    @php
+                        $role = Role::find(auth()->user()->role);
+                        echo $role->name;
+                    @endphp                   
+                </span>
             </div>
         </div>
         <div class="dropdown_menu absolute top-[100%] right-0 z-10 mt-2 w-[200px] origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
@@ -37,7 +52,7 @@
             <div class="p-3" role="none">
                 <ul>
                     <li class="py-3 border-b-[1px] border-[#e5e7eb]">
-                        <div class="flex gap-[7px]">
+                        <a href="#" class="flex gap-[7px]">
                             <img src="{{asset('assets/images/profile-img.png')}}" alt="profile" class="min-w-[35px] w-[35px] h-[35px] rounded-[100%] object-cover border-[1px] border-[#13103A] ">
                             <div>
                                 <div class="flex items-center justify-between">
@@ -47,10 +62,10 @@
                                 <p class="text-xs text-gray-900 line-clamp-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
                                     molestiae quas vel sint commodi repudiandae consequuntur voluptatum.</p>
                             </div>
-                        </div>
+                        </a>
                     </li>
                     <li class="py-3 border-b-[1px] border-[#e5e7eb]">
-                        <div class="flex gap-[7px]">
+                        <a href="#" class="flex gap-[7px]">
                             <img src="{{asset('assets/images/profile-img.png')}}" alt="profile" class="min-w-[35px] w-[35px] h-[35px] rounded-[100%] object-cover border-[1px] border-[#13103A] ">
                             <div>
                                 <div class="flex items-center justify-between">
@@ -60,10 +75,10 @@
                                 <p class="text-xs text-gray-900 line-clamp-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
                                     molestiae quas vel sint commodi repudiandae consequuntur voluptatum.</p>
                             </div>
-                        </div>
+                        </a>
                     </li>
                     <li class="py-3 ">
-                        <div class="flex gap-[7px]">
+                        <a href="#" class="flex gap-[7px]">
                             <img src="{{asset('assets/images/profile-img.png')}}" alt="profile" class="min-w-[35px] w-[35px] h-[35px] rounded-[100%] object-cover border-[1px] border-[#13103A] ">
                             <div>
                                 <div class="flex items-center justify-between">
@@ -73,7 +88,7 @@
                                 <p class="text-xs text-gray-900 line-clamp-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
                                     molestiae quas vel sint commodi repudiandae consequuntur voluptatum.</p>
                             </div>
-                        </div>
+                        </a>
                     </li>
                 </ul>
             </div>

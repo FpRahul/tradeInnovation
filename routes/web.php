@@ -32,9 +32,15 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::match(['POST','GET'],'/associates', 'associates')->name('associate.listing');
         Route::match(['POST', 'GET'], '/add-associate/{id?}', 'addAssociate')->name('users.addassociate');
 
-        Route::match(['POST', 'GET'], '/user-professions/{id?}', 'userProfessions')->name('professions.index');
-        Route::match(['POST', 'GET'], '/user-incorporation/{id?}', 'userIncorporation')->name('incorporation.index');
-        Route::match(['POST', 'GET'], '/user-referral/{id?}', 'userReferral')->name('referral.index');
+        Route::match(['POST', 'GET'], '/user-professions', 'userProfessions')->name('professions.index');
+        Route::match(['POST', 'GET'], '/add-professions/{id?}', 'addProfessions')->name('professions.add');
+
+        Route::match(['POST', 'GET'], '/user-incorporation', 'userIncorporation')->name('incorporation.index');
+        Route::match(['POST', 'GET'], '/add-incorporation/{id?}', 'addIncorporation')->name('incorporation.add');
+
+        Route::match(['POST', 'GET'], '/user-referral', 'userReferral')->name('referral.index');
+        Route::match(['POST', 'GET'], '/add-referral/{id?}', 'addReferral')->name('referral.add');
+
         Route::get('/category-status/{id?}', 'categoryStatus')->name('users.category.status');
         Route::get('/category-delete/{id?}', 'categoryDelete')->name('users.category.delete');
 
@@ -65,8 +71,12 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     //Services Routes
     Route::prefix('services')->controller(ServicesController::class)->group(function () {
         Route::match(['POST','GET'],'/', 'index')->name('services.index');
+        Route::match(['POST','GET'],'/add-service', 'addService')->name('service.add');
+
         Route::match(['POST','GET'],'/subservice/{id?}', 'addSubService')->name('services.subService.add');
-        Route::match(['POST','GET'],'/changestatus/{id?}','serviceStatus')->name('service.change.status');
+        Route::match(['POST','GET'],'/changestatus/{id?}','serviceStatus')->name('service.status');
+        Route::post('/deleterepeater', 'deleteRepeaterSubserv')->name('subservice.deleterepeater');
+
     });
     
 });

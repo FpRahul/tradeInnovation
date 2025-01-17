@@ -10,6 +10,7 @@
                 <li class="text-gray">{{$moduleName}}</li>
             </ul>
         </div>
+        @if(in_array('users.adduser',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
         <div>
             <a href="{{ route('users.adduser')}}" class=" inline-flex items-center gap-[10px] text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px] ">
                 <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -18,6 +19,7 @@
                 Add Users
             </a>
         </div>
+        @endif
     </div>
     <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] overflow-hidden">
         <div class="py-[15px] md:py-[25px] px-[15px] md:px-[20px] flex items-center justify-between">
@@ -66,6 +68,7 @@
                             @endif
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] py-[12px] px-[15px]">
+                            @if((in_array('users.adduser',$permissionDetails['accessableRoutes']) || in_array('users.status',$permissionDetails['accessableRoutes']) || in_array('users.delete',$permissionDetails['accessableRoutes'])) || auth()->user()->role==1)
                             <div class="dropdown inline-block relative ml-[auto] mr-[20px] ">
                                 <a href="javascript:void(0)" type="button" class="button">
                                     <svg width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -74,14 +77,23 @@
                                 </a>
                                 <div class="dropdown_menus absolute right-0 z-10 mt-2 w-[100px] origin-top-right rounded-md bg-white shadow-md ring-1 ring-black/5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                                     <div class="text-start" role="none">
-                                        <a href="{{ route('users.adduser', ['id' => $employeeListing->id]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Edit</a>
-                                        <a href="#" data-id="{{$employeeListing->id}}" class="delete_employee block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Delete</a>
-                                        <a href="{{ route('users.status', ['id' => $employeeListing->id, 'val' => $employeeListing->status]) }}" class="client_status block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">
+                                        @if(in_array('users.adduser',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                            <a href="{{ route('users.adduser', ['id' => $employeeListing->id]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Edit</a>
+                                        @endif
+                                        @if(in_array('users.delete',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                            <a href="#" data-id="{{$employeeListing->id}}" class="delete_employee block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Delete</a>
+                                        @endif
+                                        @if(in_array('users.status',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                            <a href="{{ route('users.status', ['id' => $employeeListing->id, 'val' => $employeeListing->status]) }}" class="client_status block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">
                                             {{ $employeeListing->status ? 'Inactive' : 'Active' }}
                                         </a>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
+                            @else
+                                <x-nopermission />
+                            @endif
                         </td>
                     </tr>
                     @endforeach

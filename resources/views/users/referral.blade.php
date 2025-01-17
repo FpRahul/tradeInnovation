@@ -9,12 +9,14 @@
                 <li class="text-gray">refer</li>
             </ul>
         </div>
+        @if(in_array('referral.add',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
         <a href="javascript:void(0)" type="button" data-btn-name="Add"  data-name="" data-id="0" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal"  class="openModalRef inline-flex items-center gap-[10px] text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px] ">
             <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M8.75 5.625H5.625V8.75C5.625 9.09375 5.34375 9.375 5 9.375C4.65625 9.375 4.375 9.09375 4.375 8.75V5.625H1.25C0.90625 5.625 0.625 5.34375 0.625 5C0.625 4.65625 0.90625 4.375 1.25 4.375H4.375V1.25C4.375 0.90625 4.65625 0.625 5 0.625C5.34375 0.625 5.625 0.90625 5.625 1.25V4.375H8.75C9.09375 4.375 9.375 4.65625 9.375 5C9.375 5.34375 9.09375 5.625 8.75 5.625Z" fill="white" />
             </svg>
             Add Referral Partner
         </a>
+        @endif
     </div>
     <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] ">
         <div class="py-[25px] px-[20px] flex items-center justify-between">
@@ -60,6 +62,7 @@
                                     @endif
                                 </td>
                                 <td class="border-b-[1px] border-[#0000001A] py-[12px] px-[15px]">
+                                    @if((in_array('incorporations.add',$permissionDetails['accessableRoutes']) || in_array('users.category.status',$permissionDetails['accessableRoutes']) || in_array('users.category.delete',$permissionDetails['accessableRoutes'])) || auth()->user()->role==1)
                                     <div class="dropdown inline-block relative ml-[auto] mr-[20px] ">
                                         <a href="javascript:void(0)" type="button" class="button">
                                             <svg width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -68,15 +71,22 @@
                                         </a>
                                         <div class="dropdown_menus absolute right-0 z-10 mt-2 w-[100px] origin-top-right rounded-md bg-white shadow-md ring-1 ring-black/5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                                             <div class="text-start" role="none">
-                                                <a href="javascript:void(0)" type="button" data-btn-name="edit" data-name="{{$newCategorylist->name}}" data-id="{{$newCategorylist->id}}" class="openModalRef block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal">Edit</a>
-                                                <a href="{{ route('users.category.status',['id'=>$newCategorylist->id,'val' => $newCategorylist->status])}}" class="client_status block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">
-                                                    {{ $newCategorylist->status ? 'Inactive' : 'Active' }}
-                                                </a>
-                                                <a href="#" data-id="{{$newCategorylist->id}}" class="delete_referral_list block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Delete</a>
-                                               
+                                                @if(in_array('referral.add',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                                    <a href="javascript:void(0)" type="button" data-btn-name="edit" data-name="{{$newCategorylist->name}}" data-id="{{$newCategorylist->id}}" class="openModalRef block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal">Edit</a>
+                                                @endif
+                                                @if(in_array('referral.status',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                                    <a href="{{ route('users.category.status',['id'=>$newCategorylist->id,'val' => $newCategorylist->status])}}" class="client_status block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">
+                                                    {{ $newCategorylist->status ? 'Inactive' : 'Active' }}</a>
+                                                @endif
+                                                @if(in_array('referral.delete',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                                    <a href="#" data-id="{{$newCategorylist->id}}" class="delete_referral_list block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Delete</a>
+                                                @endif       
                                             </div>
                                         </div>
                                     </div>
+                                    @else
+                                    <x-nopermission />
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

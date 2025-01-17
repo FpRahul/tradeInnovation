@@ -45,6 +45,7 @@ use App\Models\MenuAction;
                             @if (isset($menu['subMenu']))
                             <ul class="accordian_body pl-[20px]">
                                 @foreach($menu['subMenu'] as $smid => $subMenu)
+                                @php if($smid==9){ continue;} @endphp
                                 @if (isset($menuAddedAction[$smid]))
                                     @php $isChecked = 'checked';  @endphp
                                 @else

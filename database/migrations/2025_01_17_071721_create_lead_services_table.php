@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('lead_services', function (Blueprint $table) {
             $table->id();
-            $table->integer('leadId')->default(0);
-            $table->tinyInteger('serviceId')->default(0);
-            $table->tinyInteger('subserviceId')->default(0);
-            $table->string('quotedPrice')->nullable(true);
+            $table->foreignId('lead_id')->constrained()->onDelete('cascade');
+            $table->integer('service_id')->default(0);
+            $table->integer('subservice_id')->default(0);
+            $table->string('quoted_price')->nullable(true);
             $table->timestamps();
         });
     }

@@ -7,43 +7,51 @@
     </div>
 
     <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] mb-[30px]">
-        <form method="POST" class="py-[25px] px-[30px] space-y-[20px]">
-
-            <input type="hidden" name="role" id="role" value="2">
+        <form method="POST" action="{{ route('leads.add')}}" class="py-[25px] px-[30px] space-y-[20px]">
+            @csrf
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="source" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Source</label>
-                    <select name="source" id="source" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                    <select name="source" id="source" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                         <option value="">Source Type</option>
-                        <option value="1">1</option>
+                        @if (count($sourceList) > 0)
+                            @foreach ($sourceList as $sourceListData)
+                                <option value="{{ $sourceListData->id}}">{{ $sourceListData->name}}</option>
+                            @endforeach                            
+                        @endif
                     </select>
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="clientname" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Client Name</label>
-                    <input type="text" name="clientname" id="clientname" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" >
+                    <input type="text" name="clientname" id="clientname" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                 </div>
             </div>
             
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="companyname" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Company Name</label>
-                    <input type="text" name="companyname" id="companyname" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                    <input type="text" name="companyname" id="companyname" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="mobilenumber" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mobile number</label>
-                    <input type="text" name="mobilenumber" id="mobilenumber" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                    <input type="text" name="mobilenumber" id="mobilenumber" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                 </div>
             </div>
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Email-Id</label>
-                    <input type="text" name="email" id="email" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                    <input type="text" name="email" id="email" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="assign" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign to</label>
-                    <select name="assign" id="assign" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                    <select name="assign" id="assign" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                         <option value="">Assign To Users</option>
-                        <option value="1">1</option>
+                        @if (count($userList) > 0)
+                            @foreach ($userList as $userListData)
+                                <option value="{{$userListData->id}}">{{ $userListData->name}}</option>
+
+                            @endforeach                            
+                        @endif
                     </select>
                 </div>
             </div>
@@ -58,15 +66,19 @@
                                     <input type="hidden" name="lead_service_id" class="lead_service_id" value="0">
                                     <div class="flex flex-col md:flex-row gap-[20px]">
                                         <div class="w-full md:w-1/2">
-                                            <select name="source" id="source" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                                            <select name="servicetbl" id="servicetbl" class="setSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                 <option value="">Service Name</option>
-                                                <option value="1">1</option>
+                                                @if (count($serviceList) > 0)
+                                                    @foreach ($serviceList as $serviceListData)
+                                                        <option value="{{ $serviceListData->id}}">{{ $serviceListData->serviceName}}</option>
+                                                    @endforeach  
+                                                @endif
+                                                
                                             </select>
                                         </div>
                                         <div class="w-full md:w-1/2">
-                                            <select name="source" id="source" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
-                                                <option value="">Service Type</option>
-                                                <option value="1">1</option>
+                                            <select name="subservicetbl" id="subservicetbl" class="getSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                <option value="">Service Type</option>                                                
                                             </select>
                                         </div>
                                     </div>
@@ -98,5 +110,24 @@
         </form>
     </div>
 </div>
-
+<script>
+    $(document).on('change','.setSubService',function(){
+        var serviceId = $(this).val();
+        var e = $(this);
+        $.ajax({
+            method:'POST',
+            url:"{{ route('lead.subservice')}}",
+            headers:{
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            dataType:'json',
+            data:{
+                serviceId:serviceId
+            },
+            success:function(res){
+                e.parent().parent().find('.getSubService').html(res.data);
+            }
+        });
+    });
+</script>
 @stop

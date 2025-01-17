@@ -4,12 +4,13 @@
 <div>
     <div class="flex flex-col md:flex-row md:items-center justify-between mb-[20px] gap-[15px]">
         <div>
-            <h3 class="text-[20px] font-[500] leading-[24px] text-[#13103A] tracking-[0.02em] mb-1.5">{{$moduleName}}</h3>
+            <h3 class="text-[20px] font-[500] leading-[24px] text-[#13103A] tracking-[0.02em] mb-1.5">Manage Services</h3>
             <ul class="flex items-center text-[14px] font-[400] leading-[16px] text-[#000000] gap-[5px]">
-                <li>{{$header_title_name}}</li> /
-                <li class="text-gray">{{$moduleName}}</li>
+                <li>Services</li> /
+                <li class="text-gray">Preview</li>
             </ul>
         </div>
+        @if(in_array('service.add',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
         <div>
             <a href="javascript:void(0)" data-modal-target="serviceModal" data-modal-toggle="serviceModal" data-name="" data-des="" data-id="0" class="openModalServices inline-flex items-center gap-[10px] text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px] ">
                 <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -18,6 +19,7 @@
                 Add Service
             </a>
         </div>
+        @endif
     </div>
     <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] overflow-hidden">
         <div class="py-[15px] md:py-[25px] px-[15px] md:px-[20px] flex items-center justify-end">
@@ -61,6 +63,7 @@
                             @endif
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] py-[12px] px-[15px]">
+                            @if((in_array('service.add',$permissionDetails['accessableRoutes']) || in_array('service.status',$permissionDetails['accessableRoutes'])) || auth()->user()->role==1)
                             <div class="dropdown inline-block relative ml-[auto] mr-[20px] ">
                                 <a href="javascript:void(0)" type="button" class="button">
                                     <svg width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -69,15 +72,23 @@
                                 </a>
                                 <div class="dropdown_menus absolute right-0 z-10 mt-2 w-[100px] origin-top-right rounded-md bg-white shadow-md ring-1 ring-black/5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                                     <div class="text-start" role="none">
-                                        <a href="javascript:void(0)" data-modal-target="serviceModal" data-modal-toggle="serviceModal" data-name="{{$serviceListing->serviceName}}" data-des="{{$serviceListing->serviceDescription}}" data-id="{{$serviceListing->id}}" class="openModalServices block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Edit</a>
-                                        <a href="{{ route('service.status', ['id' => $serviceListing->id, 'val' => $serviceListing->status]) }}" class="client_status block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">
+                                        @if(in_array('service.add',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                            <a href="javascript:void(0)" data-modal-target="serviceModal" data-modal-toggle="serviceModal" data-name="{{$serviceListing->serviceName}}" data-des="{{$serviceListing->serviceDescription}}" data-id="{{$serviceListing->id}}" class="openModalServices block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Edit</a>
+                                        @endif
+                                        @if(in_array('service.status',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                            <a href="{{ route('service.status', ['id' => $serviceListing->id, 'val' => $serviceListing->status]) }}" class="client_status block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">
                                             {{ $serviceListing->status ? 'Inactive' : 'Active' }}
                                         </a>
-                                        <a href="{{ route('services.subService.add')}}/{{$serviceListing->id}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Sub-Service</a>
-
+                                        @endif
+                                        @if(in_array('service.add',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                            <a href="{{ route('services.subService.add')}}/{{$serviceListing->id}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Sub-Service</a>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
+                            @else
+                                <x-nopermission />
+                            @endif
                         </td>
                     </tr>
                     @endforeach

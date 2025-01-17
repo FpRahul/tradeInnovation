@@ -12,7 +12,7 @@
 
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
-                    <label for="name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Name</label>
+                    <label for="name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Name <strong class="text-[#f83434]">*</strong></label>
                     <input type="text" name="name" id="name" value="{{ $newUser->name }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Name" required>
                     @error('name')
                     <div class="alert alert-danger">{{ $message }}</div>
@@ -20,8 +20,8 @@
 
                 </div>
                 <div class="w-full md:w-1/2">
-                    <label for="role" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Role</label>
-                    <select name="role" id="role" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                    <label for="role" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Role <strong class="text-[#f83434]">*</strong></label>
+                    <select name="role" id="role" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                         <option value="">Select Role</option>
                         @if (count($roleData) > 0)
                             @foreach ($roleData as $roles)
@@ -30,14 +30,14 @@
                         @endif
                     </select>
                     @error('role')
-                    <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
+                        <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
                     @enderror
                 </div>
 
             </div>
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
-                    <label for="fatherHusbandName" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Father/Husband Name</label>
+                    <label for="fatherHusbandName" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Father/Husband Name <strong class="text-[#f83434]">*</strong></label>
                     <input type="text" name="fatherHusbandName" id="fatherHusbandName" value="{{ $newUserDetails->fatherHusbandName }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Company Name" required>
                     @error('fatherHusbandName')
                     <div class="alert alert-danger">{{ $message }}</div>
@@ -64,7 +64,7 @@
             <div class="flex flex-col md:flex-row gap-[20px]">
 
                 <div class="w-full md:w-1/2">
-                    <label for="mobileNumber" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mobile Number</label>
+                    <label for="mobileNumber" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mobile Number <strong class="text-[#f83434]">*</strong></label>
                     <input type="number" name="mobileNumber" id="mobileNumber" value="{{ $newUser->mobile }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Mobile Number" required>
                     @error('mobileNumber')
                     <div class="alert alert-danger">{{ $message }}</div>
@@ -81,14 +81,14 @@
             <div class="flex flex-col md:flex-row gap-[20px]">
 
                 <div class="w-full md:w-1/2">
-                    <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Email-Id</label>
+                    <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Email-Id <strong class="text-[#f83434]">*</strong></label>
                     <input type="text" name="email" id="email" value="{{ $newUser->email }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Email" required>
                     @error('email')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="w-full md:w-1/2">
-                    <label for="qualification" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Qualification</label>
+                    <label for="qualification" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Qualification <strong class="text-[#f83434]">*</strong></label>
                     <input type="text" name="qualification" id="qualification" value="{{ $newUserDetails->qualification }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Qualification" required>
                     @error('qualification')
                     <div class="alert alert-danger">{{ $message }}</div>
@@ -148,23 +148,21 @@
                                     </label>
                                     <input type="text" name="employerName" id="employerName"
                                         class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"
-                                        placeholder="Employer Name" required>
+                                        placeholder="Employer Name">
                                 </div>
                                 <div class="w-full">
                                     <label for="startDate" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
                                         Start Date
                                     </label>
                                     <input type="date" name="startDate" id="startDate"
-                                        class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"
-                                        required>
+                                        class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                                 </div>
                                 <div class="w-full">
                                     <label for="endDate" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
                                         End Date
                                     </label>
                                     <input type="date" name="endDate" id="endDate"
-                                        class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"
-                                        required>
+                                        class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                                 </div>
                             </div>
                             <div class="w-[55px]">
@@ -189,14 +187,14 @@
             <div class="flex flex-col md:flex-row gap-[20px]">
 
                 <div class="w-full md:w-1/2">
-                    <label for="skill" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Skills</label>
+                    <label for="skill" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Skills <strong class="text-[#f83434]">*</strong></label>
                     <input type="text" name="skill" id="skill" value="{{ $newUserDetails->skills }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                     @error('skill')
                     <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="w-full md:w-1/2">
-                    <label for="keyResponsibilityArea" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Key Responsibility Area</label>
+                    <label for="keyResponsibilityArea" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Key Responsibility Area <strong class="text-[#f83434]">*</strong></label>
                     <input type="text" name="keyResponsibilityArea" id="keyResponsibilityArea" value="{{ $newUserDetails->keyResponsibilityArea }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                     @error('keyResponsibilityArea')
                     <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
@@ -207,14 +205,14 @@
 
                 <div class="w-full md:w-1/2">
                     <label for="keyPerformanceIndicator" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Key Performance Indicator</label>
-                    <input type="text" name="keyPerformanceIndicator" id="keyPerformanceIndicator" value="{{ $newUserDetails->keyPerformanceIndicator }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <input type="text" name="keyPerformanceIndicator" id="keyPerformanceIndicator" value="{{ $newUserDetails->keyPerformanceIndicator }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                     @error('keyPerformanceIndicator')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="emergencyContactDetails" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Emergency Contact Details</label>
-                    <input type="text" name="emergencyContactDetails" id="emergencyContactDetails" value="{{ $newUserDetails->emergencyContactDetails }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <input type="text" name="emergencyContactDetails" id="emergencyContactDetails" value="{{ $newUserDetails->emergencyContactDetails }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                     @error('emergencyContactDetails')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -223,15 +221,15 @@
             <div class="flex flex-col md:flex-row gap-[20px]">
 
                 <div class="w-full md:w-1/2">
-                    <label for="currentAddress" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Current Address</label>
+                    <label for="currentAddress" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Current Address <strong class="text-[#f83434]">*</strong></label>
                     <textarea type="text" name="currentAddress" id="currentAddress" class="w-full h-[120px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Current Address" required>{{ $newUserDetails->currentAddress }}</textarea>
                     @error('currentAddress')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="w-full md:w-1/2">
-                    <label for="permanentAddress" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Permanent Address</label>
-                    <textarea type="text" name="permanentAddress" id="permanentAddress" class="w-full h-[120px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Permanent Address" required>{{ $newUserDetails->permanentAddress }}</textarea>
+                    <label for="permanentAddress" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Permanent Address <strong class="text-[#f83434]">*</strong></label>
+                    <textarea R type="text" name="permanentAddress" id="permanentAddress" class="w-full h-[120px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Permanent Address" required>{{ $newUserDetails->permanentAddress }}</textarea>
                     @error('permanentAddress')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -240,7 +238,7 @@
             <div class="flex flex-col md:flex-row gap-[20px]">
 
                 <div class="w-full md:w-1/2">
-                    <label for="uploadPan" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload Pan</label>
+                    <label for="uploadPan" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload Pan <strong class="text-[#f83434]">*</strong></label>
                     <div class="relative flex flex-wrap gap-[10px]">
                         <img class="getpreviewImage" src="{{asset($newUserDetails->uploadPan ? 'Image/'.$newUserDetails->uploadPan : 'assets/images/noimage.png')}}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
                         
@@ -250,7 +248,7 @@
                                     <path d="M13.9395 8.95044H8.93945V13.9504C8.93945 14.5004 8.48945 14.9504 7.93945 14.9504C7.38945 14.9504 6.93945 14.5004 6.93945 13.9504V8.95044H1.93945C1.38945 8.95044 0.939453 8.50044 0.939453 7.95044C0.939453 7.40044 1.38945 6.95044 1.93945 6.95044H6.93945V1.95044C6.93945 1.40044 7.38945 0.950439 7.93945 0.950439C8.48945 0.950439 8.93945 1.40044 8.93945 1.95044V6.95044H13.9395C14.4895 6.95044 14.9395 7.40044 14.9395 7.95044C14.9395 8.50044 14.4895 8.95044 13.9395 8.95044Z" fill="#13103A" />
                                 </svg>
                             </label>
-                            <input type="file" name="uploadPan" id="uploadPan" class="previewImage w-0 opacity-0 absolute top-0 left-0">
+                            <input type="file" name="uploadPan" id="uploadPan" class="previewImage w-0 opacity-0 absolute top-0 left-0" @if($newUserDetails->uploadDrivingLicence=='') required @endif>
                         </div>
                     </div>
                     @error('uploadPan')
@@ -258,7 +256,7 @@
                     @enderror
                 </div>
                 <div class="w-full md:w-1/2">
-                    <label for="uploadAadhar" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload Aadhar</label>
+                    <label for="uploadAadhar" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload Aadhar <strong class="text-[#f83434]">*</strong></label>
                     <div class="relative flex flex-wrap gap-[10px]">
                         <img class="getpreviewImage" src="{{asset($newUserDetails->uploadAadhar ? 'Image/'.$newUserDetails->uploadAadhar : 'assets/images/noimage.png')}}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
                         <div class="relative">
@@ -267,7 +265,7 @@
                                     <path d="M13.9395 8.95044H8.93945V13.9504C8.93945 14.5004 8.48945 14.9504 7.93945 14.9504C7.38945 14.9504 6.93945 14.5004 6.93945 13.9504V8.95044H1.93945C1.38945 8.95044 0.939453 8.50044 0.939453 7.95044C0.939453 7.40044 1.38945 6.95044 1.93945 6.95044H6.93945V1.95044C6.93945 1.40044 7.38945 0.950439 7.93945 0.950439C8.48945 0.950439 8.93945 1.40044 8.93945 1.95044V6.95044H13.9395C14.4895 6.95044 14.9395 7.40044 14.9395 7.95044C14.9395 8.50044 14.4895 8.95044 13.9395 8.95044Z" fill="#13103A" />
                                 </svg>
                             </label>
-                            <input type="file" name="uploadAadhar" id="uploadAadhar" class="previewImage w-0 opacity-0 absolute top-0 left-0">
+                            <input type="file" name="uploadAadhar" id="uploadAadhar" class="previewImage w-0 opacity-0 absolute top-0 left-0" @if($newUserDetails->uploadAadhar=='') required @endif>
                         </div>
                     </div>
                     @error('uploadAadhar')
@@ -275,7 +273,7 @@
                     @enderror
                 </div>
                 <div class="w-full md:w-1/2">
-                    <label for="uploadDrivingLicence" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload Driving Licence</label>
+                    <label for="uploadDrivingLicence" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload Driving Licence <strong class="text-[#f83434]">*</strong></label>
                     <div class="relative flex flex-wrap gap-[10px]">
                         <img class="getpreviewImage" src="{{asset($newUserDetails->uploadDrivingLicence ? 'Image/'.$newUserDetails->uploadDrivingLicence : 'assets/images/noimage.png')}}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
                         <div class="relative">
@@ -284,7 +282,7 @@
                                     <path d="M13.9395 8.95044H8.93945V13.9504C8.93945 14.5004 8.48945 14.9504 7.93945 14.9504C7.38945 14.9504 6.93945 14.5004 6.93945 13.9504V8.95044H1.93945C1.38945 8.95044 0.939453 8.50044 0.939453 7.95044C0.939453 7.40044 1.38945 6.95044 1.93945 6.95044H6.93945V1.95044C6.93945 1.40044 7.38945 0.950439 7.93945 0.950439C8.48945 0.950439 8.93945 1.40044 8.93945 1.95044V6.95044H13.9395C14.4895 6.95044 14.9395 7.40044 14.9395 7.95044C14.9395 8.50044 14.4895 8.95044 13.9395 8.95044Z" fill="#13103A" />
                                 </svg>
                             </label>
-                            <input type="file" name="uploadDrivingLicence" id="uploadDrivingLicence" class="previewImage w-0 opacity-0 absolute top-0 left-0">
+                            <input type="file" name="uploadDrivingLicence" id="uploadDrivingLicence" class="previewImage w-0 opacity-0 absolute top-0 left-0" @if($newUserDetails->uploadDrivingLicence=='') required @endif>
                         </div>
                     </div>
                     @error('uploadDrivingLicence')

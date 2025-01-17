@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\UserDetail;
 use App\Models\RoleMenu;
+use App\Models\MenuAction;
 use App\Models\Menu;
 use Illuminate\Support\Facades\Auth;
 class User extends Authenticatable
@@ -61,18 +62,50 @@ class User extends Authenticatable
     {
         return true;
         $user = Auth::user();
+        $returnMenus = [
+            'status' => false,
+            'permission' => [1]
+        ];
         if($user->role==1){
-            return true;
+            $returnMenus['status'] = true;
+            return $returnMenus;
         }
-        $permissions = RoleMenu::where('roleId',$user->role)->with('menu')->get();
-        echo "<pre>"; print_R($permissions);die;
-        if(!$permissions && $permissions->isNotEmpty()){
-            foreach($permissions as $permission){
 
+        $permissions = RoleMenu::where('roleId',$user->role)->get();
+        echo "<pre>"; print_R($permissions->toArray());die;
+        $accessableRoutes = [];
+        if($permissions->isNotEmpty()){
+            foreach($permissions as $permission){
+                $menuDetail = Menu::find($permission->menuId);
+                $availableActions = explode(',',$permission->permission);
+                $menuActions = MenuAction::whereIn('id',$availableActions)->get();
+                if($menuActions->isNotEmpty()){
+                    foreach($menuActions as $menuAction){
+                        $accessableRoutes[] = $menuAction->route;
+                    }
+                    $accessableRoutes[] = $menuDetail->url;
+                    $returnMenus['permission'][$menuDetail->id] = $menuDetail->id;
+                    if($menuDetail->parentId>0){
+                        $returnMenus['permission'][$menuDetail->parentId] = $menuDetail->parentId;
+                    }
+                }else{
+                    $accessableRoutes[] = $menuDetail->url;
+                    $returnMenus['permission'][$permission->menuId] = $permission->menuId;
+                }
             }
         }
-        echo "<pre>"; print_R($permission);die;
-        return in_array($routeName, $permissions);
+        echo "<pre>"; print_R($returnMenus);die;
+        //mandatory routes
+        $accessableRoutes[] = 'user.logout';
+        $accessableRoutes[] = 'user.myprofile';
+        $accessableRoutes[] = 'chart.data';
+        $accessableRoutes[] = 'dashboard';
+        //end
+        
+        if(in_array($routeName, $accessableRoutes)){
+            $returnMenus['status'] = true;
+        }
+        return $returnMenus;
     }
 
     public function role()

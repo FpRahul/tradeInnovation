@@ -13,19 +13,19 @@ return new class extends Migration
     {
         Schema::create('leads', function (Blueprint $table) {
             $table->id();
-            $table->integer('userId')->default(0);
-            $table->tinyInteger('source')->default(0);
-            $table->integer('sourceId')->default(0);
-            $table->string('clientName')->nullable(true);
-            $table->string('companyName')->nullable(true);
-            $table->string('mobileNumber')->nullable(true);
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->integer('source')->default(0);
+            $table->integer('source_id')->default(0);
+            $table->string('client_name')->nullable(true);
+            $table->string('company_name')->nullable(true);
+            $table->string('mobile_number')->nullable(true);
             $table->string('email')->nullable(true);
-            $table->tinyInteger('assignTo')->nullable(true);
+            $table->integer('assign_to')->nullable(true);
             $table->text('description')->nullable(true);
             $table->tinyInteger('status')->default(0);            
-            $table->datetime('completedDate')->nullable(true);
-            $table->tinyInteger('quotationSent')->default(0);  
-            $table->datetime('quotationSentDate')->nullable(true);
+            $table->datetime('completed_date')->nullable(true);
+            $table->tinyInteger('quotation_sent')->default(0);  
+            $table->datetime('quotation_sent_date')->nullable(true);
 
             $table->timestamps();
         });

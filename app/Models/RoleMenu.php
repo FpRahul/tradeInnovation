@@ -16,5 +16,10 @@ class RoleMenu extends Model
     {
         return $this->belongsTo(Role::class, 'roleId', 'id');
     }
+
+    public function menu()
+    {
+        return $this->belongsTo(Menu::class, 'roleId', 'id');
+    }
     
 }

@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('lead_log_attachments', function (Blueprint $table) {
             $table->id();
-            $table->integer('leadId')->default(0);
-            $table->integer('userId')->default(0);
-            $table->string('fileName')->nullable(true);
+            $table->foreignId('lead_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('file_name')->nullable(true);
             $table->timestamps();
         });
     }

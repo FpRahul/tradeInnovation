@@ -56,9 +56,10 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     //Leads Routes
     Route::prefix('leads')->controller(LeadsController::class)->group(function () {
         Route::get('/', 'index')->name('leads.index');
-        Route::get('/add', 'add')->name('leads.add');
+        Route::match(['POST','GET'],'/add', 'add')->name('leads.add');
         Route::get('/sendquote', 'sendquote')->name('leads.quote');
         Route::get('/logs', 'leadLogs')->name('leads.logs');
+        Route::POST('/getsubservice','getSubService')->name('lead.subservice');
     });
 
     //Tasks Routes

@@ -13,17 +13,17 @@ return new class extends Migration
     {
         Schema::create('lead_logs', function (Blueprint $table) {
             $table->id();
-            $table->integer('leadId')->default(0);
-            $table->integer('userId')->default(0);
+            $table->foreignId('lead_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->integer('status')->default(0);
-            $table->tinyInteger('isFollowUp')->default(0);
-            $table->datetime('followUpDate')->nullable(true);
-            $table->datetime('verfiedOn')->nullable(true);
-            $table->datetime('deadLine')->nullable(true);
+            $table->tinyInteger('is_follow_up')->default(0);
+            $table->datetime('follow_up_date')->nullable(true);
+            $table->datetime('verfied_on')->nullable(true);
+            $table->datetime('dead_line')->nullable(true);
             $table->text('description')->nullable(true);            
-            $table->datetime('actionDate')->nullable(true);
-            $table->string('objectReason')->nullable(true);
-            $table->datetime('hearingDate')->nullable(true);
+            $table->datetime('action_date')->nullable(true);
+            $table->string('object_reason')->nullable(true);
+            $table->datetime('hearing_date')->nullable(true);
             $table->timestamps();
         });
     }

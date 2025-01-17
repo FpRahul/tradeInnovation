@@ -6,6 +6,9 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Menu;
+use App\Models\RoleMenu;
+use App\Models\MenuAction;
 
 class CheckPermission
 {
@@ -17,12 +20,90 @@ class CheckPermission
             abort(403, 'Unauthorized action.');
         }
 
-        // Get the current route name
         $routeName = $request->route()->getName();
+        $permissionDetails = [
+            'status' => false,
+            'menuId' => [1],
+            'accessableRoutes' => [
+                0 => 'user.logout',
+                1 => 'user.myprofile',
+                2 => 'chart.data',
+                3 => 'dashboard'
+            ]
+        ];
+        if($user->role==1){
+            $permissionDetails['status'] = true;
+            $systemMenus = Menu::get();
+        }else{
+            $permissions = RoleMenu::where('roleId',$user->role)->get();
+            if($permissions->isNotEmpty()){
+                foreach($permissions as $permission){
+                    $menuDetail = Menu::find($permission->menuId);
+                    $availableActions = explode(',',$permission->permission);
+                    $menuActions = MenuAction::whereIn('id',$availableActions)->get();
+                    if($menuActions->isNotEmpty()){
+                        foreach($menuActions as $menuAction){
+                            $permissionDetails['accessableRoutes'][] = $menuAction->route;
+                        }
+                        $permissionDetails['accessableRoutes'][] = $menuDetail->url;
+                        $permissionDetails['menuId'][] = $menuDetail->id;
+                        if($menuDetail->parentId>0){
+                            $permissionDetails['menuId'][] = $menuDetail->parentId;
+                        }
+                    }else{
+                        $permissionDetails['accessableRoutes'][] = $menuDetail->url;
+                        $permissionDetails['menuId'][] = $permission->menuId;
+                    }
+                }
+            }
+            $permissionDetails['status'] = in_array($routeName,$permissionDetails['accessableRoutes']);
 
-        // Example permission check: Check if user has permission for this route
-        if (!$user->hasPermission($routeName)) {
-            abort(403, 'You do not have permission to access this page.');
+            if (!$permissionDetails['status']) {
+                abort(403, 'You do not have permission to access this page.');
+            }
+            $systemMenus = Menu::whereIn('id',$permissionDetails['menuId'])->get();
+        }
+        
+        $serializeMenus = [];
+        $menuSubMenuRoutes = [];
+        if($systemMenus->isNotEmpty()){
+            foreach($systemMenus as $k =>$v){
+                if($v->parentId==0){
+                    $serializeMenus[$v->id]['menu']['name'] = $v->menuName;
+                    $serializeMenus[$v->id]['menu']['url'] = $v->url;
+                    $serializeMenus[$v->id]['menu']['icon'] = $v->icon;
+                }
+                if($v->parentId>0){
+                    //Check if it is sub menu or sub sub menu
+                    $checkLinkedMenus = Menu::find($v->parentId);
+                    if($checkLinkedMenus->parentId>0){
+                        //it is sub sub menu
+                        $serializeMenus[$checkLinkedMenus->parentId]['subSubMenu'][$checkLinkedMenus->id][$v->id]['name'] = $v->menuName;
+                        $serializeMenus[$checkLinkedMenus->parentId]['subSubMenu'][$checkLinkedMenus->id][$v->id]['url'] = $v->url;
+                        $serializeMenus[$checkLinkedMenus->parentId]['subSubMenu'][$checkLinkedMenus->id][$v->id]['icon'] = $v->icon;
+                    }else{
+                        $serializeMenus[$v->parentId]['subMenu'][$v->id]['name'] = $v->menuName;
+                        $serializeMenus[$v->parentId]['subMenu'][$v->id]['url'] = $v->url;
+                        $serializeMenus[$v->parentId]['subMenu'][$v->id]['icon'] = $v->icon;
+                    }
+                }
+
+                //Grouping routes per menu for active class
+                if($v->parentId>0){
+                    $groupedRoutes = explode(',',$v->actionRoutes);
+                    if(!empty($groupedRoutes)){
+                        foreach($groupedRoutes as $groupedRoute){
+                            $menuSubMenuRoutes[$v->parentId][] = $groupedRoute;
+                            if($v->url=='javascript:void(0);'){
+                                $menuSubMenuRoutes[$v->parentId][$v->id][] = $groupedRoute;
+                            }
+                        }
+                    }
+                }
+                //End
+            }
+            //echo "<pre>"; print_R($serializeMenus);die;
+            view()->share(compact('serializeMenus','menuSubMenuRoutes'));
         }
 
         return $next($request);

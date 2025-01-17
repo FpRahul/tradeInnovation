@@ -33,17 +33,19 @@ class SettingsController extends Controller
         }
         
         if($request->isMethod('post')){
-            $credentials = $request->validate([
-                'rolename' => 'required|unique:roles,name'
-            ]);
+            // $credentials = $request->validate([
+            //     'rolename' => 'required|unique:roles,name'
+            // ]);
             //Saving Role
             $roleData->name = $request->rolename;
             $roleData->save();
 
             //Saving Role Permission
             $allSavedPermissions = $request->permission;
+           
             $roleMenuPermission = [];
             $recordCounter = 0;
+            
             foreach($allSavedPermissions['mainMenu'] as $menuId => $menuItems){
                 if($menuItems=='on'){
                     $roleMenuPermission[$recordCounter]['roleId'] = $roleData->id;
@@ -91,6 +93,10 @@ class SettingsController extends Controller
                                 }
                             }
                         }
+                        $roleMenuPermission[$recordCounter]['roleId'] = $roleData->id;
+                        $roleMenuPermission[$recordCounter]['menuId'] = $menuId;
+                        $roleMenuPermission[$recordCounter]['permission'] = NULL;
+                        $recordCounter++; 
                     }else{
                         if(isset($menuItems['action'])){
                             $allActions = [];
@@ -107,7 +113,32 @@ class SettingsController extends Controller
             }
 
             if($id>0){
-                echo "<pre>"; print_R($roleMenuPermission);die;
+               
+                $updatedIds = [];
+                if(!empty($roleMenuPermission)){
+                    foreach($roleMenuPermission as $rolePermission){
+                        $oldPermission = RoleMenu::where('roleId',$rolePermission['roleId'])->where('menuId',$rolePermission['menuId'])->first();
+                        if(empty($oldPermission)){
+                            $newEntry = new RoleMenu();
+                            $newEntry->roleId = $rolePermission['roleId'];
+                            $newEntry->menuId = $rolePermission['menuId'];
+                            $newEntry->permission = $rolePermission['permission'];
+                            $newEntry->save();
+                            $updatedIds[] = $newEntry->id;
+                        }else{
+                            $oldPermission->roleId = $rolePermission['roleId'];
+                            $oldPermission->menuId = $rolePermission['menuId'];
+                            $oldPermission->permission = $rolePermission['permission'];
+                            $oldPermission->save();
+                            $updatedIds[] = $oldPermission->id;
+                        }
+                    }
+                }
+
+                if(!empty($updatedIds)){
+                    RoleMenu::whereNotIn('id', $updatedIds)->where('roleId',$id)->delete();
+                }
+                return redirect()->route('settings.roles')->with('success','Permission updated.');
             }else{
                 if(!empty($roleMenuPermission)){
                     foreach($roleMenuPermission as $rolePermission){

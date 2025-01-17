@@ -14,7 +14,7 @@ class CheckPermission
 {
     public function handle(Request $request, Closure $next): Response
     {
-        // Ensure user is authenticated
+        //Ensure user is authenticated
         $user = Auth::user();
         if (!$user) {
             abort(403, 'Unauthorized action.');
@@ -102,8 +102,7 @@ class CheckPermission
                 }
                 //End
             }
-            //echo "<pre>"; print_R($serializeMenus);die;
-            view()->share(compact('serializeMenus','menuSubMenuRoutes'));
+            view()->share(compact('serializeMenus','menuSubMenuRoutes','permissionDetails'));
         }
 
         return $next($request);

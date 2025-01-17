@@ -10,7 +10,7 @@ class SettingsController extends Controller
 {
     public function roles(){
         $header_title_name="Setting";
-        $allRoles = Role::with('roleMenus')->get();
+        $allRoles = Role::where('id','!=','1')->with('roleMenus')->get();
         $moduleName="Manage Roles";
         return view('settings/roles',compact('allRoles','header_title_name','moduleName'));
     }

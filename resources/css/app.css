@@ -57,6 +57,10 @@ span[aria-current="page"] span {
 .note-editor.note-frame .note-statusbar {
     border-color: #0000001A !important;
 }
+.daterangepicker-item {position: relative;
+    background-image: url('../../public/assets/images/calendar-icon2.png');
+    background-position: right 15px center;
+    background-repeat: no-repeat;}
 input[type="date"]{
     position: relative;
     background-image: url('../../public/assets/images/calendar-icon2.png');
@@ -91,6 +95,25 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 
+.select2.select2-container.select2-container--default {
+    width: 100%!important;
+}
+
+.select2.select2-container.select2-container--default span.select2-selection.select2-selection--single {
+    border: 1px solid #0000001A;
+    padding: 7px 10px;
+    height: auto;
+    border-radius: 8px;
+    font-size: 15px;
+    color: #000;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    top: 9px;
+    right: 6px;
+}
+
+/* responsive */
 @media (max-width: 767px){
 .employee_repeater_wrapper .repeater-default > div > div:first-child { flex-direction: column; } 
 .employee_repeater_wrapper .repeater-default > div > div:first-child > div { width: 100% !important; }

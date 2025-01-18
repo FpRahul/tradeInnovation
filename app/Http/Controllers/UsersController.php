@@ -11,6 +11,7 @@ use App\Models\CategoryOption;
 use App\Models\UserExperience;
 use App\Models\Role;
 use App\View\Components\LogActivity;
+use App\Models\Log;
 use Illuminate\Support\Str;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -30,7 +31,8 @@ class UsersController extends Controller
                 $logActivity[] = [
                     'user_id' => auth()->user()->id,
                     'title' => 'Login',
-                    'description' => auth()->user()->name.' logged into portal'
+                    'description' => auth()->user()->name.' logged into portal',
+                    'created_at' => date('Y-m-d H:i:s')
                 ];
                 $logActivity = new LogActivity($logActivity);
                 $logActivity->log();
@@ -55,7 +57,8 @@ class UsersController extends Controller
                     $logActivity[] = [
                         'user_id' => $updatePass->id,
                         'title' => 'Forgot Password',
-                        'description' => $updatePass->name.' requested for new password'
+                        'description' => $updatePass->name.' requested for new password',
+                        'created_at' => date('Y-m-d H:i:s')
                     ];
                     $logActivity = new LogActivity($logActivity);
                     $logActivity->log();
@@ -201,7 +204,8 @@ class UsersController extends Controller
                     $logActivity[] = [
                         'user_id' => auth()->user()->id,
                         'title' => 'Add/Edit User',
-                        'description' => auth()->user()->name.' has '.$logAct.' user '.$newUser->name.' ('.$newUser->id.')'
+                        'description' => auth()->user()->name.' has '.$logAct.' user '.$newUser->name.' ('.$newUser->id.')',
+                        'created_at' => date('Y-m-d H:i:s')
                     ];
                     $logActivity = new LogActivity($logActivity);
                     $logActivity->log();
@@ -226,7 +230,8 @@ class UsersController extends Controller
             $logActivity[] = [
                 'user_id' => auth()->user()->id,
                 'title' => 'Archive User',
-                'description' => auth()->user()->name.' has deleted user '.$employeeData->name.' ('.$employeeData->id.')'
+                'description' => auth()->user()->name.' has deleted user '.$employeeData->name.' ('.$employeeData->id.')',
+                'created_at' => date('Y-m-d H:i:s')
             ];
             $logActivity = new LogActivity($logActivity);
             $logActivity->log();
@@ -314,7 +319,8 @@ class UsersController extends Controller
                     $logActivity[] = [
                         'user_id' => auth()->user()->id,
                         'title' => 'Add/Edit Client',
-                        'description' => auth()->user()->name.' has '.$logAct.' user '.$newClient->name.' ('.$newClient->id.')'
+                        'description' => auth()->user()->name.' has '.$logAct.' user '.$newClient->name.' ('.$newClient->id.')',
+                        'created_at' => date('Y-m-d H:i:s')
                     ];
                     $logActivity = new LogActivity($logActivity);
                     $logActivity->log();
@@ -391,7 +397,8 @@ class UsersController extends Controller
                 $logActivity[] = [
                     'user_id' => auth()->user()->id,
                     'title' => 'Add/Edit Associate',
-                    'description' => auth()->user()->name.' has '.$logAct.' user '.$newAssociate->name.' ('.$newAssociate->id.')'
+                    'description' => auth()->user()->name.' has '.$logAct.' user '.$newAssociate->name.' ('.$newAssociate->id.')',
+                    'created_at' => date('Y-m-d H:i:s')
                 ];
                 $logActivity = new LogActivity($logActivity);
                 $logActivity->log();           
@@ -419,7 +426,8 @@ class UsersController extends Controller
                 $logActivity[] = [
                     'user_id' => auth()->user()->id,
                     'title' => 'Update User Status',
-                    'description' => auth()->user()->name.' has changed status of '.$existedUser->name.' ('.$existedUser->id.')'
+                    'description' => auth()->user()->name.' has changed status of '.$existedUser->name.' ('.$existedUser->id.')',
+                    'created_at' => date('Y-m-d H:i:s')
                 ];
                 $logActivity = new LogActivity($logActivity);
                 $logActivity->log(); 
@@ -582,9 +590,11 @@ class UsersController extends Controller
         return view('users.referral',compact('newCategory'));
     }
 
-    public function panelLogs(){
+    public function panelLogs(Request $request){
         $header_title_name = 'System Logs';
-        $employeeData = [];
-        return view('users.logs',compact('header_title_name','employeeData'));
+        $activityTitles = Log::select('title')->distinct()->orderBy('title', 'asc')->pluck('title');
+        $activityUsers = Log::select('user_id')->distinct()->orderBy('user_id', 'asc')->pluck('user_id');
+        $systemLogs = Log::with('user')->orderBy('id','DESC')->paginate(env('PAGINATION_COUNT'));
+        return view('users.logs',compact('header_title_name','systemLogs','activityTitles','activityUsers'));
     }
 }

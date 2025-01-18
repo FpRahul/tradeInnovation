@@ -79,7 +79,6 @@ class UsersController extends Controller
     }
 
     public function index(Request $request){
-       
         $employeeData = User::with('userdetail')->where('role','>','3')->where('archive', 1);
         $searchKey = $request->input('key') ?? '';
         $requestType = $request->input('requestType') ?? '';
@@ -89,12 +88,12 @@ class UsersController extends Controller
                     ->orWhere('mobile', 'LIKE', $searchKey . '%');
             });
         }
-        $employeeData = $employeeData->paginate(2);
+
+        $employeeData = $employeeData->paginate(env("PAGINATION_COUNT"));
 
         if (empty($requestType)) {    
             $header_title_name = 'User';
-            $moduleName="Manage Employees";
-            return view('users.listing', compact('employeeData', 'header_title_name', 'moduleName','searchKey'));       
+            return view('users.listing', compact('employeeData', 'header_title_name','searchKey'));       
         }else{
             $trData = view('users/employee-page-search-data', compact('employeeData','searchKey'))->render();
             $dataArray = [
@@ -117,7 +116,7 @@ class UsersController extends Controller
             $email = "required|email";
             $hashedPassword = $newUser->password;
             $successMessage = "User is successfully updated!";
-            $moduleName="Update Employee";
+            $moduleName="Update";
             $logAct = 'updated';
         }else{
             $newUser = new User();
@@ -130,7 +129,7 @@ class UsersController extends Controller
             $randomNumber = random_int(100000, 999999);
             $hashedPassword = Hash::make($randomNumber);
             $successMessage = "User is successfully inserted!";
-            $moduleName="Create Employee";
+            $moduleName="Add";
             $logAct = 'added';
         }
         if($request->isMethod('POST')){ 
@@ -246,7 +245,7 @@ class UsersController extends Controller
     }
 
     public function clients(Request $request){
-        $clientData = User::with('userdetail')->where('role', 3)->where('archive', 1);
+        $clientData = User::with('userdetail')->where('role', 2)->where('archive', 1);
         $searchKey = $request->input('key') ?? '';
         $requestType = $request->input('requestType') ?? '';
         if ($searchKey) {
@@ -254,12 +253,11 @@ class UsersController extends Controller
                 $query->where('name', 'LIKE', $searchKey . '%')->orWhere('mobile', 'LIKE', $searchKey . '%');
             });
         }
-        $clientData = $clientData->paginate(1);
+        $clientData = $clientData->paginate(env("PAGINATION_COUNT"));
 
         if (empty($requestType)) {    
             $header_title_name = 'User';
-            $moduleName="Manage Clients";
-            return view('users/client-listing', compact('clientData', 'header_title_name', 'moduleName','searchKey'));       
+            return view('users/client-listing', compact('clientData', 'header_title_name','searchKey'));       
         }else{
             $trData = view('users/client-page-search-data', compact('clientData','searchKey'))->render();
             $dataArray = [
@@ -278,7 +276,7 @@ class UsersController extends Controller
             $newClientDetails = UserDetail::where('userId',$id)->first();
             $hashedPassword = $newClient->password;
             $email = "required|email";
-            $moduleName="Update Client";
+            $moduleName="Update ";
             $logAct = 'updated';
         }else{
             $newClient = new User();
@@ -286,7 +284,7 @@ class UsersController extends Controller
             $randomNumber = random_int(100000, 999999);
             $hashedPassword = Hash::make($randomNumber);
             $email = "required|email|unique:users,email";
-            $moduleName="Add Client";
+            $moduleName="Add ";
             $logAct = 'added';
         }
         if($request->isMethod('POST')){
@@ -332,7 +330,7 @@ class UsersController extends Controller
     }
 
     public function associates(Request $request){
-        $associateData = User::with('userdetail')->where('role', 4)->where('archive', 1);
+        $associateData = User::with('userdetail')->where('role', 3)->where('archive', 1);
         $searchKey = $request->input('key') ?? '';
         $requestType = $request->input('requestType') ?? '';
         if ($searchKey) {
@@ -341,11 +339,10 @@ class UsersController extends Controller
             });
         }
 
-        $associateData = $associateData->paginate(1);
+        $associateData = $associateData->paginate(env("PAGINATION_COUNT"));
         if (empty($requestType)) {    
             $header_title_name = 'User';
-            $moduleName="Manage Associates";
-            return view('users/associate-listing', compact('associateData', 'header_title_name', 'moduleName','searchKey'));       
+            return view('users/associate-listing', compact('associateData', 'header_title_name','searchKey'));       
         }else{
             $trData = view('users/associate-page-search-data', compact('associateData','searchKey'))->render();
             $dataArray = [
@@ -362,14 +359,14 @@ class UsersController extends Controller
             $newAssociate = User::find($id);
             $hashedPassword = $newAssociate->password;
             $email = "required|email";
-            $moduleName="Update Associate";
+            $moduleName="Update ";
             $logAct = 'updated';
         }else{
             $newAssociate = new User();
             $randomNumber = random_int(100000, 999999);
             $hashedPassword = Hash::make($randomNumber);
             $email = "required|email|unique:users,email";
-            $moduleName="Add Associate";
+            $moduleName="Add ";
             $logAct = 'added';
         }
         if($request->isMethod('POST')){
@@ -438,6 +435,7 @@ class UsersController extends Controller
             $credentials = $request->validate([
                 'name' => 'required',
                 'email' => 'required|email',
+                'profilePic'=>'mimes:jpeg,png,jpg|max:2048'
             ]);
             if(!empty($request->password)){
                 $password =  Hash::make($request->password);
@@ -459,14 +457,12 @@ class UsersController extends Controller
                 return redirect()->route('dashboard')->withSuccess('Profile is successfully updated!');
             }        
         }
-        $header_title_name = 'My Profile';
-        $moduleName="Update Profile";
-        
-        return view('users/myprofile',compact('newUserDetails','userData','header_title_name','moduleName'));
+        $header_title_name = 'My Profile';        
+        return view('users/myprofile',compact('newUserDetails','userData','header_title_name'));
     }
 
     public function userProfessions(){
-        $categoryData = CategoryOption::where('type',1)->paginate(10);
+        $categoryData = CategoryOption::where('type',1)->paginate(env("PAGINATION_COUNT"));
         $header_title_name = 'User';
         return view('users.professions',compact('header_title_name','categoryData'));
     }
@@ -522,7 +518,7 @@ class UsersController extends Controller
     }
 
     public function userIncorporation(){
-        $categoryData = CategoryOption::where('type',2)->paginate(10);        
+        $categoryData = CategoryOption::where('type',2)->paginate(env("PAGINATION_COUNT"));        
         $header_title_name = 'User';
         return view('users.incorporation',compact('header_title_name','categoryData'));       
     }
@@ -553,7 +549,7 @@ class UsersController extends Controller
     }
 
     public function userReferral(){
-        $categoryData = CategoryOption::where('type',3)->paginate(10);        
+        $categoryData = CategoryOption::where('type',3)->paginate(env("PAGINATION_COUNT"));        
         $header_title_name = 'User';
         return view('users.referral',compact('header_title_name','categoryData'));
     }

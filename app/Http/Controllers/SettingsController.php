@@ -11,13 +11,11 @@ class SettingsController extends Controller
     public function roles(){
         $header_title_name="Setting";
         $allRoles = Role::where('id','!=','1')->with('roleMenus')->get();
-        $moduleName="Manage Roles";
-        return view('settings/roles',compact('allRoles','header_title_name','moduleName'));
+        return view('settings/roles',compact('allRoles','header_title_name'));
     }
 
     public function addRole(Request $request, $id = null){
         $header_title_name="Setting";
-        $moduleName="Create Role";
         $menuAddedAction = [];
         if($id>0){
             $roleData = Role::with('roleMenus')->find($id);
@@ -156,6 +154,6 @@ class SettingsController extends Controller
             
             return redirect()->back()->withSuccess('Permission updated successfully.');
         }
-        return view('settings/add-role',compact('header_title_name','moduleName','roleData','menuAddedAction'));
+        return view('settings/add-role',compact('header_title_name','roleData','menuAddedAction'));
     }
 }

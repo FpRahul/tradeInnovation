@@ -3,7 +3,7 @@
 
 <div>
     <div class="flex items-center justify-between mb-[20px]">
-        <h3 class="text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">{{$moduleName}}</h3>
+        <h3 class="text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">{{$moduleName}} Employee</h3>
     </div>
 
     <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] mb-[30px]">
@@ -38,7 +38,7 @@
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="fatherHusbandName" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Father/Husband Name <strong class="text-[#f83434]">*</strong></label>
-                    <input type="text" name="fatherHusbandName" id="fatherHusbandName" value="{{ $newUserDetails->fatherHusbandName }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Company Name" required>
+                    <input type="text" name="fatherHusbandName" id="fatherHusbandName" value="{{ !empty($newUserDetails->fatherHusbandName) ? $newUserDetails->fatherHusbandName : '' }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Company Name" required>
                     @error('fatherHusbandName')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -46,7 +46,7 @@
                 <div class="w-full md:w-1/2">
                     <label for="employeePhoto" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload Photograph:</label>
                     <div class="relative flex flex-wrap gap-[10px]">
-                        <img class="getpreviewImage" src="{{asset($newUserDetails->uploadPhotograph ? 'Image/'.$newUserDetails->uploadPhotograph : 'assets/images/noimage.png')}}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
+                        <img class="getpreviewImage" src="{{asset(!empty($newUserDetails->uploadPhotograph) ? 'Image/'.$newUserDetails->uploadPhotograph : 'assets/images/noimage.png')}}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
                         <div class="relative">
                             <label for="employeePhoto" class="cursor-pointer w-[83px] h-[45px] rounded-[10px] flex items-center justify-center border border-dashed border-[#13103a4d] ">
                                 <svg class="cursor-pointer" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -89,7 +89,7 @@
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="qualification" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Qualification <strong class="text-[#f83434]">*</strong></label>
-                    <input type="text" name="qualification" id="qualification" value="{{ $newUserDetails->qualification }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Qualification" required>
+                    <input type="text" name="qualification" id="qualification" value="{{ !empty($newUserDetails->qualification) ? $newUserDetails->qualification :'' }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Qualification" required>
                     @error('qualification')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -188,14 +188,14 @@
 
                 <div class="w-full md:w-1/2">
                     <label for="skill" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Skills <strong class="text-[#f83434]">*</strong></label>
-                    <input type="text" name="skill" id="skill" value="{{ $newUserDetails->skills }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <input type="text" name="skill" id="skill" value="{{ !empty($newUserDetails->skills) ? $newUserDetails->skills :'' }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255"  required>
                     @error('skill')
                     <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="keyResponsibilityArea" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Key Responsibility Area <strong class="text-[#f83434]">*</strong></label>
-                    <input type="text" name="keyResponsibilityArea" id="keyResponsibilityArea" value="{{ $newUserDetails->keyResponsibilityArea }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <input type="text" name="keyResponsibilityArea" id="keyResponsibilityArea" value="{{ !empty($newUserDetails->keyResponsibilityArea) ? $newUserDetails->keyResponsibilityArea :'' }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" required>
                     @error('keyResponsibilityArea')
                     <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
                     @enderror
@@ -205,14 +205,14 @@
 
                 <div class="w-full md:w-1/2">
                     <label for="keyPerformanceIndicator" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Key Performance Indicator</label>
-                    <input type="text" name="keyPerformanceIndicator" id="keyPerformanceIndicator" value="{{ $newUserDetails->keyPerformanceIndicator }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                    <input type="text" name="keyPerformanceIndicator" id="keyPerformanceIndicator" value="{{ !empty($newUserDetails->keyPerformanceIndicator) ? $newUserDetails->keyPerformanceIndicator :'' }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255">
                     @error('keyPerformanceIndicator')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="emergencyContactDetails" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Emergency Contact Details</label>
-                    <input type="text" name="emergencyContactDetails" id="emergencyContactDetails" value="{{ $newUserDetails->emergencyContactDetails }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                    <input type="text" name="emergencyContactDetails" id="emergencyContactDetails" value="{{ !empty($newUserDetails->emergencyContactDetails) ? $newUserDetails->emergencyContactDetails :'' }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                     @error('emergencyContactDetails')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -222,14 +222,14 @@
 
                 <div class="w-full md:w-1/2">
                     <label for="currentAddress" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Current Address <strong class="text-[#f83434]">*</strong></label>
-                    <textarea type="text" name="currentAddress" id="currentAddress" class="w-full h-[120px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Current Address" required>{{ $newUserDetails->currentAddress }}</textarea>
+                    <textarea type="text" name="currentAddress" id="currentAddress" class="w-full h-[120px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Current Address" required>{{ !empty($newUserDetails->currentAddress) ? $newUserDetails->currentAddress:'' }}</textarea>
                     @error('currentAddress')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="permanentAddress" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Permanent Address <strong class="text-[#f83434]">*</strong></label>
-                    <textarea R type="text" name="permanentAddress" id="permanentAddress" class="w-full h-[120px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Permanent Address" required>{{ $newUserDetails->permanentAddress }}</textarea>
+                    <textarea R type="text" name="permanentAddress" id="permanentAddress" class="w-full h-[120px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Permanent Address" required>{{ !empty($newUserDetails->permanentAddress) ? $newUserDetails->permanentAddress :'' }}</textarea>
                     @error('permanentAddress')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -240,7 +240,7 @@
                 <div class="w-full md:w-1/2">
                     <label for="uploadPan" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload Pan <strong class="text-[#f83434]">*</strong></label>
                     <div class="relative flex flex-wrap gap-[10px]">
-                        <img class="getpreviewImage" src="{{asset($newUserDetails->uploadPan ? 'Image/'.$newUserDetails->uploadPan : 'assets/images/noimage.png')}}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
+                        <img class="getpreviewImage" src="{{asset(!empty($newUserDetails->uploadPan) ? 'Image/'.$newUserDetails->uploadPan : 'assets/images/noimage.png')}}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
                         
                         <div class="relative">
                             <label for="uploadPan" class="cursor-pointer w-[83px] h-[45px] rounded-[10px] flex items-center justify-center border border-dashed border-[#13103a4d] ">
@@ -248,24 +248,24 @@
                                     <path d="M13.9395 8.95044H8.93945V13.9504C8.93945 14.5004 8.48945 14.9504 7.93945 14.9504C7.38945 14.9504 6.93945 14.5004 6.93945 13.9504V8.95044H1.93945C1.38945 8.95044 0.939453 8.50044 0.939453 7.95044C0.939453 7.40044 1.38945 6.95044 1.93945 6.95044H6.93945V1.95044C6.93945 1.40044 7.38945 0.950439 7.93945 0.950439C8.48945 0.950439 8.93945 1.40044 8.93945 1.95044V6.95044H13.9395C14.4895 6.95044 14.9395 7.40044 14.9395 7.95044C14.9395 8.50044 14.4895 8.95044 13.9395 8.95044Z" fill="#13103A" />
                                 </svg>
                             </label>
-                            <input type="file" name="uploadPan" id="uploadPan" class="previewImage w-0 opacity-0 absolute top-0 left-0" @if($newUserDetails->uploadDrivingLicence=='') required @endif>
+                            <input type="file" name="uploadPan" id="uploadPan" class="previewImage w-0 opacity-0 absolute top-0 left-0"{{ empty($newUserDetails->uploadDrivingLicence) ? 'required':''}}>
                         </div>
                     </div>
-                    @error('uploadPan')
+                    @error('uploadPan') 
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="uploadAadhar" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload Aadhar <strong class="text-[#f83434]">*</strong></label>
                     <div class="relative flex flex-wrap gap-[10px]">
-                        <img class="getpreviewImage" src="{{asset($newUserDetails->uploadAadhar ? 'Image/'.$newUserDetails->uploadAadhar : 'assets/images/noimage.png')}}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
+                        <img class="getpreviewImage" src="{{asset(!empty($newUserDetails->uploadAadhar) ? 'Image/'.$newUserDetails->uploadAadhar : 'assets/images/noimage.png')}}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
                         <div class="relative">
                             <label for="uploadAadhar" class="cursor-pointer w-[83px] h-[45px] rounded-[10px] flex items-center justify-center border border-dashed border-[#13103a4d] ">
                                 <svg class="cursor-pointer" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M13.9395 8.95044H8.93945V13.9504C8.93945 14.5004 8.48945 14.9504 7.93945 14.9504C7.38945 14.9504 6.93945 14.5004 6.93945 13.9504V8.95044H1.93945C1.38945 8.95044 0.939453 8.50044 0.939453 7.95044C0.939453 7.40044 1.38945 6.95044 1.93945 6.95044H6.93945V1.95044C6.93945 1.40044 7.38945 0.950439 7.93945 0.950439C8.48945 0.950439 8.93945 1.40044 8.93945 1.95044V6.95044H13.9395C14.4895 6.95044 14.9395 7.40044 14.9395 7.95044C14.9395 8.50044 14.4895 8.95044 13.9395 8.95044Z" fill="#13103A" />
                                 </svg>
                             </label>
-                            <input type="file" name="uploadAadhar" id="uploadAadhar" class="previewImage w-0 opacity-0 absolute top-0 left-0" @if($newUserDetails->uploadAadhar=='') required @endif>
+                            <input type="file" name="uploadAadhar" id="uploadAadhar" class="previewImage w-0 opacity-0 absolute top-0 left-0" {{empty($newUserDetails->uploadAadhar) ? 'required' :''}} >
                         </div>
                     </div>
                     @error('uploadAadhar')
@@ -275,14 +275,14 @@
                 <div class="w-full md:w-1/2">
                     <label for="uploadDrivingLicence" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload Driving Licence <strong class="text-[#f83434]">*</strong></label>
                     <div class="relative flex flex-wrap gap-[10px]">
-                        <img class="getpreviewImage" src="{{asset($newUserDetails->uploadDrivingLicence ? 'Image/'.$newUserDetails->uploadDrivingLicence : 'assets/images/noimage.png')}}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
+                        <img class="getpreviewImage" src="{{asset(!empty($newUserDetails->uploadDrivingLicence) ? 'Image/'.$newUserDetails->uploadDrivingLicence : 'assets/images/noimage.png')}}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
                         <div class="relative">
                             <label for="uploadDrivingLicence" class="cursor-pointer w-[83px] h-[45px] rounded-[10px] flex items-center justify-center border border-dashed border-[#13103a4d] ">
                                 <svg class="cursor-pointer" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M13.9395 8.95044H8.93945V13.9504C8.93945 14.5004 8.48945 14.9504 7.93945 14.9504C7.38945 14.9504 6.93945 14.5004 6.93945 13.9504V8.95044H1.93945C1.38945 8.95044 0.939453 8.50044 0.939453 7.95044C0.939453 7.40044 1.38945 6.95044 1.93945 6.95044H6.93945V1.95044C6.93945 1.40044 7.38945 0.950439 7.93945 0.950439C8.48945 0.950439 8.93945 1.40044 8.93945 1.95044V6.95044H13.9395C14.4895 6.95044 14.9395 7.40044 14.9395 7.95044C14.9395 8.50044 14.4895 8.95044 13.9395 8.95044Z" fill="#13103A" />
                                 </svg>
                             </label>
-                            <input type="file" name="uploadDrivingLicence" id="uploadDrivingLicence" class="previewImage w-0 opacity-0 absolute top-0 left-0" @if($newUserDetails->uploadDrivingLicence=='') required @endif>
+                            <input type="file" name="uploadDrivingLicence" id="uploadDrivingLicence" class="previewImage w-0 opacity-0 absolute top-0 left-0" {{empty($newUserDetails->uploadDrivingLicence) ? 'required' :''}}>
                         </div>
                     </div>
                     @error('uploadDrivingLicence')

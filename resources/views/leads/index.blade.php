@@ -3,7 +3,11 @@
 
 <div>
     <div class="flex items-center justify-between mb-[20px]">
-        <h3 class="text-[18px] md:text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">{{$moduleName}}</h3>
+        <h3 class="text-[18px] md:text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">Manage Leads</h3>
+        <ul class="flex items-center text-[14px] font-[400] leading-[16px] text-[#000000] gap-[5px]">
+            <li>Leads</li> /
+            <li class="text-gray">Manage Leads</li>
+        </ul>
         @if (in_array('leads.add',$permissionDetails['accessableRoutes']) || auth()->user()->role == 1)
             <a href="{{ route('leads.add')}}" class=" inline-flex items-center gap-[10px] text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px] ">
                 <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">

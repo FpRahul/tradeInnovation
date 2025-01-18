@@ -3,7 +3,7 @@
 
 <div>
     <div class="flex items-center justify-between mb-[20px]">
-        <h3 class="text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">{{$moduleName}}</h3>
+        <h3 class="text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">Update Profile</h3>
     </div>
 
     <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] mb-[30px]">
@@ -11,11 +11,11 @@
         <form method="POST" action="{{ route('user.myprofile',['id'=>$userData->id])}}" enctype="multipart/form-data" class="py-[25px] px-[30px] space-y-[20px]">
             @csrf
 
-            <input type="hidden" name="role" id="role" value="2">
             <div>
                 <div>
-                    <label for="profilePic" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload Profile Image</label>
+                    <label for="profilePic" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload Profile Image<span class="text-[12px] italic font-[400] text-[#e70e0e]"> (only jpg,jpeg and png format supported & max:2 MB)</span></label>
                     <div class="relative flex flex-wrap gap-[10px]">
+
                         <img src="{{asset($newUserDetails->uploadPhotograph ? 'Image/'.$newUserDetails->uploadPhotograph : 'assets/images/noimage.png')}}" width="70" height="70" class="getpreviewImage w-[150px] h-[150px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
                         <div class="relative">
                             <label for="profilePic" class=" cursor-pointer w-[150px] h-[150px] rounded-[10px] flex items-center justify-center border border-dashed border-[#13103a4d] ">
@@ -24,6 +24,9 @@
                                 </svg>
                             </label>
                             <input type="file" name="profilePic" id="profilePic" class="previewImage w-0 opacity-0 absolute top-0 left-0">
+                            @error('profilePic')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
                 </div>

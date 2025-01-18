@@ -9,12 +9,12 @@ use App\Models\SubService;
 class ServicesController extends Controller
 {
     public function index(Request $request){
-        $serviceData = Service::paginate(10);
+        $serviceData = Service::paginate(env("PAGINATION_COUNT"));
         $searchKey = $request->input('key') ?? '';       
         if($request->isMethod('POST')){
             if($request->requestType == 'ajax'){        
                 if ($searchKey) {
-                    $serviceData = Service::where('serviceName', 'like', "%{$searchKey}%")->paginate(10);         
+                    $serviceData = Service::where('serviceName', 'like', "%{$searchKey}%")->paginate(env("PAGINATION_COUNT"));         
                 }
                 $trData = view('services/service-page-search-data', compact('serviceData','searchKey'))->render();
                 $dataArray = [
@@ -67,8 +67,7 @@ class ServicesController extends Controller
           return redirect()->route('services.index')->withSuccess('Your data is successfully updated!');
         }
         $header_title_name="Service";
-        $moduleName="Sub Service";
-        return view('services/subservice',compact('subServiceList','header_title_name','moduleName'));
+        return view('services/subservice',compact('subServiceList','header_title_name'));
     }
 
     public function serviceStatus(Request $request,$id=null){

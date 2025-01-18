@@ -62,7 +62,7 @@
                                     @endif
                                 </td>
                                 <td class="border-b-[1px] border-[#0000001A] py-[12px] px-[15px]">
-                                    @if((in_array('professions.add',$permissionDetails['accessableRoutes']) || in_array('users.category.status',$permissionDetails['accessableRoutes']) || in_array('users.category.delete',$permissionDetails['accessableRoutes'])) || auth()->user()->role==1)
+                                    @if((in_array('professions.add',$permissionDetails['accessableRoutes']) || in_array('users.category.status',$permissionDetails['accessableRoutes']) ) || auth()->user()->role==1)
                                     <div class="dropdown inline-block relative ml-[auto] mr-[20px] ">
                                         <a href="javascript:void(0)" type="button" class="button">
                                             <svg width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -79,9 +79,7 @@
                                                     {{ $newCategorylist->status ? 'Inactive' : 'Active' }}
                                                 </a>
                                                 @endif
-                                                @if(in_array('professions.delete',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
-                                                    <a href="#" data-id="{{$newCategorylist->id}}" class="delete_profession_list block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Delete</a>
-                                                @endif
+                                               
                                             </div>
                                         </div>
                                     </div>
@@ -154,12 +152,6 @@
         $('#professionalName').val(name);
     });
 
-    $(document).on('click','.delete_profession_list',function(){
-        var id = $(this).data('id');
-        if(confirm('Are you sure want to delete?')){
-            window.location.href=`{{ route('users.category.delete')}}/${id}`;
-
-        }
-    });
+   
 </script>
 @stop

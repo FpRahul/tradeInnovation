@@ -46,7 +46,7 @@
                                     <a href="{{ route('users.addclient', ['id' => $clientDetails->id]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Edit</a>
                                     @endif
                                     @if(in_array('users.delete',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
-                                    <a href="#" data-id="{{$clientDetails->id}}" class="delete_client block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Delete</a>
+                                    <a href="#" data-id="{{$clientDetails->id}}" class="delete_client block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Archive</a>
                                     @endif
                                     @if(in_array('users.status',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
                                     <a href="{{ route('users.status', ['id' => $clientDetails->id, 'val' => $clientDetails->status]) }}" class="client_status block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">

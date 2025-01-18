@@ -13,8 +13,7 @@ class LeadsController extends Controller
 {
     public function index(){
         $header_title_name = 'Leads';
-        $moduleName = "Manage Leads";
-        return view('leads/index',compact('header_title_name','moduleName'));
+        return view('leads/index',compact('header_title_name'));
     }
 
     public function add(Request $request,$id=null){
@@ -27,13 +26,12 @@ class LeadsController extends Controller
         }
         $sourceList = CategoryOption::where('type',3)->where('status',1)->get();
         $serviceList = Service::where('status',1)->get();
-        $userList = User::where('role',2)->where('status',1)->get();
+        $userList = User::where('role','>',3)->where('status',1)->get();
         if($request->isMethod('POST')){            
             // $leadData-> = 
         }
         $header_title_name = 'Lead';
-        $moduleName = "Add Leads";
-        return view('leads/add',compact('header_title_name','moduleName','sourceList','serviceList','userList'));
+        return view('leads/add',compact('header_title_name','sourceList','serviceList','userList'));
     }
 
     public function getSubService(Request $request){
@@ -51,13 +49,11 @@ class LeadsController extends Controller
 
     public function sendQuote(){
         $header_title_name = 'Lead';
-        $moduleName = "Quote";
-        return view('leads/sendquote', compact('header_title_name', 'moduleName'));
+        return view('leads/sendquote', compact('header_title_name'));
     }
-    public function leadLogs()
-    {
+
+    public function leadLogs(){
         $header_title_name = 'Lead';
-        $moduleName = "Logs";
-        return view('leads/logs', compact('header_title_name', 'moduleName'));
+        return view('leads/logs', compact('header_title_name'));
     }
 }

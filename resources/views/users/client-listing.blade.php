@@ -3,10 +3,10 @@
 <div>
     <div class="flex flex-col md:flex-row md:items-center justify-between mb-[20px] gap-[15px]">
         <div>
-            <h3 class="text-[20px] font-[500] leading-[24px] text-[#13103A] tracking-[0.02em] mb-1.5">{{$moduleName}}</h3>
+            <h3 class="text-[20px] font-[500] leading-[24px] text-[#13103A] tracking-[0.02em] mb-1.5">Manage Clients</h3>
             <ul class="flex items-center text-[14px] font-[400] leading-[16px] text-[#000000] gap-[5px]">
-                <li>{{$header_title_name}}</li> /
-                <li class="text-gray">{{$moduleName}}</li>
+                <li>user</li> /
+                <li class="text-gray">manage clients</li>
             </ul>
         </div>
         @if(in_array('users.addclient',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
@@ -79,7 +79,7 @@
                                                 <a href="{{ route('users.addclient', ['id' => $clientDetails->id]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Edit</a>
                                                 @endif
                                                 @if(in_array('users.delete',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
-                                                <a href="#" data-id="{{$clientDetails->id}}" class="delete_client block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Delete</a>
+                                                <a href="#" data-id="{{$clientDetails->id}}" class="delete_client block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Archive</a>
                                                 @endif
                                                 @if(in_array('users.status',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
                                                 <a href="{{ route('users.status', ['id' => $clientDetails->id, 'val' => $clientDetails->status]) }}" class="client_status block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">

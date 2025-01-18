@@ -1,13 +1,16 @@
 @extends('layouts.default')
 @section('content')
+<?php 
+use App\Models\Role;
 
+?>
 <div>
     <div class="flex flex-col md:flex-row md:items-center justify-between mb-[20px] gap-[15px]">
         <div>
-            <h3 class="text-[20px] font-[500] leading-[24px] text-[#13103A] tracking-[0.02em] mb-1.5">{{$moduleName}}</h3>
+            <h3 class="text-[20px] font-[500] leading-[24px] text-[#13103A] tracking-[0.02em] mb-1.5">Manage Employees</h3>
             <ul class="flex items-center text-[14px] font-[400] leading-[16px] text-[#000000] gap-[5px]">
-                <li>{{$header_title_name}}</li> /
-                <li class="text-gray">{{$moduleName}}</li>
+                <li>users</li> /
+                <li class="text-gray">manage employees</li>
             </ul>
         </div>
         @if(in_array('users.adduser',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
@@ -35,16 +38,19 @@
             <table width="100%" cellpadding="0" cellspacing="0" class="min-w-[600px]">
                 <thead>
                     <tr>
-                        <th width="25%" class="text-start w-[200px] bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
-                            name
+                        <th width="20%" class="text-start w-[200px] bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
+                            Name
                         </th>
-                        <th width="25%" class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
-                            mobile number
+                        <th width="20%" class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                            Mobile Number
                         </th>
-                        <th width="25%" class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
-                            status
+                        <th width="20%" class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                            Role
                         </th>
-                        <th width="25%" class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                        <th width="20%" class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                            Status
+                        </th>
+                        <th width="20%" class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                             Action
                         </th>
                     </tr>
@@ -59,6 +65,13 @@
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                             {{$employeeListing->mobile}}
+                        </td>
+                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                            @php
+                                $role = Role::where('id',$employeeListing->role)->first();
+                                echo $role['name'];
+                            @endphp
+                            
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                             @if ($employeeListing->status == 1)
@@ -81,7 +94,7 @@
                                             <a href="{{ route('users.adduser', ['id' => $employeeListing->id]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Edit</a>
                                         @endif
                                         @if(in_array('users.delete',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
-                                            <a href="#" data-id="{{$employeeListing->id}}" class="delete_employee block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Delete</a>
+                                            <a href="#" data-id="{{$employeeListing->id}}" class="delete_employee block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Archive</a>
                                         @endif
                                         @if(in_array('users.status',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
                                             <a href="{{ route('users.status', ['id' => $employeeListing->id, 'val' => $employeeListing->status]) }}" class="client_status block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">

@@ -45,75 +45,78 @@ class SettingsController extends Controller
            
             $roleMenuPermission = [];
             $recordCounter = 0;
-            
-            foreach($allSavedPermissions['mainMenu'] as $menuId => $menuItems){
-                if($menuItems=='on'){
-                    $roleMenuPermission[$recordCounter]['roleId'] = $roleData->id;
-                    $roleMenuPermission[$recordCounter]['menuId'] = $menuId;
-                    $roleMenuPermission[$recordCounter]['permission'] = NULL;
-                    $recordCounter++;
-                }else{
-                    if(isset($menuItems['subMenu'])){
-                        foreach($menuItems['subMenu'] as $subMenuId => $subMenuItems){
-                            if($subMenuItems=='on'){
-                                $roleMenuPermission[$recordCounter]['roleId'] = $roleData->id;
-                                $roleMenuPermission[$recordCounter]['menuId'] = $subMenuId;
-                                $roleMenuPermission[$recordCounter]['permission'] = NULL;
-                                $recordCounter++;
-                            }else{
-                                if(isset($subMenuItems['action'])){
-                                    $allActions = [];
-                                    foreach($subMenuItems['action'] as $actionId => $actionVal){
-                                        $allActions[] = $actionId;
-                                    }
+            if(!empty($allSavedPermissions)){
+                foreach($allSavedPermissions['mainMenu'] as $menuId => $menuItems){
+                    if($menuItems=='on'){
+                        $roleMenuPermission[$recordCounter]['roleId'] = $roleData->id;
+                        $roleMenuPermission[$recordCounter]['menuId'] = $menuId;
+                        $roleMenuPermission[$recordCounter]['permission'] = NULL;
+                        $recordCounter++;
+                    }else{
+                        if(isset($menuItems['subMenu'])){
+                            foreach($menuItems['subMenu'] as $subMenuId => $subMenuItems){
+                                if($subMenuItems=='on'){
                                     $roleMenuPermission[$recordCounter]['roleId'] = $roleData->id;
                                     $roleMenuPermission[$recordCounter]['menuId'] = $subMenuId;
-                                    $roleMenuPermission[$recordCounter]['permission'] =implode(',',$allActions);
-                                    $recordCounter++; 
+                                    $roleMenuPermission[$recordCounter]['permission'] = NULL;
+                                    $recordCounter++;
                                 }else{
-                                    if(isset($subMenuItems['subSubMenu'])){
-                                        foreach($subMenuItems['subSubMenu'] as $subSubMenuId => $subSubMenuItems){
-                                            if(isset($subSubMenuItems['action'])){
-                                                $allActions = [];
-                                                foreach($subSubMenuItems['action'] as $actionId => $actionVal){
-                                                    $allActions[] = $actionId;
+                                    if(isset($subMenuItems['action'])){
+                                        $allActions = [];
+                                        foreach($subMenuItems['action'] as $actionId => $actionVal){
+                                            $allActions[] = $actionId;
+                                        }
+                                        $roleMenuPermission[$recordCounter]['roleId'] = $roleData->id;
+                                        $roleMenuPermission[$recordCounter]['menuId'] = $subMenuId;
+                                        $roleMenuPermission[$recordCounter]['permission'] =implode(',',$allActions);
+                                        $recordCounter++; 
+                                    }else{
+                                        if(isset($subMenuItems['subSubMenu'])){
+                                            foreach($subMenuItems['subSubMenu'] as $subSubMenuId => $subSubMenuItems){
+                                                if(isset($subSubMenuItems['action'])){
+                                                    $allActions = [];
+                                                    foreach($subSubMenuItems['action'] as $actionId => $actionVal){
+                                                        $allActions[] = $actionId;
+                                                    }
+                                                    $roleMenuPermission[$recordCounter]['roleId'] = $roleData->id;
+                                                    $roleMenuPermission[$recordCounter]['menuId'] = $subSubMenuId;
+                                                    $roleMenuPermission[$recordCounter]['permission'] =implode(',',$allActions);
+                                                    $recordCounter++; 
+                                                }else{
+                                                    $roleMenuPermission[$recordCounter]['roleId'] = $roleData->id;
+                                                    $roleMenuPermission[$recordCounter]['menuId'] = $subSubMenuId;
+                                                    $roleMenuPermission[$recordCounter]['permission'] = NULL;
+                                                    $recordCounter++; 
                                                 }
-                                                $roleMenuPermission[$recordCounter]['roleId'] = $roleData->id;
-                                                $roleMenuPermission[$recordCounter]['menuId'] = $subSubMenuId;
-                                                $roleMenuPermission[$recordCounter]['permission'] =implode(',',$allActions);
-                                                $recordCounter++; 
-                                            }else{
-                                                $roleMenuPermission[$recordCounter]['roleId'] = $roleData->id;
-                                                $roleMenuPermission[$recordCounter]['menuId'] = $subSubMenuId;
-                                                $roleMenuPermission[$recordCounter]['permission'] = NULL;
-                                                $recordCounter++; 
                                             }
                                         }
                                     }
                                 }
                             }
-                        }
-                        $roleMenuPermission[$recordCounter]['roleId'] = $roleData->id;
-                        $roleMenuPermission[$recordCounter]['menuId'] = $menuId;
-                        $roleMenuPermission[$recordCounter]['permission'] = NULL;
-                        $recordCounter++; 
-                    }else{
-                        if(isset($menuItems['action'])){
-                            $allActions = [];
-                            foreach($menuItems['action'] as $actionId => $actionVal){
-                                $allActions[] = $actionId;
-                            }
                             $roleMenuPermission[$recordCounter]['roleId'] = $roleData->id;
                             $roleMenuPermission[$recordCounter]['menuId'] = $menuId;
-                            $roleMenuPermission[$recordCounter]['permission'] =implode(',',$allActions);
+                            $roleMenuPermission[$recordCounter]['permission'] = NULL;
                             $recordCounter++; 
+                        }else{
+                            if(isset($menuItems['action'])){
+                                $allActions = [];
+                                foreach($menuItems['action'] as $actionId => $actionVal){
+                                    $allActions[] = $actionId;
+                                }
+                                $roleMenuPermission[$recordCounter]['roleId'] = $roleData->id;
+                                $roleMenuPermission[$recordCounter]['menuId'] = $menuId;
+                                $roleMenuPermission[$recordCounter]['permission'] =implode(',',$allActions);
+                                $recordCounter++; 
+                            }
                         }
                     }
                 }
+            }else{
+                $roleMenuPermission[0]['roleId'] = $roleData->id;
+                $roleMenuPermission[0]['menuId'] = 1;
+                $roleMenuPermission[0]['permission'] = NULL;
             }
-
             if($id>0){
-               
                 $updatedIds = [];
                 if(!empty($roleMenuPermission)){
                     foreach($roleMenuPermission as $rolePermission){

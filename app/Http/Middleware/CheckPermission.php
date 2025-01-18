@@ -72,6 +72,7 @@ class CheckPermission
                     $serializeMenus[$v->id]['menu']['name'] = $v->menuName;
                     $serializeMenus[$v->id]['menu']['url'] = $v->url;
                     $serializeMenus[$v->id]['menu']['icon'] = $v->icon;
+                    $serializeMenus[$v->id]['menu']['groupedRoutes'] = $v->actionRoutes;
                 }
                 if($v->parentId>0){
                     //Check if it is sub menu or sub sub menu
@@ -102,6 +103,7 @@ class CheckPermission
                 }
                 //End
             }
+            
             view()->share(compact('serializeMenus','menuSubMenuRoutes','permissionDetails'));
         }
 

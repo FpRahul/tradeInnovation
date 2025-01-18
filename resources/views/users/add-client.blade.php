@@ -11,14 +11,14 @@
             <input type="hidden" name="role" id="role" value="3">
             <div class="flex flex-col md:flex-row gap-[20px] !mt-0">
                 <div class="w-full md:w-1/2">
-                    <label for="name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Name</label>
+                    <label for="name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Name <strong class="text-[#f83434]">*</strong></label>
                     <input type="text" name="name" id="name" value="{{$newClient->name}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Name" required>
                     @error('name')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="w-full md:w-1/2">
-                    <label for="companyname" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Company Name</label>
+                    <label for="companyname" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Company Name <strong class="text-[#f83434]">*</strong></label>
                     <input type="text" name="companyname" id="companyname" value="{{$newClient->companyName}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Company Name" required>
                     @error('companyname')
                     <div class="alert alert-danger">{{ $message }}</div>
@@ -27,8 +27,8 @@
             </div>
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
-                    <label for="incorporationtype" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Incorporation type</label>
-                    <select name="incorporationtype" id="incorporationtype" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                    <label for="incorporationtype" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Incorporation Type <strong class="text-[#f83434]">*</strong></label>
+                    <select name="incorporationtype" id="incorporationtype" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                         <option value="">Select Incorporation Type</option>
                         @if (count($incorporationDataList) > 0)
                             @foreach ($incorporationDataList as $incorporationDataListDetails)  
@@ -38,7 +38,7 @@
                     </select>
                 </div>
                 <div class="w-full md:w-1/2">
-                    <label for="number" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mobile Number</label>
+                    <label for="number" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mobile Number <strong class="text-[#f83434]">*</strong></label>
                     <input type="text" name="number" id="number" value="{{$newClient->mobile}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Number" required>
                     @error('number')
                     <div class="alert alert-danger">{{ $message }}</div>
@@ -47,7 +47,7 @@
             </div>
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
-                    <label for="address" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Address </label>
+                    <label for="address" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Address <strong class="text-[#f83434]">*</strong></label>
                     <input type="text" name="address" id="address" value="{{$newClient->address}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                     @error('address')
                     <div class="alert alert-danger">{{ $message }}</div>
@@ -63,7 +63,7 @@
             </div>
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
-                    <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Email-Id</label>
+                    <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Email-Id <strong class="text-[#f83434]">*</strong></label>
                     <input type="text" name="email" id="email" value="{{$newClient->email}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Email" required>
                     @error('email')
                     <div class="alert alert-danger">{{ $message }}</div>
@@ -79,15 +79,15 @@
             </div>
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
-                    <label for="communi_address" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Communication address</label>
-                    <input type="text" name="communi_address" id="communi_address" value="{{$newClient->communicationAdress}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                    <label for="communi_address" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Communication Address <strong class="text-[#f83434]">*</strong></label>
+                    <input type="text" name="communi_address" id="communi_address" value="{{$newClient->communicationAdress}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                     @error('communi_address')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="w-full md:w-1/2">
-                    <label for="referralPartner" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Referral Partner</label>
-                    <select name="referralPartner" id="referralPartner" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                    <label for="referralPartner" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Referral Partner <strong class="text-[#f83434]">*</strong></label>
+                    <select name="referralPartner" id="referralPartner" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                         <option value=""  >Select Referral Partner</option>
                         @if (count($referDataList) > 0)
                             @foreach ($referDataList as $referDataListDetails)  

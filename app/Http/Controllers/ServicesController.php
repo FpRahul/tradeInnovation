@@ -12,7 +12,7 @@ class ServicesController extends Controller
         $serviceData = Service::paginate(10);
         $searchKey = $request->input('key') ?? '';       
         if($request->isMethod('POST')){
-            if($request->requestType == 'ajax'){    // search filter               
+            if($request->requestType == 'ajax'){        
                 if ($searchKey) {
                     $serviceData = Service::where('serviceName', 'like', "%{$searchKey}%")->paginate(10);         
                 }
@@ -21,13 +21,10 @@ class ServicesController extends Controller
                     'trData' => $trData,
                 ];
                 return response()->json($dataArray);
-            }else{    //............................. form submittion
-                
-            }      
+            }     
         }
         $header_title_name = 'Services';
-        $moduleName="Manage Services";
-        return view('services.index', compact('serviceData', 'header_title_name', 'moduleName','searchKey'));         
+        return view('services.index', compact('serviceData', 'header_title_name','searchKey'));         
     }
 
     public function addService(Request $request){

@@ -21,7 +21,7 @@
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="role" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Role <strong class="text-[#f83434]">*</strong></label>
-                    <select name="role" id="role" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <select name="role" id="role" class="allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                         <option value="">Select Role</option>
                         @if (count($roleData) > 0)
                             @foreach ($roleData as $roles)
@@ -44,7 +44,7 @@
                     @enderror
                 </div>
                 <div class="w-full md:w-1/2">
-                    <label for="employeePhoto" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload Photograph:</label>
+                    <label for="employeePhoto" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload Photograph: <span class="text-[12px] italic font-[400] text-[#e70e0e]"> (only jpg,jpeg and png format supported & max:2 MB)</span></label>
                     <div class="relative flex flex-wrap gap-[10px]">
                         <img class="getpreviewImage" src="{{asset(!empty($newUserDetails->uploadPhotograph) ? 'Image/'.$newUserDetails->uploadPhotograph : 'assets/images/noimage.png')}}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
                         <div class="relative">
@@ -238,7 +238,7 @@
             <div class="flex flex-col md:flex-row gap-[20px]">
 
                 <div class="w-full md:w-1/2">
-                    <label for="uploadPan" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload Pan <strong class="text-[#f83434]">*</strong></label>
+                    <label for="uploadPan" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload Pan <strong class="text-[#f83434]">*</strong> <span class="text-[12px] italic font-[400] text-[#e70e0e]"> (only jpg,jpeg,png and pdf format supported )</span></label>
                     <div class="relative flex flex-wrap gap-[10px]">
                         <img class="getpreviewImage" src="{{asset(!empty($newUserDetails->uploadPan) ? 'Image/'.$newUserDetails->uploadPan : 'assets/images/noimage.png')}}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
                         
@@ -256,7 +256,7 @@
                     @enderror
                 </div>
                 <div class="w-full md:w-1/2">
-                    <label for="uploadAadhar" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload Aadhar <strong class="text-[#f83434]">*</strong></label>
+                    <label for="uploadAadhar" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload Aadhar <strong class="text-[#f83434]">*</strong> <span class="text-[12px] italic font-[400] text-[#e70e0e]"> (only jpg,jpeg,png and pdf format supported )</span></label>
                     <div class="relative flex flex-wrap gap-[10px]">
                         <img class="getpreviewImage" src="{{asset(!empty($newUserDetails->uploadAadhar) ? 'Image/'.$newUserDetails->uploadAadhar : 'assets/images/noimage.png')}}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
                         <div class="relative">
@@ -273,7 +273,7 @@
                     @enderror
                 </div>
                 <div class="w-full md:w-1/2">
-                    <label for="uploadDrivingLicence" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload Driving Licence <strong class="text-[#f83434]">*</strong></label>
+                    <label for="uploadDrivingLicence" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload Driving Licence <strong class="text-[#f83434]">* <span class="text-[12px] italic font-[400] text-[#e70e0e]"> (only jpg,jpeg,png and pdf format supported )</span></strong></label>
                     <div class="relative flex flex-wrap gap-[10px]">
                         <img class="getpreviewImage" src="{{asset(!empty($newUserDetails->uploadDrivingLicence) ? 'Image/'.$newUserDetails->uploadDrivingLicence : 'assets/images/noimage.png')}}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
                         <div class="relative">

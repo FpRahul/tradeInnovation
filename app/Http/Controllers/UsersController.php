@@ -39,8 +39,12 @@ class UsersController extends Controller
                 return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
             }
             return redirect()->back()->with('error','The provided credentials do not match our records.');
-        }       
-        return view('users/login');
+        } 
+        if (Auth::check()) {
+            return redirect()->route('dashboard');
+        } else {
+            return view('users/login');
+        }
     }
 
     public function forgetPassword(Request $request){
@@ -135,8 +139,7 @@ class UsersController extends Controller
             $moduleName="Add";
             $logAct = 'added';
         }
-        if($request->isMethod('POST')){ 
-           
+        if($request->isMethod('POST')){           
             $credentials = $request->validate([               
                 'email'=> $email,           
                 'uploadPan' => $pImage,

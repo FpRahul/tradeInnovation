@@ -12,13 +12,19 @@
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="source" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Source</label>
-                    <select name="source" id="source" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <select name="source" id="source" class="allform-select2 showSourceListName w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                         <option value="">Source Type</option>
                         @if (count($sourceList) > 0)
                             @foreach ($sourceList as $sourceListData)
                                 <option value="{{ $sourceListData->id}}">{{ $sourceListData->name}}</option>
                             @endforeach                            
                         @endif
+                    </select>
+                </div>
+                <div class="sourceTypeNameDiv w-full md:w-1/2 hidden">
+                    <label for="sourceTypeNameList" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Source Type Name</label>
+                    <select name="sourcetypenamelist" id="sourceTypeNameList" class="allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    
                     </select>
                 </div>
                 <div class="w-full md:w-1/2">
@@ -44,7 +50,7 @@
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="assign" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign to</label>
-                    <select name="assign" id="assign" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <select name="assign" id="assign" class="allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                         <option value="">Assign To Users</option>
                         @if (count($userList) > 0)
                             @foreach ($userList as $userListData)
@@ -66,7 +72,7 @@
                                     <input type="hidden" name="lead_service_id" class="lead_service_id" value="0">
                                     <div class="flex flex-col md:flex-row gap-[20px]">
                                         <div class="w-full md:w-1/2">
-                                            <select name="servicetbl" id="servicetbl" class="setSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                            <select name="serviceid" id="serviceid" class="setSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                 <option value="">Service Name</option>
                                                 @if (count($serviceList) > 0)
                                                     @foreach ($serviceList as $serviceListData)
@@ -77,7 +83,7 @@
                                             </select>
                                         </div>
                                         <div class="w-full md:w-1/2">
-                                            <select name="subservicetbl" id="subservicetbl" class="getSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                            <select name="subserviceid" id="subserviceid" class="getSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                 <option value="">Service Type</option>                                                
                                             </select>
                                         </div>
@@ -128,6 +134,29 @@
                 e.parent().parent().find('.getSubService').html(res.data);
             }
         });
+    });
+    $(document).on('change','.showSourceListName',function(){
+        var value = $(this).val();
+        if(value == 14 || value == 15 || value == 19){
+            
+            $.ajax({
+                method:'POST',
+                url:"{{ route('lead.getsourcetypename')}}",
+                headers:{
+                    'X-CSRF-TOKEN':'{{ csrf_token()}}'
+                },
+                dataType:'json',
+                data:{
+                    value:value
+                },
+                success:function(res){
+                    $('.sourceTypeNameDiv').find('#sourceTypeNameList').html(res.data);
+                    $('.sourceTypeNameDiv').css('display','block');
+                }
+            })
+        }else{
+            $('.sourceTypeNameDiv').css('display','none');
+        }
     });
 </script>
 @stop

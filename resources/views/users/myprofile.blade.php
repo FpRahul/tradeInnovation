@@ -23,12 +23,12 @@
                                     <path d="M13.9395 8.95044H8.93945V13.9504C8.93945 14.5004 8.48945 14.9504 7.93945 14.9504C7.38945 14.9504 6.93945 14.5004 6.93945 13.9504V8.95044H1.93945C1.38945 8.95044 0.939453 8.50044 0.939453 7.95044C0.939453 7.40044 1.38945 6.95044 1.93945 6.95044H6.93945V1.95044C6.93945 1.40044 7.38945 0.950439 7.93945 0.950439C8.48945 0.950439 8.93945 1.40044 8.93945 1.95044V6.95044H13.9395C14.4895 6.95044 14.9395 7.40044 14.9395 7.95044C14.9395 8.50044 14.4895 8.95044 13.9395 8.95044Z" fill="#13103A" />
                                 </svg>
                             </label>
-                            <input type="file" name="profilePic" id="profilePic" class="previewImage w-0 opacity-0 absolute top-0 left-0">
-                            @error('profilePic')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
+                            <input type="file" name="profilePic" id="profilePic" class="previewImage w-0 opacity-0 absolute top-0 left-0">                           
+                        </div>                        
                     </div>
+                    @error('profilePic')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
                 </div>
             </div>
             <div class="flex flex-col md:flex-row gap-[20px]">

@@ -63,6 +63,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/sendquote', 'sendquote')->name('leads.quote');
         Route::get('/logs', 'leadLogs')->name('leads.logs');
         Route::POST('/getsubservice','getSubService')->name('lead.subservice');
+        Route::match(['POST','GET'],'/getsourcetypename','getSourceTypeName')->name('lead.getsourcetypename');
     });
 
     //Tasks Routes

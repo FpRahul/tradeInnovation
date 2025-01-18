@@ -17,7 +17,7 @@
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="profession" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Profession <strong class="text-[#f83434]">*</strong></label>
-                    <select name="profession" id="profession" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <select name="profession" id="profession" class="allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                         @if (count($professionDataList) > 0)
                             @foreach ($professionDataList as $professionDataListDetails)  
                                 <option value="{{$professionDataListDetails->id}}">{{$professionDataListDetails->name}}</option>                      

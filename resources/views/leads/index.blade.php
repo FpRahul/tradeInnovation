@@ -3,11 +3,13 @@
 
 <div>
     <div class="flex items-center justify-between mb-[20px]">
-        <h3 class="text-[18px] md:text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">Manage Leads</h3>
-        <ul class="flex items-center text-[14px] font-[400] leading-[16px] text-[#000000] gap-[5px]">
-            <li>Leads</li> /
-            <li class="text-gray">Manage Leads</li>
-        </ul>
+        <div>
+            <h3 class="text-[18px] md:text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">Manage Leads</h3>
+            <ul class="flex items-center text-[14px] font-[400] leading-[16px] text-[#000000] gap-[5px]">
+                <li>Leads</li> /
+                <li class="text-gray">Manage Leads</li>
+            </ul>
+        </div>
         @if (in_array('leads.add',$permissionDetails['accessableRoutes']) || auth()->user()->role == 1)
             <a href="{{ route('leads.add')}}" class=" inline-flex items-center gap-[10px] text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px] ">
                 <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -22,19 +24,19 @@
     <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] overflow-hidden ">
         <div class="py-[15px] md:py-[25px] px-[15px] md:px-[20px] gap-[10px] flex flex-col md:flex-row items-center justify-between">
             <div class="flex flex-col md:flex-row md:flex-wrap gap-[10px] w-full">
-                <select name="sorting" id="sorting" class="!outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
+                <select name="sorting" id="sorting" class="allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
                     <option value="">Source</option>
                     <option value="1">demo</option>
                 </select>
-                <select name="sorting" id="sorting" class="!outline-none h-[40px] border border-[#0000001A] w-full md:w-[98px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
+                <select name="sorting" id="sorting" class="allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[98px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
                     <option value="">Service</option>
                     <option value="1">demo</option>
                 </select>
-                <select name="sorting" id="sorting" class="!outline-none h-[40px] border border-[#0000001A] w-full md:w-[90px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
+                <select name="sorting" id="sorting" class="allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[90px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
                     <option value="">Status</option>
                     <option value="1">demo</option>
                 </select>
-                <select name="sorting" id="sorting" class="!outline-none h-[40px] border border-[#0000001A] w-full md:w-[66px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
+                <select name="sorting" id="sorting" class="allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[66px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
                     <option value="1">1</option>
                     <option value="1">2</option>
                     <option value="1">3</option>
@@ -84,15 +86,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    @if ($leadList && $leadList->isNotEmpty())
+                       @foreach ($leadList as $leadData)
+                       <tr>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px] pl-[25px]">
-                            #001
+                            {{$leadData->id}}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            <span class="inline-flex items-center gap-[10px]">Associate <span><img src="{{ asset('assets/images/i-icon.png') }}" alt="icon"></span></span>
+                            <span class="inline-flex items-center gap-[10px]">  {{$leadData->id}} <span><img src="{{ asset('assets/images/i-icon.png') }}" alt="icon"></span></span>
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            Rahul
+                            {{$leadData->id}}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                             <span class="text-[#13103A] bg-[#ADD8E6] inline-block text-center min-w-[100px] py-[5px] px-[10px] rounded-[5px] ">Open</span>
@@ -126,6 +130,8 @@
                             </div>
                         </td>
                     </tr>
+                       @endforeach
+                    @endif                  
                    
                 </tbody>
             </table>
@@ -158,7 +164,7 @@
                     <div class="flex flex-col md:flex-row gap-[20px]">
                         <div class="w-full md:w-1/2">
                             <label for="selectuser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Select User</label>
-                            <select name="selectuser" id="selectuser" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                            <select name="selectuser" id="selectuser" class="allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                                 <option value="">Select User</option>
                                 <option value="1">1</option>
                             </select>

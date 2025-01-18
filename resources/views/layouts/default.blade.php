@@ -86,6 +86,9 @@
             $('.allform-filter-select2').select2({
                 placeholder: 'Select'
             });
+            $('.allform-select2').select2({
+                placeholder: 'Select'
+            });
         })
         $(document).ready(function() {
             $('.userExperienceRepeater').repeater({

@@ -1,8 +1,7 @@
 @extends('layouts.default')
 @section('content')
 <?php 
-use App\Models\Role;
-
+    use App\Models\Role;
 ?>
 <div>
     <div class="flex flex-col md:flex-row md:items-center justify-between mb-[20px] gap-[15px]">

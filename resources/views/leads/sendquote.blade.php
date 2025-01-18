@@ -3,10 +3,10 @@
 <div>
     <div class="flex items-center justify-between mb-[20px]">
         <div>
-            <h3 class="text-[20px] font-[500] leading-[24px] text-[#13103A] tracking-[0.02em] mb-1">{{$moduleName}}</h3>
+            <h3 class="text-[20px] font-[500] leading-[24px] text-[#13103A] tracking-[0.02em] mb-1">Quote</h3>
             <ul class="flex items-center text-[14px] font-[400] leading-[16px] text-[#000000] gap-[5px]">
-                <li>{{$header_title_name}}</li> /
-                <li class="text-gray">{{$moduleName}}</li>
+                <li>Leads</li> /
+                <li class="text-gray">Quote</li>
             </ul>
         </div>
     </div>

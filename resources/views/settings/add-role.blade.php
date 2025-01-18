@@ -5,7 +5,7 @@ use App\Models\MenuAction;
 @endphp
 <div>
     <div class="flex items-center justify-between mb-[20px]">
-        <h3 class="text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">{{$moduleName}}</h3>
+        <h3 class="text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">Create Role</h3>
     </div>
     <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] mb-[30px]">
         <form method="POST">

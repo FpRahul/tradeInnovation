@@ -590,7 +590,32 @@ class UsersController extends Controller
         $header_title_name = 'System Logs';
         $activityTitles = Log::select('title')->distinct()->orderBy('title', 'asc')->pluck('title');
         $activityUsers = Log::select('user_id')->distinct()->orderBy('user_id', 'asc')->pluck('user_id');
-        $systemLogs = Log::with('user')->orderBy('id','DESC')->paginate(env('PAGINATION_COUNT'));
-        return view('users.logs',compact('header_title_name','systemLogs','activityTitles','activityUsers'));
+
+        $filterOptions['completeDate'] = $request->dateRange ?? '';
+        if(!empty($selectedDate)){
+            $selectedDate = explode('-',$filterOptions['completeDate']);
+            $filterOptions = [
+                'startDate' => date('Y-m-d',strtotime($selectedDate[0])),
+                'endDate' => date('Y-m-d',strtotime($selectedDate[1])),
+                'completeDate' => $request->dateRange
+            ];
+        }
+        $filterOptions['user_id'] = $request->user_id ?? '';
+        $filterOptions['activity'] = $request->activity ?? '';
+        $query = Log::with('user')->orderBy('id', 'desc');
+        if (!empty($filterOptions['startDate']) && !empty($filterOptions['endDate'])) {
+            $query->whereDate('created_at', '>=', $filterOptions['startDate'])->whereDate('created_at', '<=', $filterOptions['endDate']);
+        }
+
+        if (!empty($filterOptions['user_id'])) {
+            $query->where('user_id', $filterOptions['user_id']);
+        }
+
+        if (!empty($filterOptions['activity'])) {
+            $query->where('title', 'like', '%' . $filterOptions['activity'] . '%');
+        }
+       
+        $systemLogs = $query->paginate(1)->appends($request->query());
+        return view('users.logs',compact('header_title_name','systemLogs','activityTitles','activityUsers','filterOptions'));
     }
 }

@@ -87,25 +87,32 @@
                 </thead>
                 <tbody>
                     @if ($leadList && $leadList->isNotEmpty())
-                       @foreach ($leadList as $leadData)
+                       @foreach ($leadList as $leadData)   
+                                        
                        <tr>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px] pl-[25px]">
                             {{$leadData->id}}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            <span class="inline-flex items-center gap-[10px]">  {{$leadData->id}} <span><img src="{{ asset('assets/images/i-icon.png') }}" alt="icon"></span></span>
+                            <span class="inline-flex items-center gap-[10px]"> 
+                                @if ($leadData->source > 0)
+                                    {{ getSourceData($leadData->source) ? getSourceData($leadData->source)->name : '' }}
+                                @endif
+                                <span><img src="{{ asset('assets/images/i-icon.png') }}" alt="icon"></span></span>
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            {{$leadData->id}}
+                            {{$leadData->client_name}}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            <span class="text-[#13103A] bg-[#ADD8E6] inline-block text-center min-w-[100px] py-[5px] px-[10px] rounded-[5px] ">Open</span>
+                            <span class="text-[#13103A] bg-[#ADD8E6] inline-block text-center min-w-[100px] py-[5px] px-[10px] rounded-[5px] "> {{$leadData->status}}</span>
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            2023-02-19 10:22:16
+                            {{ date('d M Y H:i:A', strtotime($leadData->created_at) ) }}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            Trademark
+                            @if (!empty($leadData->leadService))
+                                {{ implode(', ', collect(getServiceData($leadData->leadService))->pluck('serviceName')->toArray()) }}
+                            @endif                       
                         </td>
                         <td class="text-center border-b-[1px] border-[#0000001A] py-[12px] px-[15px]">
                             {{-- @if (in_array('leads.add',$permissionDetails['accessableRoutes']) || )
@@ -119,7 +126,7 @@
                                 </a>
                                 <div class="dropdown_menus absolute right-0 z-10 mt-2 w-[100px] origin-top-right rounded-md bg-white shadow-md ring-1 ring-black/5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                                     <div class="text-start" role="none">
-                                        <a href="{{ route('leads.add')}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Edit</a>
+                                        <a href="{{ route('leads.add')}}/{{$leadData->id}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Edit</a>
                                         <a href="javascript:void(0)" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal" type="button">Assign</a>
                                         <a href="#" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Archive</a>
                                         <a href="{{ route('leads.quote')}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Send Quote</a>

@@ -112,7 +112,7 @@ class UsersController extends Controller
     }
 
     public function addUser(Request $request, $id=null){
-        $roleData = Role::where('id', '!=', 1)->get();
+        $roleData = Role::where('id', '>', 3)->get();
         if($id > 0){
             $newUser = User::find($id);  
             $newUserDetails = UserDetail::where('userId',$id)->first();

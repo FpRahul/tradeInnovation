@@ -20,8 +20,8 @@ class LeadsController extends Controller
 
     public function add(Request $request,$id=null){
         if($id > 0){
-            $leadData = Lead::find($id)->get();
-            $leadServiceData = LeadService::where('service_id',$id)->get();
+            $leadData = Lead::where('id',$id)->get();
+            $leadServiceData = LeadService::where('lead_id',$id)->get();
             $successMsg = 'Your lead is succussfully updated!';
         }else{
             $leadData = new Lead();
@@ -31,7 +31,7 @@ class LeadsController extends Controller
         $sourceList = CategoryOption::where('type',3)->where('status',1)->get();
         $serviceList = Service::where('status',1)->get();
         $userList = User::where('role','>',3)->where('status',1)->get();
-        if($request->isMethod('POST')){            
+        if($request->isMethod('POST')){ 
             if($request->sourcetypenamelist > 0){
                 $sourceId = $request->sourcetypenamelist;
             }else{
@@ -49,22 +49,25 @@ class LeadsController extends Controller
             if($leadData->save()){
                 if(!empty($request->leadRepeater)){
                     foreach($request->leadRepeater as $serviceKey => $serviceVal){
-                        if($serviceVal['lead_service_id'] > 0){
-                            $leadServiceData = LeadService::where('id',$serviceVal['lead_service_id']);
+                        if($serviceVal['lead_id'] > 0){
+                            $leadServiceData1 = LeadService::where('id',$serviceVal['lead_id'])->first();
                         }else{
-                            $leadServiceData = new LeadService();
+                            $leadServiceData1 = new LeadService();
                         }
-                        $leadServiceData->lead_id = $leadData->id;
-                        $leadServiceData->service_id = $serviceVal['serviceid'];
-                        $leadServiceData->subservice_id = $serviceVal['subserviceid'];
-                        $leadServiceData->save();
+                        
+                        $leadServiceData1->lead_id = $leadData->id;
+                        $leadServiceData1->service_id = $serviceVal['serviceid'];
+                        $leadServiceData1->subservice_id = $serviceVal['subserviceid'];
+                     
+                        $leadServiceData1->save();
                     }
+                 
                 }                
                 return redirect()->route('leads.index')->withSuccess($successMsg);
             }
         }
         $header_title_name = 'Lead';
-        return view('leads/add',compact('header_title_name','sourceList','serviceList','userList'));
+        return view('leads/add',compact('header_title_name','sourceList','serviceList','userList','leadData','leadServiceData'));
     }
 
     public function getSubService(Request $request){
@@ -90,7 +93,7 @@ class LeadsController extends Controller
         return view('leads/logs', compact('header_title_name'));
     }
 
-    public function getSourceTypeName(Request $request){        
+    public function getSourceTypeName(Request $request){
         if($request->value == 14){
             $value = 3;
         }elseif($request->value == 15){

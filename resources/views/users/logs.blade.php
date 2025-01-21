@@ -68,6 +68,14 @@
                         <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                             Details
                         </th>
+                        <!-- ip -->
+                        <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                            IP
+                        </th>
+                        <!-- User Agent -->
+                        <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                        User Agent
+                        </th>
                         <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                             Action Date
                         </th>
@@ -76,7 +84,6 @@
                 <tbody id="get_dynamic_data">
                     @if ($systemLogs && $systemLogs->isNotEmpty())
                     @foreach ($systemLogs as $logs)
-
                     <tr>
                         <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
                             {{$logs->user->name}}
@@ -87,7 +94,25 @@
                         <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                             {{$logs->description}}
                         </td>
+                        @if($logs->user->ip_address)
                         <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                        {{$logs->user->ip_address}}
+                        </td>
+                        @else
+                        <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                        Not Available
+                       </td>
+                        @endif
+                        @if($logs->user->operating_system)
+                        <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                        {{$logs->user->operating_system}}
+                        </td>
+                        @else
+                        <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                        Not Available
+                        </td>
+                        @endif
+                        <td class="bor  der-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                             {{ date('d M Y',strtotime($logs->created_at))}}
                         </td>
                     </tr>

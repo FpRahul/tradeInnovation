@@ -128,10 +128,10 @@
                                     <div class="text-start" role="none">
                                         <a href="{{ route('leads.add')}}/{{$leadData->id}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Edit</a>
                                         <a href="javascript:void(0)" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal" type="button">Assign</a>
-                                        <a href="#" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Archive</a>
+                                        <a href="#" data-id="{{$leadData->id}}" class="lead_archive block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Archive</a>
                                         <a href="{{ route('leads.quote')}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Send Quote</a>
                                         <a href="{{ route('leads.logs')}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Logs</a>
-                                        <a href="#" class="block px-3 py-1 text-[12px] hover:bg-[#f7f7f7] text-gray-700">Delete</a>
+                                        {{-- <a href="#" class="block px-3 py-1 text-[12px] hover:bg-[#f7f7f7] text-gray-700">Delete</a> --}}
                                     </div>
                                 </div>
                             </div>
@@ -194,5 +194,13 @@
         </div>
     </div>
 </div>
+<script>
+  $(document).on('click', '.lead_archive', function () {
+    var id = $(this).data('id'); 
+    if (confirm('Are you sure you want to archive this lead?')) {
+        window.location.href = `{{ route('leads.archive') }}/${id}`;
+    }
+});
 
+</script>
 @stop

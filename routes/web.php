@@ -40,7 +40,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
 
         Route::match(['POST', 'GET'], '/user-referral', 'userReferral')->name('referral.index');
         Route::match(['POST', 'GET'], '/add-referral/{id?}', 'addReferral')->name('referral.add');
-
+ 
         Route::get('/category-status/{id?}', 'categoryStatus')->name('users.category.status');
         Route::get('/category-delete/{id?}', 'categoryDelete')->name('users.category.delete');
 

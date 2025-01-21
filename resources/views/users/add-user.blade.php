@@ -113,19 +113,35 @@
                                                 class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"
                                                 placeholder="Employer Name">
                                         </div>
-                                        <div class="w-full">
-                                            <label for="startDate" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-                                                Start Date
-                                            </label>
-                                            <input type="date" name="startDate" id="startDate" value="{{ $exVal['startDate']}}"
-                                                class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+
+                                        <!-- ***** -->
+                                        <!-- <div class="w-[16%] relative">
+                        <label class="flex text-[15px] text-[#000] mb-[5px]">Date Range</label>
+                        <div class="w-[100%] relative">
+                            <input type="text" placeholder="Start Date" name="dateRange" class="daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" value="{{ $filterOptions['completeDate'] }}">
+                            <i class="ri-calendar-line absolute right-[8px] top-[9px]" ></i>
+                        </div>
+                    </div> -->
+                                        <!-- ***** -->
+
+                                        <div class="w-[16%] relative">
+                                        <label for="startDate" class="flex text-[15px] text-[#000] mb-[5px]">
+                                            Start Date
+                                        </label>
+                                        <div class="w-[100%] relative">
+                                            <input type="text" name="startDate" id="startDate" placeholder="YYYY-MM-DD"
+                                                class="daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                                            <i class="ri-calendar-line absolute right-[8px] top-[9px]" id="calendarIcon"></i>
                                         </div>
-                                        <div class="w-full">
-                                            <label for="endDate" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+                                    </div>
+
+                                    <div class="w-[16%] relative">
+                                            <label for="endDate" cclass="flex text-[15px] text-[#000] mb-[5px]">
                                                 End Date
                                             </label>
-                                            <input type="date" name="endDate" id="endDate" value="{{ $exVal['endDate']}}"
-                                                class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                                            <input type="text" name="endDate" id="endDate" value="{{ $exVal['endDate']}}"
+                                            class="daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                                            <i class="ri-calendar-line absolute right-[8px] top-[9px]" ></i>
                                         </div>
                                     </div>
                                     <div class="w-[55px] ">
@@ -314,6 +330,45 @@
                 previewContainer.attr('src', '');
             }
         });
+        
+        // $('.daterangepicker-item').daterangepicker({
+            
+        //     opens: 'right',
+        //     locale: {
+        //         format: 'DD MMM YYYY'
+        //     }
+        // }, function(start, end, label) {
+        //     console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+        // });
+        $('#startDate').on('click',function(){
+            $(this).attr('type', 'text');
+            $('.startdateShow').show();
+         
+        })
+        $('#startDate').daterangepicker({
+        singleDatePicker: true,  
+        showDropdowns: true,     
+        locale: {
+            format: 'YYYY-MM-DD' 
+        }
+    });
+
+ 
+  
+
+      $('#endDate').on('click',function(){
+            $(this).attr('type', 'text');
+            $('.startdateShow').show();
+         
+        })
+        $('#endDate').daterangepicker({
+        format: 'YYYY-MM-DD' ,
+        singleDatePicker: true, 
+        showDropdowns: true,
+        locale: {
+            format: 'YYYY-MM-DD' 
+        }
+      });
     });
 
 </script>

@@ -10,13 +10,16 @@ use App\Models\MenuAction;
     <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] mb-[30px]">
         <form method="POST">
             @csrf
+
             <div class="py-[25px] px-[20px]">
                 <label for="rolename" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Role Name</label>
                 <input type="text" required name="rolename" id="rolename" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[18px] py-[14px] rounded-[10px] !outline-none" placeholder="Enter Role Name" value="{{ $roleData->name }}">
+            
                 @error('rolename')
                     <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
             </div>
+            <input type="hidden" name="name" value="{{ $roleData->name }}">
             <div class="px-[20px] flex flex-col md:flex-row gap-[30px]">
                 <div class="w-[230px] max-h-[100%] overflow-y-auto ">
                     <ul class="accordian space-y-[7px]">
@@ -186,6 +189,17 @@ use App\Models\MenuAction;
 </div>
 
 <script>
+    $(document).ready(function(){
+        var url = window.location.href; 
+        var id = url.split('/').pop();
+        id = parseInt(id)
+        if(isNaN(id)){
+            $("#rolename").prop('disabled', false)
+        }else{  
+            $("#rolename").prop('disabled', true)
+
+        }     
+    })
     $(document).on('click','.parent-element',function (){
         if($(this).is(':checked')){
             $(this).parent().parent().parent().find('input:checkbox').prop('checked',true);

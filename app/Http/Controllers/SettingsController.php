@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Role;
-use App\Models\RoleMenu;
+use App\Models\RoleMenu; 
 use App\Models\Menu;
 use Illuminate\Http\Request;
 
@@ -15,6 +15,7 @@ class SettingsController extends Controller
     }
 
     public function addRole(Request $request, $id = null){
+        
         $header_title_name="Setting";
         $menuAddedAction = [];
         if($id>0){
@@ -35,12 +36,19 @@ class SettingsController extends Controller
             //     'rolename' => 'required|unique:roles,name'
             // ]);
             //Saving Role
-            $roleData->name = $request->rolename;
+            $name = $request->rolename;
+            if(!$name){
+               $name =  $request->name;
+            }else{
+                $name = $request->rolename;
+            }
+          
+            $roleData->name = $name;
             $roleData->save();
 
             //Saving Role Permission
             $allSavedPermissions = $request->permission;
-           
+            
             $roleMenuPermission = [];
             $recordCounter = 0;
             if(!empty($allSavedPermissions)){

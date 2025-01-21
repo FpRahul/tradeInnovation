@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('roleId');
             $table->integer('menuId');
-            $table->string('permission');
+            $table->string('permission')->nullable(true);
             $table->timestamps();
         });
     }

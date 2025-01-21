@@ -10,4 +10,8 @@ class Menu extends Model
         'roleId',
         'menuName'
     ];
+
+    public function getRoleMenu(){
+        return $this->hasOne(RoleMenu::class,'menuId', 'id');
+    }
 }

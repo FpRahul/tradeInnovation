@@ -26,3 +26,96 @@ input:-webkit-autofill:active {
 ::-webkit-scrollbar-thumb {
     background: #13103A;
 }
+
+select{-webkit-appearance: none;-moz-appearance: none;background-image: url('../../public/assets/images/select-arrow.png') !important;background-position: right 10px center !important; background-repeat: no-repeat !important;}
+
+.alert-danger {
+    color: red;
+}
+
+.alert-success {
+    color: green;
+}
+
+.alert {
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.toast {
+    opacity: 1 !important;
+}
+
+span[aria-current="page"] span {
+    background-color: #13103a !important;
+    color: #fff !important;
+}
+
+.note-editor.note-airframe,
+.note-editor.note-frame,
+.note-editor.note-airframe .note-statusbar,
+.note-editor.note-frame .note-statusbar {
+    border-color: #0000001A !important;
+}
+.daterangepicker-item {position: relative;
+    background-image: url('../../public/assets/images/calendar-icon2.png');
+    background-position: right 15px center;
+    background-repeat: no-repeat;}
+input[type="date"]{
+    position: relative;
+    background-image: url('../../public/assets/images/calendar-icon2.png');
+    background-position: right 15px center;
+    background-repeat: no-repeat;
+    /* background-size: 20px; */
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+    background: transparent;
+    bottom: 0;
+    color: transparent;
+    cursor: pointer;
+    height: auto;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+}
+
+.toast {
+    font-size: 14px;
+    background-size: 18px;
+    padding-left: 45px !important;
+}
+
+.employee_repeater_wrapper > div > div > div:first-child > div {
+    width: 100% !important;
+}
+.employee_repeater_wrapper > div > div > div:first-child > div:last-child {
+    display: none;
+}
+
+
+.select2.select2-container.select2-container--default {
+    width: 100%!important;
+}
+
+.select2.select2-container.select2-container--default span.select2-selection.select2-selection--single {
+    border: 1px solid #0000001A;
+    padding: 7px 10px;
+    height: auto;
+    border-radius: 8px;
+    font-size: 15px;
+    color: #000;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    top: 9px;
+    right: 6px;
+}
+
+/* responsive */
+@media (max-width: 767px){
+.employee_repeater_wrapper .repeater-default > div > div:first-child { flex-direction: column; } 
+.employee_repeater_wrapper .repeater-default > div > div:first-child > div { width: 100% !important; }
+.employee_repeater_wrapper .repeater-default > div > div { background: #f7f7f7; padding: 10px;border-radius: 10px; } 
+}

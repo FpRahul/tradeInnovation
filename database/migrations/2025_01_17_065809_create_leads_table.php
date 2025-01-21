@@ -22,11 +22,11 @@ return new class extends Migration
             $table->string('email')->nullable(true);
             $table->integer('assign_to')->nullable(true);
             $table->text('description')->nullable(true);
-            $table->tinyInteger('status')->default(0);            
+            $table->tinyInteger('status')->default(0); 
+            $table->tinyInteger('archive')->default(1)->comment('0 for archive & 1 for active');           
             $table->datetime('completed_date')->nullable(true);
             $table->tinyInteger('quotation_sent')->default(0);  
             $table->datetime('quotation_sent_date')->nullable(true);
-
             $table->timestamps();
         });
     }

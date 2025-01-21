@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('parentId')->nullable(0); 
             $table->string('menuName')->nullable(true);     
-            $table->string('icon')->nullable(true);       
+            $table->string('icon')->nullable(true);   
             $table->timestamps();
         });
     }

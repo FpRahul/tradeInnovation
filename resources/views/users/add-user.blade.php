@@ -117,15 +117,34 @@
                                             <label for="startDate" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
                                                 Start Date
                                             </label>
-                                            <input type="date" name="startDate" id="startDate" value="{{ $exVal['startDate']}}"
-                                                class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                                            {{-- <input type="date" name="startDate" id="startDate" value="{{ $exVal['startDate']}}"
+                                                class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"> --}}
+                                            <div class="w-[100%] relative">
+                                                <input 
+                                                    type="text" 
+                                                    placeholder="Start Date" 
+                                                    name="startDate" 
+                                                    class="daterangepicker-startDate w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
+                                                    value="{{ $exVal['startDate'] }}" 
+                                                    autocomplete="off"
+                                                >
+                                                <div class="absolute right-[10px] top-[10px]">
+                                                <i class="ri-calendar-line"></i>
+                                                </div>
+                                            </div>                                                
                                         </div>
                                         <div class="w-full">
                                             <label for="endDate" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
                                                 End Date
                                             </label>
-                                            <input type="date" name="endDate" id="endDate" value="{{ $exVal['endDate']}}"
-                                                class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                                            {{-- <input type="date" name="endDate" id="endDate" value="{{ $exVal['endDate']}}"
+                                                class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"> --}}
+                                                <div class="w-[100%] relative">
+                                                    <input type="text" placeholder="Start Date" name="endDate" class="daterangepicker-endDate w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" value="{{ $exVal['endDate'] }}">
+                                                    <div class="absolute right-[10px] top-[10px]">
+                                                        <i class="ri-calendar-line"></i>
+                                                    </div>
+                                                </div>
                                         </div>
                                     </div>
                                     <div class="w-[55px] ">
@@ -154,15 +173,34 @@
                                     <label for="startDate" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
                                         Start Date
                                     </label>
-                                    <input type="date" name="startDate" id="startDate"
-                                        class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                                    {{-- <input type="date" name="startDate" id="startDate" value=""
+                                                class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"> --}}
+                                    <div class="w-[100%] relative">
+                                        <input 
+                                            type="text" 
+                                            placeholder="Start Date" 
+                                            name="startDate" 
+                                            class="daterangepicker-startDate w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
+                                            value="" 
+                                            autocomplete="off"
+                                        >
+                                        <div class="absolute right-[10px] top-[10px]">
+                                            <i class="ri-calendar-line"></i>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="w-full">
                                     <label for="endDate" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
                                         End Date
                                     </label>
-                                    <input type="date" name="endDate" id="endDate"
-                                        class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                                    {{-- <input type="date" name="endDate" id="endDate" value=""
+                                                class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"> --}}
+                                    <div class="w-[100%] relative">
+                                        <input type="text" placeholder="Start Date" name="endDate" class="daterangepicker-endDate w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" value="">
+                                        <div class="absolute right-[10px] top-[10px]">
+                                            <i class="ri-calendar-line"></i>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="w-[55px]">
@@ -315,6 +353,29 @@
             }
         });
     });
+  
+    $(document).ready(function() {
+        $('.daterangepicker-startDate').daterangepicker({
+            singleDatePicker: true, 
+            opens: 'right',
+            locale: {
+                format: 'DD MMM YYYY' 
+            }
+        }).on('apply.daterangepicker', function(ev, picker) {
+            console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+        });
+    });
 
+    $(document).ready(function() {
+        $('.daterangepicker-endDate').daterangepicker({
+            singleDatePicker: true, 
+            opens: 'right',
+            locale: {
+                format: 'DD MMM YYYY' 
+            }
+        }).on('apply.daterangepicker', function(ev, picker) {
+            console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+        });
+    });
 </script>
 @endsection

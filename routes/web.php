@@ -65,6 +65,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::POST('/getsubservice','getSubService')->name('lead.subservice');
         Route::match(['POST','GET'],'/getsourcetypename','getSourceTypeName')->name('lead.getsourcetypename');
         Route::post('/deleterepeater', 'deleteRepeaterLead')->name('lead.deleterepeater');
+        Route::post('/deleteattchmentrepeater', 'deleteAttachmentRepeaterLead')->name('lead.deleteattachmentrepeater');
         Route::match(['POST','GET'],'/archive/{id?}', 'archiveLead')->name('leads.archive');
 
     });

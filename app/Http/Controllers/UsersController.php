@@ -139,7 +139,8 @@ class UsersController extends Controller
             $moduleName="Add";
             $logAct = 'added';
         }
-        if($request->isMethod('POST')){           
+        if($request->isMethod('POST')){ 
+          
             $credentials = $request->validate([               
                 'email'=> $email,           
                 'uploadPan' => $pImage,
@@ -197,8 +198,8 @@ class UsersController extends Controller
                    }
                     $newUserExperiences->userId = $newUser->id;
                     $newUserExperiences->employerName = $exVal['employerName'];
-                    $newUserExperiences->startDate = $exVal['startDate'];
-                    $newUserExperiences->endDate = $exVal['endDate'];
+                    $newUserExperiences->startDate = date('Y-m-d',strtotime($exVal['startDate']));
+                    $newUserExperiences->endDate = date('Y-m-d',strtotime($exVal['endDate']));
                     $newUserExperiences->save();
                 } 
 

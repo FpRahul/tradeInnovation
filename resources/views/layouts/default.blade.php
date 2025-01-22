@@ -18,6 +18,9 @@
 
     <!-- Datepicker css -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+    rel="stylesheet"/>
     <!-- Datepicker css End-->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <!-- Datepicker Js -->
@@ -197,6 +200,47 @@
                         }else{
                             $(this).slideUp(deleteElement);
                         }
+                    }
+                },
+                isFirstItemUndeletable: true
+            })
+        });
+
+        $(document).ready(function() {
+            $('.leadAttachmentRepeater').repeater({
+                initEmpty: false,
+                defaultValues: {
+                    'image': ''
+                },
+                show: function() {
+                    $(this).slideDown();
+                },
+                hide: function(deleteElement) {
+                    if (confirm('Are you sure you want to delete this element?')) {
+                        var deleteId = $(this).find('.deleteAttachmentRepeaterRow').data('id');
+                        if(deleteId > 0){
+                            $.ajax({
+                                method: 'POST',
+                                url: "{{ route('lead.deleteattachmentrepeater') }}",
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                data: {
+                                    id: deleteId
+                                },
+                                success: function(res) {
+                                    if (res == 1) {
+                                        $(this).slideUp(deleteElement);
+                                    }
+                                },
+                                error: function(err) {
+                                    alert(err);
+                                }
+                            })
+                        }else{
+                            $(this).slideUp(deleteElement);
+                        }
+
                     }
                 },
                 isFirstItemUndeletable: true

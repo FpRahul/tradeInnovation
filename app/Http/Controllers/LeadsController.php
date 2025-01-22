@@ -14,8 +14,11 @@ class LeadsController extends Controller
     public function index(){
         $leadList = Lead::with('leadService')->where('archive',1);
         $leadList = $leadList->paginate(env("PAGINATION_COUNT"));
+        $sourceList = CategoryOption::where('type',3)->where('status',1)->get();
+        $serviceList = Service::where('status',1)->get();
+
         $header_title_name = 'Leads';
-        return view('leads/index',compact('header_title_name','leadList'));
+        return view('leads/index',compact('header_title_name','leadList','sourceList','serviceList'));
     }
 
     public function add(Request $request, $id = null){
@@ -118,6 +121,14 @@ class LeadsController extends Controller
         }else{
             echo "0";
         }
+    }
+    public function deleteAttachmentRepeaterLead(Request $request){
+        // $leadServiceDel = LeadService::where('id',$request->id);
+        // if($leadServiceDel->delete()){
+        //     echo "1";
+        // }else{
+        //     echo "0";
+        // }
     }
     public function archiveLead(Request $request,$id=null){
       $leadData = Lead::where('id',$id)->first();

@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Lead;
 use App\Models\LeadService;
-
+use App\Models\LeadAttachment;
 class LeadsController extends Controller
 {
     public function index(){
@@ -25,16 +25,19 @@ class LeadsController extends Controller
         if($id > 0){
             $leadData = Lead::where('id',$id)->first();
             $leadServiceData = LeadService::where('lead_id',$id)->get();
+            $leadAttachment = LeadAttachment::where('lead_id',$id)->get();
             $successMsg = 'Your lead is succussfully updated!';
         }else{
             $leadData = [];
             $leadServiceData =[];
+            $leadAttachment = [];
             $successMsg = 'Your lead is succussfully inserted!';
         }
         $sourceList = CategoryOption::where('type',3)->where('status',1)->get();
         $serviceList = Service::where('status',1)->get();
         $userList = User::where('role','>',3)->where('status',1)->get();
         if($request->isMethod('POST')){ 
+            // dd($request);
             if($id == '' || $id == 0){
                 $leadData = new Lead();
             }
@@ -65,12 +68,34 @@ class LeadsController extends Controller
                         $leadServiceData->subservice_id = $serviceVal['subserviceid'];                     
                         $leadServiceData->save();
                     }                 
-                }                
+                }            
+                if(!empty($request->leadAttachment)){
+                    // dd($request->leadAttachment);
+                    foreach($request->leadAttachment as $attachmentKey => $attachmentVal){
+                        $imageNames = $attachmentVal['attachmentFile'];
+                        if($attachmentVal['attachment_id'] > 0){
+                            $leadAttachment = LeadAttachment::where('id',$attachmentVal['attachment_id'])->first();
+                        }else{
+                            $leadAttachment = new LeadAttachment();
+                        } 
+                        // dd($attachmentVal);
+                        $leadAttachment->lead_id = $leadData->id;
+                        // dd($attachmentVal);
+                        if (isset($attachmentVal['attachmentFile']) && $attachmentVal['attachmentFile'] instanceof \Illuminate\Http\UploadedFile) {
+                            $image_name = $attachmentVal['attachmentFile'];
+                            $imageName = rand(100000, 999999).'.'.$image_name->getClientOriginalExtension();
+                            $image_name->move(public_path('Image'),$imageName);
+                            $leadAttachment->document = $imageName;
+                        }
+                        
+                        $leadAttachment->save();
+                    }
+                }    
                 return redirect()->route('leads.index')->withSuccess($successMsg);
             }
         }
         $header_title_name = 'Lead';
-        return view('leads/add',compact('header_title_name','sourceList','serviceList','userList','leadData','leadServiceData'));
+        return view('leads/add',compact('header_title_name','sourceList','serviceList','userList','leadData','leadServiceData','leadAttachment'));
     }
 
     public function getSubService(Request $request){

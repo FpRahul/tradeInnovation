@@ -14,6 +14,7 @@ class LeadsController extends Controller
     public function index(){
         $leadList = Lead::with('leadService');
         $leadList = $leadList->paginate(env("PAGINATION_COUNT"));
+        // dd($leadList);
         $header_title_name = 'Leads';
         return view('leads/index',compact('header_title_name','leadList'));
     }

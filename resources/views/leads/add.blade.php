@@ -7,9 +7,9 @@
     </div>
 
     <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] mb-[30px]">
-        <form method="POST" action="{{ route('leads.add')}}/{{!empty($leadData) ? $leadData->id :''}}" class="py-[25px] px-[30px] space-y-[20px]">
+        <form method="POST" action="{{ route('leads.add')}}/{{!empty($leadData) ? $leadData->id :''}}" enctype="multipart/form-data" class="py-[25px] px-[30px] space-y-[20px]">
             @csrf
-          
+         
             {{-- // $leadServiceData --}}
             
             <div class="flex flex-col md:flex-row gap-[20px]">
@@ -183,6 +183,39 @@
                 <div class="leadAttachmentRepeater md:border-[1px] border-[#0000001A] rounded-[10px] md:p-[20px] employee_repeater_wrapper">
                     <div class="repeater-default">
                         <div data-repeater-list="leadAttachment" class="flex flex-col gap-[40px]"> 
+                            @if (count($leadAttachment) > 0)
+                                @foreach ($leadAttachment as $attachmentVal) 
+                                    <div data-repeater-item class="flex  flex-wrap items-end gap-[20px]">
+                                        <div class="w-[calc(100%-75px)] ">
+                                            <input type="hidden" name="attachment_id" class="attachment_id" value="{{ $attachmentVal['id']}}">
+                                            <div class="flex flex-col md:flex-row gap-[20px]">
+                                                <div class="w-full md:w-1/2">
+                                                    <div class="relative flex flex-wrap items-center gap-[10px]">
+                                                        <img src="{{asset(!empty($attachmentVal['document']) ? 'Image/'.$attachmentVal['document'] : 'assets/images/noimage.png')}}" class="getpreviewImage w-[100%] max-w-[150px] rounded-[10px] object-cover" />
+                                                        
+                                                        <div class="relative">
+                                                            <label for="attachmentFile" class="cursor-pointer w-[50px] h-[50px] rounded-[8px] flex items-center justify-center border border-dashed border-[#13103a4d] ">
+                                                                <svg class="cursor-pointer" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M13.9395 8.95044H8.93945V13.9504C8.93945 14.5004 8.48945 14.9504 7.93945 14.9504C7.38945 14.9504 6.93945 14.5004 6.93945 13.9504V8.95044H1.93945C1.38945 8.95044 0.939453 8.50044 0.939453 7.95044C0.939453 7.40044 1.38945 6.95044 1.93945 6.95044H6.93945V1.95044C6.93945 1.40044 7.38945 0.950439 7.93945 0.950439C8.48945 0.950439 8.93945 1.40044 8.93945 1.95044V6.95044H13.9395C14.4895 6.95044 14.9395 7.40044 14.9395 7.95044C14.9395 8.50044 14.4895 8.95044 13.9395 8.95044Z" fill="#13103A" />
+                                                                </svg>
+                                                            </label>
+                                                            <input class="previewImage " type="file" name="attachmentFile" id="attachmentFile">
+                                                        </div>
+                                                    </div>
+                                                </div>                                            
+                                            </div>
+                                        </div>
+                                        <div class="w-[55px]">
+                                            <span data-repeater-delete data-id="0" class="deleteAttachmentRepeaterRow w-full h-[45px] flex items-center justify-center border-[1px] border-[#0000001A] rounded-[10px] text-center">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                                <svg class="mx-auto" width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M2.616 16C2.15533 16 1.771 15.846 1.463 15.538C1.155 15.23 1.00067 14.8453 1 14.384V2H0V1H4V0.230003H10V1H14V2H13V14.385C13 14.845 12.846 15.2293 12.538 15.538C12.23 15.8467 11.8453 16.0007 11.384 16H2.616ZM4.808 13H5.808V4H4.808V13ZM8.192 13H9.192V4H8.192V13Z" fill="#FF0000" />
+                                                </svg>
+                                            </span>
+                                        </div>
+                                    </div> 
+                                @endforeach
+                                @else
                                 <div data-repeater-item class="flex  flex-wrap items-end gap-[20px]">
                                     <div class="w-[calc(100%-75px)] ">
                                         <input type="hidden" name="attachment_id" class="attachment_id" value="0">
@@ -197,7 +230,7 @@
                                                                 <path d="M13.9395 8.95044H8.93945V13.9504C8.93945 14.5004 8.48945 14.9504 7.93945 14.9504C7.38945 14.9504 6.93945 14.5004 6.93945 13.9504V8.95044H1.93945C1.38945 8.95044 0.939453 8.50044 0.939453 7.95044C0.939453 7.40044 1.38945 6.95044 1.93945 6.95044H6.93945V1.95044C6.93945 1.40044 7.38945 0.950439 7.93945 0.950439C8.48945 0.950439 8.93945 1.40044 8.93945 1.95044V6.95044H13.9395C14.4895 6.95044 14.9395 7.40044 14.9395 7.95044C14.9395 8.50044 14.4895 8.95044 13.9395 8.95044Z" fill="#13103A" />
                                                             </svg>
                                                         </label>
-                                                        <input class="previewImage attachementFile " type="file" name="attachmentFile" id="attachmentFile" >
+                                                        <input class="previewImage " type="file" name="attachmentFile" id="attachmentFile" {{ empty($leadAttachment->document) ? 'required':''}}>
                                                     </div>
                                                 </div>
                                             </div>                                            
@@ -212,6 +245,7 @@
                                         </span>
                                     </div>
                                 </div> 
+                            @endif
                               
                         </div>
                         <div class="mt-[20px]">
@@ -232,27 +266,22 @@
     </div>
 </div>
 <script>
-    $(document).on('change', '.previewImage', function () {
-        $(this).attr('piy', 'vj');
-    });
+   
     
-        // $(document).on('change','.previewImage' ,function () { 
-        //     $(this).attr('piy','vj');
-            // console.log($(this).parent().parent().html());           
-            // var input = event.target;
-            // var previewContainer = $(this).parent().parent().attr('piy','vj');   
-            // return false;         
-            // if (input.files && input.files[0]) {
-            //     var reader = new FileReader();
-            //     reader.onload = function (e) {
-            //         previewContainer.attr('src', e.target.result).show();
-            //     };
-            //     reader.readAsDataURL(input.files[0]);
-            // } else {
-            //     previewContainer.hide();
-            //     previewContainer.attr('src', '');
-            // }
-        // });
+      $(document).on('change','.previewImage' ,function () {                     
+          var input = event.target;
+          var previewContainer = $(this).parent().parent().find('.getpreviewImage');   
+          if (input.files && input.files[0]) {
+              var reader = new FileReader();
+              reader.onload = function (e) {
+                  previewContainer.attr('src', e.target.result).show();
+              };
+              reader.readAsDataURL(input.files[0]);
+          } else {
+              previewContainer.hide();
+              previewContainer.attr('src', '');
+          }
+      });
    
     $(document).on('change','.setSubService',function(){
         var serviceId = $(this).val();

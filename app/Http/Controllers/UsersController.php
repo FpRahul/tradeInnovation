@@ -16,6 +16,8 @@ use Illuminate\Support\Str;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Mail;
+use App\Jobs\SendClientWelcomeEmail;
 
 class UsersController extends Controller
 {
@@ -86,7 +88,7 @@ class UsersController extends Controller
         $request->session()->regenerateToken();
         return redirect()->route('login')->withSuccess('You have been logged out successfully!');
     }
-
+ 
     public function index(Request $request)
     {
         $employeeData = User::with('userdetail')->where('role', '>', '3')->where('archive', 1);
@@ -361,6 +363,8 @@ class UsersController extends Controller
                     ];
                     $logActivity = new LogActivity($logActivity);
                     $logActivity->log();
+                    SendClientWelcomeEmail::dispatch($newClient);
+                    // dd("Job dispatched for client: {$newClient->name}"); 
                     return redirect()->route('client.listing')->withSuccess('Client is successfully inserted!');
                 } else {
                     return back()->with('error', 'Some error is occur.');

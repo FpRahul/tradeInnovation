@@ -1,6 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\User;
+use App\Models\Lead;
+use App\Models\Service;
+
 
 use Illuminate\Http\Request;
 
@@ -8,13 +12,17 @@ class DashboardController extends Controller
 {
     public function index(){
         $header_title_name = 'Dashboard';
-
-        return view('dashboard/index',compact('header_title_name'));
+        $activeAssociate = User::where('role', 3)->where('status', 1)->where('archive',1)->count();
+        $activeClient = User::where('role', 2)->where('status', 1)->where('archive',1)->count();
+        $activeClient = User::where('role', 2)->where('status', 1)->where('archive',1)->count();
+        $activeLeads = Lead::where('status', 1)->count();
+        $activeServices = Service::where('status', 1)->count();
+        return view('dashboard/index',compact('header_title_name','activeAssociate','activeClient','activeLeads','activeServices'));
     } 
 
     public function chartData()
-    {
-        // Example data (can be fetched from a database or calculated dynamically)
+    {   
+        
         $labels = ['Jan', 'Febr', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
 
         return response()->json([
@@ -87,4 +95,6 @@ class DashboardController extends Controller
             ],
         ]);
     }
+
+  
 }

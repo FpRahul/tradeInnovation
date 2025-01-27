@@ -113,6 +113,7 @@
                                                 class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"
                                                 placeholder="Employer Name">
                                         </div>
+<<<<<<< HEAD
                                         <div class="w-full">
                                             <label for="startDate" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
                                                 Start Date
@@ -132,6 +133,19 @@
                                                 <i class="ri-calendar-line"></i>
                                                 </div>
                                             </div>                                                
+=======
+
+                                        
+
+                                        <div class="w-[16%] relative">
+                                        <label for="startDate" class="flex text-[15px] text-[#000] mb-[5px]">
+                                            Start Date
+                                        </label>
+                                        <div class="w-[100%] relative">
+                                            <input type="text" name="startDate" id="startDate" placeholder="YYYY-MM-DD"
+                                                class="daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                                            <i class="ri-calendar-line absolute right-[8px] top-[9px]" id="calendarIcon"></i>
+>>>>>>> 4566d0e83d837eb14ee26359bf874df268a4ef07
                                         </div>
                                     </div>
 

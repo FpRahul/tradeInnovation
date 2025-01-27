@@ -18,6 +18,8 @@ use PHPMailer\PHPMailer\Exception;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Mail;
 use App\Jobs\SendClientWelcomeEmail;
+use App\Jobs\SentForgetPasswordmail;
+
 
 class UsersController extends Controller
 {
@@ -50,18 +52,27 @@ class UsersController extends Controller
     }
 
     public function forgetPassword(Request $request)
-    {
+    {   
+
         if ($request->isMethod('POST')) {
             $credentials = $request->validate([
-                'email' => 'required|email',
+                'email' => 'required|email|exists:users,email',
             ]);
+
             $updatePass = User::where('email', $request->email)->first();
+            // dd($updatePass->toArray());
             if ($updatePass) {
-                $randomNumber = random_int(100000, 999999);
-                $randomNumber = '123456';
-                $hashedPassword = Hash::make($randomNumber);
-                $updatePass->password = $hashedPassword;
-                if ($updatePass->save()) {
+                $newPass = '123456';
+                // dd($newPass);
+                $hashPasswrd = Hash::make($newPass);
+                $updatePass->password = $hashPasswrd;
+
+                
+                $updatePass->save();
+                SentForgetPasswordmail::dispatch($updatePass , $newPass);
+
+                // dd($updatePass);
+                if ($updatePass) {
                     $logActivity[] = [
                         'user_id' => $updatePass->id,
                         'title' => 'Forgot Password',
@@ -70,7 +81,7 @@ class UsersController extends Controller
                     ];
                     $logActivity = new LogActivity($logActivity);
                     $logActivity->log();
-                    return redirect()->route('login')->withSuccess('Password is successfully updated! ');
+                    return redirect()->route('login')->withSuccess('An email has been sent to your register address ');
                 } else {
                     return back()->with('error', 'Some error is occur.');
                 }
@@ -119,8 +130,7 @@ class UsersController extends Controller
     {
 
         $clientIP = \Request::ip();
-        //  $serverIP = gethostbyname(gethostname());
-        // dd($clientIP);
+        
         $userAgent = \Request::header('User-Agent');
         function getOperatingSystem($userAgent)
         {
@@ -255,12 +265,9 @@ class UsersController extends Controller
                 return back()->with('error', 'Some error is occur.');
             }
         }
-
-
         $header_title_name = 'User';
         return view('users.add-user', compact('roleData', 'newUser', 'newUserDetails', 'newUserExperiences', 'header_title_name', 'moduleName'));
     }
-
     public function deleteUser($id = null)
     {
         $employeeData = User::where('id', $id)->first();
@@ -277,7 +284,6 @@ class UsersController extends Controller
             return redirect()->back()->with('success', 'Your data is successfully deleted');
         }
     }
-
     public function deleteRepeaterUser(Request $request)
     {
 
@@ -316,14 +322,15 @@ class UsersController extends Controller
     public function addClient(Request $request, $id = null)
     {
         $incorporationDataList = CategoryOption::where('status', 1)->where('type', 2)->get();
+        
         $referDataList = CategoryOption::where('status', 1)->where('type', 3)->get();
-
+        
         if ($id > 0) {
             $newClient = User::find($id);
             $newClientDetails = UserDetail::where('userId', $id)->first();
             $hashedPassword = $newClient->password;
             $email = "required|email";
-            $moduleName = "Update ";
+            $moduleName = "Update";
             $logAct = 'updated';
         } else {
             $newClient = new User();
@@ -363,7 +370,7 @@ class UsersController extends Controller
                     ];
                     $logActivity = new LogActivity($logActivity);
                     $logActivity->log();
-                    SendClientWelcomeEmail::dispatch($newClient);
+                    SendClientWelcomeEmail::dispatch($newClient,$newClientDetails);
                     // dd("Job dispatched for client: {$newClient->name}"); 
                     return redirect()->route('client.listing')->withSuccess('Client is successfully inserted!');
                 } else {
@@ -374,7 +381,8 @@ class UsersController extends Controller
             }
         }
         $header_title_name = 'User';
-        return view('users.add-client', compact('newClient', 'newClientDetails', 'header_title_name', 'moduleName', 'incorporationDataList', 'referDataList'));
+        // dd($newClientDetails);
+        return view('users.add-client', compact('newClient', 'newClientDetails', 'header_title_name', 'moduleName', 'F', 'referDataList'));
     }
 
     public function associates(Request $request)
@@ -423,7 +431,6 @@ class UsersController extends Controller
             $credentials = $request->validate([
                 'email' =>  $email,
             ]);
-
             $newAssociate->name = $request->name;
             $newAssociate->Profession = $request->profession;
             $newAssociate->role = $request->role;
@@ -682,5 +689,8 @@ class UsersController extends Controller
         $systemLogs = $query->paginate(8)->appends($request->query());
         
         return view('users.logs', compact('header_title_name', 'systemLogs', 'activityTitles', 'activityUsers', 'filterOptions'));
+    }
+    public function resetPassword(Request $request){
+        dd($request->all());
     }
 }

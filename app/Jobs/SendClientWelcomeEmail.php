@@ -12,13 +12,17 @@ class SendClientWelcomeEmail implements ShouldQueue
     use Queueable, SerializesModels;
     public $newClient;
     public $filePath;
-    public function __construct($newClient, $filePath = null)
+    public $newClientDetails;
+
+    public function __construct($newClient, $newClientDetails, $filePath = null)
     {
         $this->newClient = $newClient;
         $this->filePath = $filePath;
+        $this->filePath = $filePath;
+        $this->newClientDetails  = $newClientDetails;
     }
     public function handle(): void
     {   
-        Mail::to($this->newClient->email)->send(new ClientWelcomeEmail($this->newClient, $this->filePath));
+        Mail::to($this->newClient->email)->send(new ClientWelcomeEmail($this->newClient, $this->newClientDetails,$this->filePath));
     }
 }

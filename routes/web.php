@@ -12,6 +12,9 @@ use App\Http\Middleware\CheckPermission;
 //Users Routes
 Route::match(['get','post'],'/', [UsersController::class,'login'])->name('login');
 Route::match(['get','post'],'forget_password', [UsersController::class,'forgetPassword'])->name('forgetPassword');
+Route::get('reset/password/{token?}',[UsersController::class, 'resetPassword'])->name('resetPassword.resetPassword');
+Route::post('password/reset',[UsersController::class, 'passwordReset'])->name('passwordReset.passwordReset');
+
 Route::middleware(['auth', CheckPermission::class])->group(function () {
     //Dashboard Routes
     Route::get('/logout',[UsersController::class,'logout'])->name('user.logout');
@@ -23,13 +26,13 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     //Users Routes
     Route::prefix('users')->controller(UsersController::class)->group(function () {
         Route::match(['POST','GET'],'/', 'index')->name('users.listing');
-        Route::match(['POST', 'GET'], '/add-user/{id?}', 'addUser')->name('users.adduser');
+        Route::match(['POST','GET'], '/add-user/{id?}', 'addUser')->name('users.adduser');
         Route::get('/delete/{id?}', 'deleteUser')->name('users.delete');
         Route::post('/deleterepeater', 'deleteRepeaterUser')->name('users.deleterepeater');
-        Route::match(['POST','GET'],'/client', 'clients')->name('client.listing');
-        Route::match(['POST', 'GET'], '/add-client/{id?}', 'addClient')->name('users.addclient');
-        Route::match(['POST','GET'],'/associates', 'associates')->name('associate.listing');
-        Route::match(['POST', 'GET'], '/add-associate/{id?}', 'addAssociate')->name('users.addassociate');
+        Route::match(['POST','GET'], '/client', 'clients')->name('client.listing');
+        Route::match(['POST','GET'], '/add-client/{id?}', 'addClient')->name('users.addclient');
+        Route::match(['POST','GET'], '/associates', 'associates')->name('associate.listing');
+        Route::match(['POST','GET'], '/add-associate/{id?}', 'addAssociate')->name('users.addassociate');
 
         Route::match(['POST', 'GET'], '/user-professions', 'userProfessions')->name('professions.index');
         Route::match(['POST', 'GET'], '/add-professions/{id?}', 'addProfessions')->name('professions.add');

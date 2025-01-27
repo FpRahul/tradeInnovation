@@ -114,15 +114,7 @@
                                                 placeholder="Employer Name">
                                         </div>
 
-                                        <!-- ***** -->
-                                        <!-- <div class="w-[16%] relative">
-                        <label class="flex text-[15px] text-[#000] mb-[5px]">Date Range</label>
-                        <div class="w-[100%] relative">
-                            <input type="text" placeholder="Start Date" name="dateRange" class="daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" value="{{ $filterOptions['completeDate'] }}">
-                            <i class="ri-calendar-line absolute right-[8px] top-[9px]" ></i>
-                        </div>
-                    </div> -->
-                                        <!-- ***** -->
+                                        
 
                                         <div class="w-[16%] relative">
                                         <label for="startDate" class="flex text-[15px] text-[#000] mb-[5px]">

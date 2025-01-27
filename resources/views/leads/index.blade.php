@@ -108,7 +108,7 @@
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                             <span class="inline-flex items-center gap-[10px]"> 
                             @if ($leadData->source > 0)
-                                 {{ getSourceData($leadData->source) }}
+                                 {{ getSourceData($leadData->source)->name }}
                             @endif
 
 
@@ -143,7 +143,7 @@
                                 <div class="dropdown_menus absolute right-0 z-10 mt-2 w-[100px] origin-top-right rounded-md bg-white shadow-md ring-1 ring-black/5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                                     <div class="text-start" role="none">
                                         <a href="{{ route('leads.add')}}/{{$leadData->id}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Edit</a>
-                                        <a href="javascript:void(0)" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal" type="button">Assign</a>
+                                        {{-- <a href="javascript:void(0)" data-id="{{$leadData->id}}" class="lead_assign_to_user block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal" type="button">Assign</a> --}}
                                         <a href="#" data-id="{{$leadData->id}}" class="lead_archive block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Archive</a>
                                         <a href="{{ route('leads.quote')}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Send Quote</a>
                                         <a href="{{ route('leads.logs')}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Logs</a>
@@ -181,20 +181,40 @@
             </div>
             <!-- Modal body -->
             <div class="p-[20px]">
-                <form method="POST" class="space-y-[20px]">
-
-                    <input type="hidden" name="role" id="role" value="2">
+                <form method="POST" action="{{ route('leads.assign')}}" class="space-y-[20px]">
+                    @csrf
+                    <input type="hidden" name="lead_id" id="modal_lead_id" value="">
+                    <input type="hidden" name="assign_by" id="assign_by" value="{{auth()->user()->id}}">
                     <div class="flex flex-col md:flex-row gap-[20px]">
                         <div class="w-full md:w-1/2">
                             <label for="selectuser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Select User</label>
                             <select name="selectuser" id="selectuser" class="allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                                 <option value="">Select User</option>
-                                <option value="1">1</option>
+                                @if ($userList && $userList->isNotEmpty())
+                                    @foreach ($userList as $userData)
+                                    <option value="{{ $userData['id']}}">{{ $userData['name']}}</option>
+ 
+                                    @endforeach
+                                @endif
                             </select>
                         </div>
                         <div class="w-full md:w-1/2">
-                            <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Deadline</label>
-                            <input type="date" name="deadline" id="deadline" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                            <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+                                Dead line
+                            </label>                           
+                            <div class="w-[100%] relative">
+                                <input 
+                                    type="text" 
+                                    placeholder="Dead Line" 
+                                    name="deadline" 
+                                    class="daterangepicker-deadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
+                                    value="" 
+                                    autocomplete="off"
+                                >
+                                <div class="absolute right-[10px] top-[10px]">
+                                <i class="ri-calendar-line"></i>
+                                </div>
+                            </div>     
                         </div>
                     </div>
                     <div class="">
@@ -212,11 +232,28 @@
 </div>
 <script>
   $(document).on('click', '.lead_archive', function () {
-    var id = $(this).data('id'); 
-    if (confirm('Are you sure you want to archive this lead?')) {
-        window.location.href = `{{ route('leads.archive') }}/${id}`;
-    }
-});
+        var id = $(this).data('id'); 
+        if (confirm('Are you sure you want to archive this lead?')) {
+            window.location.href = `{{ route('leads.archive') }}/${id}`;
+        }
+    });
+
+    $(document).ready(function() {
+        $('.daterangepicker-deadline').daterangepicker({
+            singleDatePicker: true, 
+            opens: 'right',
+            locale: {
+                format: 'DD MMM YYYY' 
+            }
+        }).on('apply.daterangepicker', function(ev, picker) {
+            console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+        });
+    });
+
+    $(document).on('click','.lead_assign_to_user',function(){
+        $('#modal_lead_id').val($(this).data('id'));
+
+    })
 
 </script>
 @stop

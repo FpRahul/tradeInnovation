@@ -1,6 +1,8 @@
+@php
+    namespace App;
+@endphp
 @extends('layouts.default')
 @section('content')
-
 <div>
     <div class="flex items-center justify-between mb-[20px]">
         <div>
@@ -93,7 +95,7 @@
                         <th class="text-center bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                             Action
                         </th>
-                    </tr>
+                    </tr> 
                 </thead>
                 <tbody>
                     @if ($leadList && $leadList->isNotEmpty())
@@ -105,9 +107,11 @@
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                             <span class="inline-flex items-center gap-[10px]"> 
-                                @if ($leadData->source > 0)
-                                    {{ getSourceData($leadData->source) ? getSourceData($leadData->source)->name : '' }}
-                                @endif
+                            @if ($leadData->source > 0)
+                                 {{ getSourceData($leadData->source) }}
+                            @endif
+
+
                                 <span><img src="{{ asset('assets/images/i-icon.png') }}" alt="icon"></span></span>
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
@@ -122,7 +126,9 @@
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                             @if (!empty($leadData->leadService))
                                 {{ implode(', ', collect(getServiceData($leadData->leadService))->pluck('serviceName')->toArray()) }}
-                            @endif                       
+                           
+                            @endif   
+                            
                         </td>
                         <td class="text-center border-b-[1px] border-[#0000001A] py-[12px] px-[15px]">
                             {{-- @if (in_array('leads.add',$permissionDetails['accessableRoutes']) || )

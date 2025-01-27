@@ -16,7 +16,6 @@ class LeadsController extends Controller
         $leadList = $leadList->paginate(env("PAGINATION_COUNT"));
         $sourceList = CategoryOption::where('type',3)->where('status',1)->get();
         $serviceList = Service::where('status',1)->get();
-
         $header_title_name = 'Leads';
         return view('leads/index',compact('header_title_name','leadList','sourceList','serviceList'));
     }

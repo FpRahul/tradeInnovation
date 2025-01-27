@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('menus', function (Blueprint $table) {
-            $table->id();
-            $table->integer('parentId')->nullable(0); 
-            $table->string('menuName')->nullable(true);     
-            $table->string('icon')->nullable(true);   
-            $table->timestamps();
+        Schema::table('logs', function (Blueprint $table) {
+            $table->string('ip_address')->nullable();
+            $table->string('operating_system')->nullable();
         });
     }
 
@@ -25,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('menus');
+        Schema::table('logs', function (Blueprint $table) {
+            $table->dropColumn(['ip_address', 'operating_system']);
+        });
     }
 };

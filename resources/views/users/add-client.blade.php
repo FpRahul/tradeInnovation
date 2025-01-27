@@ -36,7 +36,7 @@
                             @endforeach                                                            
                         @endif
                     </select>
-                    incorporationDataList
+                    
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="number" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mobile Number <strong class="text-[#f83434]">*</strong></label>

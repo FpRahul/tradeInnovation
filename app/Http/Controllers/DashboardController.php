@@ -4,20 +4,27 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Lead;
 use App\Models\Service;
+use App\Models\Log;
+
 
 
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
         $header_title_name = 'Dashboard';
         $activeAssociate = User::where('role', 3)->where('status', 1)->where('archive',1)->count();
         $activeClient = User::where('role', 2)->where('status', 1)->where('archive',1)->count();
         $activeClient = User::where('role', 2)->where('status', 1)->where('archive',1)->count();
         $activeLeads = Lead::where('status', 1)->count();
         $activeServices = Service::where('status', 1)->count();
-        return view('dashboard/index',compact('header_title_name','activeAssociate','activeClient','activeLeads','activeServices'));
+
+        $getLogs = Log::with(['user' => function ($getLogs) {
+            $getLogs->select('id','name'); // Specify the columns you want from the `user` table
+        }])->orderBy('id', 'desc');
+        $systemLogs = $getLogs->paginate(8)->appends($request->query());
+        return view('dashboard/index',compact('header_title_name','activeAssociate','activeClient','activeLeads','activeServices','systemLogs'));
     } 
 
     public function chartData()
@@ -94,7 +101,16 @@ class DashboardController extends Controller
                 ]
             ],
         ]);
-    }
+    } 
+
+    // public function getActionLog(Request $request){
+    //     $autoId = $request->input('auto');
+    //     if($autoId){
+    //         $getLogs = Log::with('user')->find($autoId);
+    //         return view('users.logs', compact('getLogs'));
+    //         // dd($getLogs);
+    //     }
+    // }
 
   
 }

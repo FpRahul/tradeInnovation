@@ -44,3 +44,26 @@ if(!function_exists('getSubService')){
     }
 }
 
+if (!function_exists('getOperatingSystem')) {
+    function getOperatingSystem($userAgent)
+    {
+        $osArray = [
+            'Windows' => 'Windows',
+            'Mac' => 'Mac',
+            'Linux' => 'Linux',
+            'Android' => 'Android',
+            'iPhone' => 'iPhone',
+            'iPad' => 'iPad',
+            'Unix' => 'Unix',
+        ];
+
+        foreach ($osArray as $key => $os) {
+            if (stripos($userAgent, $key) !== false) {
+                return $os;
+            }
+        }
+
+        return 'Unknown';
+    }
+}
+

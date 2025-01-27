@@ -10,6 +10,8 @@ use App\Models\UserDetail;
 use App\Models\RoleMenu;
 use App\Models\MenuAction;
 use App\Models\Menu;
+use App\Models\LeadAssign;
+
 use Illuminate\Support\Facades\Auth;
 class User extends Authenticatable
 {
@@ -123,5 +125,9 @@ class User extends Authenticatable
 
     public function userexperience(){
         return $this->hasOne(UserExperience::class,'userId','id');
+    }
+
+    public function assignLead(){
+        return $this->hasMany(LeadAssign::class,'user_id','id');
     }
 }

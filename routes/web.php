@@ -70,7 +70,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::post('/deleterepeater', 'deleteRepeaterLead')->name('lead.deleterepeater');
         Route::post('/deleteattchmentrepeater', 'deleteAttachmentRepeaterLead')->name('lead.deleteattachmentrepeater');
         Route::match(['POST','GET'],'/archive/{id?}', 'archiveLead')->name('leads.archive');
-
+        Route::POST('/setassign','setAssignToUser')->name('leads.assign');
     });
     //Tasks Routes
     Route::prefix('tasks')->controller(TasksController::class)->group(function () {

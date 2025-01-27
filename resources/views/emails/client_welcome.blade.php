@@ -4,8 +4,9 @@
             <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); overflow: hidden;">
                 
                 <tr>
-                    <td style="background: url('login-bg.jpg') center/cover no-repeat; padding: 60px 30px; text-align: center;">
-                        <img src="logo-w.png" alt="Your Logo" style="max-width: 200px; margin-bottom: 10px;">
+                <td style="background: url('assets/images/login-bg.jpg') center/cover no-repeat; padding: 60px 30px; text-align: center;">
+
+                        <img src="https://futureprofilez.com/wp-content/themes/fptheme/assets2/img/logo.png?dshf" alt="Your Logo" style="max-width: 200px; margin-bottom: 10px;">
                         <h1 style="color: #ffffff; font-size: 26px; margin: 0; font-weight: bold;">Welcome to Our Platform!</h1>
                     </td>
                 </tr>
@@ -15,7 +16,7 @@
                         <p style="font-size: 16px; line-height: 1.8; margin: 0 0 10px; color: #555;">
                             Hi <strong>{{ $client->name }}</strong>,
                         </p>
-                        <p style="font-size: 16px; line-height: 1.8; margin: 0 0 20px; color: #555;">
+                        <p style="font-size: 16px; line-height: 1.8; margin: 0 0 20px; color: #555;"> 
                             Thank you for joining our platform. Below are your account details:
                         </p>
                         <!-- Details Table -->
@@ -30,7 +31,7 @@
                             </tr>
                             <tr>
                                 <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">Incorporation Type:</td>
-                                <td width="50%" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">{{ $client->incorporationType }}</td>
+                                <td width="50%" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">{{ $newClientDetails->incorporationType }}</td>
                             </tr>
                             <tr>
                                 <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">Number:</td>

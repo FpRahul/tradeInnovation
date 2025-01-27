@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Mail;
+
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -8,28 +10,33 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Attachment;
 
-class ClientWelcomeEmail extends Mailable
+
+class forgotPassword extends Mailable
 {
     use Queueable, SerializesModels;
-
-    public $newClient;
+    public $updatePass;
     public $filePath;
-    public $newClientDetails;
+    public $newPass;
 
-    
-    public function __construct($newClient , $newClientDetails,$filePath = null)
+
+    /**
+     * Create a new message instance.
+     *
+     * @param $updatePass
+     * @param $hashedToken
+     * @param $filePath
+     */
+    public function __construct($updatePass,$newPass,$filePath)
     {
-        $this->newClient = $newClient;
+        $this->updatePass = $updatePass;
         $this->filePath = $filePath;
-        $this->newClientDetails = $newClientDetails;
+        $this->newPass = $newPass;
 
     }
-
-    
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: "Welcome {$this->newClient->name}!",
+            subject: "Forgot Password {$this->updatePass->name}",
         );
     }
 
@@ -37,11 +44,10 @@ class ClientWelcomeEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.client_welcome',
+           view: 'emails.forgetPassword_template',
             with: [
-                'client' => $this->newClient,
-                'client' => $this->newClient,
-                'newClientDetails' => $this->newClientDetails
+                'updatePass' => $this->updatePass,
+                'newPass' => $this->newPass
             ]
         );
     }

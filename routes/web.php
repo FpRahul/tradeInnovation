@@ -28,7 +28,6 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::post('/deleterepeater', 'deleteRepeaterUser')->name('users.deleterepeater');
         Route::match(['POST','GET'],'/client', 'clients')->name('client.listing');
         Route::match(['POST', 'GET'], '/add-client/{id?}', 'addClient')->name('users.addclient');
-
         Route::match(['POST','GET'],'/associates', 'associates')->name('associate.listing');
         Route::match(['POST', 'GET'], '/add-associate/{id?}', 'addAssociate')->name('users.addassociate');
 
@@ -40,7 +39,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
 
         Route::match(['POST', 'GET'], '/user-referral', 'userReferral')->name('referral.index');
         Route::match(['POST', 'GET'], '/add-referral/{id?}', 'addReferral')->name('referral.add');
-
+ 
         Route::get('/category-status/{id?}', 'categoryStatus')->name('users.category.status');
         Route::get('/category-delete/{id?}', 'categoryDelete')->name('users.category.delete');
 
@@ -49,13 +48,11 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
 
         Route::get('/userstatus','userStatus')->name('users.status');
     });
-
     //Settings Routes
     Route::prefix('settings')->controller(SettingsController::class)->group(function () {
         Route::get('/roles', 'roles')->name('settings.roles');
         Route::match(['POST','GET'],'/add-role/{id?}', 'addRole')->name('settings.addrole');
     });
-
     //Leads Routes
     Route::prefix('leads')->controller(LeadsController::class)->group(function () {
         Route::get('/', 'index')->name('leads.index');
@@ -69,19 +66,16 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::match(['POST','GET'],'/archive/{id?}', 'archiveLead')->name('leads.archive');
 
     });
-
     //Tasks Routes
     Route::prefix('tasks')->controller(TasksController::class)->group(function () {
         Route::get('/', 'index')->name('task.index');
         Route::get('/logs', 'logs')->name('task.log');
         Route::get('/details', 'detail')->name('task.detail');
     });
-
     //Services Routes
     Route::prefix('services')->controller(ServicesController::class)->group(function () {
         Route::match(['POST','GET'],'/', 'index')->name('services.index');
         Route::match(['POST','GET'],'/add-service', 'addService')->name('service.add');
-
         Route::match(['POST','GET'],'/subservice/{id?}', 'addSubService')->name('services.subService.add');
         Route::match(['POST','GET'],'/changestatus/{id?}','serviceStatus')->name('service.status');
         Route::post('/deleterepeater', 'deleteRepeaterSubserv')->name('subservice.deleterepeater');

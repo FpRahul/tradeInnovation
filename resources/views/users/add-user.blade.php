@@ -133,8 +133,10 @@
                                                 </div>
                                             </div>                                                
                                         </div>
-                                        <div class="w-full">
-                                            <label for="endDate" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+                                    </div>
+
+                                    <div class="w-[16%] relative">
+                                            <label for="endDate" cclass="flex text-[15px] text-[#000] mb-[5px]">
                                                 End Date
                                             </label>
                                             {{-- <input type="date" name="endDate" id="endDate" value="{{ $exVal['endDate']}}"
@@ -352,6 +354,45 @@
                 previewContainer.attr('src', '');
             }
         });
+        
+        // $('.daterangepicker-item').daterangepicker({
+            
+        //     opens: 'right',
+        //     locale: {
+        //         format: 'DD MMM YYYY'
+        //     }
+        // }, function(start, end, label) {
+        //     console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+        // });
+        $('#startDate').on('click',function(){
+            $(this).attr('type', 'text');
+            $('.startdateShow').show();
+         
+        })
+        $('#startDate').daterangepicker({
+        singleDatePicker: true,  
+        showDropdowns: true,     
+        locale: {
+            format: 'YYYY-MM-DD' 
+        }
+    });
+
+ 
+  
+
+      $('#endDate').on('click',function(){
+            $(this).attr('type', 'text');
+            $('.startdateShow').show();
+         
+        })
+        $('#endDate').daterangepicker({
+        format: 'YYYY-MM-DD' ,
+        singleDatePicker: true, 
+        showDropdowns: true,
+        locale: {
+            format: 'YYYY-MM-DD' 
+        }
+      });
     });
   
     $(document).ready(function() {

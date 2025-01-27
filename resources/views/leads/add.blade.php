@@ -83,6 +83,30 @@
                     </select>
                 </div>
             </div>
+            <div class="flex flex-col md:flex-row gap-[20px]">
+                <div class="w-full md:w-1/2">
+                    <label for="taskdescription" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Task Description</label>
+                    <textarea type="text" name="taskdescription" id="taskdescription" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required></textarea>
+                </div>
+                <div class="w-full md:w-1/2">
+                    <label for="taskdeadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+                       Task DeadLine
+                    </label>                           
+                    <div class="w-[100%] relative">
+                        <input 
+                            type="text" 
+                            placeholder="Dead Line" 
+                            name="taskdeadline" 
+                            class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
+                            value="" 
+                            autocomplete="off"
+                        >
+                        <div class="absolute right-[10px] top-[10px]">
+                        <i class="ri-calendar-line"></i>
+                        </div>
+                    </div>     
+                </div>
+            </div>
             <div>
                 {{-- service repeater start --}}
                 <label class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Services</label>
@@ -194,12 +218,7 @@
                                                         <img src="{{asset(!empty($attachmentVal['document']) ? 'Image/'.$attachmentVal['document'] : 'assets/images/noimage.png')}}" class="getpreviewImage w-[100%] max-w-[150px] rounded-[10px] object-cover" />
                                                         
                                                         <div class="relative">
-                                                            <label for="attachmentFile" class="cursor-pointer w-[50px] h-[50px] rounded-[8px] flex items-center justify-center border border-dashed border-[#13103a4d] ">
-                                                                <svg class="cursor-pointer" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path d="M13.9395 8.95044H8.93945V13.9504C8.93945 14.5004 8.48945 14.9504 7.93945 14.9504C7.38945 14.9504 6.93945 14.5004 6.93945 13.9504V8.95044H1.93945C1.38945 8.95044 0.939453 8.50044 0.939453 7.95044C0.939453 7.40044 1.38945 6.95044 1.93945 6.95044H6.93945V1.95044C6.93945 1.40044 7.38945 0.950439 7.93945 0.950439C8.48945 0.950439 8.93945 1.40044 8.93945 1.95044V6.95044H13.9395C14.4895 6.95044 14.9395 7.40044 14.9395 7.95044C14.9395 8.50044 14.4895 8.95044 13.9395 8.95044Z" fill="#13103A" />
-                                                                </svg>
-                                                            </label>
-                                                            <input class="previewImage " type="file" name="attachmentFile" id="attachmentFile">
+                                                            <input class="previewImage " type="file" name="attachmentFile" >
                                                         </div>
                                                     </div>
                                                 </div>                                            
@@ -225,12 +244,7 @@
                                                     <img src="/assets/images/noimage.png" class="getpreviewImage w-[100%] max-w-[150px] rounded-[10px] object-cover" />
                                                     
                                                     <div class="relative">
-                                                        <label for="attachmentFile" class="cursor-pointer w-[50px] h-[50px] rounded-[8px] flex items-center justify-center border border-dashed border-[#13103a4d] ">
-                                                            <svg class="cursor-pointer" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path d="M13.9395 8.95044H8.93945V13.9504C8.93945 14.5004 8.48945 14.9504 7.93945 14.9504C7.38945 14.9504 6.93945 14.5004 6.93945 13.9504V8.95044H1.93945C1.38945 8.95044 0.939453 8.50044 0.939453 7.95044C0.939453 7.40044 1.38945 6.95044 1.93945 6.95044H6.93945V1.95044C6.93945 1.40044 7.38945 0.950439 7.93945 0.950439C8.48945 0.950439 8.93945 1.40044 8.93945 1.95044V6.95044H13.9395C14.4895 6.95044 14.9395 7.40044 14.9395 7.95044C14.9395 8.50044 14.4895 8.95044 13.9395 8.95044Z" fill="#13103A" />
-                                                            </svg>
-                                                        </label>
-                                                        <input class="previewImage " type="file" name="attachmentFile" id="attachmentFile" {{ empty($leadAttachment->document) ? 'required':''}}>
+                                                        <input class="previewImage " type="file" name="attachmentFile"  {{ empty($leadAttachment->document) ? 'required':''}}>
                                                     </div>
                                                 </div>
                                             </div>                                            
@@ -268,20 +282,20 @@
 <script>
    
     
-      $(document).on('change','.previewImage' ,function () {                     
-          var input = event.target;
-          var previewContainer = $(this).parent().parent().find('.getpreviewImage');   
-          if (input.files && input.files[0]) {
-              var reader = new FileReader();
-              reader.onload = function (e) {
-                  previewContainer.attr('src', e.target.result).show();
-              };
-              reader.readAsDataURL(input.files[0]);
-          } else {
-              previewContainer.hide();
-              previewContainer.attr('src', '');
-          }
-      });
+    $(document).on('change','.previewImage' ,function () {                     
+        var input = event.target;
+        var previewContainer = $(this).parent().parent().find('.getpreviewImage');   
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                previewContainer.attr('src', e.target.result).show();
+            };
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            previewContainer.hide();
+            previewContainer.attr('src', '');
+        }
+    });
    
     $(document).on('change','.setSubService',function(){
         var serviceId = $(this).val();
@@ -301,6 +315,7 @@
             }
         });
     });
+
     $(document).on('change','.showSourceListName',function(){
         var value = $(this).val();
         if(value == 14 || value == 15 || value == 19){
@@ -323,6 +338,18 @@
         }else{
             $('.sourceTypeNameDiv').css('display','none');
         }
+    });
+
+    $(document).ready(function() {
+        $('.daterangepicker-taskdeadline').daterangepicker({
+            singleDatePicker: true, 
+            opens: 'right',
+            locale: {
+                format: 'DD MMM YYYY' 
+            }
+        }).on('apply.daterangepicker', function(ev, picker) {
+            console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+        });
     });
 </script>
 @stop

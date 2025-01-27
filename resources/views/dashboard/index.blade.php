@@ -103,179 +103,73 @@
             <h4 class="text-[14px] leading-[16px] text-[#000000] font-[500] tracking-[0.04em] ">Recent Activity</h4>
         </div>
         <div class="overflow-x-auto ">
-            <table width="100%" cellpadding="0" cellspacing="0" class="min-w-[900px]">
+        <table width="100%" cellpadding="0" cellspacing="0" class="min-w-[600px]">
                 <thead>
                     <tr>
-                        <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
-                            Client name
-                        </th>
-                        <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
-                            Lead Id
-                        </th>
-                        <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
-                            Services
+                        <th class="text-start w-[200px] bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
+                            User
                         </th>
                         <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                             Activity
                         </th>
                         <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
-                            Log Date
+                            Details
                         </th>
-                        <th class="text-center bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
-                            Action
+                        <!-- ip -->
+                        <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                            IP
+                        </th>
+                        <!-- User Agent -->
+                        <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                        User Agent
+                        </th>
+                        <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                            Action Date
+                        </th>
+                        <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                            Action Date
                         </th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="get_dynamic_data">
+                    @if ($systemLogs && $systemLogs->isNotEmpty())
+                    @foreach ($systemLogs as $logs)
                     <tr>
-                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px] pl-[25px]">
-                            Rahul
+                        <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
+                            {{$logs->user->name}}
                         </td>
-                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            #004
+                        <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                            {{$logs->title}}
                         </td>
-                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            Trademark, Patent
+                        <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                            {{$logs->description}}
                         </td>
-                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            Document verified on the government portal
+                        @if($logs->ip_address)
+                        <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                        {{$logs->ip_address}}
                         </td>
-                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            2023-02-19
+                        @else
+                        <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                        Not Available
+                       </td>
+                        @endif
+                        @if($logs->operating_system)
+                        <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                        {{$logs->operating_system}}
                         </td>
-                        <td class="text-center border-b-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            <a href="#" class="inline-flex w-[27px] h-[27px] items-center justify-center bg-[#F1F3F4] rounded-[100%]">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <g clip-path="url(#clip0_446_3019)">
-                                        <path d="M0.762451 7.05005C0.762451 7.05005 3.01245 2.55005 6.94995 2.55005C10.8875 2.55005 13.1375 7.05005 13.1375 7.05005C13.1375 7.05005 10.8875 11.55 6.94995 11.55C3.01245 11.55 0.762451 7.05005 0.762451 7.05005Z" stroke="#13103A" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M6.94995 8.73755C7.88193 8.73755 8.63745 7.98203 8.63745 7.05005C8.63745 6.11807 7.88193 5.36255 6.94995 5.36255C6.01797 5.36255 5.26245 6.11807 5.26245 7.05005C5.26245 7.98203 6.01797 8.73755 6.94995 8.73755Z" stroke="#13103A" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round" />
-                                    </g>
-                                    <defs>
-                                        <clipPath id="clip0_446_3019">
-                                            <rect width="13.5" height="13.5" fill="white" transform="translate(0.199951 0.300049)" />
-                                        </clipPath>
-                                    </defs>
-                                </svg>
-                            </a>
+                        @else
+                        <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                        Not Available
                         </td>
-                    </tr>
-                    <tr>
-                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px] pl-[25px]">
-                            Rahul
-                        </td>
-                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            #004
-                        </td>
-                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            Trademark, Patent
-                        </td>
-                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            Document verified on the government portal
-                        </td>
-                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            2023-02-19
-                        </td>
-                        <td class="text-center border-b-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            <a href="#" class="inline-flex w-[27px] h-[27px] items-center justify-center bg-[#F1F3F4] rounded-[100%]">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <g clip-path="url(#clip0_446_3019)">
-                                        <path d="M0.762451 7.05005C0.762451 7.05005 3.01245 2.55005 6.94995 2.55005C10.8875 2.55005 13.1375 7.05005 13.1375 7.05005C13.1375 7.05005 10.8875 11.55 6.94995 11.55C3.01245 11.55 0.762451 7.05005 0.762451 7.05005Z" stroke="#13103A" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M6.94995 8.73755C7.88193 8.73755 8.63745 7.98203 8.63745 7.05005C8.63745 6.11807 7.88193 5.36255 6.94995 5.36255C6.01797 5.36255 5.26245 6.11807 5.26245 7.05005C5.26245 7.98203 6.01797 8.73755 6.94995 8.73755Z" stroke="#13103A" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round" />
-                                    </g>
-                                    <defs>
-                                        <clipPath id="clip0_446_3019">
-                                            <rect width="13.5" height="13.5" fill="white" transform="translate(0.199951 0.300049)" />
-                                        </clipPath>
-                                    </defs>
-                                </svg>
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px] pl-[25px]">
-                            Rahul
-                        </td>
-                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            #004
-                        </td>
-                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            Trademark, Patent
-                        </td>
-                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            Document verified on the government portal
-                        </td>
-                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            2023-02-19
-                        </td>
-                        <td class="text-center border-b-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            <a href="#" class="inline-flex w-[27px] h-[27px] items-center justify-center bg-[#F1F3F4] rounded-[100%]">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <g clip-path="url(#clip0_446_3019)">
-                                        <path d="M0.762451 7.05005C0.762451 7.05005 3.01245 2.55005 6.94995 2.55005C10.8875 2.55005 13.1375 7.05005 13.1375 7.05005C13.1375 7.05005 10.8875 11.55 6.94995 11.55C3.01245 11.55 0.762451 7.05005 0.762451 7.05005Z" stroke="#13103A" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M6.94995 8.73755C7.88193 8.73755 8.63745 7.98203 8.63745 7.05005C8.63745 6.11807 7.88193 5.36255 6.94995 5.36255C6.01797 5.36255 5.26245 6.11807 5.26245 7.05005C5.26245 7.98203 6.01797 8.73755 6.94995 8.73755Z" stroke="#13103A" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round" />
-                                    </g>
-                                    <defs>
-                                        <clipPath id="clip0_446_3019">
-                                            <rect width="13.5" height="13.5" fill="white" transform="translate(0.199951 0.300049)" />
-                                        </clipPath>
-                                    </defs>
-                                </svg>
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px] pl-[25px]">
-                            Rahul
-                        </td>
-                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            #004
-                        </td>
-                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            Trademark, Patent
-                        </td>
-                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            Document verified on the government portal
-                        </td>
-                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            2023-02-19
-                        </td>
-                        <td class="text-center border-b-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            <a href="#" class="inline-flex w-[27px] h-[27px] items-center justify-center bg-[#F1F3F4] rounded-[100%]">
-                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <g clip-path="url(#clip0_446_3019)">
-                                        <path d="M0.762451 7.05005C0.762451 7.05005 3.01245 2.55005 6.94995 2.55005C10.8875 2.55005 13.1375 7.05005 13.1375 7.05005C13.1375 7.05005 10.8875 11.55 6.94995 11.55C3.01245 11.55 0.762451 7.05005 0.762451 7.05005Z" stroke="#13103A" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M6.94995 8.73755C7.88193 8.73755 8.63745 7.98203 8.63745 7.05005C8.63745 6.11807 7.88193 5.36255 6.94995 5.36255C6.01797 5.36255 5.26245 6.11807 5.26245 7.05005C5.26245 7.98203 6.01797 8.73755 6.94995 8.73755Z" stroke="#13103A" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round" />
-                                    </g>
-                                    <defs>
-                                        <clipPath id="clip0_446_3019">
-                                            <rect width="13.5" height="13.5" fill="white" transform="translate(0.199951 0.300049)" />
-                                        </clipPath>
-                                    </defs>
-                                </svg>
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class=" text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px] pl-[25px]">
-                            Rahul
-                        </td>
-                        <td class=" text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            #004
-                        </td>
-                        <td class=" text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            Trademark, Patent
-                        </td>
-                        <td class=" text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            Document verified on the government portal
-                        </td>
-                        <td class=" text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            2023-02-19
+                        @endif
+                        <td class="bor  der-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                            {{ date('d M Y',strtotime($logs->created_at))}}
                         </td>
                         <td class="text-center  text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            <a href="#" class="inline-flex w-[27px] h-[27px] items-center justify-center bg-[#F1F3F4] rounded-[100%]">
+                            <a href="{{ route('getActionLog.log', ['auto'=> $logs->id]) }}" class="inline-flex w-[27px] h-[27px] items-center justify-center bg-[#F1F3F4] rounded-[100%]">
                                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g clip-path="url(#clip0_446_3019)">
-                                        <path d="M0.762451 7.05005C0.762451 7.05005 3.01245 2.55005 6.94995 2.55005C10.8875 2.55005 13.1375 7.05005 13.1375 7.05005C13.1375 7.05005 10.8875 11.55 6.94995 11.55C3.01245 11.55 0.762451 7.05005 0.762451 7.05005Z" stroke="#13103A" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round" />
+                                         <path d="M0.762451 7.05005C0.762451 7.05005 3.01245 2.55005 6.94995 2.55005C10.8875 2.55005 13.1375 7.05005 13.1375 7.05005C13.1375 7.05005 10.8875 11.55 6.94995 11.55C3.01245 11.55 0.762451 7.05005 0.762451 7.05005Z" stroke="#13103A" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round" />
                                         <path d="M6.94995 8.73755C7.88193 8.73755 8.63745 7.98203 8.63745 7.05005C8.63745 6.11807 7.88193 5.36255 6.94995 5.36255C6.01797 5.36255 5.26245 6.11807 5.26245 7.05005C5.26245 7.98203 6.01797 8.73755 6.94995 8.73755Z" stroke="#13103A" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round" />
                                     </g>
                                     <defs>
@@ -287,7 +181,12 @@
                             </a>
                         </td>
                     </tr>
-
+                    @endforeach
+                    @else
+                    <tr>
+                        <td colspan="4" class="text-center text-red-500">No Logs Found!</td>
+                    </tr>
+                    @endif
                 </tbody>
             </table>
         </div>
@@ -334,3 +233,6 @@
    
 </script>
 @stop
+
+
+ 

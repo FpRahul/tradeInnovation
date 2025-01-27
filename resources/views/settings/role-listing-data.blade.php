@@ -52,8 +52,9 @@ use App\Models\Menu;
                                             <rect width="14.4" height="14.4" fill="white" transform="translate(0.299805 0.300049)" />
                                         </clipPath>
                                     </defs>
-                                </svg>
+                                </svg> 
                             </a>
+                            
                         </td>
                     </tr>
                     @endforeach

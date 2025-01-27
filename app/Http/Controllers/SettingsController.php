@@ -11,7 +11,7 @@ class SettingsController extends Controller
 { 
     $search =  $request->data ?? '';
     
-    if ($search) {
+    if ($search) { 
         $allRoles = Role::where('id', '!=', '1')  
         ->where('name', 'LIKE',  $search . '%')  
         ->with('roleMenus')  
@@ -24,8 +24,17 @@ class SettingsController extends Controller
         
         return view('settings/roles', compact('allRoles','header_title_name'));
     } else {
+        if($allRoles->isNotempty()){
+            $status =  200;
+        }else if(empty($allRoles)){
+            $status =  500;
+        }else{
+            $status = 400;
+
+        }
         
-        $trData = view('settings/role-listing-data', compact('allRoles'))->render();
+        // dd($status);
+        $trData = view('settings/role-listing-data', compact('allRoles','search','status'))->render();
         return response()->json([
             'trData' => $trData,
         ]);

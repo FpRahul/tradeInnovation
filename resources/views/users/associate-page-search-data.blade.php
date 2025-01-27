@@ -17,7 +17,7 @@
                 Action
             </th>
         </tr>
-    </thead>
+    </thead> 
     <tbody>
         @if (count($associateData) > 0)
             @foreach ($associateData as $associateDetails)

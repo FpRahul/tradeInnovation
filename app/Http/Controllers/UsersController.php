@@ -26,6 +26,12 @@ class UsersController extends Controller
     public function login(Request $request)
     {
         if ($request->isMethod('post')) {
+            $clientIP = \Request::ip();
+        
+            $userAgent = \Request::header('User-Agent');
+        
+
+        $operatingSystem = getOperatingSystem($userAgent);
             $credentials = $request->validate([
                 'email' => 'required|email',
                 'password' => 'required'
@@ -36,8 +42,11 @@ class UsersController extends Controller
                     'user_id' => auth()->user()->id,
                     'title' => 'Login',
                     'description' => auth()->user()->name . ' logged into portal',
-                    'created_at' => date('Y-m-d H:i:s')
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'ip_address' => $clientIP,
+                    'operating_system' => $operatingSystem
                 ];
+                
                 $logActivity = new LogActivity($logActivity);
                 $logActivity->log();
                 return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
@@ -53,7 +62,12 @@ class UsersController extends Controller
 
     public function forgetPassword(Request $request)
     {   
+        $clientIP = \Request::ip();
+        
+        $userAgent = \Request::header('User-Agent');
+  
 
+        $operatingSystem = getOperatingSystem($userAgent);
         if ($request->isMethod('POST')) {
             $credentials = $request->validate([
                 'email' => 'required|email|exists:users,email',
@@ -77,7 +91,10 @@ class UsersController extends Controller
                         'user_id' => $updatePass->id,
                         'title' => 'Forgot Password',
                         'description' => $updatePass->name . ' requested for new password',
-                        'created_at' => date('Y-m-d H:i:s')
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'ip_address' => $clientIP,
+                        'operating_system' => $operatingSystem
+
                     ];
                     $logActivity = new LogActivity($logActivity);
                     $logActivity->log();
@@ -132,26 +149,7 @@ class UsersController extends Controller
         $clientIP = \Request::ip();
         
         $userAgent = \Request::header('User-Agent');
-        function getOperatingSystem($userAgent)
-        {
-            $osArray = [
-                'Windows' => 'Windows',
-                'Mac' => 'Mac',
-                'Linux' => 'Linux',
-                'Android' => 'Android',
-                'iPhone' => 'iPhone',
-                'iPad' => 'iPad',
-                'Unix' => 'Unix',
-            ];
-
-            foreach ($osArray as $key => $os) {
-                if (stripos($userAgent, $key) !== false) {
-                    return $os;
-                }
-            }
-
-            return 'Unknown';
-        }
+   
 
         $operatingSystem = getOperatingSystem($userAgent);
 
@@ -161,9 +159,9 @@ class UsersController extends Controller
             $newUser = User::find($id);
             $newUserDetails = UserDetail::where('userId', $id)->first();
             $newUserExperiences = UserExperience::where('userId', $id)->get();
-            $pImage = !empty($newUserDetails['uploadPan']) ? '' : 'required|mimes:jpeg,png,jpg,pdf|max:2048';
-            $aImage = !empty($newUserDetails['uploadAadhar']) ? '' : 'required|mimes:jpeg,png,jpg,pdf|max:2048';
-            $dImage = !empty($newUserDetails['uploadDrivingLicence']) ? '' : 'required|mimes:jpeg,png,jpg,pdf|max:2048';
+            $pImage = !empty($newUserDetails['uploadPan']) ? '' : 'mimes:jpeg,png,jpg,pdf|max:2048';
+            $aImage = !empty($newUserDetails['uploadAadhar']) ? '' : 'mimes:jpeg,png,jpg,pdf|max:2048';
+            $dImage = !empty($newUserDetails['uploadDrivingLicence']) ? '' : 'mimes:jpeg,png,jpg,pdf|max:2048';
             $email = "required|email";
             $hashedPassword = $newUser->password;
             $successMessage = "User is successfully updated!";
@@ -270,6 +268,13 @@ class UsersController extends Controller
     }
     public function deleteUser($id = null)
     {
+
+        $clientIP = \Request::ip();
+        
+        $userAgent = \Request::header('User-Agent');
+       
+
+        $operatingSystem = getOperatingSystem($userAgent);
         $employeeData = User::where('id', $id)->first();
         $employeeData->archive = 0;
         if ($employeeData->save()) {
@@ -277,7 +282,9 @@ class UsersController extends Controller
                 'user_id' => auth()->user()->id,
                 'title' => 'Archive User',
                 'description' => auth()->user()->name . ' has deleted user ' . $employeeData->name . ' (' . $employeeData->id . ')',
-                'created_at' => date('Y-m-d H:i:s')
+                'created_at' => date('Y-m-d H:i:s'),
+                'ip_address' => $clientIP,
+                'operating_system' => $operatingSystem
             ];
             $logActivity = new LogActivity($logActivity);
             $logActivity->log();
@@ -320,7 +327,14 @@ class UsersController extends Controller
     }
 
     public function addClient(Request $request, $id = null)
-    {
+    {  
+
+        $clientIP = \Request::ip();
+        
+        $userAgent = \Request::header('User-Agent');
+    
+
+        $operatingSystem = getOperatingSystem($userAgent);
         $incorporationDataList = CategoryOption::where('status', 1)->where('type', 2)->get();
         
         $referDataList = CategoryOption::where('status', 1)->where('type', 3)->get();
@@ -365,8 +379,10 @@ class UsersController extends Controller
                     $logActivity[] = [
                         'user_id' => auth()->user()->id,
                         'title' => 'Add/Edit Client',
-                        'description' => auth()->user()->name . ' has ' . $logAct . ' user ' . $newClient->name . ' (' . $newClient->id . ')',
-                        'created_at' => date('Y-m-d H:i:s')
+                        'description' => auth()->user()->name . ' has ' . $logAct . ' client ' . $newClient->name . ' (' . $newClient->id . ')',
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'ip_address' => $clientIP,
+                        'operating_system' => $operatingSystem
                     ];
                     $logActivity = new LogActivity($logActivity);
                     $logActivity->log();
@@ -382,7 +398,7 @@ class UsersController extends Controller
         }
         $header_title_name = 'User';
         // dd($newClientDetails);
-        return view('users.add-client', compact('newClient', 'newClientDetails', 'header_title_name', 'moduleName', 'F', 'referDataList'));
+        return view('users.add-client', compact('newClient', 'newClientDetails', 'header_title_name', 'moduleName', 'referDataList','incorporationDataList'));
     }
 
     public function associates(Request $request)
@@ -410,7 +426,13 @@ class UsersController extends Controller
     }
 
     public function addAssociate(Request $request, $id = null)
-    {
+    {   
+
+        $clientIP = \Request::ip();
+        
+        $userAgent = \Request::header('User-Agent');
+        
+        $operatingSystem = getOperatingSystem($userAgent);
         $professionDataList = CategoryOption::where('status', 1)->where('type', 1)->get();
 
         if ($id > 0) {
@@ -445,8 +467,10 @@ class UsersController extends Controller
                 $logActivity[] = [
                     'user_id' => auth()->user()->id,
                     'title' => 'Add/Edit Associate',
-                    'description' => auth()->user()->name . ' has ' . $logAct . ' user ' . $newAssociate->name . ' (' . $newAssociate->id . ')',
-                    'created_at' => date('Y-m-d H:i:s')
+                    'description' => auth()->user()->name . ' has ' . $logAct . ' Associate ' . $newAssociate->name . ' (' . $newAssociate->id . ')',
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'ip_address' => $clientIP,
+                    'operating_system' => $operatingSystem
                 ];
                 $logActivity = new LogActivity($logActivity);
                 $logActivity->log();
@@ -460,7 +484,13 @@ class UsersController extends Controller
     }
 
     public function userStatus(Request $request)
-    {
+    {  
+        $clientIP = \Request::ip();
+        
+        $userAgent = \Request::header('User-Agent');
+     
+
+        $operatingSystem = getOperatingSystem($userAgent);
         if ($request->isMethod('GET')) {
             if ($request->val) {
                 $status = 0;
@@ -474,7 +504,9 @@ class UsersController extends Controller
                     'user_id' => auth()->user()->id,
                     'title' => 'Update User Status',
                     'description' => auth()->user()->name . ' has changed status of ' . $existedUser->name . ' (' . $existedUser->id . ')',
-                    'created_at' => date('Y-m-d H:i:s')
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'ip_address' => $clientIP,
+                    'operating_system' => $operatingSystem
                 ];
                 $logActivity = new LogActivity($logActivity);
                 $logActivity->log();
@@ -486,7 +518,14 @@ class UsersController extends Controller
     }
 
     public function myprofile(Request $request, $id = null)
-    {
+    {  
+        $clientIP = \Request::ip();
+        
+        $userAgent = \Request::header('User-Agent');
+        $logAct = 'updated';
+   
+
+        $operatingSystem = getOperatingSystem($userAgent);
         $user = Auth::user();
         $userData = User::where('id', $user->id)->first();
         $newUserDetails = UserDetail::where('userId', $user->id)->first();
@@ -508,12 +547,24 @@ class UsersController extends Controller
                 $newUserDetails->uploadPhotograph = $imageName;
                 $newUserDetails->save();
             }
-
+            
             $userData->name = $request->name;
             $userData->email = $request->email;
             $userData->password = $password;
             if ($userData->save()) {
+                $logActivity[] = [
+                    'user_id' => auth()->user()->id,
+                    'title' => 'Add/Edit Profile',
+                    'description' => auth()->user()->name . ' has ' . $logAct . ' user ' . $userData->name . ' (' . $userData->id . ')',
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'ip_address' => $clientIP,
+                    'operating_system' => $operatingSystem
+                ];
+                $logActivity = new LogActivity($logActivity);
+                $logActivity->log();
                 return redirect()->route('dashboard')->withSuccess('Profile is successfully updated!');
+            }else{
+                return back()->with('error', 'Some error is occur.');
             }
         }
         $header_title_name = 'My Profile';
@@ -528,11 +579,20 @@ class UsersController extends Controller
     }
 
     public function addProfessions(Request $request)
-    {
+    {  
+
+        $clientIP = \Request::ip();
+        
+        $userAgent = \Request::header('User-Agent');
+      
+
+        $operatingSystem = getOperatingSystem($userAgent);
         if ($request->profession_id > 0) {
             $newCategory = CategoryOption::where('id', $request->profession_id)->first();
+            $logAct = 'updated';
         } else {
             $newCategory = new CategoryOption;
+            $logAct = 'Add';
         }
         if ($request->isMethod('POST')) {
             $authUser = Auth::user();
@@ -541,6 +601,16 @@ class UsersController extends Controller
             $newCategory->name = $request->name;
 
             if ($newCategory->save()) {
+                $logActivity[] = [
+                    'user_id' => auth()->user()->id,
+                    'title' => 'Add/Edit Professions',
+                    'description' => auth()->user()->name . ' has ' . $logAct . ' Professions ' . $newCategory->name . ' (' . $newCategory->id . ')',
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'ip_address' => $clientIP,
+                    'operating_system' => $operatingSystem
+                ];
+                $logActivity = new LogActivity($logActivity);
+                $logActivity->log();
                 if ($request->profession_id > 0) {
                     return redirect()->back()->with('success', 'Your data is successfully updated');
                 } else {
@@ -554,15 +624,32 @@ class UsersController extends Controller
     }
 
     public function categoryStatus(Request $request, $id = null)
-    {
+    {    
+        $clientIP = \Request::ip();
+        
+        $userAgent = \Request::header('User-Agent');
+     
+
+    $operatingSystem = getOperatingSystem($userAgent);
+    $logAct = 'Status Change';
         $categoryData = CategoryOption::find($id);
         if ($request->val) {
             $categoryData->status = 0;
         } else {
             $categoryData->status = 1;
         }
-
+        
         if ($categoryData->save()) {
+            $logActivity[] = [
+                'user_id' => auth()->user()->id,
+                'title' => 'Update Category Status',
+                'description' => auth()->user()->name . ' has ' . $logAct . ' category ' . $categoryData->name . ' (' . $categoryData->id . ')',
+                'created_at' => date('Y-m-d H:i:s'),
+                'ip_address' => $clientIP,
+                'operating_system' => $operatingSystem
+            ];
+            $logActivity = new LogActivity($logActivity);
+            $logActivity->log();
             return redirect()->back()->with('success', 'Status is successfully updated!');
         } else {
             return redirect()->back()->with('error', 'Some error is occur!');
@@ -570,9 +657,27 @@ class UsersController extends Controller
     }
 
     public function categoryDelete($id = null)
-    {
+    {   
+
+        $clientIP = \Request::ip();
+        
+        $userAgent = \Request::header('User-Agent');
+      
+
+    $operatingSystem = getOperatingSystem($userAgent);
+    
         $categoryData = CategoryOption::find($id);
         if ($categoryData->delete()) {
+            $logActivity[] = [
+                'user_id' => auth()->user()->id,
+                'title' => 'Archive User',
+                'description' => auth()->user()->name . ' has deleted user ' . $categoryData->name . ' (' . $categoryData->id . ')',
+                'created_at' => date('Y-m-d H:i:s'),
+                'ip_address' => $clientIP,
+                'operating_system' => $operatingSystem
+            ];
+            $logActivity = new LogActivity($logActivity);
+            $logActivity->log();
             return redirect()->back()->with('success', 'Your data is successfully deleted!');
         } else {
             return redirect()->back()->with('error', 'Some error is occur!');
@@ -587,19 +692,38 @@ class UsersController extends Controller
     }
 
     public function addIncorporation(Request $request)
-    {
+    {    
+        $clientIP = \Request::ip();
+        
+        $userAgent = \Request::header('User-Agent');
+        
+
+    $operatingSystem = getOperatingSystem($userAgent);
         if ($request->incorporation_id > 0) {
             $newCategory = CategoryOption::where('id', $request->incorporation_id)->first();
+            $logAct = "Update";
         } else {
             $newCategory = new CategoryOption;
+            $logAct = "Add";
+
         }
         if ($request->isMethod('POST')) {
             $authUser = Auth::user();
             $newCategory->authId = $authUser->id;
             $newCategory->type = $request->type;
             $newCategory->name = $request->name;
-
+            
             if ($newCategory->save()) {
+                $logActivity[] = [
+                    'user_id' => auth()->user()->id,
+                    'title' => 'Add/Edit Incorporation',
+                    'description' => auth()->user()->name . $logAct . $newCategory->name . ' (' . $newCategory->id . ')',
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'ip_address' => $clientIP,
+                    'operating_system' => $operatingSystem
+                ];
+                $logActivity = new LogActivity($logActivity);
+                $logActivity->log();
                 if ($request->incorporation_id > 0) {
                     return redirect()->back()->with('success', 'Your data is successfully updated');
                 } else {
@@ -620,11 +744,20 @@ class UsersController extends Controller
     }
 
     public function addReferral(Request $request)
-    {
+    {  
+        $clientIP = \Request::ip();
+        
+        $userAgent = \Request::header('User-Agent');
+        
+
+    $operatingSystem = getOperatingSystem($userAgent);
         if ($request->referral_id > 0) {
+            $logAct = "Update";
             $newCategory = CategoryOption::where('id', $request->referral_id)->first();
         } else {
             $newCategory = new CategoryOption;
+            $logAct = "Add";
+
         }
         if ($request->isMethod('POST')) {
             $authUser = Auth::user();
@@ -632,6 +765,16 @@ class UsersController extends Controller
             $newCategory->type = $request->type;
             $newCategory->name = $request->name;
             if ($newCategory->save()) {
+                $logActivity[] = [
+                    'user_id' => auth()->user()->id,
+                    'title' => 'Add/Edit Referral',
+                    'description' => auth()->user()->name .' has '. $logAct .' Referral '. $newCategory->name . ' (' . $newCategory->id . ')',
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'ip_address' => $clientIP,
+                    'operating_system' => $operatingSystem
+                ];
+                $logActivity = new LogActivity($logActivity);
+                $logActivity->log();
                 if ($request->referral_id > 0) {
                     return redirect()->back()->with('success', 'Your data is successfully updated');
                 } else {
@@ -645,8 +788,9 @@ class UsersController extends Controller
     }
 
     public function panelLogs(Request $request)
-    {
+    {  
         $header_title_name = 'System Logs';
+        if(empty($request->input('auto'))){
         $activityTitles = Log::select('title')->distinct()->orderBy('title', 'asc')->pluck('title');
         $activityUsers = Log::select('user_id')->distinct()->orderBy('user_id', 'asc')->pluck('user_id');
 
@@ -671,6 +815,7 @@ class UsersController extends Controller
         $query = Log::with(['user' => function ($query) {
                 $query->select('id','name', 'ip_address', 'operating_system'); // Specify the columns you want from the `user` table
             }])->orderBy('id', 'desc');
+           
     
         if (!empty($filterOptions['startDate']) && !empty($filterOptions['endDate'])) {
             $query->whereDate('created_at', '>=', $filterOptions['startDate'])->whereDate('created_at', '<=', $filterOptions['endDate']);
@@ -688,9 +833,25 @@ class UsersController extends Controller
         
         $systemLogs = $query->paginate(8)->appends($request->query());
         
-        return view('users.logs', compact('header_title_name', 'systemLogs', 'activityTitles', 'activityUsers', 'filterOptions'));
+        return view('users.logs', compact('header_title_name', 'systemLogs', 'activityTitles', 'activityUsers', 'filterOptions'))->with('isAutoId', false);;
+     } else{
+        $autoId = $request->input('auto');
+        $query = Log::with(['user' => function ($query) {
+            $query->select('id','name'); 
+        }])->where('id' ,$autoId )->orderBy('id', 'desc')->first();
+            // $systemLogs = Log::with('user')->find($autoId);
+            // $systemLogs = $query->paginate(8)->appends($request->query());
+            // dd($systemLogs->user->name);
+            return view('users.logs', compact('query' , 'header_title_name'))->with('isAutoId' , true);
+    
+        }
     }
     public function resetPassword(Request $request){
-        dd($request->all());
+        $autoId = $request->input('auto');
+        if($autoId){
+            $getLogs = Log::with('user')->find($autoId);
+            return view('users.logs', compact('getLogs'));
+            // dd($getLogs);
+        }
     }
 }

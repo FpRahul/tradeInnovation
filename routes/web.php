@@ -23,6 +23,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/chart-data', [DashboardController::class, 'chartData'])->name('chart.data');
 
+
     //Users Routes
     Route::prefix('users')->controller(UsersController::class)->group(function () {
         Route::match(['POST','GET'],'/', 'index')->name('users.listing');
@@ -47,6 +48,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/category-delete/{id?}', 'categoryDelete')->name('users.category.delete');
 
         Route::get('/panel-logs', 'panelLogs')->name('logs.index');
+        Route::get('/get/action/logs' ,'panelLogs')->name('getActionLog.log');
+
         Route::get('/view-logs', 'viewLogs')->name('logs.view');
 
         Route::get('/userstatus','userStatus')->name('users.status');

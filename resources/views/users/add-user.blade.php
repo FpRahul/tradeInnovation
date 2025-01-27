@@ -1,6 +1,12 @@
 @extends('layouts.default')
 @section('content')
+<style>
 
+
+    .w-0 {
+        width: 184px !important;
+    }
+</style>
 <div>
     <div class="flex items-center justify-between mb-[20px]">
         <h3 class="text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">{{$moduleName}} Employee</h3>
@@ -113,7 +119,6 @@
                                                 class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"
                                                 placeholder="Employer Name">
                                         </div>
-<<<<<<< HEAD
                                         <div class="w-full">
                                             <label for="startDate" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
                                                 Start Date
@@ -133,7 +138,6 @@
                                                 <i class="ri-calendar-line"></i>
                                                 </div>
                                             </div>                                                
-=======
 
                                         
 
@@ -145,7 +149,6 @@
                                             <input type="text" name="startDate" id="startDate" placeholder="YYYY-MM-DD"
                                                 class="daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                                             <i class="ri-calendar-line absolute right-[8px] top-[9px]" id="calendarIcon"></i>
->>>>>>> 4566d0e83d837eb14ee26359bf874df268a4ef07
                                         </div>
                                     </div>
 
@@ -302,7 +305,7 @@
                                     <path d="M13.9395 8.95044H8.93945V13.9504C8.93945 14.5004 8.48945 14.9504 7.93945 14.9504C7.38945 14.9504 6.93945 14.5004 6.93945 13.9504V8.95044H1.93945C1.38945 8.95044 0.939453 8.50044 0.939453 7.95044C0.939453 7.40044 1.38945 6.95044 1.93945 6.95044H6.93945V1.95044C6.93945 1.40044 7.38945 0.950439 7.93945 0.950439C8.48945 0.950439 8.93945 1.40044 8.93945 1.95044V6.95044H13.9395C14.4895 6.95044 14.9395 7.40044 14.9395 7.95044C14.9395 8.50044 14.4895 8.95044 13.9395 8.95044Z" fill="#13103A" />
                                 </svg>
                             </label>
-                            <input type="file" name="uploadPan" id="uploadPan" class="previewImage w-0 opacity-0 absolute top-0 left-0"{{ empty($newUserDetails->uploadDrivingLicence) ? 'required':''}}>
+                            <input type="file" name="uploadPan" id="uploadPan" required class="previewImage w-0 opacity-0 absolute top-0 left-0"{{ empty($newUserDetails->uploadDrivingLicence) ? 'required':''}}>
                         </div>
                     </div>
                     @error('uploadPan') 

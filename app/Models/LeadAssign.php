@@ -13,7 +13,5 @@ class LeadAssign extends Model
         'dead_line'
     ];
 
-    public function userDetails(){
-        return $this->belongs(User::class,'id','user_id');
-    }
+   
 }

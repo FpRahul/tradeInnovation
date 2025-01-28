@@ -114,6 +114,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .attachementFile { opacity: 0; width: 0; position: absolute; top: 0; left: 0; }
+.notifList {
+    max-height: 260px;
+    overflow-y: auto;
+}
 /* responsive */
 @media (max-width: 767px){
 .employee_repeater_wrapper .repeater-default > div > div:first-child { flex-direction: column; } 

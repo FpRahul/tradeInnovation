@@ -55,24 +55,20 @@
         </a>
         <div class="dropdown_menu absolute top-[100%] mt-2 right-0 z-10 w-[300px] md:w-[350px] origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
             <div class="p-3" role="none">
-                <ul>
-                  <x-GetAssignedNotification />
-                   
-                        <li class="py-3 border-b-[1px] border-[#e5e7eb]">
+                <ul class="notifList">
+                  <x-GetAssignedNotification />                   
+                        {{-- <li class="py-3 border-b-[1px] border-[#e5e7eb]">
                             <a href="#" class="flex gap-[7px]">
                                 <img src="{{asset('assets/images/profile-img.png')}}" alt="profile" class="min-w-[35px] w-[35px] h-[35px] rounded-[100%] object-cover border-[1px] border-[#13103A] ">
                                 <div>
                                     <div class="flex items-center justify-between">
-                                        <h4 class="text-sm font-semibold text-black mb-[5px]"></h4>
-                                        <div class="text-xs text-gray-900"></div>
+                                        <h4 class="text-sm font-semibold text-black mb-[5px]">john deo</h4>
+                                        <div class="text-xs text-gray-900">2025-12-24</div>
                                     </div>
-                                    <p class="text-xs text-gray-900 line-clamp-2"></p>
+                                    <p class="text-xs text-gray-900 line-clamp-2">adfadsfads</p>
                                 </div>
                             </a>
-                        </li>
-                       
-                   
-                  
+                        </li> --}}
                 </ul>
             </div>
         </div>

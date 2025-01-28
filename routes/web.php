@@ -58,10 +58,14 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::prefix('settings')->controller(SettingsController::class)->group(function () {
         Route::get('/roles', 'roles')->name('settings.roles');
         Route::match(['POST','GET'],'/add-role/{id?}', 'addRole')->name('settings.addrole');
+        Route::get('assign-menu','viewMenu')->name('setting.viewMenu');
+        Route::post('get-menu','getMenu')->name('setting.getMenu');
+
     });
     //Leads Routes
     Route::prefix('leads')->controller(LeadsController::class)->group(function () {
         Route::get('/', 'index')->name('leads.index');
+        Route::get('/lead-logs','leadLogs')->name('leadLogs.index');
         Route::match(['POST','GET'],'/add/{id?}', 'add')->name('leads.add');
         Route::get('/sendquote', 'sendquote')->name('leads.quote');
         Route::get('/logs', 'leadLogs')->name('leads.logs');

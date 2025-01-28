@@ -94,25 +94,29 @@
     </div>
 </div>
 <script>
-    $(document).ready(function(){
-        $("#search").on('keyup', function(){
-            var data = $(this).val()
-            $.ajax({
-                url:"{{ route('settings.roles') }}",
-                method: "GET",
-               
-                data: {
-                    data:data
-                },
-                dataType: 'json',
-                success: function(response){
-                         console.log(response);
-                         
-                    $('#search_table_data').html(response.trData); 
-                }
-            })
+    
+    $(document).on('keyup', '#search', function() {
+        var key = $(this).val();
+        
+        $.ajax({
+            method: 'GET',
+            url: "{{ route('settings.roles') }}",
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            data: {
+                key: key,
+                requestType: 'ajax',
+            },
+            dataType: 'json',
+            success: function(res) {
+                console.log(res);
+                $('#search_table_data').html(res.trData);
+
+            }
         })
-    })
+
+    });
 </script>
 
 @endsection

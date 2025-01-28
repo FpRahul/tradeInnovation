@@ -109,7 +109,7 @@
                     @endif
 
 
-                </tbody>
+                </tbody> 
             </table>
         </div>
         <div id="dynamic-pagination" class="py-[15px] px-[20px]">

@@ -19,6 +19,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Mail;
 use App\Jobs\SendClientWelcomeEmail;
 use App\Jobs\SentForgetPasswordmail;
+use Carbon\Carbon;
 
 
 class UsersController extends Controller
@@ -27,10 +28,7 @@ class UsersController extends Controller
     {
         if ($request->isMethod('post')) {
             $clientIP = \Request::ip();
-        
             $userAgent = \Request::header('User-Agent');
-        
-
         $operatingSystem = getOperatingSystem($userAgent);
             $credentials = $request->validate([
                 'email' => 'required|email',
@@ -74,18 +72,12 @@ class UsersController extends Controller
             ]);
 
             $updatePass = User::where('email', $request->email)->first();
-            // dd($updatePass->toArray());
             if ($updatePass) {
-                $newPass = '123456';
-                // dd($newPass);
+                $newPass = substr(str_shuffle('9abcdefghijklmnopq045678rstuvwxyzABCDEFG123HIJKLMNOPQRSTUVWXYZ'), 0, 8);
                 $hashPasswrd = Hash::make($newPass);
                 $updatePass->password = $hashPasswrd;
-
-                
                 $updatePass->save();
                 SentForgetPasswordmail::dispatch($updatePass , $newPass);
-
-                // dd($updatePass);
                 if ($updatePass) {
                     $logActivity[] = [
                         'user_id' => $updatePass->id,
@@ -145,28 +137,23 @@ class UsersController extends Controller
 
     public function addUser(Request $request, $id = null)
     {
-
         $clientIP = \Request::ip();
-        
         $userAgent = \Request::header('User-Agent');
-   
-
         $operatingSystem = getOperatingSystem($userAgent);
-
-        // dd($operatingSystem);
         $roleData = Role::where('id', '>', 3)->get();
         if ($id > 0) {
             $newUser = User::find($id);
             $newUserDetails = UserDetail::where('userId', $id)->first();
             $newUserExperiences = UserExperience::where('userId', $id)->get();
-            $pImage = !empty($newUserDetails['uploadPan']) ? '' : 'mimes:jpeg,png,jpg,pdf|max:2048';
-            $aImage = !empty($newUserDetails['uploadAadhar']) ? '' : 'mimes:jpeg,png,jpg,pdf|max:2048';
-            $dImage = !empty($newUserDetails['uploadDrivingLicence']) ? '' : 'mimes:jpeg,png,jpg,pdf|max:2048';
+            $pImage = !empty($newUserDetails['uploadPan']) ? '' : 'required|mimes:jpeg,png,jpg,pdf|max:2048';
+            $aImage = !empty($newUserDetails['uploadAadhar']) ? '' : 'required|mimes:jpeg,png,jpg,pdf|max:2048';
+            $dImage = !empty($newUserDetails['uploadDrivingLicence']) ? '' : 'required|mimes:jpeg,png,jpg,pdf|max:2048';
             $email = "required|email";
             $hashedPassword = $newUser->password;
             $successMessage = "User is successfully updated!";
             $moduleName = "Update";
             $logAct = 'updated';
+            $mail = false;
         } else {
             $newUser = new User();
             $newUserDetails = new UserDetail();
@@ -175,27 +162,34 @@ class UsersController extends Controller
             $dImage = "required|mimes:jpeg,png,jpg,pdf|max:2048";
             $newUserExperiences = [];
             $email = "required|email|unique:users,email";
-            $randomNumber = random_int(100000, 999999);
+            $randomNumber = substr(str_shuffle('9abcdefghijklmnopq045678rstuvwxyzABCDEFG123HIJKLMNOPQRSTUVWXYZ'), 0, 8);
             $hashedPassword = Hash::make($randomNumber);
             $successMessage = "User is successfully inserted!";
             $moduleName = "Add";
             $logAct = 'added';
+            $mail = true;
+            $type = 'User';
+
         }
         if($request->isMethod('POST')){           
+            $customMessages = [
+                'uploadPan.max' => 'File size exceeds 2MB limit.',
+                'uploadAadhar.max' => 'File size exceeds 2MB limit.',
+                'uploadDrivingLicence.max' => 'File size exceeds 2MB limit.',
+                'mimes' => 'The :attribute must be a file of type: jpeg, png, jpg, pdf.'
+            ];
             $credentials = $request->validate([               
-                'email'=> $email,           
-                'uploadPan' => $pImage,
-                'uploadAadhar' => $aImage,
-                'uploadDrivingLicence' => $dImage,
-            ]);
+                'email' => $email,           
+                'uploadPan' => $pImage,      
+                'uploadAadhar' => $aImage,   
+                'uploadDrivingLicence' => $dImage, 
+            ], $customMessages);
             $newUser->name = $request->name;
             $newUser->role = $request->role;
             $newUser->email = $request->email;
             $newUser->mobile = $request->mobileNumber;
             $newUser->altNumber = $request->altMobile;
             $newUser->password = $hashedPassword;
-            
-
             if ($newUser->save()) {
                 $newUserDetails->userId = $newUser->id;
                 $newUserDetails->fatherHusbandName = $request->fatherHusbandName;
@@ -255,6 +249,9 @@ class UsersController extends Controller
                     ];
                     $logActivity = new LogActivity($logActivity);
                     $logActivity->log();
+                    if($mail == true){
+                        SendClientWelcomeEmail::dispatch($newUser,$randomNumber,$filePath = null,$type);
+                    }
                     return redirect()->route('users.listing')->withSuccess($successMessage);
                 } else {
                     return back()->with('error', 'Some error is occur.');
@@ -268,12 +265,8 @@ class UsersController extends Controller
     }
     public function deleteUser($id = null)
     {
-
         $clientIP = \Request::ip();
-        
         $userAgent = \Request::header('User-Agent');
-       
-
         $operatingSystem = getOperatingSystem($userAgent);
         $employeeData = User::where('id', $id)->first();
         $employeeData->archive = 0;
@@ -328,17 +321,11 @@ class UsersController extends Controller
 
     public function addClient(Request $request, $id = null)
     {  
-
         $clientIP = \Request::ip();
-        
         $userAgent = \Request::header('User-Agent');
-    
-
         $operatingSystem = getOperatingSystem($userAgent);
         $incorporationDataList = CategoryOption::where('status', 1)->where('type', 2)->get();
-        
         $referDataList = CategoryOption::where('status', 1)->where('type', 3)->get();
-        
         if ($id > 0) {
             $newClient = User::find($id);
             $newClientDetails = UserDetail::where('userId', $id)->first();
@@ -346,17 +333,19 @@ class UsersController extends Controller
             $email = "required|email";
             $moduleName = "Update";
             $logAct = 'updated';
+            $mail = false;
         } else {
             $newClient = new User();
             $newClientDetails = new UserDetail();
-            $randomNumber = random_int(100000, 999999);
+            $randomNumber = substr(str_shuffle('9abcdefghijklmnopq045678rstuvwxyzABCDEFG123HIJKLMNOPQRSTUVWXYZ'), 0, 8);
             $hashedPassword = Hash::make($randomNumber);
             $email = "required|email|unique:users,email";
-            $moduleName = "Add ";
+            $moduleName = "Add";
             $logAct = 'added';
+            $mail = true;
+            $type = 'Client';
         }
         if ($request->isMethod('POST')) {
-
             $credentials = $request->validate([
                 'email' => $email,
             ]);
@@ -386,8 +375,9 @@ class UsersController extends Controller
                     ];
                     $logActivity = new LogActivity($logActivity);
                     $logActivity->log();
-                    SendClientWelcomeEmail::dispatch($newClient,$newClientDetails);
-                    // dd("Job dispatched for client: {$newClient->name}"); 
+                    if($mail == true){
+                        SendClientWelcomeEmail::dispatch($newClient,$randomNumber, $filePath = null,$type);
+                    }
                     return redirect()->route('client.listing')->withSuccess('Client is successfully inserted!');
                 } else {
                     return back()->with('error', 'Some error is occur.');
@@ -400,7 +390,7 @@ class UsersController extends Controller
         // dd($newClientDetails);
         return view('users.add-client', compact('newClient', 'newClientDetails', 'header_title_name', 'moduleName', 'referDataList','incorporationDataList'));
     }
-
+ 
     public function associates(Request $request)
     {
         $associateData = User::with('userdetail')->where('role', 3)->where('archive', 1);
@@ -429,9 +419,7 @@ class UsersController extends Controller
     {   
 
         $clientIP = \Request::ip();
-        
         $userAgent = \Request::header('User-Agent');
-        
         $operatingSystem = getOperatingSystem($userAgent);
         $professionDataList = CategoryOption::where('status', 1)->where('type', 1)->get();
 
@@ -441,13 +429,16 @@ class UsersController extends Controller
             $email = "required|email";
             $moduleName = "Update ";
             $logAct = 'updated';
+            $mail = false;
         } else {
             $newAssociate = new User();
-            $randomNumber = random_int(100000, 999999);
+            $randomNumber = substr(str_shuffle('9abcdefghijklmnopq045678rstuvwxyzABCDEFG123HIJKLMNOPQRSTUVWXYZ'), 0, 8);
             $hashedPassword = Hash::make($randomNumber);
             $email = "required|email|unique:users,email";
             $moduleName = "Add ";
             $logAct = 'added';
+            $mail = true;
+            $type = 'Associate';
         }
         if ($request->isMethod('POST')) {
             $credentials = $request->validate([
@@ -474,6 +465,10 @@ class UsersController extends Controller
                 ];
                 $logActivity = new LogActivity($logActivity);
                 $logActivity->log();
+                    if($mail == true){
+                        SendClientWelcomeEmail::dispatch($newAssociate,$randomNumber,$filePath = null,$type);
+                    }
+               
                 return redirect()->route('associate.listing')->withSuccess('Associate is successfully inserted!');
             } else {
                 return back()->with('error', 'Some error is occur.');
@@ -788,60 +783,41 @@ class UsersController extends Controller
     }
 
     public function panelLogs(Request $request)
-    {  
+    {   
         $header_title_name = 'System Logs';
         if(empty($request->input('auto'))){
         $activityTitles = Log::select('title')->distinct()->orderBy('title', 'asc')->pluck('title');
         $activityUsers = Log::select('user_id')->distinct()->orderBy('user_id', 'asc')->pluck('user_id');
-
-        $filterOptions['completeDate'] = $request->dateRange ?? '';
-        // dd($filterOptions['completeDate']);
-        if (!empty($selectedDate)) {
-            $selectedDate = explode('-', $filterOptions['completeDate']);
-            $filterOptions = [
-                'startDate' => date('Y-m-d', strtotime($selectedDate[0])),
-                'endDate' => date('Y-m-d', strtotime($selectedDate[1])),
-                'completeDate' => $request->dateRange
-            ];
+        
+        if(!empty($request->input('dateRange'))){
+            $filterOptions['completeDate']= $request->dateRange ?? '';
+            list($startDateStr, $endDateStr) = explode(' - ', $filterOptions['completeDate']);
+            $startDate = Carbon::createFromFormat('d M Y', $startDateStr);
+            $endDate = Carbon::createFromFormat('d M Y', $endDateStr);
+            $startDateFormatted = $startDate->format('Y-m-d');
+            $endDateFormatted = $endDate->format('Y-m-d');
         }
-
-        // $query = Log::with(['user' => function ($query) {
-        //     $query->select('id', 'title', 'post'); // Specify the columns you want from the `user` table
-        // }])->orderBy('id', 'desc');
-
         $filterOptions['user_id'] = $request->user_id ?? '';
         $filterOptions['activity'] = $request->activity ?? '';
-        // dd($filterOptions['activity']);
         $query = Log::with(['user' => function ($query) {
                 $query->select('id','name', 'ip_address', 'operating_system'); // Specify the columns you want from the `user` table
             }])->orderBy('id', 'desc');
-           
-    
-        if (!empty($filterOptions['startDate']) && !empty($filterOptions['endDate'])) {
-            $query->whereDate('created_at', '>=', $filterOptions['startDate'])->whereDate('created_at', '<=', $filterOptions['endDate']);
+        if (!empty($startDateFormatted) && !empty($endDateFormatted)) {
+            $query->whereDate('created_at', '>=', $startDateFormatted)->whereDate('created_at', '<=', $endDateFormatted);
         }
-
         if (!empty($filterOptions['user_id'])) {
             $query->where('user_id', $filterOptions['user_id']);
         }
-
         if (!empty($filterOptions['activity'])) {
             $query->where('title', 'like', '%' . $filterOptions['activity'] . '%');
         }
-       
-     
-        
-        $systemLogs = $query->paginate(8)->appends($request->query());
-        
+        $systemLogs = $query->paginate(env("PAGINATION_COUNT"))->appends($request->query());
         return view('users.logs', compact('header_title_name', 'systemLogs', 'activityTitles', 'activityUsers', 'filterOptions'))->with('isAutoId', false);;
      } else{
         $autoId = $request->input('auto');
         $query = Log::with(['user' => function ($query) {
             $query->select('id','name'); 
         }])->where('id' ,$autoId )->orderBy('id', 'desc')->first();
-            // $systemLogs = Log::with('user')->find($autoId);
-            // $systemLogs = $query->paginate(8)->appends($request->query());
-            // dd($systemLogs->user->name);
             return view('users.logs', compact('query' , 'header_title_name'))->with('isAutoId' , true);
     
         }
@@ -851,7 +827,6 @@ class UsersController extends Controller
         if($autoId){
             $getLogs = Log::with('user')->find($autoId);
             return view('users.logs', compact('getLogs'));
-            // dd($getLogs);
         }
     }
 }

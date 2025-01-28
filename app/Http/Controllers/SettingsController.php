@@ -4,65 +4,51 @@ use App\Models\Role;
 use App\Models\RoleMenu; 
 use App\Models\Menu;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class SettingsController extends Controller
 {
     public function roles(Request $request)
 { 
-    $search =  $request->data ?? '';
-    
-    if ($search) { 
-        $allRoles = Role::where('id', '!=', '1')  
-        ->where('name', 'LIKE',  $search . '%')  
-        ->with('roleMenus')  
-        ->get();
-    } else {
+    $allRoles = Role::where('id', '!=', '1')->with('roleMenus')->get();
+    $searchKey = $request->input('key') ?? '';
+    $requestType = $request->input('requestType') ?? '';
+    if ($searchKey) {
+    $allRoles = Role::where('id', '!=', '1')  
+    ->where('name', 'LIKE', '%' . $searchKey . '%') 
+    ->with('roleMenus')  
+    ->get();
+    } 
+    // $allRoles = $allRoles->paginate(env("PAGINATION_COUNT"));
+    if(empty($requestType)) {
+        $header_title_name = 'User';
         $allRoles = Role::where('id', '!=', '1')->with('roleMenus')->get();
+        return view('settings/roles', compact('allRoles','header_title_name', 'searchKey'));
     }
-    $header_title_name = 'Role';
-    if (empty($search)) {
-        
-        return view('settings/roles', compact('allRoles','header_title_name'));
-    } else {
-        if($allRoles->isNotempty()){
-            $status =  200;
-        }else if(empty($allRoles)){
-            $status =  500;
-        }else{
-            $status = 400;
-
-        }
-        
-        // dd($status);
-        $trData = view('settings/role-listing-data', compact('allRoles','search','status'))->render();
-        return response()->json([
+    else {
+        $trData = view('settings/role-listing-data',compact('allRoles', 'searchKey'))->render();
+        $dataArray = [
             'trData' => $trData,
-        ]);
+        ];
+        return response()->json($dataArray);
     }
+    
 }
-
-   
     public function addRole(Request $request, $id = null){
-        // dd($request->all());
         $header_title_name="Setting";
         $menuAddedAction = [];
         if($id>0){
             $roleData = Role::with('roleMenus')->find($id);
-            // dd($roleData);
             foreach($roleData->roleMenus as $menu){
                 $vaerifSubs = Menu::find($menu->menuId);
-                // dd($vaerifSubs);
                 if($vaerifSubs->parentId>0){
                     $menuAddedAction[$vaerifSubs->parentId] = [];
-                    // dd($menuAddedAction[$vaerifSubs->parentId]);
                 }
                 $menuAddedAction[$menu->menuId] = explode(',',$menu->permission);
-                // dd($menuAddedAction[$menu->menuId]);
             }
         }else{
             $roleData = new Role();
         }
-        
         if($request->isMethod('post')){
             // $credentials = $request->validate([
             //     'rolename' => 'required|unique:roles,name'
@@ -217,5 +203,46 @@ class SettingsController extends Controller
             return redirect()->back()->withSuccess('Permission updated successfully.');
         }
         return view('settings/add-role',compact('header_title_name','roleData','menuAddedAction'));
+    }
+
+    public function viewMenu(){
+        $header_title_name = 'Assign Menu';
+        $data = Menu::select('id', 'parentId', 'menuName', 'icon', 'url', 'actionRoutes')->get();   
+        return view('settings.assign_menue',compact('header_title_name','data'));
+    }
+
+    public function getMenu(Request $request){
+        $menuParentID = $request->menuName ?? 0;
+        
+        $rule = [
+            'name' => 'required',
+            'icon' => 'nullable',
+            'url' => 'required',
+            'action' => 'required',
+        ];
+
+        $validator = Validator::make($request->all(), $rule);
+        if($validator->fails()){
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        $menu = new Menu();
+         $menu->parentId = $menuParentID;
+         $menu->menuName = $request->name;
+         $menu->icon = $request->icon;
+         $menu->url = $request->url;
+         $menu->actionRoutes = $request->action;
+        
+     
+           if($menu){
+            $menu->save();
+            return redirect()->back()->with('success', 'Menu assigned successfully.');
+           }
+            
+
+        
+
+
+
+
     }
 }

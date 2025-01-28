@@ -14,12 +14,12 @@
     <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] overflow-hidden">
         <div class="py-[15px] md:py-[25px] px-[15px] md:px-[20px] gap-[10px] flex flex-col md:flex-row items-center justify-between">
             @if(!isset($isAutoId) || !$isAutoId)
-            <form class="w-full" method="get">
+            <form id="filterForm" class="w-full" method="get">
                 <div class="flex items-end gap-[10px] w-full">
                     <div class="w-[16%] relative">
                         <label class="flex text-[15px] text-[#000] mb-[5px]">Date Range</label>
                         <div class="w-[100%] relative">
-                            <input type="text" placeholder="Start Date" name="dateRange" class="daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" value="{{ $filterOptions['completeDate'] }}">
+                            <input type="text" placeholder="Start Date" name="dateRange" class="daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" value="">
                             <i class="ri-calendar-line absolute right-[8px] top-[9px]"></i>
                         </div>
                     </div>
@@ -51,7 +51,12 @@
                             </select>
                         </div>
                     </div>
-                    <button class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[15px] px-[30px]">Filter</button>
+                    <button class=" text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[15px] px-[30px]">Filter</button>
+                    <button id="resetButton" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[15px] px-[30px]">
+                        Reset
+                    </button>
+
+
 
                 </div>
             </form>
@@ -160,6 +165,13 @@
             }
         }, function(start, end, label) {
             console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+        });
+
+        $("#resetButton").on('click', function() {
+            event.preventDefault();
+            window.history.replaceState({}, document.title, window.location.pathname);
+            window.location.reload();
+            $("#filterForm")[0].reset();
         });
     })
 </script>

@@ -12,38 +12,59 @@ class ClientWelcomeEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $newClient;
+    public $userOrClient;  // This can hold User, Client, or Associate object
     public $filePath;
-    public $newClientDetails;
-
-    
-    public function __construct($newClient , $newClientDetails,$filePath = null)
+    public $randomNumber;
+    public $type;
+    public function __construct($userOrClient , $randomNumber,$filePath, $type)
     {
-        $this->newClient = $newClient;
+        $this->userOrClient = $userOrClient;
         $this->filePath = $filePath;
-        $this->newClientDetails = $newClientDetails;
-
+        $this->randomNumber = $randomNumber;
+        $this->type = $type;
     }
-
-    
     public function envelope(): Envelope
-    {
+    { 
+        $subject = "Welcome {$this->userOrClient->name}!";
+        // Adjust subject based on type (client, user, associate)
+        if ($this->type == 'Client') {
+            $subject = "Welcome {$this->userOrClient->name} to our platform!";
+        } elseif ($this->type == 'User') {
+            $subject = "Welcome User {$this->userOrClient->name}!";
+        } elseif ($this->type == 'Associate') {
+            $subject = "Welcome Associate {$this->userOrClient->name}!";
+        }
         return new Envelope(
-            subject: "Welcome {$this->newClient->name}!",
+            subject: $subject,
         );
     }
-
-    
     public function content(): Content
-    {
-        return new Content(
-            view: 'emails.client_welcome',
-            with: [
-                'client' => $this->newClient,
-                'client' => $this->newClient,
-                'newClientDetails' => $this->newClientDetails
-            ]
-        );
+    {   
+        if($this->type == 'Client'){
+            return new Content(
+                view: 'emails.client_welcome',
+                with: [
+                    'client' => $this->userOrClient,
+                    'randomNumber' => $this->randomNumber
+                ]
+            );
+        }else if($this->type == 'User'){
+            return new Content(
+                view: 'emails.user_register',
+                with: [
+                    'user' => $this->userOrClient,
+                    'randomNumber' => $this->randomNumber
+                ]
+            );
+        }else if($this->type == 'Associate'){
+            return new Content(
+                view: 'emails.associate_register',
+                with: [
+                    'associate' => $this->userOrClient,
+                    'randomNumber' => $this->randomNumber
+                ]
+            );
+        }
     }
 
     /**

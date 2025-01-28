@@ -186,4 +186,7 @@ class LeadsController extends Controller
             return back()->with('success','Your lead successfully assigned!');
         }
     }
+    // public function leadLogs(){
+       
+    // }
 }

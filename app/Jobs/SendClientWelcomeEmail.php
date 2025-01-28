@@ -10,19 +10,33 @@ use Illuminate\Queue\SerializesModels;
 class SendClientWelcomeEmail implements ShouldQueue
 {
     use Queueable, SerializesModels;
-    public $newClient;
+    public $userOrClient; // single varabel define the what we register User Or client or associate
     public $filePath;
-    public $newClientDetails;
+    public $randomNumber;
+    public $type;
 
-    public function __construct($newClient, $newClientDetails, $filePath = null)
-    {
-        $this->newClient = $newClient;
+    public function __construct($userOrClient, $randomNumber, $filePath, $type)
+    {   
+        ;
+
+        $this->userOrClient = $userOrClient;
         $this->filePath = $filePath;
-        $this->filePath = $filePath;
-        $this->newClientDetails  = $newClientDetails;
+        $this->randomNumber  = $randomNumber;
+        $this->type = $type;
     }
     public function handle(): void
     {   
-        Mail::to($this->newClient->email)->send(new ClientWelcomeEmail($this->newClient, $this->newClientDetails,$this->filePath));
+        
+        if($this->type == 'Client'){
+            Mail::to($this->userOrClient->email)->send(new ClientWelcomeEmail($this->userOrClient, $this->randomNumber,$this->filePath, 'Client'));
+        }
+        else if($this->type == 'User'){
+            Mail::to($this->userOrClient->email)->send(new ClientWelcomeEmail($this->userOrClient, $this->randomNumber,$this->filePath,'User'));
+        }
+        else if($this->type == 'Associate'){
+            Mail::to($this->userOrClient->email)->send(new ClientWelcomeEmail($this->userOrClient, $this->randomNumber,$this->filePath,'Associate'));
+        }else {
+            Log::error('User or Client is null in SendClientWelcomeEmail job.');
+        }
     }
 }

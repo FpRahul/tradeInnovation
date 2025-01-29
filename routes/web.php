@@ -8,6 +8,8 @@ use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TasksController;
 use App\Http\Middleware\CheckPermission;
+use App\Http\Controllers\StagesController;
+
 
 //Users Routes
 Route::match(['get','post'],'/', [UsersController::class,'login'])->name('login');
@@ -60,7 +62,13 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::match(['POST','GET'],'/add-role/{id?}', 'addRole')->name('settings.addrole');
         Route::get('assign-menu','viewMenu')->name('setting.viewMenu');
         Route::post('get-menu','getMenu')->name('setting.getMenu');
+        
+         //stages controller
+        Route::prefix('stages')->controller(StagesController::class)->group(function (){
+          Route::get('/', 'index')->name('stages.index');
+          Route::post('/create', 'create')->name('stages.create');
 
+        });
     });
     //Leads Routes
     Route::prefix('leads')->controller(LeadsController::class)->group(function () {
@@ -91,6 +99,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::post('/deleterepeater', 'deleteRepeaterSubserv')->name('subservice.deleterepeater');
 
     });
+    
     
 });
 

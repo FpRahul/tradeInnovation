@@ -27,39 +27,28 @@
 @endphp --}}
     <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] overflow-hidden ">
         <div class="py-[15px] md:py-[25px] px-[15px] md:px-[20px] gap-[10px] flex flex-col md:flex-row items-center justify-between">
-            <div class="flex flex-col md:flex-row md:flex-wrap gap-[10px] w-full">
-                <select name="sorting" id="sorting" class="allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
-                  @if (!empty($sourceList))
-                  @foreach ($sourceList as $sourceVal)
-                      {{-- @php
-                           dd($sourceVal);
-                      @endphp --}}
-                  @endforeach
-                      
-                  @endif
-                    <option value="">Source</option>
-                    <option value="1">demo</option>
+            <div class="flex max-w-[600px] gap-[10px] w-full">
+                <select name="sorting"  class="allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
+                    <option value="">Select Source</option>
+                    @if (!empty($sourceList))
+                        @foreach ($sourceList as $sourceVal)                        
+                            <option value="{{ $sourceVal->id}}">{{ $sourceVal->name}}</option>
+                        @endforeach                      
+                    @endif                    
                 </select>
-                <select name="sorting" id="sorting" class="allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[98px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
-                    <option value="">Service</option>
-                    <option value="1">demo</option>
-                </select>
-                <select name="sorting" id="sorting" class="allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[90px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
+                
+                <select name="sorting"  class="allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[90px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] " >
                     <option value="">Status</option>
                     <option value="1">demo</option>
                 </select>
-                <select name="sorting" id="sorting" class="allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[66px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
-                    <option value="1">1</option>
-                    <option value="1">2</option>
-                    <option value="1">3</option>
-                    <option value="1">4</option>
-                    <option value="1">5</option>
-                    <option value="1">6</option>
-                    <option value="1">7</option>
-                    <option value="1">8</option>
-                    <option value="1">9</option>
-                    <option value="1" selected>10</option>
-                </select>
+                <select name="sorting"  class="allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[98px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
+                    <option value="">Select Service</option>
+                    @if (!empty($serviceList))
+                        @foreach ($serviceList as $serviceListVal)                        
+                            <option value="{{ $serviceListVal->id}}">{{ $serviceListVal->serviceName}}</option>
+                        @endforeach                      
+                    @endif  
+                </select>                
             </div>
             <div class="relative w-full md:w-[217px]">
                 <svg class="absolute top-[50%] left-[13px] translate-y-[-50%]" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">

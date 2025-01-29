@@ -17,8 +17,19 @@ use App\Models\LeadTaskDetail;
 
 class LeadsController extends Controller
 {
-    public function index(){
-        $leadList = Lead::with('leadService')->where('archive',1);
+    public function index(Request $request){        
+        if(base64_decode($request->id) > 0){
+            $baseNotifyId = base64_decode($request->NotifyId);
+            $baseId = base64_decode($request->id);
+            $leadList = Lead::with('leadService')->where('id',$baseId)->where('archive',1);
+        }else{            
+            if(auth()->user()->role != 1 && auth()->user()->role != 5){
+                $leadList = Lead::with('leadService')->where('assign_to',auth()->user()->id)->where('archive',1);
+            }else{
+                $leadList = Lead::with('leadService')->where('archive',1);
+            }
+        }
+        
         $leadList = $leadList->paginate(env("PAGINATION_COUNT"));
         $sourceList = CategoryOption::where('type',3)->where('status',1)->get();
         $serviceList = Service::where('status',1)->get();
@@ -154,15 +165,17 @@ class LeadsController extends Controller
                     $LeadNotification = new LeadNotification();
                     $LeadNotification->user_id = $request->assign;
                     $LeadNotification->lead_id = $leadData->id;
-                    $LeadNotification->title = 'Assign Lead';
+                    $LeadNotification->task_id = 0;
+                    $LeadNotification->title = 'Lead Assigned';
                     $LeadNotification->description = 'New lead is assigned to you by '.auth()->user()->name.' for '.$serviceNames;
                     $LeadNotification->status = 0;
                     $LeadNotification->save();
 
                     $LeadNotification = new LeadNotification();
                     $LeadNotification->user_id = $request->assign;
+                    $LeadNotification->task_id = $LeadTask->id;
                     $LeadNotification->lead_id = $leadData->id;
-                    $LeadNotification->title = 'Assign Task';
+                    $LeadNotification->title = 'Task Assigned';
                     $LeadNotification->description = 'New task assigned - '.$LeadTask->task_title;
                     $LeadNotification->status = 0;
                     $LeadNotification->save();
@@ -253,7 +266,5 @@ class LeadsController extends Controller
             return back()->with('success','Your lead successfully assigned!');
         }
     }
-    // public function leadLogs(){
-       
-    // }
+   
 }

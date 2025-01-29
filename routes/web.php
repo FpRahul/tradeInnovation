@@ -21,7 +21,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::match(['POST','GET'],'/myprofile',[UsersController::class,'myprofile'])->name('user.myprofile');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/chart-data', [DashboardController::class, 'chartData'])->name('chart.data');
+    Route::get('/chart-data', [DashboardController::class, 'chartData'])->name('chart.data');   
 
 
     //Users Routes
@@ -64,7 +64,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     });
     //Leads Routes
     Route::prefix('leads')->controller(LeadsController::class)->group(function () {
-        Route::get('/', 'index')->name('leads.index');
+        Route::match(['POST','GET'],'/', 'index')->name('leads.index');
         Route::get('/lead-logs','leadLogs')->name('leadLogs.index');
         Route::match(['POST','GET'],'/add/{id?}', 'add')->name('leads.add');
         Route::get('/sendquote', 'sendquote')->name('leads.quote');

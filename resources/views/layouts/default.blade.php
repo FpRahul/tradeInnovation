@@ -90,7 +90,8 @@
                 placeholder: 'Select'
             });
             $('.allform-select2').select2({
-                placeholder: 'Select'
+                placeholder: 'Select',
+                allowClear: true
             });
         })
         $(document).ready(function() {

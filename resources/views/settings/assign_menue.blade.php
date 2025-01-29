@@ -10,7 +10,7 @@
          @csrf
          <div class="flex flex-col md:flex-row gap-[20px]">
             <div class="w-full md:w-1/2">
-               <label for="profession" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Menu <strong class="text-[#f83434]">*</strong></label>
+               <label for="profession" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Menu</label>
                <select name="menuName" id="menuName" class="selectedValue allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" >
                   <option value="" selected>Select menu Type</option>
 
@@ -33,7 +33,7 @@
          </div>
          <div class="flex flex-col md:flex-row gap-[20px]">
             <div class="w-full md:w-1/2">
-               <label for="icon" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Icon<strong class="text-[#f83434]">*</strong></label>
+               <label for="icon" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Icon</label>
                <input type="text" name="icon" id="icon" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                @error('icon')
                <div class="alert alert-danger">{{ $message }}</div>
@@ -76,7 +76,10 @@
                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
             },
             success: function(response) {
-
+                      if(response.message == 'success' && response.status == 200){
+                         window.location.href = "{{ route('dashboard') }}";
+                      }
+                      
 
             },
             error: function(xhr, status, error) {

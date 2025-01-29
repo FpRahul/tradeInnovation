@@ -231,18 +231,12 @@ class SettingsController extends Controller
          $menu->icon = $request->icon;
          $menu->url = $request->url;
          $menu->actionRoutes = $request->action;
-        
-     
-           if($menu){
+         if ($menu) {
             $menu->save();
-            return redirect()->back()->with('success', 'Menu assigned successfully.');
-           }
-            
+            return response()->json(['message' => 'success' ,  'status' => 200]);
+        }else{
+            return response()->json(['message' => 'error' ,  'status' => 400]);
 
-        
-
-
-
-
+        }
     }
 }

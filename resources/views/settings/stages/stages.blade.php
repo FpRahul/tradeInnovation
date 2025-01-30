@@ -5,7 +5,7 @@
       <h3 class="text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]"></h3>
    </div>
    <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px]">
-      <form id="stageAssign" method="POST" class="py-[15px] md:py-[25px] px-[15px] md:px-[30px] space-y-[20px]">
+      <form id="stageAssign" action="{{route('stages.create')}}" method="POST" class="py-[15px] md:py-[25px] px-[15px] md:px-[30px] space-y-[20px]">
          @csrf
          <div class="flex flex-col md:flex-row gap-[20px]">
             <div class="w-full md:w-1/2">
@@ -19,9 +19,9 @@
                   @else
                   <option value="" selected>Not Available</option>
                   @endif
-
                </select>
             </div>
+            <input type="hidden" name="rowId" id="rowId">
             <div class="w-full md:w-1/2">
                <label for="name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage Name <strong class="text-[#f83434]">*</strong></label>
                <input type="text" name="name" id="name" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Name">
@@ -58,29 +58,37 @@
    </div>
 </div>
 <script>
-   $(document).ready(function(){
-      $("#stageAssign").on("submit", function(e){
-            var servesParentID = $('#services').find('option:selected').data('rowid');
-            var formData = $(this).serialize()
-            formData += '&parent_id=' + servesParentID;
-            e.preventDefault()
-            $.ajax({
-               url: "{{ route('stages.create') }}",
-               method: "POST",
-               data:formData,
-               headers: {
-               "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
-                },
-               success: function(response){
-                         console.log(response);
+
+document.getElementById('services').addEventListener('change', function() {
+        var selectedOption = this.options[this.selectedIndex];
+        var rowId = selectedOption.getAttribute('data-rowId');
+        document.getElementById('rowId').value = rowId;
+    });
+   // $(document).ready(function(){
+   //    $("#stageAssign").on("submit", function(e){
+   //          var servesParentID = $('#services').find('option:selected').data('rowid');
+   //          var formData = $(this).serialize()
+   //          formData += '&parent_id=' + servesParentID;
+   //          e.preventDefault()
+   //          $.ajax({
+   //             url: "{{ route('stages.create') }}",
+   //             method: "POST",
+   //             data:formData,
+   //             headers: {
+   //             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+   //              },
+   //             success: function(response){
+   //                       if(response.message == 'success' && response.status == 200 ){
+   //                         window.location.href = "{{ route('dashboard') }}";
+   //                       }
                          
-               }
+   //             }
 
-            })
-         })
+   //          })
+   //       })
 
 
 
-   });
+   // });
 </script>
 @stop

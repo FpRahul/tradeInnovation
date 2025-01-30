@@ -1,6 +1,5 @@
 @extends('layouts.default')
 @section('content')
-
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px]">
     <div class="px-[15px] md:px-[30px] py-[20px] border-b-[1px] border-[#0000001A] flex flex-wrap items-center justify-between ">
         <div class="flex items-center gap-[8px]">

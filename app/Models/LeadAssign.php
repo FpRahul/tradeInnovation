@@ -13,5 +13,9 @@ class LeadAssign extends Model
         'dead_line'
     ];
 
+
+    public function leadTask(){
+        return $this->hasMany(LeadTask::class, 'lead_id');
+    }
    
 }

@@ -17,9 +17,11 @@ use App\Models\LeadTaskDetail;
 
 class LeadsController extends Controller
 {
-    public function index(Request $request){        
+    public function index(Request $request){   
+            
         if(base64_decode($request->id) > 0){
             $baseNotifyId = base64_decode($request->NotifyId);
+            $notifyData = LeadNotification::where('id',$baseNotifyId)->update(['status'=>1]);
             $baseId = base64_decode($request->id);
             $leadList = Lead::with('leadService')->where('id',$baseId)->where('archive',1);
         }else{            
@@ -29,7 +31,27 @@ class LeadsController extends Controller
                 $leadList = Lead::with('leadService')->where('archive',1);
             }
         }
-        
+        if($request->isMethod('POST')){
+            $leadList = Lead::with(['leadService'])
+            ->where('archive', 1)
+            ->when(!empty($request->source), function ($q) use ($request) {
+                $q->where('source', $request->source);
+            })
+            ->when(!empty($request->status), function ($q) use ($request) {
+                $q->where('status', $request->status);
+            })
+            ->when(!empty($request->service), function ($q) use ($request) {
+                $q->whereHas('leadService', function ($q) use ($request) {
+                    $q->where('service_id', $request->service);
+                });
+            })        
+            ->get();        
+            $trData = view('leads/lead-page-filter-data',compact('leadList'))->render();
+            $dataArray = [
+                'trData' => $trData,
+            ];
+            return response()->json($dataArray);
+        }
         $leadList = $leadList->paginate(env("PAGINATION_COUNT"));
         $sourceList = CategoryOption::where('type',3)->where('status',1)->get();
         $serviceList = Service::where('status',1)->get();

@@ -10,12 +10,12 @@
         <form method="POST" action="{{ route('leads.add')}}/{{!empty($leadData) ? $leadData->id :''}}" enctype="multipart/form-data" class="py-[25px] px-[30px] space-y-[20px]">
             @csrf
          
-            {{-- // $leadServiceData --}}
+           
             
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="source" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Source</label>
-                    <select name="source" id="source" class="allform-select2 showSourceListName w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <select name="source" id="source" class="allform-select2 showSourceListName w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required onchange="displayRequired(this)">
                         <option value="">Source Type</option>
                         @if (count($sourceList) > 0 )
                             @foreach ($sourceList as $sourceListData)
@@ -25,21 +25,24 @@
                     </select>
                 </div>
                 @php
-                $sourceTypeData = [];
-                $displayClass = 'hidden';
+                    $sourceTypeData = [];
+                    $displayClass = '';
                 @endphp
+
                 @if (!empty($leadData))
-                    @if ($leadData->source_id > 0)                
+                    @if ($leadData->source_id > 0)           
                         @php
-                        $sourceTypeData = collect(getSourceTypeName($leadData->source));
-                        $displayClass = '';
-                        @endphp          
+                            $sourceTypeData = collect(getSourceTypeName($leadData->source));
+                            $displayClass = '';
+                        @endphp
+                    @else
+                        $displayClass = 'hidden';
                     @endif
                 @endif
-               
-                <div class="sourceTypeNameDiv w-full md:w-1/2 {{$displayClass}}">
+                <div class="sourceTypeNameDiv w-full md:w-1/2" id="source_type" style="display: none;">
                     <label for="sourceTypeNameList" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Source Type Name</label>
-                    <select name="sourcetypenamelist" id="sourceTypeNameList" class="allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <select name="sourcetypenamelist" id="sourceTypeNameList" class="allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none is_required">
+
                         @if ($sourceTypeData && $sourceTypeData->isNotEmpty())
                             @foreach ($sourceTypeData as $key =>$value)
                                 <option value="{{$value->id}}" {{$leadData->source_id == $value->id ? 'selected':''}}>{{$value->name}}</option>
@@ -47,6 +50,7 @@
                         @endif
                     </select>
                 </div>
+
                 <div class="w-full md:w-1/2">
                     <label for="clientname" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Client Name</label>
                     <input type="text" name="clientname" id="clientname" value="{{ !empty($leadData) ? $leadData->client_name : ''}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
@@ -351,5 +355,21 @@
             console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
         });
     });
+
+    function displayRequired(e){
+        const isRequireed = $('.is_required');
+        const sourceType = $('#source_type');
+        const value = $(e).val();
+
+        sourceType.hide();
+        isRequireed.attr('required', false);
+
+        console.log(value);
+        if(value == 14 || value == 15 || value == 19){
+            sourceType.show();
+            isRequireed.attr('required', true);
+        }
+        
+    }
 </script>
 @stop

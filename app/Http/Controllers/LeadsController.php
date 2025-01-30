@@ -58,7 +58,6 @@ class LeadsController extends Controller
         $serviceList = Service::where('status',1)->get();
         $userList = User::where('role','>',3)->where('status',1)->get();
         if($request->isMethod('POST')){ 
-            // dd($request);
             if($id == '' || $id == 0){
                 $leadData = new Lead();
             }
@@ -78,8 +77,6 @@ class LeadsController extends Controller
             $leadData->description = $request->description;
             
             if($leadData->save()){
-               
-
                 $serviceidArray = [];
                 // lead attachment repeater...         
                 if(!empty($request->leadAttachment)){
@@ -147,7 +144,6 @@ class LeadsController extends Controller
                     $LeadTaskDetail->status = 0;
                     $LeadTaskDetail->status_date = date('Y-m-d');
                      $LeadTaskDetail->save();
-
                     // lead logs...
                     $LeadLog = new LeadLog();
                     $LeadLog->user_id = $request->assign;
@@ -156,7 +152,6 @@ class LeadsController extends Controller
                     $LeadLog->assign_by = auth()->user()->id;
                     $LeadLog->description = '';
                     $LeadLog->save();
-
                     // lead notification...
                     $serviceNames = '';
                     if(!empty($serviceidArray)){                        

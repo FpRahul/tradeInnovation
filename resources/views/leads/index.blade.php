@@ -22,9 +22,7 @@
         @endif
         
     </div>
-{{-- @php
-     dd($sourceList);
-@endphp --}}
+
     <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] overflow-hidden ">
         <div class="py-[15px] md:py-[25px] px-[15px] md:px-[20px] gap-[10px] flex flex-col md:flex-row items-center justify-between">
             <div class="flex max-w-[600px] gap-[10px] w-full">

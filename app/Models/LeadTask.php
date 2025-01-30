@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class LeadTask extends Model
 {
@@ -12,5 +13,26 @@ class LeadTask extends Model
         'assign_by',
         'task_title',
         'task_description'
-    ];
+    ]; 
+
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id');
+    }
+
+    public function lead(){
+        return $this->belongsTo(Lead::class,'lead_id');
+    }
+
+    public function leadAssign()
+    {
+        return $this->belongsTo(LeadAssign::class, 'lead_id');  
+    }
+
+    public function leadServices()
+    {
+        return $this->hasMany(LeadService::class, 'lead_id', 'lead_id'); 
+    }
+       
+
 }

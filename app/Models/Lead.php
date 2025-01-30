@@ -26,4 +26,9 @@ class Lead extends Model
         return $this->hasMany(LeadService::class,'lead_id','id');
     }
 
+    public function leadTasks()
+    {
+        return $this->hasMany(LeadTask::class, 'lead_id');
+    }
+
 }

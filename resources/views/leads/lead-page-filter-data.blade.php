@@ -86,3 +86,6 @@
        
     </tbody>
 </table>
+<div id="dynamic-pagination" class="py-[15px] px-[20px]">
+    {{ $leadList->appends(['key' => $searchKey,'source'=>$sourceKey,'service'=>$serviceKey,'status'=>$statusKey])->links() }}
+</div>

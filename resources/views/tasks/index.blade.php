@@ -24,7 +24,7 @@
                     <label for="status" class="text-[14px] font-[400] text-[#13103A]">Status</label>
                     <select name="status" id="status" class="allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[90px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]">
                         <option value="">-Select-</option>
-                        @if($taskDetailsDrp->count() > 0)
+                        @if(!$taskDetailsDrp && $taskDetailsDrp->isNotEmpty())
                         
                         @foreach ($taskDetailsDrp as $details)
                         @php
@@ -87,7 +87,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if(!$taskDetails->isEmpty())
+                        @if(!$taskDetails && $taskDetails->isNotEmpty())
                             @foreach ($taskDetails as $task )
                             <tr>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px] pl-[25px]">

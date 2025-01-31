@@ -12,7 +12,7 @@ class TasksController extends Controller
     private $viewPath = "tasks.";
     public function index(Request $request){
         $header_title_name="Tasks";
-            $taskDetails = LeadTask::with([ 'user','lead','leadAssign' ,'leadTaskDetails' ,'leadServices.service','leadServices.subservice']);
+            $taskDetails = LeadTask::with([ 'user','lead' ,'leadTaskDetails' ,'leadServices.service','leadServices.subservice']);
             $searchKey = $request->input('key') ?? '';
             $requestType = $request->input('requestType') ?? '';
             if ($searchKey) {

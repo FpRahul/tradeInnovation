@@ -17,7 +17,7 @@ use App\Models\ServiceStages;
 
 class LeadsController extends Controller
 {
-    public function index(Request $request){            
+    public function index(Request $request){
         if(base64_decode($request->id) > 0){
             $baseNotifyId = base64_decode($request->NotifyId);
             $notifyData = LeadNotification::where('id',$baseNotifyId)->update(['status'=>1]);
@@ -25,7 +25,9 @@ class LeadsController extends Controller
             $leadList = Lead::with('leadService')->where('id',$baseId)->where('archive',1);
         }else{            
             if(auth()->user()->role != 1 && auth()->user()->role != 5){
-                $leadList = Lead::with(['leadService','leadTasks'])->where('archive',1);
+                $leadList = Lead::with(['leadService','leadTasks'])->whereHas('leadTasks',function($q){
+                    $q->where('user_id',auth()->user()->id);
+                })->where('archive',1);
             }else{
                 $leadList = Lead::with('leadService')->where('archive',1);
             }

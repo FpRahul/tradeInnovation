@@ -347,8 +347,7 @@
 
     $(document).on('change','.showSourceListName',function(){
         var value = $(this).val();
-        if(value == 14 || value == 15 || value == 19){
-            
+        if(value == 17 || value == 18 || value == 19){            
             $.ajax({
                 method:'POST',
                 url:"{{ route('lead.getsourcetypename')}}",
@@ -390,7 +389,7 @@
         isRequireed.attr('required', false);
 
         console.log(value);
-        if(value == 14 || value == 15 || value == 19){
+        if(value == 17 || value == 18 || value == 19){
             sourceType.show();
             isRequireed.attr('required', true);
         }

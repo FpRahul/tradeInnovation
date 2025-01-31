@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Service;
 use App\Models\SubService;
+use App\Models\ServiceStages;
 use App\View\Components\LogActivity;
-
 
 class ServicesController extends Controller
 {
@@ -145,17 +145,22 @@ class ServicesController extends Controller
         $operatingSystem = getOperatingSystem($userAgent);
         if($subServiceDel->delete()){
            $logActivity[] = [
-            'user_id' => auth()->user()->id,
-            'title' => 'Archive SUbServices',
-            'description' => auth()->user()->name . ' '. ' has deleted SubServices '.' '. $subServiceDel->subServiceName .' '.' (' . $subServiceDel->id . ')',
-            'created_at' => date('Y-m-d H:i:s'),
-            'ip_address' => $clientIP,
-            'operating_system' => $operatingSystem
-        ];
-        $logActivity = new LogActivity($logActivity);
-        $logActivity->log();
+                'user_id' => auth()->user()->id,
+                'title' => 'Archive SUbServices',
+                'description' => auth()->user()->name . ' '. ' has deleted SubServices '.' '. $subServiceDel->subServiceName .' '.' (' . $subServiceDel->id . ')',
+                'created_at' => date('Y-m-d H:i:s'),
+                'ip_address' => $clientIP,
+                'operating_system' => $operatingSystem
+            ];
+            $logActivity = new LogActivity($logActivity);
+            $logActivity->log();
         }else{
             echo "0";
         }
+    }
+
+    public function serviceStages(Request $request){
+        $allStages = ServiceStages::where('service_id',$request->serviceId)->get();
+        return response()->json(['data'=>$allStages]);
     }
 }

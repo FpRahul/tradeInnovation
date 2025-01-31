@@ -257,11 +257,11 @@ class LeadsController extends Controller
     }
 
     public function archiveLead(Request $request,$id=null){
-      $leadData = Lead::where('id',$id)->first();
-      $leadData->archive = 0;
-      if($leadData->save()){
-        return back()->with('success','Now your data is in archived!');
-      }
+        $leadData = Lead::where('id',$id)->first();
+        $leadData->archive = 0;
+        if($leadData->save()){
+            return back()->with('success','Now your data is in archived!');
+        }
     }
 
     public function setAssignToUser(Request $request){

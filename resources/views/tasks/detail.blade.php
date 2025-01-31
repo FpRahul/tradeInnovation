@@ -69,7 +69,6 @@
         <li>
             <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Associate</span>
             <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize">
-                {{ $task->leadAssign->associate_name ?? 'N/A' }}
             </strong>
         </li>
     @endforeach
@@ -90,8 +89,8 @@
             <div class="w-full md:w-1/2">
                 <label for="status" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
                 <select name="status" id="status" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
-                    <option value="1">Completed</option>
-                    <option value="0">Incomplete</option>
+                    <option value="1">Registered</option>
+                    <option value="0">Not Registered</option>
                 </select>
             </div>
             <div class="w-full md:w-1/2">
@@ -103,8 +102,14 @@
             <div class="w-full md:w-1/2">
                 <label for="assignUser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign User</label>
                 <select name="assignUser" id="assignUser" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                    @if($users->count() > 0)
                     <option value="1">Assign User</option>
-                    <option value="0">User</option>
+                    @foreach ($users as $user )
+                    <option value="{{$user->id}}">{{$user->name}}</option>
+                    @endforeach
+                    @else
+                    <option>Assign user</option>
+                    @endif
                 </select>
             </div>
             <div class="w-full md:w-1/2">

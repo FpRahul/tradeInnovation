@@ -90,6 +90,10 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/logs', 'logs')->name('task.log');
         Route::get('/details/{id}', 'detail')->name('task.detail');
         Route::get('/check-duplication/{id}', 'chekDuplication')->name('task.chekDuplication');
+        Route::post('/document-verified/{id}', 'documentVerified')->name('task.documentVerified');
+        Route::get('/document-verified/stage3/{id}', 'documentVerifiedChildSatge')->name('task.documentVerifiedChildSatge');
+
+
 
     });
     //Services Routes

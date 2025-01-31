@@ -24,6 +24,7 @@ class GetAssignedNotification extends Component
     public function render(): View|Closure|string
     {
         $notificationData = LeadNotification::where('user_id',auth()->user()->id)->where('status',0)->orderBy('id','DESC')->get();
-        return view('components.get-assigned-notification',compact('notificationData'));
+        $notifyCount = $notificationData->count();
+        return view('components.get-assigned-notification',compact('notificationData','notifyCount'));
     }
 }

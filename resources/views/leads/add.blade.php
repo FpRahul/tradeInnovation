@@ -19,7 +19,7 @@
                         <option value="">Source Type</option>
                         @if (count($sourceList) > 0 )
                             @foreach ($sourceList as $sourceListData)
-                                <option value="{{ $sourceListData->id}}" {{ !empty($leadData) > 0 ? $leadData->source == $sourceListData->id ? 'selected' :'' : ''}}>{{ $sourceListData->name}}</option>
+                                <option value="{{ $sourceListData->id}}" @php ($leadData->source == $sourceListData->id) ?? selected @endphp>{{ $sourceListData->name}}</option>
                             @endforeach                            
                         @endif
                     </select>
@@ -36,7 +36,9 @@
                             $displayClass = '';
                         @endphp
                     @else
-                        $displayClass = 'hidden';
+                        @php
+                            $displayClass = 'hidden';
+                        @endphp
                     @endif
                 @endif
                 <div class="sourceTypeNameDiv w-full md:w-1/2" id="source_type" style="display: none;">
@@ -85,30 +87,6 @@
                         
                             @endforeach                            
                     </select>
-                </div>
-            </div>
-            <div class="flex flex-col md:flex-row gap-[20px]">
-                <div class="w-full md:w-1/2">
-                    <label for="taskdescription" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Task Description</label>
-                    <textarea type="text" name="taskdescription" id="taskdescription" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required></textarea>
-                </div>
-                <div class="w-full md:w-1/2">
-                    <label for="taskdeadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-                       Task DeadLine
-                    </label>                           
-                    <div class="w-[100%] relative">
-                        <input 
-                            type="text" 
-                            placeholder="Dead Line" 
-                            name="taskdeadline" 
-                            class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
-                            value="" 
-                            autocomplete="off"
-                        >
-                        <div class="absolute right-[10px] top-[10px]">
-                        <i class="ri-calendar-line"></i>
-                        </div>
-                    </div>     
                 </div>
             </div>
             <div>
@@ -198,12 +176,43 @@
                              
                               
                         </div>
-                        <div class="mt-[20px]">
+                        {{-- <div class="mt-[20px]">
                             <a href="javascript:void(0)" data-repeater-create class="inline-block text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]"> Add More </a>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 {{-- service repeater end --}}               
+            </div>
+            <div class="flex flex-col md:flex-row gap-[20px]">
+                <div class="w-full md:w-1/2">
+                    <label class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
+                    <select name="stage_id" class="allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                        <option value="">Select Stage</option>
+                        @if (count($allStages) > 0 )
+                            @foreach ($allStages as $stage)
+                                <option value="{{ $stage->id}}">{{ $stage->title}}</option>
+                            @endforeach                            
+                        @endif
+                    </select>
+                </div>
+                <div class="w-full md:w-1/2">
+                    <label for="taskdeadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+                       Task DeadLine
+                    </label>                           
+                    <div class="w-[100%] relative">
+                        <input 
+                            type="text" 
+                            placeholder="Dead Line" 
+                            name="taskdeadline" 
+                            class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
+                            value="" 
+                            autocomplete="off"
+                        >
+                        <div class="absolute right-[10px] top-[10px]">
+                        <i class="ri-calendar-line"></i>
+                        </div>
+                    </div>     
+                </div>
             </div>
             {{-- multi attachment --}}
             <div>

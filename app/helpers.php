@@ -29,7 +29,7 @@ if(!function_exists('getSourceData')){
 }
 if(!function_exists('getSourceTypeName')){
     function getSourceTypeName($sourceTypeId){
-        
+        $value='0';
         if($sourceTypeId == 18){
             $value = 3;
         }elseif($sourceTypeId == 19){

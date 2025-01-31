@@ -17,8 +17,7 @@ use App\Models\ServiceStages;
 
 class LeadsController extends Controller
 {
-    public function index(Request $request){   
-            
+    public function index(Request $request){            
         if(base64_decode($request->id) > 0){
             $baseNotifyId = base64_decode($request->NotifyId);
             $notifyData = LeadNotification::where('id',$baseNotifyId)->update(['status'=>1]);
@@ -26,7 +25,7 @@ class LeadsController extends Controller
             $leadList = Lead::with('leadService')->where('id',$baseId)->where('archive',1);
         }else{            
             if(auth()->user()->role != 1 && auth()->user()->role != 5){
-                $leadList = Lead::with('leadService')->where('assign_to',auth()->user()->id)->where('archive',1);
+                $leadList = Lead::with(['leadService','leadTasks'])->where('archive',1);
             }else{
                 $leadList = Lead::with('leadService')->where('archive',1);
             }
@@ -54,16 +53,16 @@ class LeadsController extends Controller
                 $q->where('client_name', 'LIKE', '%' . $request->key . '%');
             });                
         }
-        
+       
         $leadList = $leadList->paginate(env("PAGINATION_COUNT"));
         if(empty($requestType)){
             $sourceList = CategoryOption::where('type',3)->where('status',1)->get();
             $serviceList = Service::where('status',1)->get();
             $userList = User::where('role',4)->get();
             $header_title_name = 'Leads';
-            return view('leads/index',compact('header_title_name','leadList','sourceList','serviceList','userList','sourceKey','serviceKey','statusKey'));
+            return view('leads/index',compact('header_title_name','leadList','sourceList','serviceList','userList','sourceKey','serviceKey','statusKey','searchKey'));
         }else{
-            $trData = view('leads/lead-page-filter-data',compact('leadList'))->render();
+            $trData = view('leads/lead-page-filter-data',compact('leadList','sourceKey','serviceKey','statusKey','searchKey'))->render();
             $dataArray = [
                 'trData' => $trData,
                 'source'=>$request->source,

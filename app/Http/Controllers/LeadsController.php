@@ -189,7 +189,6 @@ class LeadsController extends Controller
                     $LeadNotification->status = 0;
                     $LeadNotification->save();
                 }               
-               
                 return redirect()->route('leads.index')->withSuccess($successMsg);
             }
         }

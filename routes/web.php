@@ -88,7 +88,9 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::prefix('tasks')->controller(TasksController::class)->group(function () {
         Route::get('/', 'index')->name('task.index');
         Route::get('/logs', 'logs')->name('task.log');
-        Route::get('/details', 'detail')->name('task.detail');
+        Route::get('/details/{id}', 'detail')->name('task.detail');
+        Route::get('/check-duplication/{id}', 'chekDuplication')->name('task.chekDuplication');
+
     });
     //Services Routes
     Route::prefix('services')->controller(ServicesController::class)->group(function () {

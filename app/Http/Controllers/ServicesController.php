@@ -161,6 +161,13 @@ class ServicesController extends Controller
 
     public function serviceStages(Request $request){
         $allStages = ServiceStages::where('service_id',$request->serviceId)->get();
-        return response()->json(['data'=>$allStages]);
+        $options = '<option value="">Select Stage</option>';
+        if($allStages && $allStages->isNotEmpty()){
+            foreach($allStages as $key=>$val){
+                $options .= "<option value=\"{$val->id}\">{$val->title}</option>";
+
+            }
+        }
+        return response()->json(['options'=>$options]);
     }
 }

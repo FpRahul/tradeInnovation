@@ -1,10 +1,7 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\Models\LeadTask;
-
 class TasksController extends Controller
 {
     public function index(Request $request){

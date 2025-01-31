@@ -19,7 +19,7 @@ class Services extends Seeder
                 'status' => '1'
             ],
             [
-                'serviceName' => 'Patnet',
+                'serviceName' => 'Patent',
                 'status' => '1'
             ],
             [

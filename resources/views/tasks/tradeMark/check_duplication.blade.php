@@ -102,9 +102,15 @@
         <div class="flex flex-col md:flex-row gap-[20px]">
             <div class="w-full md:w-1/2">
                 <label for="assignUser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign User</label>
-                <select name="assignUser" id="assignUser" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
-                    <option value="1">Assign User</option>
-                    <option value="0">User</option>
+                <select name="assignUser" aria-placeholder="Assign user" id="assignUser" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                  
+                   @if($users->count()>0)
+                   @foreach ( $users as $user  )
+                   <option value="{{$user->id}}">{{$user->name}}</option>
+                   @endforeach
+                   @else
+                   <option>No user found</option>
+                   
                 </select>
             </div>
             <div class="w-full md:w-1/2">

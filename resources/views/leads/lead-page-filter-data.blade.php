@@ -80,6 +80,8 @@
             </td>
         </tr>
            @endforeach
+        @else
+            <tr> <td colspan="7" class="text-center"><div class="text-[#e11010] py-[20px]">No Record Found!</div></td></tr>
         @endif                  
        
     </tbody>

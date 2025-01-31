@@ -14,7 +14,6 @@ use App\Models\LeadNotification;
 use App\Models\LeadTask;
 use App\Models\LeadTaskDetail;
 use App\Models\ServiceStages;
-
 class LeadsController extends Controller
 {
     public function index(Request $request){
@@ -250,12 +249,12 @@ class LeadsController extends Controller
     }
 
     public function deleteAttachmentRepeaterLead(Request $request){
-        // $leadServiceDel = LeadService::where('id',$request->id);
-        // if($leadServiceDel->delete()){
-        //     echo "1";
-        // }else{
-        //     echo "0";
-        // }
+        $leadServiceDel = LeadAttachment::where('id',$request->id);
+        if($leadServiceDel->delete()){
+            echo "1";
+        }else{
+            echo "0";
+        }
     }
 
     public function archiveLead(Request $request,$id=null){

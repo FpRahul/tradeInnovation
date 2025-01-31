@@ -287,7 +287,6 @@ class UsersController extends Controller
     }
     public function deleteRepeaterUser(Request $request)
     {
-
         $experienceData = UserExperience::where('id', $request->id);
         if ($experienceData->delete()) {
             echo "1";

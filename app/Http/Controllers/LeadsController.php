@@ -31,11 +31,16 @@ class LeadsController extends Controller
                 $leadList = Lead::with('leadService')->where('archive',1);
             }
         }
-        if($request->isMethod('POST')){
-            $leadList = Lead::with(['leadService'])
-            ->where('archive', 1)
-            ->when(!empty($request->source), function ($q) use ($request) {
-                $q->where('source', $request->source);
+        
+        $sourceKey = $request->input('source') ?? '';
+        $serviceKey = $request->input('service') ?? '';
+        $statusKey = $request->input('status') ?? '';
+        $searchKey = $request->input('key') ?? '';
+        $requestType = $request->input('requestType') ?? '';
+
+        if($sourceKey != '' || $serviceKey != '' || $statusKey != '' || $searchKey != ''){
+            $leadList->when(!empty($request->source), function ($q) use ($request) {
+            $q->where('source', $request->source);
             })
             ->when(!empty($request->status), function ($q) use ($request) {
                 $q->where('status', $request->status);
@@ -44,20 +49,30 @@ class LeadsController extends Controller
                 $q->whereHas('leadService', function ($q) use ($request) {
                     $q->where('service_id', $request->service);
                 });
-            })        
-            ->get();        
+            })
+            ->when(!empty($request->key), function($q) use ($request) {
+                $q->where('client_name', 'LIKE', '%' . $request->key . '%');
+            });                
+        }
+        
+        $leadList = $leadList->paginate(env("PAGINATION_COUNT"));
+        if(empty($requestType)){
+            $sourceList = CategoryOption::where('type',3)->where('status',1)->get();
+            $serviceList = Service::where('status',1)->get();
+            $userList = User::where('role',4)->get();
+            $header_title_name = 'Leads';
+            return view('leads/index',compact('header_title_name','leadList','sourceList','serviceList','userList','sourceKey','serviceKey','statusKey'));
+        }else{
             $trData = view('leads/lead-page-filter-data',compact('leadList'))->render();
             $dataArray = [
                 'trData' => $trData,
+                'source'=>$request->source,
+                'service'=>$request->service,
+                'status'=>$request->status,
             ];
             return response()->json($dataArray);
-        }
-        $leadList = $leadList->paginate(env("PAGINATION_COUNT"));
-        $sourceList = CategoryOption::where('type',3)->where('status',1)->get();
-        $serviceList = Service::where('status',1)->get();
-        $userList = User::where('role',4)->get();
-        $header_title_name = 'Leads';
-        return view('leads/index',compact('header_title_name','leadList','sourceList','serviceList','userList'));
+        }   
+        
     }
 
     public function add(Request $request, $id = null){

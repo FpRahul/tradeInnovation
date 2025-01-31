@@ -13,7 +13,7 @@ class Role extends Seeder
      */
     public function run(): void
     {
-        DB::table('service_stages')->insert([
+        DB::table('roles')->insert([
             [
                 'name' => 'Admin',
             ],

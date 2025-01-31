@@ -99,6 +99,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::match(['POST','GET'],'/subservice/{id?}', 'addSubService')->name('services.subService.add');
         Route::match(['POST','GET'],'/changestatus/{id?}','serviceStatus')->name('service.status');
         Route::post('/deleterepeater', 'deleteRepeaterSubserv')->name('subservice.deleterepeater');
+        Route::get('/serviceStages', 'serviceStages')->name('serviceStages');
 
     });
     

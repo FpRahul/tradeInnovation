@@ -1,13 +1,18 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use App\Models\LeadTask;
+use App\Models\User;
+
+use App;
 class TasksController extends Controller
 {
+    private $viewPath = "tasks.";
     public function index(Request $request){
-        // $header_title_name="Tasks";
-            $taskDetails = LeadTask::select('task_description', 'user_id', 'lead_id', 'status') 
-            ->with([ 'user','lead','leadAssign','leadServices.service','leadServices.subservice',]);
+        $header_title_name="Tasks";
+            $taskDetails = LeadTask::with([ 'user','lead','leadAssign' ,'leadTaskDetails' ,'leadServices.service','leadServices.subservice']);
             $searchKey = $request->input('key') ?? '';
             $requestType = $request->input('requestType') ?? '';
             if ($searchKey) {
@@ -23,13 +28,19 @@ class TasksController extends Controller
                     });
                 });
             }
+            
+            $taskDetailsDrp = $taskDetails->get();
             $taskDetails = $taskDetails->paginate(env("PAGINATION_COUNT"));
             if (empty($requestType)) {                                                       
                 $header_title_name = 'User';
-                return view('tasks/index',compact('header_title_name', 'taskDetails','searchKey'));
+                return view($this->viewPath.'index',[
+                    'header_title_name' => $header_title_name,
+                    'taskDetails' => $taskDetails,
+                    'searchKey' => $searchKey,
+                    'taskDetailsDrp' => $taskDetailsDrp
+                ]);
             }else{
-                // dd($taskDetails);
-                $trData = view('tasks/task_fillter_data_listing', compact('taskDetails', 'searchKey'))->render();
+                $trData = view($this->viewPath.'task_fillter_data_listing', compact('taskDetails', 'searchKey'))->render();
             $dataArray = [
                 'trData' => $trData,
             ];
@@ -40,12 +51,25 @@ class TasksController extends Controller
 
     public function logs(){
         $header_title_name="Lead Logs";
-        return view('tasks/logs',compact('header_title_name'));
+        return view($this->viewPath.'logs',compact('header_title_name'));
     }
 
-    public function detail(){
+    public function detail($id){
+        
         $header_title_name="Lead action & details";
-        return view('tasks/detail',compact('header_title_name'));
+        $taskDetails = LeadTask::with(['user', 'lead', 'leadAssign', 'leadTaskDetails', 'leadServices.service', 'leadServices.subservice'])
+        ->where('id', $id)
+        ->get();
+        return view('tasks/detail',compact('header_title_name', 'taskDetails'));
+    }
+
+    public function chekDuplication($id){
+        $header_title_name="Lead action & details";
+        $taskDetails = LeadTask::with(['user', 'lead', 'leadAssign', 'leadTaskDetails', 'leadServices.service', 'leadServices.subservice'])
+        ->where('id', $id)
+        ->get();
+        $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1);
+        return view('tasks/detail',compact('header_title_name', 'taskDetails', 'users'));
     }
    
 

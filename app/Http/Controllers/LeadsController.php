@@ -9,11 +9,11 @@ use Illuminate\Http\Request;
 use App\Models\Lead;
 use App\Models\LeadService;
 use App\Models\LeadAttachment;
-use App\Models\LeadAssign;
 use App\Models\LeadLog;
 use App\Models\LeadNotification;
 use App\Models\LeadTask;
 use App\Models\LeadTaskDetail;
+use App\Models\ServiceStages;
 
 class LeadsController extends Controller
 {
@@ -65,24 +65,20 @@ class LeadsController extends Controller
             $leadData = Lead::where('id',$id)->first();
             $leadServiceData = LeadService::where('lead_id',$id)->get();
             $leadAttachment = LeadAttachment::where('lead_id',$id)->get();
-            $leadAssign = LeadAssign::where('lead_id',$id)->first();
             $LeadLog = LeadLog::where('lead_id',$id)->first();
-            $successMsg = 'Your lead is succussfully updated!';
+            $successMsg = 'Lead updated!!!';
         }else{
-            $leadData = [];
+            $leadData = new Lead();
             $leadServiceData =[];
             $leadAttachment = [];
-            $leadAssign = [];
             $LeadLog = [];
-            $successMsg = 'Your lead is succussfully inserted!';
+            $successMsg = 'Lead added!!';
         }
+        $allStages = ServiceStages::get();
         $sourceList = CategoryOption::where('type',3)->where('status',1)->get();
         $serviceList = Service::where('status',1)->get();
         $userList = User::where('role','>',3)->where('status',1)->get();
         if($request->isMethod('POST')){ 
-            if($id == '' || $id == 0){
-                $leadData = new Lead();
-            }
             if($request->sourcetypenamelist > 0){
                 $sourceId = $request->sourcetypenamelist;              
             }else{
@@ -95,9 +91,7 @@ class LeadsController extends Controller
             $leadData->company_name = $request->companyname;
             $leadData->mobile_number = $request->mobilenumber;
             $leadData->email = $request->email;
-            $leadData->assign_to = $request->assign;
             $leadData->description = $request->description;
-            
             if($leadData->save()){
                 $serviceidArray = [];
                 // lead attachment repeater...         
@@ -132,34 +126,17 @@ class LeadsController extends Controller
                         $leadServiceData->subservice_id = $serviceVal['subserviceid'];                     
                         $leadServiceData->save();
                     }                 
-                }   
-                // lead assign to user...
-                if(!empty($leadAssign)){
-                    $leadAssign->user_id = $request->assign;
-                    $leadAssign->lead_id = $leadData->id;
-                    $leadAssign->assign_by = auth()->user()->id;
-                    $leadAssign->description = $request->taskdescription;
-                    $leadAssign->dead_line = date('Y-m-d',strtotime($request->taskdeadline));
-                    $leadAssign->save();
-                }else{
-                    $leadAssign = new LeadAssign();
-                    $leadAssign->user_id = $request->assign;
-                    $leadAssign->lead_id = $leadData->id;
-                    $leadAssign->assign_by = auth()->user()->id;
-                    $leadAssign->description = $request->taskdescription;
-                    $leadAssign->dead_line = date('Y-m-d',strtotime($request->taskdeadline));
-                    $leadAssign->save();
                 }               
 
                 // lead task...
                 $LeadTask = new LeadTask();
                 $LeadTask->user_id = $request->assign;
                 $LeadTask->lead_id = $leadData->id;
+                $LeadTask->service_stage_id = $request->stage_id;
                 $LeadTask->assign_by = auth()->user()->id;
-                $LeadTask->task_title = '';
+                $LeadTask->task_title = ServiceStages::find($request->stage_id)->title;
                 $LeadTask->task_description = $request->taskdescription;
                 if($LeadTask->save()){
-
                     $LeadTaskDetail = new LeadTaskDetail();
                     $LeadTaskDetail->task_id = $LeadTask->id;
                     $LeadTaskDetail->dead_line = date('Y-m-d',strtotime($request->taskdeadline));
@@ -198,11 +175,11 @@ class LeadsController extends Controller
                     $LeadNotification->save();
                 }               
                
-                    return redirect()->route('leads.index')->withSuccess($successMsg);
+                return redirect()->route('leads.index')->withSuccess($successMsg);
             }
         }
         $header_title_name = 'Lead';
-        return view('leads/add',compact('header_title_name','sourceList','serviceList','userList','leadData','leadServiceData','leadAttachment'));
+        return view('leads/add',compact('header_title_name','sourceList','serviceList','userList','leadData','leadServiceData','leadAttachment','allStages'));
     }
 
     public function getSubService(Request $request){
@@ -229,11 +206,12 @@ class LeadsController extends Controller
     }
 
     public function getSourceTypeName(Request $request){
-        if($request->value == 14){
+        if($request->value == 18){
             $value = 3;
-        }elseif($request->value == 15){
-            $value = 4;
         }elseif($request->value == 19){
+            $value = 4;
+        }elseif($request->value == 17){
+            //CLIENT
             $value = 2;
         }
         $userData = User::where('role',$value)->get();
@@ -273,15 +251,7 @@ class LeadsController extends Controller
     }
 
     public function setAssignToUser(Request $request){
-        $assignData = new LeadAssign();
-        $assignData->user_id = $request->selectuser;
-        $assignData->lead_id = $request->lead_id;
-        $assignData->assign_by = $request->assign_by;
-        $assignData->description = $request->description;
-        $assignData->dead_line = date('Y-m-d',strtotime($request->deadline));
-        if($assignData->save()){
-            return back()->with('success','Your lead successfully assigned!');
-        }
+       
     }
    
 }

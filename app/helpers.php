@@ -28,11 +28,11 @@ if(!function_exists('getSourceData')){
 if(!function_exists('getSourceTypeName')){
     function getSourceTypeName($sourceTypeId){
         
-        if($sourceTypeId == 14){
+        if($sourceTypeId == 18){
             $value = 3;
-        }elseif($sourceTypeId == 15){
-            $value = 4;
         }elseif($sourceTypeId == 19){
+            $value = 4;
+        }elseif($sourceTypeId == 17){
             $value = 2;
         }
         return User::where('role',$value)->get();

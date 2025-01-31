@@ -327,6 +327,22 @@
                 e.parent().parent().find('.getSubService').html(res.data);
             }
         });
+
+        //get stages
+        $.ajax({
+            method:'POST',
+            url:"{{ route('serviceStages')}}",
+            headers:{
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            dataType:'json',
+            data:{
+                serviceId:serviceId
+            },
+            success:function(res){
+                e.parent().parent().find('.getSubService').html(res.data);
+            }
+        });
     });
 
     $(document).on('change','.showSourceListName',function(){

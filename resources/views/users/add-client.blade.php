@@ -28,11 +28,11 @@
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="incorporationtype" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Incorporation Type <strong class="text-[#f83434]">*</strong></label>
-                    <select name="incorporationtype" id="incorporationtype" class=" selectedValue allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <select name="incorporationtype" class=" selectedValue allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                         <option value="">Select Incorporation Type</option>
                         @if (count($incorporationDataList) > 0)
                             @foreach ($incorporationDataList as $incorporationDataListDetails)  
-                            <option value="{{$incorporationDataListDetails->id}}">{{$incorporationDataListDetails->name}}</option>                      
+                            <option value="{{$incorporationDataListDetails->id}}" @selected($incorporationDataListDetails->id == $newClientDetails->incorporationType)>{{$incorporationDataListDetails->name}}</option>                      
                             @endforeach                                                            
                         @endif
                     </select>
@@ -88,15 +88,43 @@
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="referralPartner" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Referral Partner <strong class="text-[#f83434]">*</strong></label>
-                    <select name="referralPartner" id="referralPartner" class="selectedValue allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <select name="referralPartner" id="referralPartner" class="showSourceListName selectedValue allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                         <option value=""  >Select Referral Partner</option>
                         @if (count($referDataList) > 0)
                             @foreach ($referDataList as $referDataListDetails)  
-                            <option value="{{$referDataListDetails->id}}">{{$referDataListDetails->name}}</option>                      
+                            <option value="{{$referDataListDetails->id}}" @selected($referDataListDetails->id == $newClientDetails->referralPartner)>{{$referDataListDetails->name}}</option>                      
                             @endforeach                                                            
                         @endif
                     </select>
                 </div>
+                @php
+                $sourceTypeData = [];
+                $displayClass = 'hidden';
+            @endphp
+
+            @if (!empty($newClientDetails))
+
+                @if ($newClientDetails->referralPartner == 17 || $newClientDetails->referralPartner == 18 || $newClientDetails->referralPartner == 19)
+                    @if ($newClientDetails->source_type_id > 0)           
+                        @php
+                        
+                            $sourceTypeData = collect(getUserSourceTypeName($newClientDetails->referralPartner));
+                            $displayClass = '';
+                        @endphp                        
+                    @endif
+                @endif
+            @endif
+            <div class="sourceTypeNameDiv w-full md:w-1/2 {{$displayClass}}" id="source_type">
+                <label for="sourceTypeNameList" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Source Type Name</label>
+                <select name="sourcetypenamelist" id="sourceTypeNameList" class="allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none is_required">
+
+                    @if ($sourceTypeData && $sourceTypeData->isNotEmpty())
+                        @foreach ($sourceTypeData as $key =>$value)
+                            <option value="{{$value->id}}" {{$newClientDetails->source_type_id == $value->id ? 'selected':''}}>{{$value->name}}</option>
+                        @endforeach                            
+                    @endif
+                </select>
+            </div>
             </div>
             <div class="">
                 <label for="referralPartner" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Registered under Startup scheme</label>
@@ -117,19 +145,28 @@
         </form>
     </div>
 </div>
-
 <script>
-    $(document).ready(function(){
-        $('#incorporationtype').select2({
-        
+    $(document).on('change','.showSourceListName',function(){
+        var value = $(this).val();
+        if(value == 17 || value == 18 || value == 19){            
+            $.ajax({
+                method:'POST',
+                url:"{{ route('lead.getsourcetypename')}}",
+                headers:{
+                    'X-CSRF-TOKEN':'{{ csrf_token()}}'
+                },
+                dataType:'json',
+                data:{
+                    value:value
+                },
+                success:function(res){
+                    $('.sourceTypeNameDiv').find('#sourceTypeNameList').html(res.data);
+                    $('.sourceTypeNameDiv').css('display','block');
+                }
+            })
+        }else{
+            $('.sourceTypeNameDiv').css('display','none');
+        }
     });
-
-    
-    })
-   
-
-
-
-    
 </script>
 @stop

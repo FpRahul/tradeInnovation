@@ -8,18 +8,15 @@
 
     <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] mb-[30px]">
         <form method="POST" action="{{ route('leads.add')}}/{{!empty($leadData) ? $leadData->id :''}}" enctype="multipart/form-data" class="py-[25px] px-[30px] space-y-[20px]">
-            @csrf
-         
-           
-            
+            @csrf      
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="source" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Source</label>
                     <select name="source" id="source" class="allform-select2 showSourceListName w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required onchange="displayRequired(this)">
                         <option value="">Source Type</option>
-                        @if (count($sourceList) > 0 )
+                        @if ($sourceList && $sourceList->isNotEmpty())
                             @foreach ($sourceList as $sourceListData)
-                                <option value="{{ $sourceListData->id}}" @php ($leadData->source == $sourceListData->id) ?? selected @endphp>{{ $sourceListData->name}}</option>
+                                <option value="{{ $sourceListData->id}}" {{$leadData->source == $sourceListData->id ? 'selected' :''}}>{{ $sourceListData->name}}</option>
                             @endforeach                            
                         @endif
                     </select>
@@ -81,7 +78,7 @@
                             @foreach ($userList as $userListData)
                             <option 
                             value="{{ $userListData->id }}" 
-                            @if(!empty($leadData) && $leadData->assign_to == $userListData->id) selected @endif>
+                           {{!empty($leadData) && $leadData->assign_to == $userListData->id ? 'selected':''}}>
                             {{ $userListData->name }}
                         </option>
                         
@@ -104,7 +101,7 @@
                                             <input type="hidden" name="lead_id" class="lead_id" value="{{$serviceVal->id}}">
                                             <div class="flex flex-col md:flex-row gap-[20px]">
                                                 <div class="w-full md:w-1/2">
-                                                    <select name="serviceid" id="serviceid" class="setSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                    <select name="serviceid" id="serviceid" class="allform-select2 setSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                         <option value="">Service Name</option>
                                                         @if (count($serviceList) > 0)
                                                             @foreach ($serviceList as $serviceListData)
@@ -115,7 +112,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="w-full md:w-1/2">
-                                                    <select name="subserviceid" id="subserviceid" class="getSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                    <select name="subserviceid" id="subserviceid" class="allform-select2 getSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                         <option value="">Service Type</option>  
                                                         @if ($serviceVal->subservice_id)                                                           
                                                             @php 
@@ -146,7 +143,7 @@
                                         <input type="hidden" name="lead_id" class="lead_id" value="0">
                                         <div class="flex flex-col md:flex-row gap-[20px]">
                                             <div class="w-full md:w-1/2">
-                                                <select name="serviceid" id="serviceid" class="setSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                <select name="serviceid" id="serviceid" class="allform-select2 setSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                     <option value="">Service Name</option>
                                                     @if (count($serviceList) > 0)
                                                         @foreach ($serviceList as $serviceListData)
@@ -157,7 +154,7 @@
                                                 </select>
                                             </div>
                                             <div class="w-full md:w-1/2">
-                                                <select name="subserviceid" id="subserviceid" class="getSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                <select name="subserviceid" id="subserviceid" class="allform-select2 getSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                     <option value="">Service Type</option>                                                
                                                 </select>
                                             </div>
@@ -184,15 +181,11 @@
                 {{-- service repeater end --}}               
             </div>
             <div class="flex flex-col md:flex-row gap-[20px]">
-                <div class="w-full md:w-1/2">
+                <div class="w-full md:w-1/2 stageoftheservice">
                     <label class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
-                    <select name="stage_id" class="allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <select name="stage_id" class="allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none serviceStagesOption" required>
                         <option value="">Select Stage</option>
-                        @if (count($allStages) > 0 )
-                            @foreach ($allStages as $stage)
-                                <option value="{{ $stage->id}}">{{ $stage->title}}</option>
-                            @endforeach                            
-                        @endif
+                       
                     </select>
                 </div>
                 <div class="w-full md:w-1/2">
@@ -238,7 +231,7 @@
                                             </div>
                                         </div>
                                         <div class="w-[55px]">
-                                            <span data-repeater-delete data-id="0" class="deleteAttachmentRepeaterRow w-full h-[45px] flex items-center justify-center border-[1px] border-[#0000001A] rounded-[10px] text-center">
+                                            <span data-repeater-delete data-id="{{ $attachmentVal['id']}}" class="deleteAttachmentRepeaterRow w-full h-[45px] flex items-center justify-center border-[1px] border-[#0000001A] rounded-[10px] text-center">
                                                 <span class="glyphicon glyphicon-remove"></span>
                                                 <svg class="mx-auto" width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <path d="M2.616 16C2.15533 16 1.771 15.846 1.463 15.538C1.155 15.23 1.00067 14.8453 1 14.384V2H0V1H4V0.230003H10V1H14V2H13V14.385C13 14.845 12.846 15.2293 12.538 15.538C12.23 15.8467 11.8453 16.0007 11.384 16H2.616ZM4.808 13H5.808V4H4.808V13ZM8.192 13H9.192V4H8.192V13Z" fill="#FF0000" />
@@ -289,6 +282,9 @@
             <div class="">
                 <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
             </div>
+            {{-- <div class="">
+                <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
+            </div> --}}
         </form>
     </div>
 </div>
@@ -335,20 +331,24 @@
             headers:{
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
-            dataType:'json',
             data:{
                 serviceId:serviceId
             },
+            dataType:'json',
             success:function(res){
-                e.parent().parent().find('.getSubService').html(res.data);
+                $('.stageoftheservice').find('.serviceStagesOption').html(res.options);
             }
         });
     });
 
+    $(document).ready(function(){
+        // $('.showSourceListName').trigger('change');
+        $('.setSubService').trigger('change');
+
+    })
     $(document).on('change','.showSourceListName',function(){
         var value = $(this).val();
-        if(value == 14 || value == 15 || value == 19){
-            
+        if(value == 17 || value == 18 || value == 19){            
             $.ajax({
                 method:'POST',
                 url:"{{ route('lead.getsourcetypename')}}",
@@ -390,7 +390,7 @@
         isRequireed.attr('required', false);
 
         console.log(value);
-        if(value == 14 || value == 15 || value == 19){
+        if(value == 17 || value == 18 || value == 19){
             sourceType.show();
             isRequireed.attr('required', true);
         }

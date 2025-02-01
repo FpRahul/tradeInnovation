@@ -57,7 +57,7 @@
                         <label>Status</label>
                         <select name="status"  class="filterData statusData allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[90px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] " >
                             <option value="">Select Status</option>
-                            <option value="0" {{ !empty($statusKey) && $statusKey == 0 ? 'selected':''}}>Open</option>
+                            <option value="0" {{ isset($statusKey) && $statusKey == 0 ? 'selected':''}}>Open</option>
                         </select>    
                     </div>  
                     <div class="flex items-end gap-[10px]">

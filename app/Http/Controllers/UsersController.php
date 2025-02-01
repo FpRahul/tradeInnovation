@@ -114,6 +114,7 @@ class UsersController extends Controller
         $employeeData = User::with('userdetail')->where('role', '>', '3')->where('archive', 1);
         $searchKey = $request->input('key') ?? '';
         $requestType = $request->input('requestType') ?? '';
+       
         if ($searchKey) {
             $employeeData->where(function ($query) use ($searchKey) {
                 $query->where('name', 'LIKE', $searchKey . '%')
@@ -286,7 +287,6 @@ class UsersController extends Controller
     }
     public function deleteRepeaterUser(Request $request)
     {
-
         $experienceData = UserExperience::where('id', $request->id);
         if ($experienceData->delete()) {
             echo "1";

@@ -127,6 +127,12 @@ class User extends Authenticatable
         return $this->hasOne(UserExperience::class,'userId','id');
     }
 
+   
+    public function leadTasks()
+    {
+        return $this->hasMany(LeadTask::class);
+    }
+
     // public function assignLead(){
     //     return $this->hasMany(LeadAssign::class,'user_id','id');
     // }

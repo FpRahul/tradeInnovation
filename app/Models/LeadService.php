@@ -17,4 +17,12 @@ class LeadService extends Model
    public function lead(){
       return $this->belongsTo(Lead::class,'lead_id');
    }
+   public function service()
+   {
+       return $this->belongsTo(Service::class, 'service_id');
+   }
+   public function subservice()
+   {
+       return $this->belongsTo(SubService::class, 'subservice_id');
+   }
 }

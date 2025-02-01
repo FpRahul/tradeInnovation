@@ -8,6 +8,8 @@ use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TasksController;
 use App\Http\Middleware\CheckPermission;
+use App\Http\Controllers\StagesController;
+
 
 //Users Routes
 Route::match(['get','post'],'/', [UsersController::class,'login'])->name('login');
@@ -21,12 +23,12 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::match(['POST','GET'],'/myprofile',[UsersController::class,'myprofile'])->name('user.myprofile');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/chart-data', [DashboardController::class, 'chartData'])->name('chart.data');
+    Route::get('/chart-data', [DashboardController::class, 'chartData'])->name('chart.data');   
 
 
     //Users Routes
     Route::prefix('users')->controller(UsersController::class)->group(function () {
-        Route::match(['POST','GET'],'/', 'index')->name('users.listing');
+        Route::get('/', 'index')->name('users.listing');
         Route::match(['POST','GET'], '/add-user/{id?}', 'addUser')->name('users.adduser');
         Route::get('/delete/{id?}', 'deleteUser')->name('users.delete');
         Route::post('/deleterepeater', 'deleteRepeaterUser')->name('users.deleterepeater');
@@ -43,7 +45,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
 
         Route::match(['POST', 'GET'], '/user-referral', 'userReferral')->name('referral.index');
         Route::match(['POST', 'GET'], '/add-referral/{id?}', 'addReferral')->name('referral.add');
- 
+  
         Route::get('/category-status/{id?}', 'categoryStatus')->name('users.category.status');
         Route::get('/category-delete/{id?}', 'categoryDelete')->name('users.category.delete');
 
@@ -60,11 +62,17 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::match(['POST','GET'],'/add-role/{id?}', 'addRole')->name('settings.addrole');
         Route::get('assign-menu','viewMenu')->name('setting.viewMenu');
         Route::post('get-menu','getMenu')->name('setting.getMenu');
+        
+         //stages controller
+        Route::prefix('stages')->controller(StagesController::class)->group(function (){
+          Route::get('/', 'index')->name('stages.index');
+          Route::post('/create', 'create')->name('stages.create');
 
+        });
     });
     //Leads Routes
     Route::prefix('leads')->controller(LeadsController::class)->group(function () {
-        Route::get('/', 'index')->name('leads.index');
+        Route::match(['POST','GET'],'/', 'index')->name('leads.index');
         Route::get('/lead-logs','leadLogs')->name('leadLogs.index');
         Route::match(['POST','GET'],'/add/{id?}', 'add')->name('leads.add');
         Route::get('/sendquote', 'sendquote')->name('leads.quote');
@@ -80,7 +88,13 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     Route::prefix('tasks')->controller(TasksController::class)->group(function () {
         Route::get('/', 'index')->name('task.index');
         Route::get('/logs', 'logs')->name('task.log');
-        Route::get('/details', 'detail')->name('task.detail');
+        Route::get('/details/{id}', 'detail')->name('task.detail');
+        Route::get('/check-duplication/{id}', 'chekDuplication')->name('task.chekDuplication');
+        Route::post('/document-verified/{id}', 'documentVerified')->name('task.documentVerified');
+        Route::get('/document-verified/stage3/{id}', 'documentVerifiedChildSatge')->name('task.documentVerifiedChildSatge');
+
+
+
     });
     //Services Routes
     Route::prefix('services')->controller(ServicesController::class)->group(function () {
@@ -89,8 +103,10 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::match(['POST','GET'],'/subservice/{id?}', 'addSubService')->name('services.subService.add');
         Route::match(['POST','GET'],'/changestatus/{id?}','serviceStatus')->name('service.status');
         Route::post('/deleterepeater', 'deleteRepeaterSubserv')->name('subservice.deleterepeater');
+        Route::post('/serviceStages', 'serviceStages')->name('serviceStages');
 
     });
+    
     
 });
 

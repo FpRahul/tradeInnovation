@@ -28,7 +28,13 @@ class CheckPermission
                 0 => 'user.logout',
                 1 => 'user.myprofile',
                 2 => 'chart.data',
-                3 => 'dashboard'
+                3 => 'dashboard',
+                4 => 'serviceStages',
+                5 => 'lead.subservice',
+                6 => 'lead.getsourcetypename',
+                7 => 'users.deleterepeater',
+                8 => 'lead.deleterepeater',
+                9 => 'lead.deleteattachmentrepeater'
             ]
         ];
         if($user->role==1){

@@ -1,6 +1,5 @@
 @extends('layouts.default')
 @section('content')
-
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px]">
     <div class="px-[15px] md:px-[30px] py-[20px] border-b-[1px] border-[#0000001A] flex flex-wrap items-center justify-between ">
         <div class="flex items-center gap-[8px]">
@@ -11,36 +10,75 @@
             </a>
             <h3 class="text-[17px] leading-[26px] font-[600] tracking-[-0.03em] ">Client Information</h3>
         </div>
-        <p class="text-[14px] leading-[16px] font-[600] text-[#2C2C2C] ">Action summary on Rahul Chouhan (lead <span class="text-[#2196F3]">#001</span>)</p>
+        @if($taskDetails->count() > 0)
+        @foreach ($taskDetails as $task )
+            
+        <p class="text-[14px] leading-[16px] font-[600] text-[#2C2C2C] ">Action summary on {{ $task->lead->client_name ?? N/A }} (lead <span class="text-[#2196F3]">#{{$task->lead->id ?? N/A}}</span>)</p>
+        @endforeach
+        @endif
     </div>
     <div class="px-[15px] md:px-[30px] py-[20px]">
-        <ul class="grid grid-cols-2 lg:grid-cols-3 gap-[20px]">
-            <li>
-                <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Client name</span>
-                <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize ">Rahul Chouhan</strong>
-            </li>
-            <li>
-                <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Company Name</span>
-                <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize ">Futureprofilez</strong>
-            </li>
-            <li>
-                <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Services</span>
-                <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize ">Trademark</strong>
-            </li>
-            <li>
-                <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Mobile Number</span>
-                <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize ">123456789</strong>
-            </li>
-            <li>
-                <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Inbound Date</span>
-                <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize ">23 Dec 2024</strong>
-            </li>
-            <li>
-                <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Associate</span>
-                <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize ">Surya</strong>
-            </li>
-        </ul>
-    </div>
+    {{-- resources/views/someview.blade.php --}}
+
+<ul class="grid grid-cols-2 lg:grid-cols-3 gap-[20px]">
+   
+ @if($taskDetails->count() > 0)
+    @foreach($taskDetails as $task)
+        <li>
+            <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Client name</span>
+            <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize">
+                {{ $task->lead->client_name ?? 'N/A' }}
+            </strong>
+        </li>
+        <li>
+            <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Company Name</span>
+            <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize">
+                {{ $task->lead->company_name ?? 'N/A' }}
+            </strong>
+        </li>
+        <li>
+            <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Services</span>
+            <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize">
+                @php
+                    $serviceNames = [];
+                @endphp
+                @foreach ($task->leadServices as $leadService)
+                    @if ($leadService->service)
+                        @php
+                            $serviceNames[] = $leadService->service->serviceName;
+                        @endphp
+                    @else
+                        Not Available
+                    @endif
+                @endforeach
+                {{ implode(', ', $serviceNames) }}
+            </strong>
+        </li>
+        <li>
+            <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Mobile Number</span>
+            <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize">
+                {{ $task->lead->mobile_number ?? 'N/A' }}
+            </strong>
+        </li>
+        <li>
+            <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Inbound Date</span>
+            <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize">
+                {{ $task->leadTaskDetails->dead_line ? \Carbon\Carbon::parse($task->lead->inbound_date)->format('d M Y') : 'N/A' }}
+            </strong>
+        </li>
+        <li>
+            <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Associate</span>
+            <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize">
+            </strong>
+        </li>
+    @endforeach
+    @endif
+    
+</ul>
+
+
+</div>
+
 </div>
 
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
@@ -51,8 +89,8 @@
             <div class="w-full md:w-1/2">
                 <label for="status" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
                 <select name="status" id="status" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
-                    <option value="1">Completed</option>
-                    <option value="0">Incomplete</option>
+                    <option value="1">Registered</option>
+                    <option value="0">Not Registered</option>
                 </select>
             </div>
             <div class="w-full md:w-1/2">
@@ -64,8 +102,14 @@
             <div class="w-full md:w-1/2">
                 <label for="assignUser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign User</label>
                 <select name="assignUser" id="assignUser" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                    @if($users->count() > 0)
                     <option value="1">Assign User</option>
-                    <option value="0">User</option>
+                    @foreach ($users as $user )
+                    <option value="{{$user->id}}">{{$user->name}}</option>
+                    @endforeach
+                    @else
+                    <option>Assign user</option>
+                    @endif
                 </select>
             </div>
             <div class="w-full md:w-1/2">

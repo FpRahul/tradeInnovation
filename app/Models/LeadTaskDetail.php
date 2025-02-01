@@ -12,4 +12,9 @@ class LeadTaskDetail extends Model
     'status',
     'status_date'
    ];
+
+   public function leadTask()
+    {
+        return $this->belongsTo(LeadTask::class, 'task_id', 'id');
+    }
 }

@@ -81,120 +81,151 @@ class LeadsController extends Controller
             $leadServiceData = LeadService::where('lead_id',$id)->get();
             $leadAttachment = LeadAttachment::where('lead_id',$id)->get();
             $LeadLog = LeadLog::where('lead_id',$id)->first();
-            $successMsg = 'Lead updated!!!';
+            $LeadTask = LeadTask::where('lead_id',$id)->first();
+            $leadSelectedStage = LeadTask::where('lead_id',$id)->first();
+            $leadStages = ServiceStages::where('service_id',$leadServiceData[0]->service_id)->get();
+            $successMsg = 'Lead updated!';
         }else{
             $leadData = new Lead();
             $leadServiceData =[];
             $leadAttachment = [];
             $LeadLog = [];
-            $successMsg = 'Lead added!!';
+            $LeadTask = [];
+            $leadStages = [];
+            $leadSelectedStage = [];
+            $successMsg = 'Lead added!';
         }
-        $allStages = ServiceStages::get();
+        // $allStages = ServiceStages::get();
         $sourceList = CategoryOption::where('type',3)->where('status',1)->get();
         $serviceList = Service::where('status',1)->get();
         $userList = User::where('role','>',3)->where('status',1)->get();
-        if($request->isMethod('POST')){ 
-            if($request->sourcetypenamelist > 0){
-                $sourceId = $request->sourcetypenamelist;              
+        if($request->isMethod('POST')){
+            if($request->savetype){ 
+                if($request->sourcetypenamelist > 0){
+                    $sourceId = $request->sourcetypenamelist;              
+                }else{
+                    $sourceId = 0;
+                }
+                $leadData->user_id = auth()->user()->id;
+                $leadData->source = $request->source;
+                $leadData->source_id = $sourceId;
+                $leadData->client_name = $request->clientname;
+                $leadData->company_name = $request->companyname;
+                $leadData->mobile_number = $request->mobilenumber;
+                $leadData->email = $request->email;
+                $leadData->description = $request->description;
+                if($leadData->save()){
+                    $serviceidArray = [];
+                    // lead attachment repeater...         
+                    if(!empty($request->leadAttachment)){
+                        foreach($request->leadAttachment as $attachmentKey => $attachmentVal){
+                            if($attachmentVal['attachment_id'] > 0){
+                                $leadAttachment = LeadAttachment::where('id',$attachmentVal['attachment_id'])->first();
+                            }else{
+                                $leadAttachment = new LeadAttachment();
+                            } 
+                            $leadAttachment->lead_id = $leadData->id;
+                            if (isset($attachmentVal['attachmentFile']) && $attachmentVal['attachmentFile'] instanceof \Illuminate\Http\UploadedFile) {
+                                $image_name = $attachmentVal['attachmentFile'];
+                                $imageName = rand(100000, 999999).'.'.$image_name->getClientOriginalExtension();
+                                $image_name->move(public_path('Image'),$imageName);
+                                $leadAttachment->document = $imageName;
+                            }                        
+                            $leadAttachment->save();
+                        }
+                    }  
+                    // lead service repeater...
+                    if(!empty($request->leadRepeater)){
+                        foreach($request->leadRepeater as $serviceKey => $serviceVal){
+                            if($serviceVal['lead_id'] > 0){
+                                $leadServiceData = LeadService::where('id',$serviceVal['lead_id'])->first();
+                            }else{
+                                $leadServiceData = new LeadService();
+                            }                        
+                            $leadServiceData->lead_id = $leadData->id;
+                            $leadServiceData->service_id = $serviceVal['serviceid'];
+                            $serviceidArray[] = $serviceVal['serviceid'];
+                            $leadServiceData->subservice_id = $serviceVal['subserviceid'];                     
+                            $leadServiceData->save();
+                        }                 
+                    }               
+                    // lead task...
+                    if($id == null || $id == 0){
+                        $LeadTask = new LeadTask();
+                        $LeadTask->user_id = $request->assign;
+                        $LeadTask->lead_id = $leadData->id;
+                        $LeadTask->service_stage_id = $request->stage_id;
+                        $LeadTask->assign_by = auth()->user()->id;
+                        $LeadTask->task_title = ServiceStages::find($request->stage_id)->title;
+                        $LeadTask->task_description = $request->taskdescription;
+
+                        if($LeadTask->save()){
+                            $LeadTaskDetail = new LeadTaskDetail();
+                            $LeadTaskDetail->task_id = $LeadTask->id;
+                            $LeadTaskDetail->dead_line = date('Y-m-d',strtotime($request->taskdeadline));
+                            $LeadTaskDetail->status = 0;
+                            $LeadTaskDetail->status_date = date('Y-m-d');
+                            $LeadTaskDetail->save();
+                            // lead logs...
+                            $LeadLog = new LeadLog();
+                            $LeadLog->user_id = $request->assign;
+                            $LeadLog->lead_id =  $leadData->id;
+                            $LeadLog->task_is = $LeadTask->id;
+                            $LeadLog->assign_by = auth()->user()->id;
+                            $LeadLog->description = '';
+                            $LeadLog->save();
+                            // lead notification...
+                            $serviceNames = '';
+                            if(!empty($serviceidArray)){                        
+                                $serviceNames = Service::whereIn('id', $serviceidArray)->get()->pluck('serviceName')->implode(', ');                        
+                            }
+                            
+                            $LeadNotification = new LeadNotification();
+                            $LeadNotification->user_id = $request->assign;
+                            $LeadNotification->lead_id = $leadData->id;
+                            $LeadNotification->task_id = 0;
+                            $LeadNotification->title = 'Lead Assigned';
+                            $LeadNotification->description = 'New lead is assigned to you by '.auth()->user()->name.' for '.$serviceNames;
+                            $LeadNotification->status = 0;
+                            $LeadNotification->save();
+        
+                            $LeadNotification = new LeadNotification();
+                            $LeadNotification->user_id = $request->assign;
+                            $LeadNotification->task_id = $LeadTask->id;
+                            $LeadNotification->lead_id = $leadData->id;
+                            $LeadNotification->title = 'Task Assigned';
+                            $LeadNotification->description = 'New task assigned - '.$LeadTask->task_title;
+                            $LeadNotification->status = 0;
+                            $LeadNotification->save();
+                                            
+                        }   
+                    }            
+                
+                    return redirect()->route('leads.index')->withSuccess($successMsg);
+                }
             }else{
-                $sourceId = 0;
-            }
-            $leadData->user_id = auth()->user()->id;
-            $leadData->source = $request->source;
-            $leadData->source_id = $sourceId;
-            $leadData->client_name = $request->clientname;
-            $leadData->company_name = $request->companyname;
-            $leadData->mobile_number = $request->mobilenumber;
-            $leadData->email = $request->email;
-            $leadData->description = $request->description;
-            if($leadData->save()){
-                $serviceidArray = [];
-                // lead attachment repeater...         
-                if(!empty($request->leadAttachment)){
-                    foreach($request->leadAttachment as $attachmentKey => $attachmentVal){
-                        if($attachmentVal['attachment_id'] > 0){
-                            $leadAttachment = LeadAttachment::where('id',$attachmentVal['attachment_id'])->first();
-                        }else{
-                            $leadAttachment = new LeadAttachment();
-                        } 
-                        $leadAttachment->lead_id = $leadData->id;
-                        if (isset($attachmentVal['attachmentFile']) && $attachmentVal['attachmentFile'] instanceof \Illuminate\Http\UploadedFile) {
-                            $image_name = $attachmentVal['attachmentFile'];
-                            $imageName = rand(100000, 999999).'.'.$image_name->getClientOriginalExtension();
-                            $image_name->move(public_path('Image'),$imageName);
-                            $leadAttachment->document = $imageName;
-                        }                        
-                        $leadAttachment->save();
-                    }
-                }  
-                // lead service repeater...
-                if(!empty($request->leadRepeater)){
-                    foreach($request->leadRepeater as $serviceKey => $serviceVal){
-                        if($serviceVal['lead_id'] > 0){
-                            $leadServiceData = LeadService::where('id',$serviceVal['lead_id'])->first();
-                        }else{
-                            $leadServiceData = new LeadService();
-                        }                        
-                        $leadServiceData->lead_id = $leadData->id;
-                        $leadServiceData->service_id = $serviceVal['serviceid'];
-                        $serviceidArray[] = $serviceVal['serviceid'];
-                        $leadServiceData->subservice_id = $serviceVal['subserviceid'];                     
-                        $leadServiceData->save();
-                    }                 
-                }               
-
-                // lead task...
-                $LeadTask = new LeadTask();
-                $LeadTask->user_id = $request->assign;
-                $LeadTask->lead_id = $leadData->id;
-                $LeadTask->service_stage_id = $request->stage_id;
-                $LeadTask->assign_by = auth()->user()->id;
-                $LeadTask->task_title = ServiceStages::find($request->stage_id)->title;
-                $LeadTask->task_description = $request->taskdescription;
-                if($LeadTask->save()){
-                    $LeadTaskDetail = new LeadTaskDetail();
-                    $LeadTaskDetail->task_id = $LeadTask->id;
-                    $LeadTaskDetail->dead_line = date('Y-m-d',strtotime($request->taskdeadline));
-                    $LeadTaskDetail->status = 0;
-                    $LeadTaskDetail->status_date = date('Y-m-d');
-                     $LeadTaskDetail->save();
-                    // lead logs...
-                    $LeadLog = new LeadLog();
-                    $LeadLog->user_id = $request->assign;
-                    $LeadLog->lead_id =  $leadData->id;
-                    $LeadLog->task_is = $LeadTask->id;
-                    $LeadLog->assign_by = auth()->user()->id;
-                    $LeadLog->description = '';
-                    $LeadLog->save();
-                    // lead notification...
-                    $serviceNames = '';
-                    if(!empty($serviceidArray)){                        
-                        $serviceNames = Service::whereIn('id', $serviceidArray)->get()->pluck('serviceName')->implode(', ');                        
-                    }
-                    $LeadNotification = new LeadNotification();
-                    $LeadNotification->user_id = $request->assign;
-                    $LeadNotification->lead_id = $leadData->id;
-                    $LeadNotification->task_id = 0;
-                    $LeadNotification->title = 'Lead Assigned';
-                    $LeadNotification->description = 'New lead is assigned to you by '.auth()->user()->name.' for '.$serviceNames;
-                    $LeadNotification->status = 0;
-                    $LeadNotification->save();
-
-                    $LeadNotification = new LeadNotification();
-                    $LeadNotification->user_id = $request->assign;
-                    $LeadNotification->task_id = $LeadTask->id;
-                    $LeadNotification->lead_id = $leadData->id;
-                    $LeadNotification->title = 'Task Assigned';
-                    $LeadNotification->description = 'New task assigned - '.$LeadTask->task_title;
-                    $LeadNotification->status = 0;
-                    $LeadNotification->save();
-                }               
+                
+                if($request->sourcetypenamelist > 0){
+                    $sourceId = $request->sourcetypenamelist;              
+                }else{
+                    $sourceId = 0;
+                }
+                $leadData->user_id = auth()->user()->id;
+                $leadData->source = $request->source;
+                $leadData->source_id = $sourceId;
+                $leadData->client_name = $request->clientname;
+                $leadData->company_name = $request->companyname;
+                $leadData->mobile_number = $request->mobilenumber;
+                $leadData->email = $request->email;
+                $leadData->description = $request->description;
+                if($leadData->save()){
+                    return redirect()->route('leads.index')->withSuccess($successMsg);
+                }
                
-                return redirect()->route('leads.index')->withSuccess($successMsg);
             }
         }
         $header_title_name = 'Lead';
-        return view('leads/add',compact('header_title_name','sourceList','serviceList','userList','leadData','leadServiceData','leadAttachment','allStages'));
+        return view('leads/add',compact('header_title_name','sourceList','serviceList','userList','leadData','leadServiceData','leadAttachment','leadStages','LeadTask','leadSelectedStage'));
     }
 
     public function getSubService(Request $request){

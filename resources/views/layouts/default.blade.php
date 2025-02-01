@@ -132,6 +132,7 @@
                 isFirstItemUndeletable: true
             })
         });
+
         $(document).ready(function() {
             $('.subservicerepeater').repeater({
                 initEmpty: false,
@@ -213,7 +214,8 @@
                 defaultValues: {
                     'image': ''
                 },
-                show: function() {
+                show: function() {                    
+                    $(this).find('img').attr('src','/assets/images/noimage.png');
                     $(this).slideDown();
                 },
                 hide: function(deleteElement) {

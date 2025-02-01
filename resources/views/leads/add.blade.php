@@ -1,14 +1,14 @@
 @extends('layouts.default')
 @section('content')
 
-<div>
+<div>   
     <div class="flex items-center justify-between mb-[20px]">
         <h3 class="text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">Add Leads</h3>
     </div>
-
     <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] mb-[30px]">
-        <form method="POST" action="{{ route('leads.add')}}/{{!empty($leadData) ? $leadData->id :''}}" enctype="multipart/form-data" class="py-[25px] px-[30px] space-y-[20px]">
-            @csrf      
+        <form method="POST" id="submitLeadForm" action="{{ route('leads.add')}}/{{!empty($leadData) ? $leadData->id :''}}" enctype="multipart/form-data" class="py-[25px] px-[30px] space-y-[20px]">
+            @csrf    
+            <input type="hidden" name="savetype" id="savetype" value='0'/>  
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="source" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Source</label>
@@ -23,22 +23,20 @@
                 </div>
                 @php
                     $sourceTypeData = [];
-                    $displayClass = '';
+                    $displayClass = 'hidden';
                 @endphp
 
                 @if (!empty($leadData))
-                    @if ($leadData->source_id > 0)           
-                        @php
-                            $sourceTypeData = collect(getSourceTypeName($leadData->source));
-                            $displayClass = '';
-                        @endphp
-                    @else
-                        @php
-                            $displayClass = 'hidden';
-                        @endphp
+                    @if ($leadData->source == 17 || $leadData->source == 18 || $leadData->source == 19)
+                        @if ($leadData->source_id > 0)           
+                            @php
+                                $sourceTypeData = collect(getSourceTypeName($leadData->source));
+                                $displayClass = '';
+                            @endphp                        
+                        @endif
                     @endif
                 @endif
-                <div class="sourceTypeNameDiv w-full md:w-1/2" id="source_type" style="display: none;">
+                <div class="sourceTypeNameDiv w-full md:w-1/2 {{$displayClass}}" id="source_type">
                     <label for="sourceTypeNameList" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Source Type Name</label>
                     <select name="sourcetypenamelist" id="sourceTypeNameList" class="allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none is_required">
 
@@ -78,7 +76,7 @@
                             @foreach ($userList as $userListData)
                             <option 
                             value="{{ $userListData->id }}" 
-                           {{!empty($leadData) && $leadData->assign_to == $userListData->id ? 'selected':''}}>
+                           {{!empty($LeadTask) && $LeadTask->user_id == $userListData->id ? 'selected':''}}>
                             {{ $userListData->name }}
                         </option>
                         
@@ -101,7 +99,7 @@
                                             <input type="hidden" name="lead_id" class="lead_id" value="{{$serviceVal->id}}">
                                             <div class="flex flex-col md:flex-row gap-[20px]">
                                                 <div class="w-full md:w-1/2">
-                                                    <select name="serviceid" id="serviceid" class="allform-select2 setSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                    <select name="serviceid" id="serviceid" class="lead_service_id allform-select2 setSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                         <option value="">Service Name</option>
                                                         @if (count($serviceList) > 0)
                                                             @foreach ($serviceList as $serviceListData)
@@ -143,7 +141,7 @@
                                         <input type="hidden" name="lead_id" class="lead_id" value="0">
                                         <div class="flex flex-col md:flex-row gap-[20px]">
                                             <div class="w-full md:w-1/2">
-                                                <select name="serviceid" id="serviceid" class="allform-select2 setSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                <select name="serviceid" id="serviceid" class="lead_service_id allform-select2 setSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                     <option value="">Service Name</option>
                                                     @if (count($serviceList) > 0)
                                                         @foreach ($serviceList as $serviceListData)
@@ -185,7 +183,11 @@
                     <label class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
                     <select name="stage_id" class="allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none serviceStagesOption" required>
                         <option value="">Select Stage</option>
-                       
+                       @if ($leadStages && $leadStages->isNotEmpty())
+                           @foreach ($leadStages as $stageVal)
+                           <option value="{{$stageVal['id']}}" {{!empty($leadSelectedStage) ? ($leadSelectedStage->service_stage_id == $stageVal['id'] ? 'selected':'') : ''}}>{{$stageVal['title']}}</option>
+                           @endforeach
+                       @endif
                     </select>
                 </div>
                 <div class="w-full md:w-1/2">
@@ -221,11 +223,20 @@
                                             <div class="flex flex-col md:flex-row gap-[20px]">
                                                 <div class="w-full md:w-1/2">
                                                     <div class="relative flex flex-wrap items-center gap-[10px]">
-                                                        <img src="{{asset(!empty($attachmentVal['document']) ? 'Image/'.$attachmentVal['document'] : 'assets/images/noimage.png')}}" class="getpreviewImage w-[100%] max-w-[150px] rounded-[10px] object-cover" />
+                                                        @php
+                                                            $imagePath = !empty($attachmentVal['document']) ? 'Image/'.$attachmentVal['document'] : 'assets/images/noimage.png';
+                                                            $extension = pathinfo($imagePath, PATHINFO_EXTENSION);
+                                                        @endphp
+
+                                                        <img src="{{ asset(strtolower($extension) === 'pdf' ? 'assets/images/pdf_logo.jpg' : $imagePath) }}" 
+                                                            class="getpreviewImage w-[100%] max-w-[100px] rounded-[10px] object-cover" />
+
                                                         
                                                         <div class="relative">
-                                                            <input class="previewImage " type="file" name="attachmentFile" >
+                                                            <input class="previewImage" type="file" name="attachmentFile" >
+                                                            
                                                         </div>
+                                                        <div class="imageErrorMsg text-[#f31111]"></div>
                                                     </div>
                                                 </div>                                            
                                             </div>
@@ -250,8 +261,9 @@
                                                     <img src="/assets/images/noimage.png" class="getpreviewImage w-[100%] max-w-[150px] rounded-[10px] object-cover" />
                                                     
                                                     <div class="relative">
-                                                        <input class="previewImage " type="file" name="attachmentFile"  {{ empty($leadAttachment->document) ? 'required':''}}>
+                                                        <input class="previewImage" type="file" name="attachmentFile"  {{ empty($leadAttachment->document) ? 'required':''}}>
                                                     </div>
+                                                    <div class="imageErrorMsg"></div>
                                                 </div>
                                             </div>                                            
                                         </div>
@@ -280,30 +292,68 @@
                 <textarea type="text" name="description" id="description" class="w-full h-[155px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">{{!empty($leadData) ? $leadData->description : ''}}</textarea>
             </div>
             <div class="">
-                <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
+                <button type="button" name="save" class="lead_submit_btn text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
             </div>
-            {{-- <div class="">
-                <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
-            </div> --}}
+            <div class="">
+                <button type="button" name="saveAssign" class="lead_submit_btn text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save & Assign</button>
+            </div>
         </form>
     </div>
 </div>
 <script>
    
-    
-    $(document).on('change','.previewImage' ,function () {                     
-        var input = event.target;
-        var previewContainer = $(this).parent().parent().find('.getpreviewImage');   
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                previewContainer.attr('src', e.target.result).show();
-            };
-            reader.readAsDataURL(input.files[0]);
-        } else {
-            previewContainer.hide();
-            previewContainer.attr('src', '');
+    $(document).on('click','.lead_submit_btn',function(){
+        if($(this).attr('name') == 'saveAssign'){
+            if(confirm("Are you sure you want to process this lead to the assigned stage? You won't be able to edit the lead anymore once confirmed.")){
+                $("#submitLeadForm").find("#savetype").val('1');
+                $("#submitLeadForm").trigger("submit");
+            }
+        }else{
+            $("#submitLeadForm").trigger("submit");
         }
+    });
+    
+    $(document).on('change','.previewImage' ,function () { 
+        var file = this.files[0]; 
+        var maxSize = 2 * 1024 * 1024;
+        var allowedExtensions = ["jpg", "jpeg", "png", "pdf"];  
+        if (file) {
+            var fileSize = file.size;
+            var fileName = file.name;
+            var fileExtension = fileName.split('.').pop().toLowerCase();
+
+            // Check file extension
+            if (!allowedExtensions.includes(fileExtension)) {
+                $(this).parent().parent().find('.imageErrorMsg').text("Invalid file type. Allowed types: " + allowedExtensions.join(", "));
+                $(this).val(""); // Clear file input
+                return false;
+            }
+
+            // Check file size
+            if (fileSize > maxSize) {
+                $(this).parent().parent().find('.imageErrorMsg').text("File size exceeds 2MB limit.");
+                $(this).val(""); // Clear file input
+                return false;
+            }
+            var input = event.target;
+            var previewContainer = $(this).parent().parent().find('.getpreviewImage');   
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    if(fileExtension == 'pdf'){
+                        previewContainer.attr('src', '/assets/images/pdf_logo.jpg').show();
+                    }else{
+                        previewContainer.attr('src', e.target.result).show();
+                    }
+                    $('.imageErrorMsg').text('');
+                };
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                previewContainer.hide();
+                previewContainer.attr('src', '');
+            }
+        }                  
+       
     });
    
     $(document).on('change','.setSubService',function(){
@@ -343,7 +393,7 @@
 
     $(document).ready(function(){
         // $('.showSourceListName').trigger('change');
-        $('.setSubService').trigger('change');
+        // $('.setSubService').trigger('change');
 
     })
     $(document).on('change','.showSourceListName',function(){

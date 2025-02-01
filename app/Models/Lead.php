@@ -15,7 +15,6 @@ class Lead extends Model
         'company_name',
         'mobile_number',
         'email',
-        'assign_to',
         'description',
         'status',
         'completed_date',

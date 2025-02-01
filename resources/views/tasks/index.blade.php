@@ -145,29 +145,36 @@
                                
                                 </td>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                                    @if($task->leadTaskDetails->dead_line)
-                                    {{ $task->leadTaskDetails->dead_line }}
+                                    @if($task->leadTaskDetails && $task->leadTaskDetails->dead_line)
+                                        {{ $task->leadTaskDetails->dead_line }}
                                     @else
-                                    Not Available
+                                        Not Available
                                     @endif
                                 </td>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                                    @if($task->leadTaskDetails->status)
-                                    @php
-                                    $status = 'other';
-                                    if($task->leadTaskDetails->status == 0){
-                                    $status = 'Pending';
-                                    }else if($task->leadTaskDetails->status == 1){
-                                    $status = 'Completed';
-                                    }else if($task->leadTaskDetails->status == 2){
-                                    $status = 'Hold';
-                                    }else if($task->leadTaskDetails->status == 3){
-                                    $status = 'follow-up';
-                                    }
-                                    @endphp
-                                    <span class="text-[#13103A] bg-[#ADD8E6] inline-block text-center min-w-[100px] py-[5px] px-[10px] rounded-[5px] ">{{ $status }}</span>
+                                @if($task->leadTaskDetails && !is_null($task->leadTaskDetails->status))
+                                        @php
+                                            $status = 'Other'; // Default status
+                                            switch ($task->leadTaskDetails->status) {
+                                                case 0:
+                                                    $status = 'Pending';
+                                                    break;
+                                                case 1:
+                                                    $status = 'Completed';
+                                                    break;
+                                                case 2:
+                                                    $status = 'Hold';
+                                                    break;
+                                                case 3:
+                                                    $status = 'Follow-up';
+                                                    break;
+                                            }
+                                        @endphp
+                                        <span class="text-[#13103A] bg-[#ADD8E6] inline-block text-center min-w-[100px] py-[5px] px-[10px] rounded-[5px]">
+                                            {{ $status }}
+                                        </span>
                                     @else
-                                    Not Available
+                                        Not Available
                                     @endif
                                 </td>
                                 <td class="text-center border-b-[1px] border-[#0000001A] py-[12px] px-[15px]">

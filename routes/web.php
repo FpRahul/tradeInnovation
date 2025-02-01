@@ -91,10 +91,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/details/{id}', 'detail')->name('task.detail');
         Route::get('/check-duplication/{id}', 'chekDuplication')->name('task.chekDuplication');
         Route::post('/document-verified/{id}', 'documentVerified')->name('task.documentVerified');
-        Route::get('/document-verified/stage3/{id}', 'documentVerifiedChildSatge')->name('task.documentVerifiedChildSatge');
-
-
-
+        Route::get('/send-quotation/next-stage/{id}', 'documentVerifiedChildSatge')->name('task.documentVerifiedChildSatge');
+        Route::post('/send-quotation/{id}','sendQuotation')->name('task.sendQuotation');
     });
     //Services Routes
     Route::prefix('services')->controller(ServicesController::class)->group(function () {

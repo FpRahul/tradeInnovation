@@ -52,14 +52,14 @@
                 <div class="w-full md:w-1/2">
                     <label for="employeePhoto" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload Photograph: <span class="text-[12px] italic font-[400] text-[#e70e0e]"> (only jpg,jpeg and png format supported & max:2 MB)</span></label>
                     <div class="relative flex flex-wrap gap-[10px]">
-                        <img class="getpreviewImage" src="{{asset(!empty($newUserDetails->uploadPhotograph) ? 'Image/'.$newUserDetails->uploadPhotograph : 'assets/images/noimage.png')}}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
+                        <img class="getpreviewImage" src="{{asset(!empty($newUserDetails->uploadPhotograph) ? 'uploads/users/'.$newUser->id.'/'.$newUserDetails->uploadPhotograph : 'assets/images/noimage.png')}}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
                         <div class="relative">
                             <label for="employeePhoto" class="cursor-pointer w-[83px] h-[45px] rounded-[10px] flex items-center justify-center border border-dashed border-[#13103a4d] ">
                                 <svg class="cursor-pointer" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M13.9395 8.95044H8.93945V13.9504C8.93945 14.5004 8.48945 14.9504 7.93945 14.9504C7.38945 14.9504 6.93945 14.5004 6.93945 13.9504V8.95044H1.93945C1.38945 8.95044 0.939453 8.50044 0.939453 7.95044C0.939453 7.40044 1.38945 6.95044 1.93945 6.95044H6.93945V1.95044C6.93945 1.40044 7.38945 0.950439 7.93945 0.950439C8.48945 0.950439 8.93945 1.40044 8.93945 1.95044V6.95044H13.9395C14.4895 6.95044 14.9395 7.40044 14.9395 7.95044C14.9395 8.50044 14.4895 8.95044 13.9395 8.95044Z" fill="#13103A" />
                                 </svg>
                             </label>
-                            <input type="file" name="employeePhoto" id="employeePhoto" class="previewImage w-0 opacity-0 absolute top-0 left-0">
+                            <input type="file" name="employeePhoto" id="employeePhoto" class="previewImage w-0 opacity-0 absolute top-0 left-0" {{empty($newUserDetails->uploadPhotograph) ? 'required' :''}}>
                         </div>
                     </div>
                     @error('employeePhoto')
@@ -106,7 +106,7 @@
             <div class="userExperienceRepeater md:border-[1px] border-[#0000001A] rounded-[10px] md:p-[20px] employee_repeater_wrapper">
                 <div class="repeater-default">
                     <div data-repeater-list="experince" class="flex flex-col gap-[20px]">
-                        @if (count($newUserExperiences)>0)
+                        @if ($newUserExperiences && $newUserExperiences->isNotEmpty())
                             @foreach ($newUserExperiences as $exKey => $exVal)
                                 <div data-repeater-item class="flex flex-wrap items-end gap-[20px]">
                                     <div class="w-[calc(100%-75px)] grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-[20px]">
@@ -119,51 +119,35 @@
                                                 class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"
                                                 placeholder="Employer Name">
                                         </div>
-                                        <div class="w-full">
-                                            <label for="startDate" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-                                                Start Date
-                                            </label>
-                                            {{-- <input type="date" name="startDate" id="startDate" value="{{ $exVal['startDate']}}"
-                                                class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"> --}}
-                                            <div class="w-[100%] relative">
-                                                <input 
-                                                    type="text" 
-                                                    placeholder="Start Date" 
-                                                    name="startDate" 
-                                                    class="daterangepicker-startDate w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
-                                                    value="{{ $exVal['startDate'] }}" 
-                                                    autocomplete="off"
-                                                >
-                                                <div class="absolute right-[10px] top-[10px]">
-                                                <i class="ri-calendar-line"></i>
-                                                </div>
-                                            </div>                                                
-
-                                        
-
-                                        <div class="w-[16%] relative">
-                                        <label for="startDate" class="flex text-[15px] text-[#000] mb-[5px]">
+                                    <div class="w-full">
+                                        <label for="startDate" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
                                             Start Date
                                         </label>
+                                        
                                         <div class="w-[100%] relative">
-                                            <input type="text" name="startDate" id="startDate" placeholder="YYYY-MM-DD"
-                                                class="daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
-                                            <i class="ri-calendar-line absolute right-[8px] top-[9px]" id="calendarIcon"></i>
-                                        </div>
-                                    </div>
+                                            <input 
+                                                type="text" 
+                                                placeholder="Start Date" 
+                                                name="startDate" 
+                                                class="daterangepicker-startDate w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
+                                                value="{{ $exVal['startDate'] }}" 
+                                                autocomplete="off"
+                                            >
+                                            <div class="absolute right-[10px] top-[10px]">
+                                            <i class="ri-calendar-line"></i>
+                                            </div>
+                                        </div>   
 
-                                    <div class="w-[16%] relative">
+                                        <div class="w-[16%] relative">
                                             <label for="endDate" cclass="flex text-[15px] text-[#000] mb-[5px]">
                                                 End Date
-                                            </label>
-                                            {{-- <input type="date" name="endDate" id="endDate" value="{{ $exVal['endDate']}}"
-                                                class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"> --}}
-                                                <div class="w-[100%] relative">
-                                                    <input type="text" placeholder="Start Date" name="endDate" class="daterangepicker-endDate w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" value="{{ $exVal['endDate'] }}">
-                                                    <div class="absolute right-[10px] top-[10px]">
-                                                        <i class="ri-calendar-line"></i>
-                                                    </div>
+                                            </label>                                                
+                                            <div class="w-[100%] relative">
+                                                <input type="text" placeholder="Start Date" name="endDate" class="daterangepicker-endDate w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" value="{{ $exVal['endDate'] }}">
+                                                <div class="absolute right-[10px] top-[10px]">
+                                                    <i class="ri-calendar-line"></i>
                                                 </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="w-[55px] ">
@@ -175,6 +159,7 @@
                                         </span>
                                     </div>
                                 </div>
+                            </div>
                             @endforeach
                         @else
                         <div data-repeater-item class="flex flex-wrap items-end gap-[20px]">
@@ -184,7 +169,7 @@
                                     <label for="endDate" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
                                         Employer
                                     </label>
-                                    <input type="text" name="employerName" id="employerName"
+                                    <input type="text" name="employerName"
                                         class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"
                                         placeholder="Employer Name">
                                 </div>
@@ -297,7 +282,7 @@
                 <div class="w-full md:w-1/2">
                     <label for="uploadPan" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload Pan <strong class="text-[#f83434]">*</strong> <span class="text-[12px] italic font-[400] text-[#e70e0e]"> (only jpg,jpeg,png and pdf format supported )</span></label>
                     <div class="relative flex flex-wrap gap-[10px]">
-                        <img class="getpreviewImage" src="{{asset(!empty($newUserDetails->uploadPan) ? 'Image/'.$newUserDetails->uploadPan : 'assets/images/noimage.png')}}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
+                        <img class="getpreviewImage" src="{{asset(!empty($newUserDetails->uploadPan) ? 'uploads/users/'.$newUser->id.'/'.$newUserDetails->uploadPan : 'assets/images/noimage.png')}}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
                         
                         <div class="relative">
                             <label for="uploadPan" class="cursor-pointer w-[83px] h-[45px] rounded-[10px] flex items-center justify-center border border-dashed border-[#13103a4d] ">
@@ -305,7 +290,7 @@
                                     <path d="M13.9395 8.95044H8.93945V13.9504C8.93945 14.5004 8.48945 14.9504 7.93945 14.9504C7.38945 14.9504 6.93945 14.5004 6.93945 13.9504V8.95044H1.93945C1.38945 8.95044 0.939453 8.50044 0.939453 7.95044C0.939453 7.40044 1.38945 6.95044 1.93945 6.95044H6.93945V1.95044C6.93945 1.40044 7.38945 0.950439 7.93945 0.950439C8.48945 0.950439 8.93945 1.40044 8.93945 1.95044V6.95044H13.9395C14.4895 6.95044 14.9395 7.40044 14.9395 7.95044C14.9395 8.50044 14.4895 8.95044 13.9395 8.95044Z" fill="#13103A" />
                                 </svg>
                             </label>
-                            <input type="file" name="uploadPan" id="uploadPan" required class="previewImage w-0 opacity-0 absolute top-0 left-0"{{ empty($newUserDetails->uploadDrivingLicence) ? 'required':''}}>
+                            <input type="file" name="uploadPan" id="uploadPan" class="previewImage w-0 opacity-0 absolute top-0 left-0"{{ empty($newUserDetails->uploadDrivingLicence) ? 'required':''}}>
                         </div>
                     </div>
                     @error('uploadPan') 
@@ -315,7 +300,7 @@
                 <div class="w-full md:w-1/2">
                     <label for="uploadAadhar" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload Aadhar <strong class="text-[#f83434]">*</strong> <span class="text-[12px] italic font-[400] text-[#e70e0e]"> (only jpg,jpeg,png and pdf format supported )</span></label>
                     <div class="relative flex flex-wrap gap-[10px]">
-                        <img class="getpreviewImage" src="{{asset(!empty($newUserDetails->uploadAadhar) ? 'Image/'.$newUserDetails->uploadAadhar : 'assets/images/noimage.png')}}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
+                        <img class="getpreviewImage" src="{{asset(!empty($newUserDetails->uploadAadhar) ? 'uploads/users/'.$newUser->id.'/'.$newUserDetails->uploadAadhar : 'assets/images/noimage.png')}}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
                         <div class="relative">
                             <label for="uploadAadhar" class="cursor-pointer w-[83px] h-[45px] rounded-[10px] flex items-center justify-center border border-dashed border-[#13103a4d] ">
                                 <svg class="cursor-pointer" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -332,7 +317,7 @@
                 <div class="w-full md:w-1/2">
                     <label for="uploadDrivingLicence" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload Driving Licence <strong class="text-[#f83434]">* <span class="text-[12px] italic font-[400] text-[#e70e0e]"> (only jpg,jpeg,png and pdf format supported )</span></strong></label>
                     <div class="relative flex flex-wrap gap-[10px]">
-                        <img class="getpreviewImage" src="{{asset(!empty($newUserDetails->uploadDrivingLicence) ? 'Image/'.$newUserDetails->uploadDrivingLicence : 'assets/images/noimage.png')}}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
+                        <img class="getpreviewImage" src="{{asset(!empty($newUserDetails->uploadDrivingLicence) ? 'uploads/users/'.$newUser->id.'/'.$newUserDetails->uploadDrivingLicence : 'assets/images/noimage.png')}}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
                         <div class="relative">
                             <label for="uploadDrivingLicence" class="cursor-pointer w-[83px] h-[45px] rounded-[10px] flex items-center justify-center border border-dashed border-[#13103a4d] ">
                                 <svg class="cursor-pointer" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -381,35 +366,35 @@
         // }, function(start, end, label) {
         //     console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
         // });
-        $('#startDate').on('click',function(){
-            $(this).attr('type', 'text');
-            $('.startdateShow').show();
+    //     $('#startDate').on('click',function(){
+    //         $(this).attr('type', 'text');
+    //         $('.startdateShow').show();
          
-        })
-        $('#startDate').daterangepicker({
-        singleDatePicker: true,  
-        showDropdowns: true,     
-        locale: {
-            format: 'YYYY-MM-DD' 
-        }
-    });
+    //     })
+    //     $('#startDate').daterangepicker({
+    //     singleDatePicker: true,  
+    //     showDropdowns: true,     
+    //     locale: {
+    //         format: 'YYYY-MM-DD' 
+    //     }
+    // });
 
  
   
 
-      $('#endDate').on('click',function(){
-            $(this).attr('type', 'text');
-            $('.startdateShow').show();
+    //   $('#endDate').on('click',function(){
+    //         $(this).attr('type', 'text');
+    //         $('.startdateShow').show();
          
-        })
-        $('#endDate').daterangepicker({
-        format: 'YYYY-MM-DD' ,
-        singleDatePicker: true, 
-        showDropdowns: true,
-        locale: {
-            format: 'YYYY-MM-DD' 
-        }
-      });
+    //     })
+    //     $('#endDate').daterangepicker({
+    //     format: 'YYYY-MM-DD' ,
+    //     singleDatePicker: true, 
+    //     showDropdowns: true,
+    //     locale: {
+    //         format: 'YYYY-MM-DD' 
+    //     }
+    //   });
     });
   
     $(document).ready(function() {
@@ -435,5 +420,7 @@
             console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
         });
     });
+
+    
 </script>
 @endsection

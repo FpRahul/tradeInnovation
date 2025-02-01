@@ -145,16 +145,25 @@ class UsersController extends Controller
         if ($id > 0) {
             $newUser = User::find($id);
             $newUserDetails = UserDetail::where('userId', $id)->first();
+        
+            if (empty($newUserDetails)) {
+                $newUserDetails = new UserDetail();
+                $pImage = "required|mimes:jpeg,png,jpg,pdf|max:2048";
+                $aImage = "required|mimes:jpeg,png,jpg,pdf|max:2048";
+                $dImage = "required|mimes:jpeg,png,jpg,pdf|max:2048";
+            } else {
+                $pImage = !empty($newUserDetails->uploadPan) ? 'nullable|mimes:jpeg,png,jpg,pdf|max:2048' : 'required|mimes:jpeg,png,jpg,pdf|max:2048';
+                $aImage = !empty($newUserDetails->uploadAadhar) ? 'nullable|mimes:jpeg,png,jpg,pdf|max:2048' : 'required|mimes:jpeg,png,jpg,pdf|max:2048';
+                $dImage = !empty($newUserDetails->uploadDrivingLicence) ? 'nullable|mimes:jpeg,png,jpg,pdf|max:2048' : 'required|mimes:jpeg,png,jpg,pdf|max:2048';
+            }        
             $newUserExperiences = UserExperience::where('userId', $id)->get();
-            $pImage = !empty($newUserDetails['uploadPan']) ? '' : 'required|mimes:jpeg,png,jpg,pdf|max:2048';
-            $aImage = !empty($newUserDetails['uploadAadhar']) ? '' : 'required|mimes:jpeg,png,jpg,pdf|max:2048';
-            $dImage = !empty($newUserDetails['uploadDrivingLicence']) ? '' : 'required|mimes:jpeg,png,jpg,pdf|max:2048';
             $email = "required|email";
             $hashedPassword = $newUser->password;
             $successMessage = "User is successfully updated!";
             $moduleName = "Update";
             $logAct = 'updated';
             $mail = false;
+            $type = 'User';  // Ensure type is defined
         } else {
             $newUser = new User();
             $newUserDetails = new UserDetail();
@@ -162,6 +171,7 @@ class UsersController extends Controller
             $aImage = "required|mimes:jpeg,png,jpg,pdf|max:2048";
             $dImage = "required|mimes:jpeg,png,jpg,pdf|max:2048";
             $newUserExperiences = [];
+        
             $email = "required|email|unique:users,email";
             $randomNumber = substr(str_shuffle('9abcdefghijklmnopq045678rstuvwxyzABCDEFG123HIJKLMNOPQRSTUVWXYZ'), 0, 8);
             $hashedPassword = Hash::make($randomNumber);
@@ -170,7 +180,6 @@ class UsersController extends Controller
             $logAct = 'added';
             $mail = true;
             $type = 'User';
-
         }
         if($request->isMethod('POST')){           
             $customMessages = [
@@ -205,25 +214,25 @@ class UsersController extends Controller
                 if ($request->hasFile('employeePhoto')) {
                     $image_name = $request->employeePhoto;
                     $imageName = rand(100000, 999999) . '.' . $image_name->getClientOriginalExtension();
-                    $image_name->move(public_path('Image'), $imageName);
+                    $image_name->move(public_path('uploads/users/'.$newUser->id), $imageName);
                     $newUserDetails->uploadPhotograph = $imageName;
                 }
                 if ($request->hasFile('uploadPan')) {
                     $image_name = $request->uploadPan;
                     $imageName = rand(100000, 999999) . '.' . $image_name->getClientOriginalExtension();
-                    $image_name->move(public_path('Image'), $imageName);
+                    $image_name->move(public_path('uploads/users/'.$newUser->id), $imageName);
                     $newUserDetails->uploadPan = $imageName;
                 }
                 if ($request->hasFile('uploadAadhar')) {
                     $image_name = $request->uploadAadhar;
                     $imageName = rand(100000, 999999) . '.' . $image_name->getClientOriginalExtension();
-                    $image_name->move(public_path('Image'), $imageName);
+                    $image_name->move(public_path('uploads/users/'.$newUser->id), $imageName);
                     $newUserDetails->uploadAadhar = $imageName;
                 }
                 if ($request->hasFile('uploadDrivingLicence')) {
                     $image_name = $request->uploadDrivingLicence;
                     $imageName = rand(100000, 999999) . '.' . $image_name->getClientOriginalExtension();
-                    $image_name->move(public_path('Image'), $imageName);
+                    $image_name->move(public_path('uploads/users/'.$newUser->id), $imageName);
                     $newUserDetails->uploadDrivingLicence = $imageName;
                 }
                 foreach ($request->experince as $exKey => $exVal) {
@@ -364,6 +373,8 @@ class UsersController extends Controller
                 $newClientDetails->incorporationType = $request->incorporationtype;
                 $newClientDetails->registered = $request->registered;
                 $newClientDetails->referralPartner = $request->referralPartner;
+                $newClientDetails->source_type_id = $request->sourcetypenamelist;
+
                 if ($newClientDetails->save()) {
                     $logActivity[] = [
                         'user_id' => auth()->user()->id,
@@ -538,7 +549,7 @@ class UsersController extends Controller
             if ($request->hasFile('profilePic')) {
                 $image_name = $request->profilePic;
                 $imageName = rand(100000, 999999) . '.' . $image_name->getClientOriginalExtension();
-                $image_name->move(public_path('Image'), $imageName);
+                $image_name->move(public_path('uploads/users/'.$newUser->id), $imageName);
                 $newUserDetails->uploadPhotograph = $imageName;
                 $newUserDetails->save();
             }

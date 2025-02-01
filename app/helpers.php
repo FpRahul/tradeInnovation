@@ -40,6 +40,19 @@ if(!function_exists('getSourceTypeName')){
         return User::where('role',$value)->get();
     }
 }
+if(!function_exists('getUserSourceTypeName')){
+    function getUserSourceTypeName($sourceTypeId){
+        $value='0';
+        if($sourceTypeId == 18){
+            $value = 3;
+        }elseif($sourceTypeId == 19){
+            $value = 4;
+        }elseif($sourceTypeId == 17){
+            $value = 2;
+        }
+        return User::where('role',$value)->get();
+    }
+}
 if(!function_exists('getSubService')){
     function getSubService($serviceId){
         return SubService::where('serviceId',$serviceId)->get();

@@ -5,8 +5,8 @@
     <div class="flex items-center justify-between mb-[20px]">
         <h3 class="text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">Add Leads</h3>
     </div>
-    <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] mb-[30px]">
-        <form method="POST" id="submitLeadForm" action="{{ route('leads.add')}}/{{!empty($leadData) ? $leadData->id :''}}" enctype="multipart/form-data" class="py-[25px] px-[30px] space-y-[20px]">
+    <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[10px] lg:rounded-[20px] mb-[30px]">
+        <form method="POST" id="submitLeadForm" action="{{ route('leads.add')}}/{{!empty($leadData) ? $leadData->id :''}}" enctype="multipart/form-data" class="py-[15px] px-[15px] lg:py-[25px] lg:px-[30px] space-y-[20px]">
             @csrf    
             <input type="hidden" name="savetype" id="savetype" value='0'/>  
             <div class="flex flex-col md:flex-row gap-[20px]">
@@ -36,7 +36,7 @@
                         @endif
                     @endif
                 @endif
-                <div class="sourceTypeNameDiv w-full md:w-1/2 {{$displayClass}}" id="source_type">
+                <div class="sourceTypeNameDiv relative w-full md:w-1/2 {{$displayClass}}" id="source_type">
                     <label for="sourceTypeNameList" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Source Type Name</label>
                     <select name="sourcetypenamelist" id="sourceTypeNameList" class="allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none is_required">
 
@@ -46,6 +46,9 @@
                             @endforeach                            
                         @endif
                     </select>
+                    <div class="loader sourceNameLoader flex items-center justify-center bg-[#ffffffa8] h-[45px] absolute top-[20px] left-[0] right-[0] m-auto hidden">
+                        <span class="loader-1"> </span>   
+                    </div>
                 </div>
 
                 <div class="w-full md:w-1/2">
@@ -96,7 +99,7 @@
                                 {{-- {{$serviceVal}} --}}
                                     <div data-repeater-item class="flex flex-wrap items-end gap-[20px]">
                                         <div class="w-[calc(100%-75px)] ">
-                                            <input type="hidden" name="lead_id" class="lead_id" value="{{$serviceVal->id}}">
+                                            <input type="hidden" name="lead_service_id" class="lead_service_id" value="{{$serviceVal->id}}">
                                             <div class="flex flex-col md:flex-row gap-[20px]">
                                                 <div class="w-full md:w-1/2">
                                                     <select name="serviceid" id="serviceid" class="lead_service_id allform-select2 setSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
@@ -138,7 +141,7 @@
                            
                                 <div data-repeater-item class="flex flex-wrap items-end gap-[20px]">
                                     <div class="w-[calc(100%-75px)] ">
-                                        <input type="hidden" name="lead_id" class="lead_id" value="0">
+                                        <input type="hidden" name="lead_service_id" class="lead_service_id" value="0">
                                         <div class="flex flex-col md:flex-row gap-[20px]">
                                             <div class="w-full md:w-1/2">
                                                 <select name="serviceid" id="serviceid" class="lead_service_id allform-select2 setSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
@@ -200,7 +203,7 @@
                             placeholder="Dead Line" 
                             name="taskdeadline" 
                             class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
-                            value="" 
+                            value="{{!empty($LeadTaskDetail) ? date('d M Y',strtotime($LeadTaskDetail->dead_line)) : ''}}" 
                             autocomplete="off"
                         >
                         <div class="absolute right-[10px] top-[10px]">
@@ -211,7 +214,7 @@
             </div>
             {{-- multi attachment --}}
             <div>
-                <label class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Attachments</label>
+                <label class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Attachments <span class="text-[12px] italic font-[400] text-[#e70e0e]"> (only jpg,jpeg png and pdf format supported & max:2 MB)</span></label>
                 <div class="leadAttachmentRepeater md:border-[1px] border-[#0000001A] rounded-[10px] md:p-[20px] employee_repeater_wrapper">
                     <div class="repeater-default">
                         <div data-repeater-list="leadAttachment" class="flex flex-col gap-[40px]"> 
@@ -236,7 +239,7 @@
                                                             <input class="previewImage" type="file" name="attachmentFile" >
                                                             
                                                         </div>
-                                                        <div class="imageErrorMsg text-[#f31111]"></div>
+                                                        <div class="imageErrorMsg text-[12px] italic font-[400] text-[#e70e0e]"></div>
                                                     </div>
                                                 </div>                                            
                                             </div>
@@ -263,7 +266,7 @@
                                                     <div class="relative">
                                                         <input class="previewImage" type="file" name="attachmentFile"  {{ empty($leadAttachment->document) ? 'required':''}}>
                                                     </div>
-                                                    <div class="imageErrorMsg"></div>
+                                                    <div class="imageErrorMsg text-[12px] italic font-[400] text-[#e70e0e]"></div>
                                                 </div>
                                             </div>                                            
                                         </div>
@@ -293,10 +296,9 @@
             </div>
             <div class="">
                 <button type="button" name="save" class="lead_submit_btn text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
-            </div>
-            <div class="">
                 <button type="button" name="saveAssign" class="lead_submit_btn text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save & Assign</button>
             </div>
+            
         </form>
     </div>
 </div>
@@ -398,7 +400,9 @@
     })
     $(document).on('change','.showSourceListName',function(){
         var value = $(this).val();
-        if(value == 17 || value == 18 || value == 19){            
+        if(value == 17 || value == 18 || value == 19){         
+            $('.sourceTypeNameDiv').css('display','block');
+            $('.sourceNameLoader').removeClass('hidden');
             $.ajax({
                 method:'POST',
                 url:"{{ route('lead.getsourcetypename')}}",
@@ -411,7 +415,7 @@
                 },
                 success:function(res){
                     $('.sourceTypeNameDiv').find('#sourceTypeNameList').html(res.data);
-                    $('.sourceTypeNameDiv').css('display','block');
+                    $('.sourceNameLoader').addClass('hidden');
                 }
             })
         }else{

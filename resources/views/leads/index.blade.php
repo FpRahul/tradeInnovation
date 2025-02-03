@@ -94,6 +94,9 @@
                             status
                         </th>
                         <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                            stages
+                        </th>
+                        <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                             Created
                         </th>
                         <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
@@ -123,10 +126,10 @@
                             {{$leadData->client_name}}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">                           
-                            <select class="px-[15px] py-[10px] pr-[20px] rounded-[3px] bg-[#fff] border-[1px] border-[#ccc] outline-none">
-                                <option value="">Select Status</option>
-                                <option value="{{$leadData->status}}" {{$leadData->status == 0 ? 'selected':''}}>Open</option>
-                            </select>
+                            {{$leadData->status}}
+                        </td>
+                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">                           
+                           stages
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                             {{ date('d M Y H:i:A', strtotime($leadData->created_at) ) }}

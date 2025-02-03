@@ -128,6 +128,12 @@ class CategoryOptions extends Seeder
                 'name' => 'Employee',
                 'status' => '1',
             ],
+            [
+                'authId' => '1',
+                'type' => '3',
+                'name' => 'Website',
+                'status' => '1',
+            ],
         ]);
     }
 }

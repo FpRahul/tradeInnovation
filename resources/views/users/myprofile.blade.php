@@ -16,7 +16,7 @@
                     <label for="profilePic" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload Profile Image<span class="text-[12px] italic font-[400] text-[#e70e0e]"> (only jpg,jpeg and png format supported & max:2 MB)</span></label>
                     <div class="relative flex flex-wrap gap-[10px]">
 
-                        <img src="{{asset($newUserDetails->uploadPhotograph ? 'Image/'.$newUserDetails->uploadPhotograph : 'assets/images/noimage.png')}}" width="70" height="70" class="getpreviewImage w-[150px] h-[150px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
+                        <img src="{{asset(isset($newUserDetails->uploadPhotograph) ? 'Image/'.$newUserDetails->uploadPhotograph : 'assets/images/noimage.png')}}" width="70" height="70" class="getpreviewImage w-[150px] h-[150px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
                         <div class="relative">
                             <label for="profilePic" class=" cursor-pointer w-[150px] h-[150px] rounded-[10px] flex items-center justify-center border border-dashed border-[#13103a4d] ">
                                 <svg class="cursor-pointer" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">

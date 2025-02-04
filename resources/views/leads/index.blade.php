@@ -27,9 +27,10 @@
         <div class="py-[15px] md:py-[25px] px-[15px] md:px-[20px] gap-[10px] flex flex-col md:flex-row items-center justify-between">
             <div class="flex max-w-[800px] gap-[10px] w-full">
                 <form class="w-full flex flex-wrap lg:flex-nowrap gap-[10px]"  method="GET">
+                    <input name="tab" type="hidden" value="{{$allRequestData->tab}}">
                     <div class="w-[100%] md:w-[40%]">
                         <label>Source</label>
-                        <select name="source"  class="filterData sourceData allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
+                        <select name="source"  class="sourceData allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
                             <option value="">Select Source</option>
     
                             @if (!empty($sourceList))
@@ -42,7 +43,7 @@
     
                     <div class="w-[100%] md:w-[40%]">
                         <label>Service</label>
-                        <select name="service"  class="filterData serviceData allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[98px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
+                        <select name="service"  class="serviceData allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[98px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
                             <option value="">Select Service</option>
     
                             @if (!empty($serviceList))
@@ -55,7 +56,7 @@
     
                     <div class="w-[100%] md:w-[40%]">
                         <label>Status</label>
-                        <select name="status"  class="filterData statusData allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[90px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] " >
+                        <select name="status"  class="statusData allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[90px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] " >
                             <option value="">Select Status</option>
                             <option value="0" {{ isset($statusKey) && $statusKey == 0 ? 'selected':''}}>Open</option>
                         </select>    
@@ -76,7 +77,18 @@
                 <input value="{{$searchKey}}" type="search" name="search" id="search" placeholder="Search By Client Name" class="!outline-none border border-[#0000001A] h-[40px] w-full p-[10px] pl-[42px] bg-transparent text-[#000000] placeholder:text-[#6F6F6F] rounded-[10px] text-[14px] font-[400] leading-[16px] ">
             </div>
         </div>
-
+            {{-- TAbbing --}}
+        <div class="bg-white">
+            <nav class="tabs flex flex-col sm:flex-row">
+                <a href="{{ route('leads.index', ['tab' => 1,'source'=>$allRequestData->source,'service'=>$allRequestData->service,'status'=>$allRequestData->status]) }}" data-target="panel-1" data-val="1" class="activeArchiveTab tab text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none text-blue-500 border-b-2 font-medium border-blue-500 {{$allRequestData->tab == 1 ? 'active':''}}">
+                    Active
+                </a>
+                <a href="{{ route('leads.index', ['tab' => 0,'source'=>$allRequestData->source,'service'=>$allRequestData->service,'status'=>$allRequestData->status]) }}" data-target="panel-2" data-val="0" class="activeArchiveTab tab text-gray-600 py-4 px-6 block hover:text-blue-500 focus:outline-none {{$allRequestData->tab == 0 ? 'active':''}}">
+                    Archive
+                </a>                   
+            </nav>
+            
+        </div>
         <div class="overflow-x-auto " id="search_table_data">
             <table width="100%" cellpadding="0" cellspacing="0" class="min-w-[900px]">
                 <thead>
@@ -109,7 +121,7 @@
                 </thead>
                 <tbody>
                     @if ($leadList && $leadList->isNotEmpty())
-                       @foreach ($leadList as $leadData)   
+                       @foreach ($leadList as $leadKey => $leadData)   
                                         
                        <tr>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px] pl-[25px]">
@@ -117,10 +129,22 @@
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                             <span class="inline-flex items-center gap-[10px]"> 
-                            @if ($leadData->source > 0)
+                            @if ($leadData->source > 0 )
                                  {{ getSourceData($leadData->source)->name }}
                             @endif
-                                <span><img src="{{ asset('assets/images/i-icon.png') }}" alt="icon"></span></span>
+                            @if ($leadData->source == 17 || $leadData->source == 18 || $leadData->source == 19)
+                                <button data-tooltip-target="tooltip-default{{$leadKey}}"><img src="{{ asset('assets/images/i-icon.png') }}" alt="icon"></button>
+
+                                <div id="tooltip-default{{$leadKey}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-[#000] rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
+                                    {{getUserNameBySource($leadData->source_id)->name}}
+                                    <div class="tooltip-arrow" data-popper-arrow></div>
+                                </div>
+                            @endif
+                              
+                            
+
+                            
+
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                             {{$leadData->client_name}}
@@ -128,8 +152,8 @@
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">                           
                             {{$leadData->status}}
                         </td>
-                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">                           
-                           stages
+                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">               
+                          {{ isset($leadTask[$leadKey]->leadTasks[0]) ? getStageName($leadTask[$leadKey]->leadTasks[0]->service_stage_id)->title : null}}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                             {{ date('d M Y H:i:A', strtotime($leadData->created_at) ) }}
@@ -244,6 +268,7 @@
     </div>
 </div>
 <script>
+
     $(document).on('click', '.lead_archive', function () {
         var id = $(this).data('id'); 
         if (confirm('Are you sure you want to archive this lead?')) {

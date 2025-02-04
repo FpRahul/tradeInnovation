@@ -89,10 +89,16 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/', 'index')->name('task.index');
         Route::get('/logs', 'logs')->name('task.log');
         Route::get('/details/{id}', 'detail')->name('task.detail');
-        Route::get('/check-duplication/{id}', 'chekDuplication')->name('task.chekDuplication');
-        Route::post('/document-verified/{id}', 'documentVerified')->name('task.documentVerified');
+        Route::get('/follow-up/{id}', 'followUp')->name('task.followup');
+        Route::get('/check-duplicate/{id}', 'chekDuplication')->name('task.chekDuplication');
+        Route::post('/duplicate-status/{id}', 'duplicateVerified')->name('task.documentVerified');
         Route::get('/send-quotation/next-stage/{id}', 'documentVerifiedChildSatge')->name('task.documentVerifiedChildSatge');
         Route::post('/send-quotation/{id}','sendQuotation')->name('task.sendQuotation');
+        Route::get('/check-payment/{id}','checkPayment')->name('task.checkPayment');
+        Route::post('/payment-status/{id}','paymentStatus')->name('task.paymentStatus');
+        Route::get('documentation/{id}','documentation')->name('task.documentation');
+        Route::Post('documentation-status/{id}','documenStatus')->name('task.documenStatus');
+
     });
     //Services Routes
     Route::prefix('services')->controller(ServicesController::class)->group(function () {

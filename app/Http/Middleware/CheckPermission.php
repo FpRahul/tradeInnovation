@@ -19,7 +19,6 @@ class CheckPermission
         if (!$user) {
             abort(403, 'Unauthorized action.');
         }
-
         $routeName = $request->route()->getName();
         $permissionDetails = [
             'status' => false,

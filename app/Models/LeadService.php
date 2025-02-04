@@ -10,7 +10,7 @@ class LeadService extends Model
    protected $fillable = [
         'lead_id',
         'service_id',
-        'subservice_id',
+        'subservice_id', 
         'quoted_price'
    ];
 

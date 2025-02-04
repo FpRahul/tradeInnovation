@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('user_details', function (Blueprint $table) {
-            $table->string('registered')->nullable(true)->change();
+        Schema::table('menus', function (Blueprint $table) {
+            $table->integer('sequence')->nullable(true)->after('actionRoutes');
         });
     }
 
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('user_details', function (Blueprint $table) {
+        Schema::table('menus', function (Blueprint $table) {
             //
         });
     }

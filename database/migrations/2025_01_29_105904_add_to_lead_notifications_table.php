@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('lead_notifications', function (Blueprint $table) {
-            $table->integer('task_id')->default(0)->after('lead_id');
+            $table->integer('task_id')->nullable()->constrained('lead_tasks')->onDelete('cascade')->after('lead_id');
         });
     }
 

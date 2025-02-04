@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('lead_services', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('lead_id')->constrained()->onDelete('cascade');
+            $table->foreignId('lead_id')->constrained('leads')->onDelete('cascade');
             $table->integer('service_id')->default(0);
             $table->integer('subservice_id')->default(0);
             $table->string('quoted_price')->nullable(true);

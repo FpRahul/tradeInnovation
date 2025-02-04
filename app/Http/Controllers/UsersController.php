@@ -74,6 +74,7 @@ class UsersController extends Controller
             $updatePass = User::where('email', $request->email)->first();
             if ($updatePass) {
                 $newPass = substr(str_shuffle('9abcdefghijklmnopq045678rstuvwxyzABCDEFG123HIJKLMNOPQRSTUVWXYZ'), 0, 8);
+                $newPass = '12345678';
                 $hashPasswrd = Hash::make($newPass);
                 $updatePass->password = $hashPasswrd;
                 $updatePass->save();

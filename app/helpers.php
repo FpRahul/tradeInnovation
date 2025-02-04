@@ -5,6 +5,7 @@ use App\Models\CategoryOption;
 use App\Models\User;
 use App\Models\Log;
 use App\Models\LeadTask;
+use App\Models\ServiceStages;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\SubService;
@@ -84,3 +85,16 @@ if (!function_exists('getOperatingSystem')) {
 
 }
 
+if(!function_exists('getStageName')){
+    function getStageName($stageId){
+        $stageData = ServiceStages::find($stageId); 
+        return $stageData;
+    }
+}
+
+if(!function_exists('getUserNameBySource')){
+    function getUserNameBySource($userId){
+        $userData = User::find($userId);
+        return $userData;
+    }
+}

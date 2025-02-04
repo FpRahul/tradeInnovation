@@ -28,7 +28,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
 
     //Users Routes
     Route::prefix('users')->controller(UsersController::class)->group(function () {
-        Route::get('/', 'index')->name('users.listing');
+        Route::match(['POST','GET'],'/', 'index')->name('users.listing');
         Route::match(['POST','GET'], '/add-user/{id?}', 'addUser')->name('users.adduser');
         Route::get('/delete/{id?}', 'deleteUser')->name('users.delete');
         Route::post('/deleterepeater', 'deleteRepeaterUser')->name('users.deleterepeater');

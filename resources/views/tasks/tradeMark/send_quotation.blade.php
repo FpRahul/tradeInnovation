@@ -46,6 +46,13 @@
                <option value="" disabled>No users available</option>
                @endif
             </select>
+            @if($taskDetails->count() > 0)
+            @foreach ($taskDetails as $user )
+            <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+               Current user assigned: {{$user->user->name}}.
+            </p>
+            @endforeach
+            @endif
          </div>
       </div>
       <div class="flex flex-col md:flex-row gap-[20px]">
@@ -61,6 +68,28 @@
          @error('attachment.*')
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
+         <div class="w-full md:w-1/2" id="verifiedDate">
+            <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+               Dead line
+            </label>
+            <div class="w-[100%] relative">
+               <input
+                  type="text"
+                  placeholder="Dead Line"
+                  name="deadline"
+                  id="deadline"
+                  class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
+                  value=""
+                  
+                  autocomplete="off">
+               <div class="absolute right-[10px] top-[10px]">
+                  <i class="ri-calendar-line"></i>
+               </div>
+            </div>
+            <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+                 Set a dead line for payment.
+               </p>
+         </div>
       </div>
       <!-- <div class="w-full md:w-1/2 stageoftheservice">
          <label class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>

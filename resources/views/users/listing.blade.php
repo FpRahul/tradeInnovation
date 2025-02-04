@@ -66,10 +66,7 @@
                             {{$employeeListing->mobile}}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
-                            @php
-                                $role = Role::where('id',$employeeListing->role)->first();
-                                echo $role['name'];
-                            @endphp
+                           {{ Role::find($employeeListing->role)->name ?? 'N/A'; }}
                             
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">

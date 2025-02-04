@@ -3,6 +3,7 @@
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px]">
     <x-client-task-details :taskID="$taskID" />
 </div>
+
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
     <form action="{{ route('task.documentVerified' , ['id' =>$taskID]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
         @csrf
@@ -24,11 +25,27 @@
                 <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                 @enderror
             </div>
+
+            <div class="w-full md:w-1/2 ifRegister" style="display: none;">
+                <label for="ifRegister" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
+                <select name="ifRegister" id="ifRegister" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                    <option value="" disabled selected>Select status</option>
+                    <option value="Prior Use">Prior Use</option>
+                    <option value="Goods are different">Goods are different</option>
+                    <option value="Proceed anyway (on client risk)">Proceed anyway (on client risk)</option>
+                </select>
+                @error('ifRegister')
+                <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+                @enderror
+                <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+                     Select on client risk.
+                  </p>
+            </div>
             <div class="w-full md:w-1/2">
                 <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
                     Verified On
                 </label>
-                <div class="w-[100%] relative">
+                <div class="w-[100%] relative"> 
                     <input
                         type="text"
                         placeholder="Dead Line"
@@ -77,6 +94,9 @@
                         <i class="ri-calendar-line"></i>
                     </div>
                 </div>
+                <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+                     Set a dead line for client approval.
+                  </p>
             </div>
         </div>
         <div class="flex flex-col md:flex-row gap-[20px]">
@@ -139,7 +159,7 @@
             <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Assign</button>
         </div>
     </form>
-</div>
+</div> 
 <script>
     $(document).ready(function() {
         $('.daterangepicker-verified').daterangepicker({
@@ -160,11 +180,17 @@
                 format: 'DD MMM YYYY'
             },
             minDate: moment().startOf('day'),
-            
         }).on('apply.daterangepicker', function(ev, picker) {
             console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+        }); 
+        $("#status").on('change', function(){
+            var statusValue = $(this).val();
+            if (statusValue == 1) {
+                $(".ifRegister").hide();
+            } else {
+                $(".ifRegister").show();
+            }
         });
-        
     });
 </script>
 @stop

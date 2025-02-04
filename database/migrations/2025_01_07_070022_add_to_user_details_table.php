@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('emergencyContactDetails')->nullable(true)->after('keyPerformanceIndicator');
             $table->string('currentAddress')->nullable(true)->after('emergencyContactDetails');
             $table->string('permanentAddress')->nullable(true)->after('currentAddress');
-
             $table->string('uploadPhotograph')->nullable(true)->after('permanentAddress');
             $table->string('uploadPan')->nullable(true)->after('uploadPhotograph');
             $table->string('uploadAadhar')->nullable(true)->after('uploadPan');

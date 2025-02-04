@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('lead_task_details', function (Blueprint $table) {
             $table->id();
-            $table->integer('task_id')->default(0);
+            $table->foreignId('task_id')->nullable()->constrained('lead_tasks')->onDelete('cascade');
             $table->date('dead_line')->nullable(true);
             $table->integer('status')->nullable(true)->comment('0 for pending , 1 for completed , 2 for hold , 3 for follow-up');
             $table->date('status_date')->nullable(true);

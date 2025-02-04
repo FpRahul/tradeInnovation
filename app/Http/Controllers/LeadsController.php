@@ -17,19 +17,26 @@ use App\Models\ServiceStages;
 class LeadsController extends Controller
 {
     public function index(Request $request){
+        $allRequestData = $request;
         if(base64_decode($request->id) > 0){
             $baseNotifyId = base64_decode($request->NotifyId);
             $notifyData = LeadNotification::where('id',$baseNotifyId)->update(['status'=>1]);
             $baseId = base64_decode($request->id);
-            $leadList = Lead::with('leadService')->where('id',$baseId)->where('archive',1);
+            $leadList = Lead::with('leadService')->where('id',$baseId);
+            $leadTask = Lead::with(['leadTasks'])->whereHas('leadTasks', function($q) use($baseId) {
+                $q->where('lead_id', $baseId);
+            })->latest()->limit(1)->get();
+            // dd($leadTask);
+
         }else{            
             if(auth()->user()->role != 1 && auth()->user()->role != 5){
                 $leadList = Lead::with(['leadService','leadTasks'])->whereHas('leadTasks',function($q){
                     $q->where('user_id',auth()->user()->id);
-                })->where('archive',1);
+                })->where('archive',$request->tab);
             }else{
-                $leadList = Lead::with('leadService')->where('archive',1);
+                $leadList = Lead::with('leadService')->where('archive',$request->tab);
             }
+            $leadTask = Lead::with('leadTasks')->whereHas('leadTasks')->latest()->get();
         }
         
         $sourceKey = $request->input('source') ?? '';
@@ -55,15 +62,16 @@ class LeadsController extends Controller
             });                
         }
        
-        $leadList = $leadList->paginate(env("PAGINATION_COUNT"));
+        $leadList = $leadList->latest()->paginate(env("PAGINATION_COUNT"));
+
         if(empty($requestType)){
             $sourceList = CategoryOption::where('type',3)->where('status',1)->get();
             $serviceList = Service::where('status',1)->get();
             $userList = User::where('role',4)->get();
             $header_title_name = 'Leads';
-            return view('leads/index',compact('header_title_name','leadList','sourceList','serviceList','userList','sourceKey','serviceKey','statusKey','searchKey'));
+            return view('leads/index',compact('allRequestData','header_title_name','leadTask','leadList','sourceList','serviceList','userList','sourceKey','serviceKey','statusKey','searchKey'));
         }else{
-            $trData = view('leads/lead-page-filter-data',compact('leadList','sourceKey','serviceKey','statusKey','searchKey'))->render();
+            $trData = view('leads/lead-page-filter-data',compact('allRequestData','leadList','leadTask','sourceKey','serviceKey','statusKey','searchKey'))->render();
             $dataArray = [
                 'trData' => $trData,
                 'source'=>$request->source,
@@ -101,7 +109,7 @@ class LeadsController extends Controller
         // $allStages = ServiceStages::get();
         $sourceList = CategoryOption::where('type',3)->where('status',1)->get();
         $serviceList = Service::where('status',1)->get();
-        $userList = User::where('role','>',3)->where('status',1)->get();
+        $userList = User::where('role',4)->where('status',1)->get();
         if($request->isMethod('POST')){
             if($request->sourcetypenamelist > 0){
                 $sourceId = $request->sourcetypenamelist;              

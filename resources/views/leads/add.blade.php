@@ -112,7 +112,7 @@
                                                         
                                                     </select>
                                                 </div>
-                                                <div class="w-full md:w-1/2">
+                                                <div class="relative w-full md:w-1/2">
                                                     <select name="subserviceid" id="subserviceid" class="allform-select2 getSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                         <option value="">Service Type</option>  
                                                         @if ($serviceVal->subservice_id)                                                           
@@ -124,6 +124,9 @@
                                                             @endforeach    
                                                         @endif                                              
                                                     </select>
+                                                    <div class="loader serviceNameLoader flex items-center justify-center bg-[#ffffffa8] h-[45px] absolute top-[20px] left-[0] right-[0] m-auto hidden">
+                                                        <span class="loader-1"> </span>   
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -154,10 +157,13 @@
                                                     
                                                 </select>
                                             </div>
-                                            <div class="w-full md:w-1/2">
+                                            <div class="relative w-full md:w-1/2">
                                                 <select name="subserviceid" id="subserviceid" class="allform-select2 getSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                     <option value="">Service Type</option>                                                
                                                 </select>
+                                                <div class="loader serviceNameLoader flex items-center justify-center bg-[#ffffffa8] h-[45px] absolute top-[0px] left-[0] right-[0] m-auto hidden">
+                                                    <span class="loader-1"> </span>   
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -360,6 +366,8 @@
    
     $(document).on('change','.setSubService',function(){
         var serviceId = $(this).val();
+        $('.serviceNameLoader').removeClass('hidden');
+
         var e = $(this);
         $.ajax({
             method:'POST',
@@ -389,6 +397,8 @@
             dataType:'json',
             success:function(res){
                 $('.stageoftheservice').find('.serviceStagesOption').html(res.options);
+                $('.serviceNameLoader').addClass('hidden');
+
             }
         });
     });

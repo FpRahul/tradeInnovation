@@ -118,10 +118,6 @@
                                     @else
                                     Not Available
                                     @endif
-                                    
-
-                                  
-                               
                             </td>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400]  leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                                     @php
@@ -181,7 +177,7 @@
                                         </a>
                                         <div class="dropdown_menus absolute right-0 z-10 mt-2 w-[100px] origin-top-right rounded-md bg-white shadow-md ring-1 ring-black/5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                                             <div class="text-start" role="none">
-                                            <a href="{{ route('task.chekDuplication', ['id' => $task->id]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Follow Up</a>
+                                            <a href="{{ route('task.followup', ['id' => $task->id]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Follow Up</a>
                                                 <a href="javascript:void(0)" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal" type="button">Logs</a>
                                                 <a href="#" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Hold</a>
                                             </div>

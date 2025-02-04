@@ -105,27 +105,22 @@
                                 @endif
                                 </td>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                                    @if($task->task_description)
-                                    {{ $task->task_description }}
+                                    @if($task->task_title)
+                                    {{ $task->task_title}}
                                     @else
                                     Not Available
                                     @endif
                                 </td>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                                    @php
-                                    $serviceNames = [];
-                                    @endphp
-                                    @foreach ($task->leadServices as $leadService)
-                                    @if ($leadService->service)
-                                    @php
-                                    $serviceNames[] = $leadService->service->serviceName;
-                                    @endphp
+                                    
+                                    @if ($task->serviceSatge )
+                                     {{ $task->serviceSatge->title }}
                                     @else
                                     Not Available
                                     @endif
-                                    @endforeach
+                                    
 
-                                    {{ implode(', ', $serviceNames) }}
+                                  
                                
                             </td>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400]  leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">

@@ -37,7 +37,7 @@ class TasksController extends Controller
                     });
             });
         }
-
+      
         $taskDetailsDrp = $taskDetails->get();
         $taskDetails = $taskDetails->paginate(env("PAGINATION_COUNT"));
         if (empty($requestType)) {
@@ -72,7 +72,7 @@ class TasksController extends Controller
     }
     public function chekDuplication($id)
     {
-        $header_title_name = "Lead action & details";
+        $header_title_name = "search For Trademark";
         $taskDetails = LeadTask::with(['user', 'lead', 'leadTaskDetails', 'leadServices.service', 'leadServices.subservice', 'serviceSatge'])
             ->where('id', $id)
             ->get();
@@ -88,11 +88,17 @@ class TasksController extends Controller
 
     public function duplicateVerified(Request $request, $id)
     {
-        // dd($id);
         // dd($request->all());
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         $deadLineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
-        $existedTaskDetails = LeadTask::find($id);
+        $existedTaskDetails = LeadTask::with(['leadServices.service'])->where('id',$id)->first();
+        foreach($existedTaskDetails->leadServices as $task ){
+             $serviceId = $task->service->id;
+             $servicename = $task->service->serviceName;
+        }
+        
+        $stageId = (int) $request->stage_id;
+     
         $newExistedTaskDetails = new LeadTask();
         $lead_id = $existedTaskDetails->lead_id;
         if (!empty($request->input('assignUser'))) {
@@ -119,10 +125,12 @@ class TasksController extends Controller
             $newExistedTaskDetails->user_id = $assignUser;
             $newExistedTaskDetails->lead_id = $existedTaskDetails->lead_id;
             $newExistedTaskDetails->assign_by = Auth::id();
+            $newExistedTaskDetails->task_title =$servicename;
+
             $newExistedTaskDetails->task_description = $request->description;
             $newExistedTaskDetails->service_stage_id = $request->stage_id;
             if ($newExistedTaskDetails->save()) {
-                $existedLeadTaskDetails->status = $request->status;
+                $existedLeadTaskDetails->status = 1;
                 $existedLeadTaskDetails->status_date = $verifiedDate;
                 $existedLeadTaskDetails->comment = $request->ifRegister ?? null;
                 if ($request->hasFile('attachment')) {
@@ -146,7 +154,6 @@ class TasksController extends Controller
                     $newTaskassign->dead_line = $deadLineDate;
                     $newTaskassign->status = 0;
                 }
-                
                 $newTaskassign->save();
                 $LeadLog = new LeadLog();
                 $LeadLog->user_id = $assignUser;
@@ -156,10 +163,11 @@ class TasksController extends Controller
                 $LeadLog->description = $request->description;
                 $LeadLog->save();
                 $id = $newExistedTaskDetails->id;
-                return redirect()->route('task.documentVerifiedChildSatge', ['id' => $id])
+                
+                return redirect()->route('task.followup', ['id' => $id ,'serviceId' => $serviceId,'stageId'=> $stageId])
                     ->with('success', 'Document verified successfully');
             } else {
-                // dd($id);
+                
                 return redirect()->back()->with('error', "there is something wrong");
             }
         } else {
@@ -181,21 +189,22 @@ class TasksController extends Controller
             $stageId = $value->service_stage_id;
         }
 
-        $getStage = ServiceStages::where('service_id', 1)->where('id', '>', $stageId)->get();
+        // dd($stageId);
         $leadTaskdetials = LeadTaskDetail::find($taskDetailsId);
-        return view('tasks.tradeMark.send_quotation', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage'));
+        return view('tasks.tradeMark.send_quotation', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'stageId'));
     }
     public function sendQuotation(Request $request, $id)
     {
-        // dd($request->all());
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
-
-
-        $existedTask = LeadTask::find($id);
+        $existedTask = LeadTask::with(['leadServices.service'])->where('id',$id)->first();
         $existedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
         $newTaskAssigned = new LeadTask();
         $newTaskDetails = new LeadTaskDetail();
+        foreach($existedTask->leadServices as $task ){
+            $serviceId = $task->service->id;
+            $servicename = $task->service->serviceName;
+       }
         $rule = [
             'verified' => 'required',
             'attachment' => 'array',
@@ -211,29 +220,31 @@ class TasksController extends Controller
             $newTaskAssigned->lead_id = $existedTask->lead_id;
             $newTaskAssigned->service_stage_id = $existedTask->service_stage_id;
             $newTaskAssigned->assign_by = Auth::id();
+            $newTaskAssigned->task_title = $servicename;
             $newTaskAssigned->task_description = $request->description;
             if ($newTaskAssigned->save()) {
                 $newTaskDetails->task_id = $newTaskAssigned->id;
                 $newTaskDetails->status = 0;
                 $newTaskDetails->dead_line = $deadlineDate;
-                if ($request->hasFile('attachment')) {
-                    $folderPath = public_path('Image/leads/lead_' . $existedTask->lead_id);
-                    if (!file_exists($folderPath)) {
-                        mkdir($folderPath, 0755, true);
-                    }
-                    $filePaths = [];
-                    foreach ($request->file('attachment') as $file) {
-                        if ($file->isValid()) {
-                            $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
-                            $file->move($folderPath, $fileName);
-                            $filePaths[] = $fileName;
-                        }
-                    }
-                    $newTaskDetails->attachment = json_encode($filePaths);
-                }
+                
                 if ($newTaskDetails->save()) {
                     $existedTaskDetails->status_date = $verifiedDate;
                     $existedTaskDetails->status = 1;
+                    if ($request->hasFile('attachment')) {
+                        $folderPath = public_path('Image/leads/lead_' . $existedTask->lead_id);
+                        if (!file_exists($folderPath)) {
+                            mkdir($folderPath, 0755, true);
+                        }
+                        $filePaths = [];
+                        foreach ($request->file('attachment') as $file) {
+                            if ($file->isValid()) {
+                                $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
+                                $file->move($folderPath, $fileName);
+                                $filePaths[] = $fileName;
+                            }
+                        }
+                        $existedTaskDetails->attachment = json_encode($filePaths);
+                    }
                     if ($existedTaskDetails->save()) {
                         $LeadLog = new LeadLog();
                         $LeadLog->user_id = $request->assignUser ?? $existedTask->user_id;
@@ -277,13 +288,21 @@ class TasksController extends Controller
     }
 
     public function paymentStatus(Request $request, $id)
-    {
+    { 
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
-        $existedLeaedTask = LeadTask::find($id);
+        $existedLeaedTask = LeadTask::with(['leadServices.service'])->where('id',$id)->first();
         $existedLeaedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
         $newLeadtask = new LeadTask();
         $newLeadTaskDeatails  = new LeadTaskDetail();
+        foreach($existedLeaedTask->leadServices as $task ){
+            $serviceId = $task->service->id;
+            $servicename = $task->service->serviceName;
+
+        }
+        $stageId = (int) $request->stage_id;
+
+       
         $rule = [
             'payment' => 'required',
             'deadline' => 'required',
@@ -300,6 +319,8 @@ class TasksController extends Controller
             $newLeadtask->lead_id = $existedLeaedTask->lead_id;
             $newLeadtask->service_stage_id = $request->stage_id;
             $newLeadtask->assign_by = Auth::id();
+            $newLeadtask->task_title = $servicename;
+
             $newLeadtask->task_description = $request->description ?? null;
             if ($newLeadtask->save()) {
                 $existedLeaedTaskDetails->status = $request->payment;
@@ -319,7 +340,7 @@ class TasksController extends Controller
                             $filePaths[] = $fileName;
                         }
                     }
-                    $newLeadTaskDeatails->attachment = json_encode($filePaths);
+                    $existedLeaedTaskDetails->attachment = json_encode($filePaths);
                 }
                 if ($existedLeaedTaskDetails->save() && $newLeadTaskDeatails->save()) {
                     $LeadLog = new LeadLog();
@@ -329,9 +350,8 @@ class TasksController extends Controller
                     $LeadLog->assign_by = Auth::id();
                     $LeadLog->description = $request->description;
                     $LeadLog->save();
-
                     $id = $newLeadtask->id;
-                    return redirect()->route('task.documentation', ['id' => $id])->with('success', 'payment status is Updated');
+                    return redirect()->route('task.followup', ['id' => $id ,'serviceId' => $serviceId,'stageId'=> $stageId])->with('success', 'payment status is Updated');
                 } else {
                     return redirect()->back()->error('message', " there is something wrong ");
                 }
@@ -346,7 +366,7 @@ class TasksController extends Controller
 
     public function documentation($id)
     {
-        $header_title_name = "Document Verification";
+        $header_title_name = "Document Drafting";
         $taskDetails = LeadTask::with(['user', 'lead', 'leadTaskDetails', 'leadServices.service', 'leadServices.subservice', 'serviceSatge'])
             ->where('id', $id)
             ->get();
@@ -363,16 +383,28 @@ class TasksController extends Controller
     }
 
     public function documenStatus(Request $request, $id){
-        
         $existedLeaedTask = LeadTask::find($id);
         $existedLeaedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
         $newLeadtask = new LeadTask();
         $newLeadTaskDeatails  = new LeadTaskDetail();
-         
-        
     }
+    public function assignTask(Request $request){
+        $header_title_name = "Assign Task";
+        return view('settings.assign_stage',compact('header_title_name'));
 
-    public function followUp($id){
-        
     }
+    public function followUp($id, $serviceId , $stageId){
+        $taskDetails = LeadTask::find($id);
+        if($id == $taskDetails->id && $serviceId == 1 && $stageId == 1 ){
+                    return redirect()->route('task.chekDuplication',['id'=> $id]); 
+       }
+       else if($id == $taskDetails->id && $serviceId == 1 && $stageId == 2){
+        return redirect()->route('task.documentVerifiedChildSatge',['id'=> $id]); 
+       } else if($id == $taskDetails->id && $serviceId == 1 && $stageId == 3){
+        return redirect()->route('task.documentation',['id'=> $id]); 
+       }
+       
+}
+
+
 }

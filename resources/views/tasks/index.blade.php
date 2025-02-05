@@ -67,10 +67,11 @@
                                 Clients Name
                             </th>
                             <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
-                                Task Detail
+                               
+                                Services
                             </th>
                             <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
-                                Services
+                            Task Detail
                             </th>
                             <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                                 Services type
@@ -105,16 +106,27 @@
                                 @endif
                                 </td>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                                    @if($task->task_title)
-                                    {{ $task->task_title}}
+                                @foreach($task->leadServices as $service)
+                                    @if($service->service && $service->service->serviceName)
+                                        {{ $service->service->serviceName }}
+                                        @php
+                                            $serviceID = $service->service->id;
+                                            
+                                        @endphp
                                     @else
-                                    Not Available
+                                        Not Available
                                     @endif
-                                </td>
+                                @endforeach
+
+                           
+                                    </td>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                                     
                                     @if ($task->serviceSatge )
                                      {{ $task->serviceSatge->title }}
+                                     @php
+                                     $stageId = $task->serviceSatge->id;
+                                     @endphp
                                     @else
                                     Not Available
                                     @endif
@@ -176,21 +188,29 @@
                                             </svg>
                                         </a>
                                         <div class="dropdown_menus absolute right-0 z-10 mt-2 w-[100px] origin-top-right rounded-md bg-white shadow-md ring-1 ring-black/5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                                            @if($task->leadTaskDetails->status == 1)
                                             <div class="text-start" role="none">
-                                            <a href="{{ route('task.followup', ['id' => $task->id]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Follow Up</a>
+                                            <a href="#" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Follow Up</a>
                                                 <a href="javascript:void(0)" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal" type="button">Logs</a>
                                                 <a href="#" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Hold</a>
                                             </div>
+                                            @else
+                                            <div class="text-start" role="none">
+                                            <a href="{{ route('task.followup', ['id' => $task->id,'serviceId' => $serviceID , 'stageId' => $stageId ]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Follow Up</a>
+                                                <a href="javascript:void(0)" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal" type="button">Logs</a>
+                                                <a href="#" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Hold</a>
+                                            </div>
+                                           @endif
                                         </div>
                                     </div>
                                 </td>
                             </tr>
                             @endforeach
-                        @else
-                            <tr>
-                                no data found
-                            </tr>
-                        @endif
+                            @else
+                                <tr>
+                                    <td colspan="8" class="text-center text-red-500 py-[12px]">No task found</td>
+                                </tr>
+                            @endif
                     </tbody>
                 </table>
             </div>

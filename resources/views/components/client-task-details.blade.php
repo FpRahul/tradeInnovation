@@ -18,8 +18,6 @@
         <p>No task details found</p>
     @endif
 </div>
-
-
 <div class="px-[15px] md:px-[30px] py-[20px]">
     {{-- Display task details if they exist --}}
     <ul class="grid grid-cols-2 lg:grid-cols-3 gap-[20px]">

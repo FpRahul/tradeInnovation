@@ -10,6 +10,7 @@ use App\Models\Lead;
 use App\Models\LeadService;
 use App\Models\LeadAttachment;
 use App\Models\LeadLog;
+use App\Models\FollowUp;
 use App\Models\LeadNotification;
 use App\Models\LeadTask;
 use App\Models\LeadTaskDetail;
@@ -158,12 +159,10 @@ class LeadsController extends Controller
                         $leadServiceData->lead_id = $leadData->id;                            
                         $leadServiceData->service_id = $serviceVal['serviceid'];
                         $serviceidArray[] = $serviceVal['serviceid'];
-                        $leadServiceData->subservice_id = $serviceVal['subserviceid'];                     
+                        $leadServiceData->subservice_id = $serviceVal['subserviceid'];                   
                         $leadServiceData->save();
                     }                 
-                } 
-                            
-                // lead task...   
+                }   
                 if($id==null){
                     $LeadTask = new LeadTask();
                 }     
@@ -181,6 +180,11 @@ class LeadsController extends Controller
                     $LeadTaskDetail->status = 0;
                     $LeadTaskDetail->status_date = NULL;
                     $LeadTaskDetail->save();
+                    $followUp = new FollowUp();
+                    $followUp->task_id = $LeadTask->id;
+                    $followUp->service_id = $leadServiceData->service_id;
+                    $followUp->stage_id = $LeadTask->service_stage_id;
+                    $followUp->save(); 
 
                     if($request->savetype == 1 && $leadOldData->status==0){
                         // lead logs...

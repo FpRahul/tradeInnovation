@@ -30,4 +30,9 @@ class Lead extends Model
         return $this->hasMany(LeadTask::class, 'lead_id');
     }
 
+    public function leadTask()
+    {
+        return $this->hasOne(LeadTask::class, 'lead_id')->latest();
+    }
+
 }

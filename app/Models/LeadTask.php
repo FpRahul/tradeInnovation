@@ -23,6 +23,7 @@ class LeadTask extends Model
     public function lead(){
         return $this->belongsTo(Lead::class,'lead_id');
     }
+    
     public function leadServices()
     {
         return $this->hasMany(LeadService::class, 'lead_id', 'lead_id'); 

@@ -1,12 +1,13 @@
 @extends('layouts.default')
 @section('content')
 <div>
+    
     <div class="flex items-center justify-between mb-[20px]">
         <div>
             <h3 class="text-[20px] font-[500] leading-[24px] text-[#13103A] tracking-[0.02em] mb-1.5">Manage Professions</h3>
             <ul class="flex items-center text-[14px] font-[400] leading-[16px] text-[#000000] gap-[5px]">
                 <li>{{$header_title_name}}</li> /
-                <li class="text-gray">professions</li>
+                <li class="text-gray">Professions</li>
             </ul>
         </div>
         @if(in_array('professions.add',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
@@ -47,8 +48,9 @@
                 <tbody id="get_dynamic_data">
                     
                     @if (!empty($categoryData)) 
+                    
                         @foreach ($categoryData as $newCategorylist)
-
+                        
                             <tr>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
                                     {{$newCategorylist->name}}
@@ -99,7 +101,7 @@
         </div>
         <!-- Pagination Links -->
         <div id="dynamic-pagination" class="py-[15px] px-[20px]">
-            {{ $categoryData}}
+            {{ $categoryData->appends(['key' => $searchKey])->links() }}
         </div>
     </div>
 </div>
@@ -152,6 +154,27 @@
         $('#professionalName').val(name);
     });
 
+    $(document).on('keyup', '.search', function() {
+        var key = $(this).val();
+        $.ajax({
+            method: 'POST',
+            url: "{{ route('professions.index')}}",
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            data: {
+                key: key,
+                requestType: 'ajax',
+            },
+            dataType: 'json',
+            success: function(res) {
+                console.log(res);
+                $('#search_table_data').html(res.trData);
+
+            }
+        })
+
+    });
    
 </script>
 @stop

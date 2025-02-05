@@ -14,11 +14,11 @@
       <div class="flex flex-col md:flex-row gap-[20px]">
          <input type="hidden" name="checkValid" id="checkValid" value="">
          <div class="w-full md:w-1/2">
-            <label for="payment" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
+            <label for="payment" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Payment status</label>
             <select name="payment" id="payment" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                <option value="" disabled selected>Select status</option>
-               <option value="1">Received</option>
-               <option value="0">Not Received</option>
+               <option value="1">Payed</option>
+               <option value="0">Not Payed</option>
             </select>
             @error('payment')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
@@ -26,7 +26,7 @@
          </div>
          <div class="w-full md:w-1/2" id="verifiedDate">
             <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-               verified On
+             Payed  On
             </label>
             <div class="w-[100%] relative">
                <input
@@ -43,53 +43,6 @@
             </div>
          </div>
       </div>
-      <div class="flex flex-col md:flex-row gap-[20px]">
-      <div class="w-full md:w-1/2">
-         <label for="assignUser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign User</label>
-         <select name="assignUser" id="assignUser" class="filterData assignUserData allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]">
-            <option value="" disabled selected>Select a user</option>
-            @if($users->count() > 0)
-            <option value="" disabled selected>Select a user</option>
-            @foreach ($users as $user)
-            <option value="{{ $user->id }}" {{ !empty($selectedUserId) && $user->id == $selectedUserId ? 'selected' : '' }}>
-               {{ $user->name }}
-            </option>
-            @endforeach
-            @else
-            <option value="" disabled>No users available</option>
-            @endif
-         </select>
-         @if($taskDetails->count() > 0)
-         @foreach ($taskDetails as $user )
-         <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-            Current user assigned: {{$user->user->name}}.
-         </p>
-         @endforeach
-         @endif
-      </div>
-      <div class="w-full md:w-1/2" id="verifiedDate">
-            <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-               Dead line
-            </label>
-            <div class="w-[100%] relative">
-               <input
-                  type="text"
-                  placeholder="Dead Line"
-                  name="deadline"
-                  id="deadline"
-                  class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
-                  value=""
-
-                  autocomplete="off">
-               <div class="absolute right-[10px] top-[10px]">
-                  <i class="ri-calendar-line"></i>
-               </div>
-            </div>
-            <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-               Set a dead line for Documentation.
-            </p>
-         </div>
-         </div>
       <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="flex justify-start gap-[15px] w-[100%] md:w-[49%]">
             <label for="attachment" class="flex items-center gap-[10px] w-full text-[13px] font-[500] leading-[15px] text-[#666666] tracking-[0.01em] bg-[#fff] border-dashed border-[1px] border-[#ccc] rounded-[6px] py-[14px] px-[15px] cursor-pointer">
@@ -116,6 +69,56 @@
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
          </div>
+
+         
+      </div>
+      <div class="flex flex-col md:flex-row gap-[20px]">
+         <div class="w-full md:w-1/2">
+            <label for="assignUser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign User</label>
+            <select name="assignUser" id="assignUser" class="filterData assignUserData allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]">
+               <option value="" disabled selected>Select a user</option>
+               @if($users->count() > 0)
+               <option value="" disabled selected>Select a user</option>
+               @foreach ($users as $user)
+               <option value="{{ $user->id }}" {{ !empty($selectedUserId) && $user->id == $selectedUserId ? 'selected' : '' }}>
+                  {{ $user->name }}
+               </option>
+               @endforeach
+               @else
+               <option value="" disabled>No users available</option>
+               @endif
+            </select>
+            @if($taskDetails->count() > 0)
+            @foreach ($taskDetails as $user )
+            <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+               Current user assigned: {{$user->user->name}}.
+            </p>
+            @endforeach
+            @endif
+         </div>
+         <div class="w-full md:w-1/2" id="verifiedDate">
+            <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+               Dead line
+            </label>
+            <div class="w-[100%] relative">
+               <input
+                  type="text"
+                  placeholder="Dead Line"
+                  name="deadline"
+                  id="deadline"
+                  class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
+                  value=""
+
+                  autocomplete="off">
+               <div class="absolute right-[10px] top-[10px]">
+                  <i class="ri-calendar-line"></i>
+               </div>
+            </div>
+            <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+               Set a dead line for Documentation.
+            </p>
+         </div>   
+
       </div>
       <div class="">
          <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>

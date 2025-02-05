@@ -89,7 +89,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/', 'index')->name('task.index');
         Route::get('/logs', 'logs')->name('task.log');
         Route::get('/details/{id}', 'detail')->name('task.detail');
-        Route::get('/follow-up/{id}', 'followUp')->name('task.followup');
+        Route::get('/follow-up/view', 'assignTask')->name('task.assignTask');
+        Route::get('/follow-up/{id}/{serviceId}/{stageId}', 'followUp')->name('task.followup');
         Route::get('/check-duplicate/{id}', 'chekDuplication')->name('task.chekDuplication');
         Route::post('/duplicate-status/{id}', 'duplicateVerified')->name('task.documentVerified');
         Route::get('/send-quotation/next-stage/{id}', 'documentVerifiedChildSatge')->name('task.documentVerifiedChildSatge');

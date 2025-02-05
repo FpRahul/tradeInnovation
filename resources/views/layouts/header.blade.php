@@ -21,7 +21,7 @@
                     $profileImage = '';
                 }
             @endphp
-            <img src="{{asset($profileImage ? 'Image/'.$profileImage : 'assets/images/noimage.png')}}"            
+            <img src="{{asset($profileImage ? 'uploads/users/'.auth()->user()->id.'/'.$profileImage : 'assets/images/noimage.png')}}"            
              alt="profile" class="w-[33px] h-[33px] rounded-[9px] object-cover border-[1px] border-[#13103A] ">
             <div class="pr-[7px]">
                 <strong class="flex items-center gap-[10px] text-xs md:text-[13px] font-[500] leading-[15px] text-[#13103A] tracking-[0.01em] capitalize mb-[2px]">

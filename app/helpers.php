@@ -85,12 +85,12 @@ if (!function_exists('getOperatingSystem')) {
 
 }
 
-if(!function_exists('getStageName')){
-    function getStageName($stageId){
-        $stageData = ServiceStages::find($stageId); 
-        return $stageData;
-    }
-}
+// if(!function_exists('getStageName')){
+//     function getStageName($stageId){
+//         $stageData = ServiceStages::find($stageId); 
+//         return $stageData;
+//     }
+// }
 
 if(!function_exists('getUserNameBySource')){
     function getUserNameBySource($userId){

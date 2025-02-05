@@ -18,34 +18,30 @@ class LeadsController extends Controller
 {
     public function index(Request $request){
         $allRequestData = $request;
+        if(!isset($request->tab)){
+            $request->tab = 1;
+        }
         if(base64_decode($request->id) > 0){
             $baseNotifyId = base64_decode($request->NotifyId);
             $notifyData = LeadNotification::where('id',$baseNotifyId)->update(['status'=>1]);
             $baseId = base64_decode($request->id);
-            $leadList = Lead::with('leadService')->where('id',$baseId);
-            $leadTask = Lead::with(['leadTasks'])->whereHas('leadTasks', function($q) use($baseId) {
-                $q->where('lead_id', $baseId);
-            })->latest()->limit(1)->get();
-            // dd($leadTask);
-
+            $leadList = Lead::with(['leadService','leadTask'])->where('id',$baseId);
         }else{            
             if(auth()->user()->role != 1 && auth()->user()->role != 5){
-                $leadList = Lead::with(['leadService','leadTasks'])->whereHas('leadTasks',function($q){
-                    $q->where('user_id',auth()->user()->id);
-                })->where('archive',$request->tab);
+                $leadList = Lead::with(['leadService','leadTask'])->where('archive',$request->tab);
             }else{
-                $leadList = Lead::with('leadService')->where('archive',$request->tab);
-            }
-            $leadTask = Lead::with('leadTasks')->whereHas('leadTasks')->latest()->get();
+                $leadList = Lead::with(['leadService','leadTask'])->where('archive',$request->tab);
+            }           
         }
-        
+
         $sourceKey = $request->input('source') ?? '';
         $serviceKey = $request->input('service') ?? '';
         $statusKey = $request->input('status') ?? '';
         $searchKey = $request->input('key') ?? '';
         $requestType = $request->input('requestType') ?? '';
-
         if($sourceKey != '' || $serviceKey != '' || $statusKey != '' || $searchKey != ''){
+                     
+
             $leadList->when(!empty($request->source), function ($q) use ($request) {
             $q->where('source', $request->source);
             })
@@ -59,19 +55,18 @@ class LeadsController extends Controller
             })
             ->when(!empty($request->key), function($q) use ($request) {
                 $q->where('client_name', 'LIKE', '%' . $request->key . '%');
-            });                
+            }); 
         }
-       
         $leadList = $leadList->latest()->paginate(env("PAGINATION_COUNT"));
-
+      
         if(empty($requestType)){
             $sourceList = CategoryOption::where('type',3)->where('status',1)->get();
             $serviceList = Service::where('status',1)->get();
             $userList = User::where('role',4)->get();
             $header_title_name = 'Leads';
-            return view('leads/index',compact('allRequestData','header_title_name','leadTask','leadList','sourceList','serviceList','userList','sourceKey','serviceKey','statusKey','searchKey'));
+            return view('leads/index',compact('allRequestData','header_title_name','leadList','sourceList','serviceList','userList','sourceKey','serviceKey','statusKey','searchKey'));
         }else{
-            $trData = view('leads/lead-page-filter-data',compact('allRequestData','leadList','leadTask','sourceKey','serviceKey','statusKey','searchKey'))->render();
+            $trData = view('leads/lead-page-filter-data',compact('allRequestData','leadList','sourceKey','serviceKey','statusKey','searchKey'))->render();
             $dataArray = [
                 'trData' => $trData,
                 'source'=>$request->source,
@@ -97,6 +92,7 @@ class LeadsController extends Controller
             $successMsg = 'Lead updated!';
         }else{
             $leadData = new Lead();
+            $leadOldData =new Lead();
             $leadServiceData =[];
             $leadAttachment = [];
             $LeadLog = [];
@@ -225,7 +221,7 @@ class LeadsController extends Controller
                         $LeadNotification->save();
                     }           
                 }  
-                return redirect()->route('leads.index')->withSuccess($successMsg);
+                return redirect()->route("leads.index", ['tab' => 1])->withSuccess($successMsg);
             }
         }
         $header_title_name = 'Lead';

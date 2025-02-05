@@ -24,12 +24,11 @@ use Carbon\Carbon;
 
 class UsersController extends Controller
 {
-    public function login(Request $request)
-    {
+    public function login(Request $request){
         if ($request->isMethod('post')) {
             $clientIP = \Request::ip();
             $userAgent = \Request::header('User-Agent');
-        $operatingSystem = getOperatingSystem($userAgent);
+            $operatingSystem = getOperatingSystem($userAgent);
             $credentials = $request->validate([
                 'email' => 'required|email',
                 'password' => 'required'
@@ -43,8 +42,7 @@ class UsersController extends Controller
                     'created_at' => date('Y-m-d H:i:s'),
                     'ip_address' => $clientIP,
                     'operating_system' => $operatingSystem
-                ];
-                
+                ];                
                 $logActivity = new LogActivity($logActivity);
                 $logActivity->log();
                 return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
@@ -58,13 +56,9 @@ class UsersController extends Controller
         }
     }
 
-    public function forgetPassword(Request $request)
-    {   
-        $clientIP = \Request::ip();
-        
+    public function forgetPassword(Request $request){   
+        $clientIP = \Request::ip();        
         $userAgent = \Request::header('User-Agent');
-  
-
         $operatingSystem = getOperatingSystem($userAgent);
         if ($request->isMethod('POST')) {
             $credentials = $request->validate([
@@ -102,16 +96,14 @@ class UsersController extends Controller
         return view('users/forgetPassword');
     }
 
-    public function logout(Request $request)
-    {
+    public function logout(Request $request){
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect()->route('login')->withSuccess('You have been logged out successfully!');
     }
  
-    public function index(Request $request)
-    {
+    public function index(Request $request){
         $employeeData = User::with('userdetail')->where('role', '>', '3')->where('archive', 1);
         $searchKey = $request->input('key') ?? '';
         $requestType = $request->input('requestType') ?? '';
@@ -123,7 +115,7 @@ class UsersController extends Controller
             });
         }
 
-        $employeeData = $employeeData->paginate(env("PAGINATION_COUNT"));
+        $employeeData = $employeeData->latest()->paginate(env("PAGINATION_COUNT"));
 
         if (empty($requestType)) {
             $header_title_name = 'User';
@@ -137,8 +129,7 @@ class UsersController extends Controller
         }
     }
 
-    public function addUser(Request $request, $id = null)
-    {
+    public function addUser(Request $request, $id = null){
         $clientIP = \Request::ip();
         $userAgent = \Request::header('User-Agent');
         $operatingSystem = getOperatingSystem($userAgent);
@@ -274,8 +265,8 @@ class UsersController extends Controller
         $header_title_name = 'User';
         return view('users.add-user', compact('roleData', 'newUser', 'newUserDetails', 'newUserExperiences', 'header_title_name', 'moduleName'));
     }
-    public function deleteUser($id = null)
-    {
+
+    public function deleteUser($id = null){
         $clientIP = \Request::ip();
         $userAgent = \Request::header('User-Agent');
         $operatingSystem = getOperatingSystem($userAgent);
@@ -295,8 +286,8 @@ class UsersController extends Controller
             return redirect()->back()->with('success', 'Your data is successfully deleted');
         }
     }
-    public function deleteRepeaterUser(Request $request)
-    {
+
+    public function deleteRepeaterUser(Request $request){
         $experienceData = UserExperience::where('id', $request->id);
         if ($experienceData->delete()) {
             echo "1";
@@ -305,8 +296,7 @@ class UsersController extends Controller
         }
     }
 
-    public function clients(Request $request)
-    {
+    public function clients(Request $request){
         $clientData = User::with('userdetail')->where('role', 2)->where('archive', 1);
         $searchKey = $request->input('key') ?? '';
         $requestType = $request->input('requestType') ?? '';
@@ -329,8 +319,7 @@ class UsersController extends Controller
         }
     }
 
-    public function addClient(Request $request, $id = null)
-    {  
+    public function addClient(Request $request, $id = null){  
         $clientIP = \Request::ip();
         $userAgent = \Request::header('User-Agent');
         $operatingSystem = getOperatingSystem($userAgent);
@@ -403,8 +392,7 @@ class UsersController extends Controller
         return view('users.add-client', compact('newClient', 'newClientDetails', 'header_title_name', 'moduleName', 'referDataList','incorporationDataList'));
     }
  
-    public function associates(Request $request)
-    {
+    public function associates(Request $request){
         $associateData = User::with('userdetail')->where('role', 3)->where('archive', 1);
         $searchKey = $request->input('key') ?? '';
         $requestType = $request->input('requestType') ?? '';
@@ -427,9 +415,7 @@ class UsersController extends Controller
         }
     }
 
-    public function addAssociate(Request $request, $id = null)
-    {   
-
+    public function addAssociate(Request $request, $id = null){
         $clientIP = \Request::ip();
         $userAgent = \Request::header('User-Agent');
         $operatingSystem = getOperatingSystem($userAgent);
@@ -490,13 +476,9 @@ class UsersController extends Controller
         return view('users/add-associate', compact('newAssociate', 'header_title_name', 'moduleName', 'professionDataList'));
     }
 
-    public function userStatus(Request $request)
-    {  
+    public function userStatus(Request $request){  
         $clientIP = \Request::ip();
-        
         $userAgent = \Request::header('User-Agent');
-     
-
         $operatingSystem = getOperatingSystem($userAgent);
         if ($request->isMethod('GET')) {
             if ($request->val) {
@@ -524,14 +506,10 @@ class UsersController extends Controller
         }
     }
 
-    public function myprofile(Request $request, $id = null)
-    {  
+    public function myprofile(Request $request, $id = null){  
         $clientIP = \Request::ip();
-        
         $userAgent = \Request::header('User-Agent');
         $logAct = 'updated';
-   
-
         $operatingSystem = getOperatingSystem($userAgent);
         $user = Auth::user();
         $userData = User::where('id', $user->id)->first();
@@ -550,7 +528,7 @@ class UsersController extends Controller
             if ($request->hasFile('profilePic')) {
                 $image_name = $request->profilePic;
                 $imageName = rand(100000, 999999) . '.' . $image_name->getClientOriginalExtension();
-                $image_name->move(public_path('uploads/users/'.$newUser->id), $imageName);
+                $image_name->move(public_path('uploads/users/'.$user->id), $imageName);
                 $newUserDetails->uploadPhotograph = $imageName;
                 $newUserDetails->save();
             }
@@ -578,21 +556,35 @@ class UsersController extends Controller
         return view('users/myprofile', compact('newUserDetails', 'userData', 'header_title_name'));
     }
 
-    public function userProfessions()
-    {
-        $categoryData = CategoryOption::where('type', 1)->paginate(env("PAGINATION_COUNT"));
-        $header_title_name = 'User';
-        return view('users.professions', compact('header_title_name', 'categoryData'));
+    public function userProfessions(Request $request){
+        $categoryData = CategoryOption::where('type', 1);
+        $searchKey = $request->input('key') ?? '';
+        $requestType = $request->input('requestType') ?? '';
+        if($searchKey){
+            $categoryData->where(function($q) use($searchKey){
+                $q->where('name', 'LIKE', "%{$searchKey}%");
+            });
+        }
+        $categoryData = $categoryData->paginate(env("PAGINATION_COUNT"));
+
+        if(empty($requestType)){
+            $header_title_name = 'User';
+            return view('users.professions', compact('header_title_name', 'categoryData','searchKey'));
+        }else{
+            $trData = view('users/profession-page-search-data', compact('categoryData', 'searchKey'))->render();
+            $dataArray = [
+                'trData' => $trData,
+            ];
+            return response()->json($dataArray);
+        }
+        // profession-page-search-data.blade.php
+        
+        
     }
 
-    public function addProfessions(Request $request)
-    {  
-
-        $clientIP = \Request::ip();
-        
+    public function addProfessions(Request $request){
+        $clientIP = \Request::ip();        
         $userAgent = \Request::header('User-Agent');
-      
-
         $operatingSystem = getOperatingSystem($userAgent);
         if ($request->profession_id > 0) {
             $newCategory = CategoryOption::where('id', $request->profession_id)->first();
@@ -630,15 +622,11 @@ class UsersController extends Controller
         return view('users.professions', compact('newCategory'));
     }
 
-    public function categoryStatus(Request $request, $id = null)
-    {    
+    public function categoryStatus(Request $request, $id = null){    
         $clientIP = \Request::ip();
-        
         $userAgent = \Request::header('User-Agent');
-     
-
-    $operatingSystem = getOperatingSystem($userAgent);
-    $logAct = 'Status Change';
+        $operatingSystem = getOperatingSystem($userAgent);
+        $logAct = 'Status Change';
         $categoryData = CategoryOption::find($id);
         if ($request->val) {
             $categoryData->status = 0;
@@ -663,16 +651,10 @@ class UsersController extends Controller
         }
     }
 
-    public function categoryDelete($id = null)
-    {   
-
-        $clientIP = \Request::ip();
-        
+    public function categoryDelete($id = null){ 
+        $clientIP = \Request::ip();        
         $userAgent = \Request::header('User-Agent');
-      
-
-    $operatingSystem = getOperatingSystem($userAgent);
-    
+        $operatingSystem = getOperatingSystem($userAgent);    
         $categoryData = CategoryOption::find($id);
         if ($categoryData->delete()) {
             $logActivity[] = [
@@ -691,21 +673,34 @@ class UsersController extends Controller
         }
     }
 
-    public function userIncorporation()
-    {
-        $categoryData = CategoryOption::where('type', 2)->paginate(env("PAGINATION_COUNT"));
-        $header_title_name = 'User';
-        return view('users.incorporation', compact('header_title_name', 'categoryData'));
+    public function userIncorporation(Request $request){
+        // incorporation-page-search-data.blade.php
+        $categoryData = CategoryOption::where('type', 2);
+        $searchKey = $request->input('key') ?? '';
+        $requestType = $request->input('requestType') ?? '';
+        if($searchKey){
+            $categoryData->where(function($q) use($searchKey){
+                $q->where('name', 'LIKE', "%{$searchKey}%");
+            });
+        }
+        
+        $categoryData = $categoryData->paginate(env("PAGINATION_COUNT"));
+        if(empty($requestType)){
+            $header_title_name = 'User';
+            return view('users.incorporation', compact('header_title_name', 'categoryData','searchKey'));
+        }else{
+            $trData = view('users/incorporation-page-search-data', compact('categoryData', 'searchKey'))->render();
+            $dataArray = [
+                'trData' => $trData,
+            ];
+            return response()->json($dataArray);
+        }
     }
 
-    public function addIncorporation(Request $request)
-    {    
-        $clientIP = \Request::ip();
-        
+    public function addIncorporation(Request $request){
+        $clientIP = \Request::ip();        
         $userAgent = \Request::header('User-Agent');
-        
-
-    $operatingSystem = getOperatingSystem($userAgent);
+        $operatingSystem = getOperatingSystem($userAgent);
         if ($request->incorporation_id > 0) {
             $newCategory = CategoryOption::where('id', $request->incorporation_id)->first();
             $logAct = "Update";
@@ -743,21 +738,33 @@ class UsersController extends Controller
         return view('users.incorporation', compact('newCategory'));
     }
 
-    public function userReferral()
-    {
-        $categoryData = CategoryOption::where('type', 3)->paginate(env("PAGINATION_COUNT"));
-        $header_title_name = 'User';
-        return view('users.referral', compact('header_title_name', 'categoryData'));
+    public function userReferral(Request $request){
+        $categoryData = CategoryOption::where('type', 3);
+        $searchKey = $request->input('key') ?? '';
+        $requestType = $request->input('requestType') ?? '';
+        if($searchKey){
+            $categoryData->where(function($q) use($searchKey){
+                $q->where('name', 'LIKE', "%{$searchKey}%");
+            });
+        }
+        $categoryData = $categoryData->paginate(env("PAGINATION_COUNT"));
+        if(empty($requestType)){
+            $header_title_name = 'User';
+            return view('users.referral', compact('header_title_name', 'categoryData','searchKey'));
+        }else{
+            $trData = view('users/referral-page-listing-data', compact('categoryData', 'searchKey'))->render();
+            $dataArray = [
+                'trData' => $trData,
+            ];
+            return response()->json($dataArray);
+        }
+       
     }
 
-    public function addReferral(Request $request)
-    {  
-        $clientIP = \Request::ip();
-        
+    public function addReferral(Request $request){
+        $clientIP = \Request::ip();        
         $userAgent = \Request::header('User-Agent');
-        
-
-    $operatingSystem = getOperatingSystem($userAgent);
+        $operatingSystem = getOperatingSystem($userAgent);
         if ($request->referral_id > 0) {
             $logAct = "Update";
             $newCategory = CategoryOption::where('id', $request->referral_id)->first();
@@ -794,8 +801,7 @@ class UsersController extends Controller
         return view('users.referral', compact('newCategory'));
     }
 
-    public function panelLogs(Request $request)
-    {   
+    public function panelLogs(Request $request){
         $header_title_name = 'System Logs';
         if(empty($request->input('auto'))){
         $activityTitles = Log::select('title')->distinct()->orderBy('title', 'asc')->pluck('title');
@@ -834,6 +840,7 @@ class UsersController extends Controller
     
         }
     }
+
     public function resetPassword(Request $request){
         $autoId = $request->input('auto');
         if($autoId){

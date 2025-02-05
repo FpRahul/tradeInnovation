@@ -5,8 +5,8 @@
         <div>
             <h3 class="text-[20px] font-[500] leading-[24px] text-[#13103A] tracking-[0.02em] mb-1.5">Manage Clients</h3>
             <ul class="flex items-center text-[14px] font-[400] leading-[16px] text-[#000000] gap-[5px]">
-                <li>user</li> /
-                <li class="text-gray">manage clients</li>
+                <li>User</li> /
+                <li class="text-gray">Manage Clients</li>
             </ul>
         </div>
         @if(in_array('users.addclient',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)

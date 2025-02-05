@@ -6,7 +6,7 @@
             <h3 class="text-[20px] font-[500] leading-[24px] text-[#13103A] tracking-[0.02em] mb-1.5">Manage Incorporation</h3>
             <ul class="flex items-center text-[14px] font-[400] leading-[16px] text-[#000000] gap-[5px]">
                 <li>{{$header_title_name}}</li> /
-                <li class="text-gray">incorporation</li>
+                <li class="text-gray">Incorporation</li>
             </ul>
         </div>
         @if(in_array('incorporations.add',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
@@ -96,9 +96,9 @@
                 </tbody>
             </table>
         </div>
-        <!-- Pagination Links -->
+        <!-- Pagination Links -->        
         <div id="dynamic-pagination" class="py-[15px] px-[20px]">
-            {{ $categoryData}}
+            {{ $categoryData->appends(['key' => $searchKey])->links() }}
         </div>
     </div>
 </div>
@@ -151,6 +151,26 @@
         $('#incorporationName').val(name);
     });
 
-   
+    $(document).on('keyup', '.search', function() {
+        var key = $(this).val();
+        $.ajax({
+            method: 'POST',
+            url: "{{ route('incorporation.index')}}",
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            data: {
+                key: key,
+                requestType: 'ajax',
+            },
+            dataType: 'json',
+            success: function(res) {
+                console.log(res);
+                $('#search_table_data').html(res.trData);
+
+            }
+        })
+
+    });
 </script>
 @stop

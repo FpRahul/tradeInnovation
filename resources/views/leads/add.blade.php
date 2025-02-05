@@ -407,7 +407,8 @@
         // $('.showSourceListName').trigger('change');
         // $('.setSubService').trigger('change');
 
-    })
+    });
+    
     $(document).on('change','.showSourceListName',function(){
         var value = $(this).val();
         if(value == 17 || value == 18 || value == 19){         

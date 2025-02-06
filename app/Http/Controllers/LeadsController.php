@@ -15,7 +15,7 @@ use App\Models\LeadNotification;
 use App\Models\LeadTask;
 use App\Models\LeadTaskDetail;
 use App\Models\ServiceStages;
-use Illuminate\Support\Facades\Str;
+use Illuminate\Support\Facades\Validator;
 class LeadsController extends Controller
 {
     public function index(Request $request){
@@ -255,16 +255,63 @@ class LeadsController extends Controller
         'data' =>$options
        ]);
     }
-
     public function sendQuote(){
         $header_title_name = 'Lead';
         return view('leads/sendquote', compact('header_title_name'));
     }
 
-    public function leadLogs(){
-        $header_title_name = 'Lead';
-        return view('leads/logs', compact('header_title_name'));
+    public function getLogs(Request $request){
+        
+        $rule = [
+            'lead_id' => 'required',
+        ];
+        $validator = Validator::make($request->all(), $rule);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $lead = Lead::find($request->lead_id);
+
+        // foreach($lead->lead_logs as $log){
+        //     $a = getTask($log->task_id);
+        // }
+        
+        // $data = LeadLog::where('lead_id', $request->input('lead_id'))->get();
+        return response()->json([
+            'status'=> 200,
+            'lead'=> $lead,
+            'logs' => $lead->lead_logs
+        ]);
     }
+
+    public function leadLogs(Request $request)
+    {
+        $leads = Lead::orderBy('created_at', 'DESC')->get();
+        $query = LeadLog::orderBy('created_at');
+
+        if (!empty($request->query('lead_id'))) {
+            $lead_id = $request->query('lead_id');
+            $query->whereLeadId($lead_id);
+        }
+
+        $logs = $query->paginate('10');
+
+        if(request()->ajax()){
+            return view('leads.logs.list', [
+                'logs' => $logs,
+                'leads' => $leads
+            ]);
+        }
+
+        return view('leads.logs.index', [
+            'logs' => $logs,
+            'leads' => $leads,
+            'header_title_name' => 'Lead Logs'
+        ]);
+    }
+
+
+
 
     public function getSourceTypeName(Request $request){
         if($request->value == 18){
@@ -314,5 +361,7 @@ class LeadsController extends Controller
     public function setAssignToUser(Request $request){
        
     }
+   
+
    
 }

@@ -15,7 +15,7 @@ class ClientTaskDetails extends Component
     {
         $this->taskID = $taskID;
     }
-
+    
     public function render(): View|Closure|string
     {   
         $taskDetails = LeadTask::with([
@@ -23,7 +23,8 @@ class ClientTaskDetails extends Component
                 'lead', 
                 'leadTaskDetails', 
                 'leadServices.service', 
-                'leadServices.subservice'
+                'leadServices.subservice',
+                'serviceSatge'
             ])
           ->where('id', $this->taskID)->first();
           return view('components.client-task-details', compact('taskDetails'));

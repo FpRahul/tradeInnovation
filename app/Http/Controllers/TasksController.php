@@ -12,9 +12,6 @@ use App\Models\ServiceStages;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-
-
-
 class TasksController extends Controller
 {
     private $viewPath = "tasks.";
@@ -37,7 +34,11 @@ class TasksController extends Controller
                     });
             });
         }
-      
+        if ($request->leadId) {
+            $taskDetails = $taskDetails->whereHas('lead', function ($q) use ($request) {
+                $q->where('lead_id', $request->leadId); 
+            }); 
+        }
         $taskDetailsDrp = $taskDetails->get();
         $taskDetails = $taskDetails->paginate(env("PAGINATION_COUNT"));
         if (empty($requestType)) {

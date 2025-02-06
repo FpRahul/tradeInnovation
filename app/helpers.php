@@ -98,3 +98,13 @@ if(!function_exists('getUserNameBySource')){
         return $userData;
     }
 }
+
+
+/**
+ * Get Task
+ * @param integer $id Task Id
+ * @return mixed
+*/
+function getTask($id){
+    return LeadTask::find($id);
+}

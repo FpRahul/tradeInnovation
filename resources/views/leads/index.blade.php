@@ -126,7 +126,7 @@
                                         
                        <tr>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px] pl-[25px]">
-                            {{$leadData->id}}
+                            #{{$leadData->lead_id}}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                             <span class="inline-flex items-center gap-[10px]"> 

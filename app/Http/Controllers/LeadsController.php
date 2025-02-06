@@ -15,6 +15,7 @@ use App\Models\LeadNotification;
 use App\Models\LeadTask;
 use App\Models\LeadTaskDetail;
 use App\Models\ServiceStages;
+use Illuminate\Support\Facades\Str;
 class LeadsController extends Controller
 {
     public function index(Request $request){
@@ -114,6 +115,16 @@ class LeadsController extends Controller
                 $sourceId = 0;
             }
             $leadData->user_id = auth()->user()->id;
+            $clientName = strtoupper(substr($request->input('clientname'), 0, 3));
+            $randomNumber = rand(10, 99);
+            $lastLead = Lead::latest('id')->first();
+            $lastLeadId = $lastLead ? $lastLead->id + 1 : 1; 
+            $lead_id = $clientName . $randomNumber . $lastLeadId;
+            $existingLead = Lead::where('lead_id', $lead_id)->first();
+            if ($existingLead) {
+                $lead_id = $clientName . $randomNumber . ($lastLeadId + 1);
+            }
+            $leadData->lead_id = $lead_id; 
             $leadData->source = $request->source;
             $leadData->source_id = $sourceId;
             $leadData->client_name = $request->clientname;

@@ -11,8 +11,8 @@
     @if($taskDetails)
         <!-- Display Task Title and Client Info -->
         <p class="text-[14px] leading-[16px] font-[600] text-[#2C2C2C]">
-            {{ $taskDetails->task_title ?? "Title not fiund" }} 
-            (lead <span class="text-[#2196F3]">#{{ $taskDetails->lead->id ?? 'N/A' }}</span>)
+            {{ $taskDetails->serviceSatge->title ?? "Title not fiund" }} 
+            (lead <span class="text-[#2196F3]">#{{ $taskDetails->lead->lead_id ?? 'N/A' }}</span>)
         </p>
     @else
         <p>No task details found</p>

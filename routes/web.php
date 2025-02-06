@@ -79,7 +79,10 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/lead-logs','leadLogs')->name('leadLogs.index');
         Route::match(['POST','GET'],'/add/{id?}', 'add')->name('leads.add');
         Route::get('/sendquote', 'sendquote')->name('leads.quote');
+
         Route::get('/logs', 'leadLogs')->name('leads.logs');
+        
+        Route::post('/get-logs', 'getLogs')->name('leads.getLogs');
         Route::POST('/getsubservice','getSubService')->name('lead.subservice');
         Route::match(['POST','GET'],'/getsourcetypename','getSourceTypeName')->name('lead.getsourcetypename');
         Route::post('/deleterepeater', 'deleteRepeaterLead')->name('lead.deleterepeater');

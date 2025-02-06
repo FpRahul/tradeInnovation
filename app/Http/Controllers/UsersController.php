@@ -622,17 +622,73 @@ class UsersController extends Controller
         return view('users.professions', compact('newCategory'));
     }
 
-    public function categoryStatus(Request $request, $id = null){    
+    public function professionStatus(Request $request, $id = null){ 
         $clientIP = \Request::ip();
         $userAgent = \Request::header('User-Agent');
         $operatingSystem = getOperatingSystem($userAgent);
-        $logAct = 'Status Change';
+        $logAct = 'Profession Status Change';
         $categoryData = CategoryOption::find($id);
-        if ($request->val) {
-            $categoryData->status = 0;
-        } else {
-            $categoryData->status = 1;
+        if (!$categoryData) {
+            return redirect()->back()->with('error', 'Category not found!');
         }
+        $categoryData->status = $categoryData->status == 1 ? 0 : 1;
+
+        if ($categoryData->save()) {
+            $logActivity[] = [
+                'user_id' => auth()->user()->id,
+                'title' => 'Update Category Status',
+                'description' => auth()->user()->name . ' has ' . $logAct . ' category ' . $categoryData->name . ' (' . $categoryData->id . ')',
+                'created_at' => now(),
+                'ip_address' => $clientIP,
+                'operating_system' => $operatingSystem
+            ];
+            $logActivity = new LogActivity($logActivity);
+            $logActivity->log();
+            return redirect()->back()->with('success', 'Status successfully updated!');
+        } else {
+            return redirect()->back()->with('error', 'An error occurred while updating the status!');
+        }
+    }
+
+
+    public function incorporationStatus(Request $request, $id = null){
+        $clientIP = \Request::ip();
+        $userAgent = \Request::header('User-Agent');
+        $operatingSystem = getOperatingSystem($userAgent);
+        $logAct = 'Incorporation Status Change';
+        $categoryData = CategoryOption::find($id);
+        if (!$categoryData) {
+            return redirect()->back()->with('error', 'Category not found!');
+        }
+        $categoryData->status = $categoryData->status == 1 ? 0 : 1;
+        
+        if ($categoryData->save()) {
+            $logActivity[] = [
+                'user_id' => auth()->user()->id,
+                'title' => 'Update Category Status',
+                'description' => auth()->user()->name . ' has ' . $logAct . ' category ' . $categoryData->name . ' (' . $categoryData->id . ')',
+                'created_at' => date('Y-m-d H:i:s'),
+                'ip_address' => $clientIP,
+                'operating_system' => $operatingSystem
+            ];
+            $logActivity = new LogActivity($logActivity);
+            $logActivity->log();
+            return redirect()->back()->with('success', 'Status is successfully updated!');
+        } else {
+            return redirect()->back()->with('error', 'Some error is occur!');
+        }
+    }
+   
+    public function referralStatus(Request $request, $id = null){    
+        $clientIP = \Request::ip();
+        $userAgent = \Request::header('User-Agent');
+        $operatingSystem = getOperatingSystem($userAgent);
+        $logAct = 'Referral Status Change';
+        $categoryData = CategoryOption::find($id);
+        if (!$categoryData) {
+            return redirect()->back()->with('error', 'Category not found!');
+        }
+        $categoryData->status = $categoryData->status == 1 ? 0 : 1;
         
         if ($categoryData->save()) {
             $logActivity[] = [

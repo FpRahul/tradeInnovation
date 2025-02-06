@@ -39,15 +39,18 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
 
         Route::match(['POST', 'GET'], '/user-professions', 'userProfessions')->name('professions.index');
         Route::match(['POST', 'GET'], '/add-professions/{id?}', 'addProfessions')->name('professions.add');
+        Route::get('/profession-status/{id?}','professionStatus')->name('professions.status');
 
         Route::match(['POST', 'GET'], '/user-incorporation', 'userIncorporation')->name('incorporation.index');
         Route::match(['POST', 'GET'], '/add-incorporation/{id?}', 'addIncorporation')->name('incorporation.add');
+        Route::match(['POST','GET'],'/incorporation-status/{id?}','incorporationStatus')->name('incorporations.status');
 
         Route::match(['POST', 'GET'], '/user-referral', 'userReferral')->name('referral.index');
         Route::match(['POST', 'GET'], '/add-referral/{id?}', 'addReferral')->name('referral.add');
-  
-        Route::get('/category-status/{id?}', 'categoryStatus')->name('users.category.status');
-        Route::get('/category-delete/{id?}', 'categoryDelete')->name('users.category.delete');
+        Route::get('referral-status/{id?}','referralStatus')->name('referral.status');
+
+        // Route::get('/category-status/{id?}', 'categoryStatus')->name('users.category.status');
+        // Route::get('/category-delete/{id?}', 'categoryDelete')->name('users.category.delete');
 
         Route::get('/panel-logs', 'panelLogs')->name('logs.index');
         Route::get('/get/action/logs' ,'panelLogs')->name('getActionLog.log');
@@ -99,6 +102,9 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::post('/payment-status/{id}','paymentStatus')->name('task.paymentStatus');
         Route::get('documentation/{id}','documentation')->name('task.documentation');
         Route::Post('documentation-status/{id}','documenStatus')->name('task.documenStatus');
+
+        //For patent.........
+        Route::get('/patent/payment-verification/{id?}','patentPaymentVerification')->name('task.patentPaymentVerification');
 
     });
     //Services Routes

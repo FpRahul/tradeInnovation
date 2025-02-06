@@ -103,6 +103,9 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('documentation/{id}','documentation')->name('task.documentation');
         Route::Post('documentation-status/{id}','documenStatus')->name('task.documenStatus');
 
+        //For patent.........
+        Route::get('/patent/payment-verification/{id?}','patentPaymentVerification')->name('task.patentPaymentVerification');
+
     });
     //Services Routes
     Route::prefix('services')->controller(ServicesController::class)->group(function () {

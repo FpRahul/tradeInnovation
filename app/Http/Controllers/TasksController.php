@@ -133,7 +133,7 @@ class TasksController extends Controller
                 $existedLeadTaskDetails->status = 1;
                 $existedLeadTaskDetails->status_date = $verifiedDate;
                 $existedLeadTaskDetails->comment = $request->ifRegister ?? null;
-                if ($request->hasFile('attachment')) {
+                if ($request->hasFile('attachment')){
                     $folderPath = public_path('Image/leads/lead_' . $lead_id);
                     if (!file_exists($folderPath)) {
                         mkdir($folderPath, 0755, true);
@@ -363,7 +363,6 @@ class TasksController extends Controller
         }
     }
 
-
     public function documentation($id)
     {
         $header_title_name = "Document Drafting";
@@ -388,23 +387,37 @@ class TasksController extends Controller
         $newLeadtask = new LeadTask();
         $newLeadTaskDeatails  = new LeadTaskDetail();
     }
+
     public function assignTask(Request $request){
         $header_title_name = "Assign Task";
         return view('settings.assign_stage',compact('header_title_name'));
 
     }
+
     public function followUp($id, $serviceId , $stageId){
         $taskDetails = LeadTask::find($id);
         if($id == $taskDetails->id && $serviceId == 1 && $stageId == 1 ){
-                    return redirect()->route('task.chekDuplication',['id'=> $id]); 
-       }
-       else if($id == $taskDetails->id && $serviceId == 1 && $stageId == 2){
-        return redirect()->route('task.documentVerifiedChildSatge',['id'=> $id]); 
-       } else if($id == $taskDetails->id && $serviceId == 1 && $stageId == 3){
-        return redirect()->route('task.documentation',['id'=> $id]); 
-       }
+            return redirect()->route('task.chekDuplication',['id'=> $id]); 
+        }else if($id == $taskDetails->id && $serviceId == 1 && $stageId == 2){
+            return redirect()->route('task.documentVerifiedChildSatge',['id'=> $id]); 
+        }else if($id == $taskDetails->id && $serviceId == 1 && $stageId == 3){
+            return redirect()->route('task.documentation',['id'=> $id]); 
+        }
+
+        // For Patent...............
+        elseif($taskDetails && $serviceId == 2 && $stageId == 43){
+            return redirect()->route('task.patentPaymentVerification',['id'=> $id]); 
+        }
        
-}
+    }
+
+    public function patentPaymentVerification(Request $request){
+        $taskId = $request->id;
+        $taskList = LeadTask::find($taskId);
+        dd($taskList);
+        $header_title_name = "Payment Verification";
+        return view('tasks/patent/payment-verification',compact('header_title_name','taskId'));
+    }
 
 
 }

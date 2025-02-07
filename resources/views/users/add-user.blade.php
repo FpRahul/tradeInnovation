@@ -131,13 +131,11 @@
                                                         type="text" 
                                                         placeholder="Start Date" 
                                                         name="startDate" 
-                                                        class="daterangepicker-startDate w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
+                                                        class="daterangepicker-item daterangepicker-startDate w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
                                                         value="{{ $exVal['startDate'] }}" 
                                                         autocomplete="off"
                                                     >
-                                                    <div class="absolute right-[10px] top-[32px]">
-                                                    <i class="ri-calendar-line"></i>
-                                                    </div>
+                                                   
                                                 </div>   
 
                                                 <div class="w-[100%] relative">
@@ -145,10 +143,8 @@
                                                         End Date
                                                     </label>                                                
                                                     <div class="w-[100%]">
-                                                        <input type="text" placeholder="End Date" name="endDate" class="daterangepicker-endDate w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" value="{{ $exVal['endDate'] }}">
-                                                        <div class="absolute right-[10px] top-[32px]">
-                                                            <i class="ri-calendar-line"></i>
-                                                        </div>
+                                                        <input type="text" placeholder="End Date" name="endDate" class="daterangepicker-item daterangepicker-endDate w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" value="{{ $exVal['endDate'] }}">
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
@@ -188,13 +184,11 @@
                                                     type="text" 
                                                     placeholder="Start Date" 
                                                     name="startDate" 
-                                                    class="daterangepicker-startDate w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
+                                                    class="daterangepicker-item daterangepicker-startDate w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
                                                     value="" 
                                                     autocomplete="off"
                                                 >
-                                                <div class="absolute right-[10px] top-[32px]">
-                                                    <i class="ri-calendar-line"></i>
-                                                </div>
+                                               
                                             </div>
                                         
                                         <div class="w-full relative">
@@ -202,10 +196,8 @@
                                                 End Date
                                             </label>                                           
                                             <div class="w-[100%] ">
-                                                <input type="text" placeholder="End Date" name="endDate" class="daterangepicker-endDate w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" value="">
-                                                <div class="absolute right-[10px] top-[32px]">
-                                                    <i class="ri-calendar-line"></i>
-                                                </div>
+                                                <input type="text" placeholder="End Date" name="endDate" class="daterangepicker-item daterangepicker-endDate w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" value="">
+                                                
                                             </div>
                                         </div>
                                     </div>

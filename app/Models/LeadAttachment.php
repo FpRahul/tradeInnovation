@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Lead;
 
 class LeadAttachment extends Model
 {
@@ -10,4 +11,8 @@ class LeadAttachment extends Model
     'lead_id',
     'document'
    ];
+
+   public function lead(){
+      return $this->belongsTo(Lead::class ,'lead_id');
+   }
 }

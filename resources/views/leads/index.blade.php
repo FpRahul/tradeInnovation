@@ -1,5 +1,7 @@
 @php
     namespace App;
+    use App\Models\Service;
+
 @endphp
 @extends('layouts.default')
 @section('content')
@@ -47,8 +49,10 @@
                             <option value="">Select Service</option>
     
                             @if (!empty($serviceList))
-                                @foreach ($serviceList as $serviceListVal)                        
-                                    <option value="{{ $serviceListVal->id}}" {{ !empty($serviceKey) && $serviceListVal->id == $serviceKey ? 'selected':''}}>{{ $serviceListVal->serviceName}}</option>
+                            
+                                @foreach ($serviceList as $serviceKey => $serviceListVal)       
+                                           
+                                    {{-- <option value="{{ $serviceListVal->id}}" {{ !empty($serviceKey) && $serviceListVal->id == $serviceKey ? 'selected':''}}>{{ $serviceListVal->serviceName}}</option> --}}
                                 @endforeach                      
                             @endif  
                         </select> 
@@ -136,16 +140,11 @@
                             @if ($leadData->source == 17 || $leadData->source == 18 || $leadData->source == 19)
                                 <button data-tooltip-target="tooltip-default{{$leadKey}}"><img src="{{ asset('assets/images/i-icon.png') }}" alt="icon"></button>
 
-                                <div id="tooltip-default{{$leadKey}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-[#000] rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
+                                <div id="tooltip-default{{$leadKey}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-[#13103A] rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
                                     {{getUserNameBySource($leadData->source_id)->name}}
                                     <div class="tooltip-arrow" data-popper-arrow></div>
                                 </div>
                             @endif
-                              
-                            
-
-                            
-
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                             {{$leadData->client_name}}
@@ -175,7 +174,7 @@
                                 <div class="dropdown_menus absolute right-0 z-10 mt-2 w-[100px] origin-top-right rounded-md bg-white shadow-md ring-1 ring-black/5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                                     <div class="text-start" role="none">
                                         @if(in_array('leads.add',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
-                                            <a href="{{ route('leads.add')}}/{{$leadData->id}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Edit</a>
+                                            <a data-id="{{$leadData->id}}" class="lead_edit block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-modal-target="editLeadModal" data-modal-toggle="editLeadModal" type="button">Edit</a>
                                         @endif
                                         {{-- <a href="javascript:void(0)" data-id="{{$leadData->id}}" class="lead_assign_to_user block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal" type="button">Assign</a> --}}
                                         @if(in_array('leads.archive',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
@@ -209,16 +208,16 @@
 </div>
 
 <!-- Main modal -->
-<div id="assignUserModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[100%)] max-h-full bg-[rgba(0,0,0,0.6)] ">
+<div id="editLeadModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[100%)] max-h-full bg-[rgba(0,0,0,0.6)] ">
     <div class="relative p-4 w-full max-w-[780px] max-h-full">
         <!-- Modal content -->
         <div class="relative bg-white rounded-[20px] shadow dark:bg-gray-700">
             <!-- Modal header -->
             <div class="flex items-center justify-between p-4 md:px-5 md:py-[20px] border-b border-[#0000001A] rounded-t dark:border-gray-600">
                 <h3 class="text-[14px] font-[400] leading-[17px] text-[#000000] dark:text-white">
-                    Assigning user to lead #0001
+                    Update Lead
                 </h3>
-                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="assignUserModal">
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="editLeadModal">
                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                     </svg>
@@ -227,55 +226,111 @@
             </div>
             <!-- Modal body -->
             <div class="p-[20px]">
-                <form method="POST" action="{{ route('leads.assign')}}" class="space-y-[20px]">
+                <form method="POST" action="{{ route('leads.edit')}}" enctype="multipart/form-data" class="space-y-[20px]">
                     @csrf
                     <input type="hidden" name="lead_id" id="modal_lead_id" value="">
-                    <input type="hidden" name="assign_by" id="assign_by" value="{{auth()->user()->id}}">
                     <div class="flex flex-col md:flex-row gap-[20px]">
                         <div class="w-full md:w-1/2">
-                            <label for="selectuser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Select User</label>
-                            <select name="selectuser" id="selectuser" class="allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
-                                <option value="">Select User</option>
-                                @if ($userList && $userList->isNotEmpty())
-                                    @foreach ($userList as $userData)
-                                        <option value="{{ $userData['id']}}">{{ $userData['name']}}</option> 
-                                    @endforeach
-                                @endif
-                            </select>
+                            <label for="modalclientname" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Client Name</label>
+                            <input type="text" name="modalclientname" id="modalclientname" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                         </div>
                         <div class="w-full md:w-1/2">
-                            <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-                                Dead line
-                            </label>                           
-                            <div class="w-[100%] relative">
-                                <input 
-                                    type="text" 
-                                    placeholder="Dead Line" 
-                                    name="deadline" 
-                                    class="daterangepicker-deadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
-                                    value="" 
-                                    autocomplete="off"
-                                >
-                                <div class="absolute right-[10px] top-[10px]">
-                                <i class="ri-calendar-line"></i>
-                                </div>
-                            </div>     
+                            <label for="modalcompanyname" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Company Name</label>
+                            <input type="text" name="modalcompanyname" id="modalcompanyname" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                        </div>
+                        
+                    </div>
+                    <div class="flex flex-col md:flex-row gap-[20px]">  
+                        <div class="w-full md:w-1/2">
+                            <label for="modalmobilenumber" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mobile number</label>
+                            <input type="text" name="modalmobilenumber" id="modalmobilenumber" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                        </div>                      
+                        <div class="w-full md:w-1/2">
+                            <label for="modalemail" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Email-Id</label>
+                            <input type="text" name="modalemail" id="modalemail" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Attachments <span class="text-[12px] italic font-[400] text-[#e70e0e]"> (only jpg,jpeg png and pdf format supported & max:2 MB)</span></label>
+                        <div class="leadAttachmentRepeater md:border-[1px] border-[#0000001A] rounded-[10px] md:p-[20px] employee_repeater_wrapper">
+                           <div id="existedAttachment">
+
+                           </div>
+                           <input name="modalfileattachment" type="file" multiple/>
                         </div>
                     </div>
                     <div class="">
-                        <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
-                        <textarea type="text" name="description" id="description" class="w-full h-[155px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
+                        <label for="modaldescription" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
+                        <textarea type="text" name="modaldescription" id="modaldescription" class="w-full h-[155px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
                     </div>
                     <div class="flex justify-end gap-[15px]">
-                        <button data-modal-hide="assignUserModal" type="button" class="rounded-[10px] py-[12px] px-[30px] text-[13px] font-[500] leading-[15px] tracking-[0.01em] text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Decline</button>
-                        <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Assign</button>
+                        <button data-modal-hide="editLeadModal" type="button" class="rounded-[10px] py-[12px] px-[30px] text-[13px] font-[500] leading-[15px] tracking-[0.01em] text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Cancel</button>
+                        <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Update</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
 <script>
+
+    $(document).on('click', '.lead_edit', function () {
+        let id = $(this).data('id');
+        $.ajax({
+            method: 'POST',
+            url: '{{ route("leads.fetch") }}', 
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            data: { id: id },
+            success: function (res) {
+                $("#modal_lead_id").val(res.data.id);
+                $("#modalclientname").val(res.data.client_name);
+                $("#modalmobilenumber").val(res.data.mobile_number);
+                $("#modalcompanyname").val(res.data.company_name);
+                $("#modalemail").val(res.data.email);
+                $("#modaldescription").text(res.data.description);
+                let attachData = $('#existedAttachment'); // Ensure tbody is targeted if using a table
+                let attachments = res.data.lead_attachments;
+                attachments.forEach((ele, index) => {
+                    let row = `
+                        <tr>
+                            <td>${ele.document}</td>
+                            <td>
+                                <button class="modalAttachmentDelete delete-btn" data-id="${ele.id}">Delete</button>
+                            </td>
+                        </tr>
+                    `;
+                    attachData.append(row);
+                });
+            }
+        })
+    });
+
+    $(document).on('click','.modalAttachmentDelete',function(){
+        let id = $(this).data('id');
+        if (confirm('Are you sure you want to delete this element?')) {
+            $.ajax({
+            method: 'POST',
+            url: "{{ route('lead.deleterepeater') }}",
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            data: {
+                id: id
+            },
+            success: function(res) {
+                if (res == 1) {
+                }
+            },
+            error: function(err) {
+                alert(err);
+            }
+        })
+        }
+       
+    })
 
     $(document).on('click', '.lead_archive', function () {
         var id = $(this).data('id'); 
@@ -294,12 +349,7 @@
         }).on('apply.daterangepicker', function(ev, picker) {
             console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
         });
-    });
-
-    $(document).on('click','.lead_assign_to_user',function(){
-        $('#modal_lead_id').val($(this).data('id'));
-
-    });
+    });   
   
     $(document).on('keyup','#search',function(){
         let val = $(this).val();

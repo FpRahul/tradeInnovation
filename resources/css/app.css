@@ -167,6 +167,26 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     bottom: 2px;
 }
 
+.fileOutput {
+    margin: 10px 0 0;
+    width: 100%;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.file-name {
+    font-size: 12px;
+    border: 1px solid #ccc;
+    padding: 4px;
+    display: inline-block;
+    width: auto;
+    border-radius: 4px;
+}
+
+input#attachment {
+    display: none;
+}
 /* tabbing */
 .tab-content {
     display: none;

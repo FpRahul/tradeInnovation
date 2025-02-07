@@ -4,11 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\LeadService;
+use App\Models\LeadAttachment;
 
 class Lead extends Model
 {
     protected $fillable = [
         'user_id',
+        'lead_id',
         'source',
         'source_id',
         'client_name',
@@ -40,4 +42,7 @@ class Lead extends Model
         return $this->hasMany(LeadLog::class, 'lead_id', 'id');
     }
 
+    public function leadAttachments(){
+        return $this->hasMany(LeadAttachment::class, 'lead_id','id');
+    }
 }

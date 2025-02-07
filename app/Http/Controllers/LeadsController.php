@@ -63,6 +63,9 @@ class LeadsController extends Controller
       
         if(empty($requestType)){
             $sourceList = CategoryOption::where('type',3)->where('status',1)->get();
+            // $serviceList = Lead::with('leadService')->whereHas('leadService')->where('user_id', auth()->user()->id)->groupBy('id')->get();
+            // dd($serviceList);
+            // dd($serviceList[0]->leadService[0]->service->serviceName);
             $serviceList = Service::where('status',1)->get();
             $userList = User::where('role',4)->get();
             $header_title_name = 'Leads';
@@ -241,6 +244,33 @@ class LeadsController extends Controller
         }
         $header_title_name = 'Lead';
         return view('leads/add',compact('header_title_name','sourceList','serviceList','userList','leadData','leadServiceData','leadAttachment','leadStages','LeadTask','LeadTaskDetail','leadSelectedStage'));
+    }
+
+    // lead fetch...........
+    public function leadFetch(Request $request){
+        $leadData = Lead::with('leadAttachments')->find($request->id);
+        return response()->json([
+            'data' =>$leadData
+           ]);
+    }
+
+    public function edit(Request $request){
+        $leadData = Lead::find($request->lead_id);
+        if ($leadData) {
+            $leadData->update([
+                'client_name' => $request->modalclientname,
+                'company_name' => $request->modalcompanyname,
+                'mobile_number' => $request->modalmobilenumber,
+                'email' => $request->modalemail,
+                'description' => $request->modaldescription
+            ]);
+        }
+        
+        if($leadData->save()){
+            return redirect()->back()->with('success','Lead updated!');
+        }else{
+            return redirect()->back()->with('error','Some error is occur!');
+        }
     }
 
     public function getSubService(Request $request){

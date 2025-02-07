@@ -6,7 +6,7 @@
         <h3 class="text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">Add Leads</h3>
     </div>
     <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[10px] lg:rounded-[20px] mb-[30px]">
-        <form method="POST" id="submitLeadForm" action="{{ route('leads.add')}}/{{!empty($leadData) ? $leadData->id :''}}" enctype="multipart/form-data" class="py-[15px] px-[15px] lg:py-[25px] lg:px-[30px] space-y-[20px]">
+        <form method="POST" id="submitLeadForm" action="{{ route('leads.add',['id'=>$leadData->id])}}" enctype="multipart/form-data" class="py-[15px] px-[15px] lg:py-[25px] lg:px-[30px] space-y-[20px]">
             @csrf    
             <input type="hidden" name="savetype" id="savetype" value='0'/>  
             <div class="flex flex-col md:flex-row gap-[20px]">
@@ -208,13 +208,11 @@
                             type="text" 
                             placeholder="Dead Line" 
                             name="taskdeadline" 
-                            class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
+                            class="daterangepicker-taskdeadline daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
                             value="{{!empty($LeadTaskDetail) ? date('d M Y',strtotime($LeadTaskDetail->dead_line)) : ''}}" 
                             autocomplete="off"
                         >
-                        <div class="absolute right-[10px] top-[10px]">
-                        <i class="ri-calendar-line"></i>
-                        </div>
+                        
                     </div>     
                 </div>
             </div>
@@ -270,7 +268,7 @@
                                                     <img src="/assets/images/noimage.png" class="getpreviewImage w-[100%] max-w-[150px] rounded-[10px] object-cover" />
                                                     
                                                     <div class="relative">
-                                                        <input class="previewImage" type="file" name="attachmentFile"  {{ empty($leadAttachment->document) ? 'required':''}}>
+                                                        <input class="previewImage" type="file" name="attachmentFile" >
                                                     </div>
                                                     <div class="imageErrorMsg text-[12px] italic font-[400] text-[#e70e0e]"></div>
                                                 </div>

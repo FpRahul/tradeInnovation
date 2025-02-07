@@ -1,39 +1,40 @@
 @extends('layouts.default')
 @section('content')
+<style>
+    .modal-style {
+        box-shadow: 0 5px 15px rgb(0 0 0 / 50%);
+        border: 1px solid rgba(0, 0, 0, .2)
+    }
+</style>
 <div>
     <div class="flex items-center justify-between mb-[20px]">
         <h3 class="text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">Lead logs </h3>
     </div>
-
     <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] mb-[20px] p-[23px]">
         <form id="filterForm" action="" class="w-full" method="GET">
-            @csrf
             <div class="flex items-end gap-[10px] w-full">
-                    <div class="w-[50%]">
-                        <label class="flex text-[15px] text-[#000] mb-[5px]">Lead ID<strong class="text-[#f83434]">*</strong></label>
-                        <select name="lead_id" id="lead_id" class="allform-filter-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
-                            <option value="">Select Lead ID</option>
-                            @forelse($leadData as $leadDetails)
-                                <option value="{{ $leadDetails->id }}"> {{ $leadDetails->lead_id }} </option>
-                            @empty
-                                <option value="" disabled>No leads available</option>
-                            @endforelse
-                        </select>
-                    </div>
-                
+                <div class="w-[50%]">
+                    <label class="flex text-[15px] text-[#000] mb-[5px]">Lead ID<strong class="text-[#f83434]">*</strong></label>
+                    <select name="lead_id" id="lead_id" class="allform-filter-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
+                        <option value="">Select Lead ID</option>
+                        @forelse($leadData as $leadDetails)
+                        <option value="{{ $leadDetails->id }}" @if(isset($requestParams['lead_id']) && $requestParams['lead_id']==$leadDetails->id) selected @endif> {{ $leadDetails->lead_id }} - {{ $leadDetails->client_name }} </option>
+                        @empty
+                        <option value="" disabled>No leads available</option>
+                        @endforelse
+                    </select>
+                </div>
                 <button class=" text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[15px] px-[30px]">Filter</button>
                 <button id="resetButton" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[15px] px-[30px]">
                     Reset
                 </button>
-
-
-
             </div>
         </form>
     </div>
-    <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] p-[23px]" >
+    <div hidden id="showLog" class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] p-[23px]">
         <div>
             <ul>
+                @foreach($leadLogs as $log)
                 <li class="py-[6px] pt-0 flex items-start flex-wrap gap-[16px] relative">
                     <div class="static min-w-[34px] w-[34px] h-[34px] bg-[#13103A] rounded-[100%] flex items-center justify-center ">
                         <img src="{{ asset('assets/images/list-icon-img.png') }}" alt="icon" class="relative z-2">
@@ -41,7 +42,8 @@
                     </div>
                     <div class="w-[calc(100%-50px)] bg-[#EFEDFF] rounded-[10px] p-[12px]">
                         <div class="flex items-center gap-[15px]">
-                            <span class="text-[13px] leading-[16px] font-[400] tracking-[-0.04em] text-[#454545] ">2023-12-1</span>
+                            <span class="text-[13px] leading-[16px] font-[400] tracking-[-0.04em] text-[#454545] ">{{ \Carbon\Carbon::parse($log->created_at)->format('j M Y') }}
+                            </span>
                             <div class="flex items-center gap-[7px]">
                                 <span class="inline-flex items-center justify-center w-[22px] h-[22px] border border-[#0000001A] rounded-[5px]">
                                     <svg width="8" height="10" viewBox="0 0 8 10" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -66,49 +68,232 @@
                                     </svg>
                                 </span>
                             </div>
-                            <span class="border border-[#0000001A] text-[13px] leading-[12px] font-[400] tracking-[-0.04em] text-[#000000] px-[10px] py-[5px] rounded-[5px] ">Lead Received</span>
+                            @foreach ( $log->leadService as $servicesas )
+                            <span class="border border-[#0000001A] text-[13px] leading-[12px] font-[400] tracking-[-0.04em] text-[#000000] px-[10px] py-[5px] rounded-[5px] ">{{ $servicesas->service->serviceName}}</span>
+                            @endforeach
                         </div>
-                        <div class="text-[16px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] mt-[10px] mb-[10px]">
-                            Stage: Mr Ashish referred by website
-                        </div>
-                        <div class="space-y-[7px]">
-                            <div class="text-[14px] leading-[16px] font-[400] tracking-[-0.04em] text-[#666666] flex"><strong class="min-w-[100px] inline-block font-[500] text-[#262626]">Status:</strong> 9947757475</div>
-                            <div class="text-[14px] leading-[16px] font-[400] tracking-[-0.04em] text-[#666666] flex"><strong class="min-w-[100px] inline-block font-[500] text-[#262626]">Verified On:</strong> Trademark</div>
-                            <div class="text-[14px] leading-[16px] font-[400] tracking-[-0.04em] text-[#666666] flex"><strong class="min-w-[100px] inline-block font-[500] text-[#262626]">Remark:</strong> Client on risk</div>
-                            <div class="text-[14px] leading-[18px] font-[400] tracking-[-0.04em] text-[#666666] flex"><strong class="min-w-[100px] inline-block font-[500] text-[#262626]">Description:</strong> Lead has been assigned to John by Rachel. Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
-                                molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum
-                                numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium
-                                optio, eaque rerum! Provident similique accusantium nemo autem.</div>
+                        <div class="flex  flex-wrap lg-flex-nowrap items-center justify-between gap-[10px] mt-[20px]">
+                            <div class="flex flex-wrap lg:flex-nowrap  items-center justify-between w-[100%] lg:w-[80%]">
+                                <div class="flex-inline flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
+                                    <label class="text-[15px] font-[600] text-[#000]">
+                                        Stage:
+                                    </label>
+                                    {{ $log->leadTask->serviceSatge->title }}
+                                </div>
+                                <div class="flex-inline items-center gap-[10px] w-[100%] lg:w-[30%] text-[14px] leading-[16px] font-[400] tracking-[-0.04em] text-[#666666] flex"><label class="text-[15px] font-[600] text-[#000]">Status:</label>
+                                    @if($log->leadTask->leadTaskDetails->status == 0)
+                                    Pending
+                                    @elseif($log->leadTask->leadTaskDetails->status == 1)
+                                    Completed
+                                    @elseif($log->leadTask->leadTaskDetails->status == 2)
+                                    On Hold
+                                    @elseif($log->leadTask->leadTaskDetails->status == 3)
+                                    Follow Up
+                                    @elseif($log->leadTask->leadTaskDetails->status == 'null')
+                                    Not Updated
+                                    @endif
+                                </div>
+                                <div class="relative flex flex-col items-center group">
+                                    <a href="#" data-rowId="{{$log->id}}" class=" viewLogDeatails flex items-center gap-[8px] text-[15px] font-[600]  text-[#000]">
+                                        Action
+                                    </a>
+                                    <div class=" absolute bottom-0 flex flex-col items-center hidden mb-5 group-hover:flex">
+                                        <span class="flex items-center justify-center relative rounded-md z-10 px-[2px]  w-[70px] h-[30px] text-xs leading-none text-white whitespace-no-wrap bg-[#13103a] shadow-lg">Logs detail</p></span>
+                                        <div class="w-3 h-3 -mt-2 rotate-45 bg-black"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-end gap-[10px] w-[5%] text-[14px] leading-[16px] font-[400] tracking-[-0.04em] text-[#666666] flex">
+                                <div class="relative flex flex-col pr-[10px] items-center group">
+                                    <a href="#" class="flex items-center gap-[8px] text-[15px] font-[600]  text-[#000] py-[10px] px-[10px]" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal">
+                                        <i class="ri-download-2-line text-[22px]"></i>
+                                    </a>
+                                    <div class=" absolute bottom-[18px] flex flex-col items-center hidden mb-[15px] group-hover:flex">
+                                        <span class="flex items-center justify-center relative rounded-md z-10 px-[2px]  w-[70px] h-[30px] text-xs leading-none text-white whitespace-no-wrap bg-[#13103a] shadow-lg">Download file</p></span>
+                                        <div class="w-3 h-3 -mt-2 rotate-45 bg-black"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </li>
+                @endforeach
             </ul>
         </div>
     </div>
 </div>
-<script>
-    $(document).ready(function(){
-        $("#filterForm").on('submit', function(e) {
-        e.preventDefault();  
-        var lead_id = $("#lead_id").val();  
-        $.ajax({
-            url: "{{ route('leads.getLogs') }}",  
-            type: 'POST', 
-            data: { lead_id: lead_id }, 
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')  
-            },
-            success: function(response) {
-                     if(response.status == 200){
-                        console.log(response);
-                        
-                     }
-            },
-           
-        });
-    });
 
-    });
+<div id="assignUserModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[100%)] max-h-full bg-[rgba(0,0,0,0.6)] ">
+    <div class="relative p-4 w-full max-w-[780px] max-h-full m-auto">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-[20px] shadow">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:px-5 md:py-[20px] border-b border-[#f2f2f2]">
+                <h3 class="flex items-center gap-[8px] text-[24px] font-[600] leading-[17px] text-[#000]">
+                    Log Review<p id="rowLeadId" class="text-sky-500"></p>
+
+                </h3>
+                <button type="button" class=" absolute top-[-10px] right-[-10px] w-[35px] h-[35px] bg-[#13103A] flex items-center justify-center text-[#fff] rounded-[60px]" data-modal-hide="assignUserModal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                    </svg>
+
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-[20px]">
+            <form method="POST" class="space-y-[20px]">
+                @csrf
+                <div class="flex flex-col md:flex-row gap-[20px]">
+                    <div class="w-full border-[1px] border-[#f2f2f2] min-h-[150px] p-[15px] rounded-[8px] text-[#000] text-[15px] leading-[22px] font-[400]">
+                        <!-- Client Name -->
+                        <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626]">
+                            <label class="text-[15px] font-[600] text-[#000] w-[40%]">
+                                Client Name:
+                            </label>
+                            <p id="rowClient" class="text-[15px] font-[500] text-[#262626] w-[60%] overflow-hidden truncate"></p>
+                        </div>
+
+
+                        <!-- Service -->
+                        <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
+                            <label class="text-[15px] font-[600] text-[#000] w-[40%]">
+                                Service:
+                            </label>
+                            <p id="rowService" class="w-[60%]"></p>
+                        </div>
+
+                        <!-- Stage -->
+                        <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
+                            <label class="text-[15px] font-[600] text-[#000] w-[40%]">
+                                Stage:
+                            </label>
+                            <p id="rowStage" class="w-[60%]"></p>
+                        </div>
+
+                        <!-- Assigned To -->
+                        <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
+                            <label class="text-[15px] font-[600] text-[#000] w-[40%]">
+                                Assigned To:
+                            </label>
+                            <p id="rowAssignedTo" class="w-[60%]"></p>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
+                            <label class="text-[15px] font-[600] text-[#000] w-[40%]">
+                                Status:
+                            </label>
+                            <p id="rowStatus" class="w-[60%]"></p>
+                        </div>
+
+                        <!-- Verified On -->
+                        <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
+                            <label class="text-[15px] font-[600] text-[#000] w-[40%]">
+                                Verified On:
+                            </label>
+                            <p id="rowVerifiedOn" class="w-[60%]"></p>
+                        </div>
+
+                        <!-- Clarification -->
+                        <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
+                            <label class="text-[15px] font-[600] text-[#000] w-[40%]">
+                                Clarification:
+                            </label>
+                            <p id="rowClarification" class="w-[60%]"></p>
+                        </div>
+
+                        <!-- Dead Line -->
+                        <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
+                            <label class="text-[15px] font-[600] text-[#000] w-[40%]">
+                                Dead Line:
+                            </label>
+                            <p id="rowDeadLine" class="w-[60%]"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between p-4 md:px-5 md:py-[20px] border-b border-[#f2f2f2]">
+                    <h3 class="text-[24px] font-[600] leading-[17px] text-[#000]">
+                        Remark
+                    </h3>
+                </div>
+
+                <!-- Textarea Section -->
+                <div class="flex flex-col md:flex-row gap-[20px]">
+                    <div class="w-full">
+                        <textarea id="remark" class="w-full border-[1px] border-[#f2f2f2] min-h-[80px] p-[15px] rounded-[8px] text-[#000] text-[15px] leading-[22px] font-[400] focus:outline-none"></textarea>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    $(document).ready(function() {
+
+        var urlParams = new URLSearchParams(window.location.search);
+        if (!urlParams.has('lead_id') || urlParams.get('lead_id') === '') {
+            $('#showLog').attr('hidden', true);
+        } else {
+            $('#showLog').removeAttr('hidden');
+        }
+        $(document).on('click', '.viewLogDeatails', function(e) {
+            e.preventDefault();
+            $('#assignUserModal').removeClass('hidden');
+        });
+        $(document).on('click', '[data-modal-hide="assignUserModal"]', function() {
+            $('#assignUserModal').addClass('hidden');
+        });
+        $(".viewLogDeatails").on('click', function() {
+            var lead_id = $(this).data('rowid');
+
+            $.ajax({
+                url: "{{ route('leads.getLogs') }}",
+                method: 'POST',
+                data: {
+                    lead_id: lead_id
+                },
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.status == 200) {
+                        console.log(response);
+
+                        var lead = response.data[0]; // Assuming you have an array in data
+
+                        $('#rowClient').text(lead.client_name);
+                        $('#rowLeadId').text(lead.lead_id);
+                        $('#rowService').text(lead.services.join(", "));
+                        $('#rowStage').text(lead.stage);
+                        $('#rowAssignedTo').text(lead.assignTo);
+                        $('#remark').val(lead.remark);
+                        $('#rowStatus').text(function() {
+                            switch (lead.status) {
+                                case 0:
+                                    return 'Pending';
+                                case 1:
+                                    return 'Completed';
+                                case 2:
+                                    return 'Hold';
+                                case 3:
+                                    return 'Follow Up';
+                                default:
+                                    return 'Not Updated';
+                            }
+                        });
+                        $('#rowVerifiedOn').text(lead.verifiedOn ? lead.verifiedOn : 'Not Updated');
+                        $('#rowClarification').text(lead.logDescription);
+                        $('#rowDeadLine').text(lead.deadLine);
+                    }
+                }
+            })
+        })
+
+
+    })
 </script>
 @stop
-

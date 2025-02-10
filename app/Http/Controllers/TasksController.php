@@ -19,7 +19,6 @@ class TasksController extends Controller
     {
         $header_title_name = "Tasks";
         $taskDetails = LeadTask::with(['user', 'lead', 'leadTaskDetails', 'leadServices.service', 'leadServices.subservice', 'serviceSatge'])->orderBy('created_at', 'desc');
-        
         $searchKey = $request->input('key') ?? '';
         $requestType = $request->input('requestType') ?? '';
         if ($searchKey) {
@@ -41,6 +40,7 @@ class TasksController extends Controller
             }); 
         }
         $taskDetailsDrp = $taskDetails->get();
+        
         $taskDetails = $taskDetails->paginate(env("PAGINATION_COUNT"));
         if (empty($requestType)) {
             $header_title_name = 'User';
@@ -195,7 +195,8 @@ class TasksController extends Controller
         return view('tasks.tradeMark.send_quotation', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'stageId'));
     }
     public function sendQuotation(Request $request, $id)
-    {
+    {   
+        // dd($request->all());
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
         $existedTask = LeadTask::with(['leadServices.service'])->where('id',$id)->first();
@@ -256,7 +257,7 @@ class TasksController extends Controller
                         $LeadLog->save();
                     }
                     $id = $newTaskAssigned->id;
-                    return redirect()->route('task.checkPayment', ['id' => $id])
+                    return redirect()->route('task.index')
                         ->with('success', 'Quotation sent successfully');
                 } else {
                     return redirect()->back()->error('message', " there is something wrong ");
@@ -281,11 +282,11 @@ class TasksController extends Controller
         $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
         foreach ($taskDetails as $value) {
             $stageId = $value->service_stage_id;
+            $substageId = ServiceStages::where('sub_stage_id', $value->serviceSatge->stage_id)->get();
         }
-
         $getStage = ServiceStages::where('service_id', 1)->where('id', '>', $stageId)->get();
         $leadTaskdetials = LeadTaskDetail::find($taskDetailsId);
-        return view('tasks.tradeMark.payment_status', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage'));
+        return view('tasks.tradeMark.payment_status', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage','substageId'));
     }
 
     public function paymentStatus(Request $request, $id)
@@ -324,7 +325,7 @@ class TasksController extends Controller
 
             $newLeadtask->task_description = $request->description ?? null;
             if ($newLeadtask->save()) {
-                $existedLeaedTaskDetails->status = $request->payment;
+                $existedLeaedTaskDetails->status = 1;
                 $existedLeaedTaskDetails->status_date = $verifiedDate;
                 $newLeadTaskDeatails->task_id = $newLeadtask->id;
                 $newLeadTaskDeatails->dead_line = $deadlineDate;
@@ -397,13 +398,17 @@ class TasksController extends Controller
 
     }
 
-    public function followUp($id, $serviceId , $stageId){
+    public function followUp($id, $serviceId , $stageId,$substageId = null){
+        
         $taskDetails = LeadTask::find($id);
         if($id == $taskDetails->id && $serviceId == 1 && $stageId == 1 ){
             return redirect()->route('task.chekDuplication',['id'=> $id]); 
         }else if($id == $taskDetails->id && $serviceId == 1 && $stageId == 2){
             return redirect()->route('task.documentVerifiedChildSatge',['id'=> $id]); 
-        }else if($id == $taskDetails->id && $serviceId == 1 && $stageId == 3){
+        }else if($id = $taskDetails->id && $serviceId == 1 && $stageId == 2 && $substageId == 2){
+            return redirect()->route('task.checkPayment',['id'=> $id]); 
+        }
+        else if($id == $taskDetails->id && $serviceId == 1 && $stageId == 3){
             return redirect()->route('task.documentation',['id'=> $id]); 
         }
 

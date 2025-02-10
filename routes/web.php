@@ -95,7 +95,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/logs', 'logs')->name('task.log');
         Route::get('/details/{id}', 'detail')->name('task.detail');
         Route::get('/follow-up/view', 'assignTask')->name('task.assignTask');
-        Route::get('/follow-up/{id}/{serviceId}/{stageId}', 'followUp')->name('task.followup');
+        Route::get('/follow-up/{id}/{serviceId}/{stageId}/{substageId?}', 'followUp')->name('task.followup');
         Route::get('/check-duplicate/{id}', 'chekDuplication')->name('task.chekDuplication');
         Route::post('/duplicate-status/{id}', 'duplicateVerified')->name('task.documentVerified');
         Route::get('/send-quotation/next-stage/{id}', 'documentVerifiedChildSatge')->name('task.documentVerifiedChildSatge');
@@ -104,10 +104,10 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::post('/payment-status/{id}','paymentStatus')->name('task.paymentStatus');
         Route::get('documentation/{id}','documentation')->name('task.documentation');
         Route::Post('documentation-status/{id}','documenStatus')->name('task.documenStatus');
-
+        
         //For patent.........
         Route::get('/patent/payment-verification/{id?}','patentPaymentVerification')->name('task.patentPaymentVerification');
-
+        
     });
     //Services Routes
     Route::prefix('services')->controller(ServicesController::class)->group(function () {

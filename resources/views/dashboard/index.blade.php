@@ -162,10 +162,10 @@
                         Not Available
                         </td>
                         @endif
-                        <td class="bor  der-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                        <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                             {{ date('d M Y',strtotime($logs->created_at))}}
                         </td>
-                        <td class="text-center  text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
+                        <td class="border-b-[1px] border-[#0000001A] text-center  text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                             <a href="{{ route('getActionLog.log', ['auto'=> $logs->id]) }}" class="inline-flex w-[27px] h-[27px] items-center justify-center bg-[#F1F3F4] rounded-[100%]">
                                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g clip-path="url(#clip0_446_3019)">

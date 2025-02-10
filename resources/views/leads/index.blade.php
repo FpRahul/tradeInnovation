@@ -182,7 +182,7 @@
                                         @endif
                                         {{-- <a href="{{ route('leads.quote')}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Send Quote</a> --}}
                                         @if(in_array('leads.logs',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)                                       
-                                        <a href="{{ route('leads.logs')}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Logs</a>
+                                        <a href="{{ route('leadLogs.index', ['lead_id' => $leadData->id]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Logs</a>
                                         @endif
                                         {{-- <a href="#" class="block px-3 py-1 text-[12px] hover:bg-[#f7f7f7] text-gray-700">Delete</a> --}}
                                     </div>

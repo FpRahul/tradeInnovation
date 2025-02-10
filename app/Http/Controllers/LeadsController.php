@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 use App\Models\CategoryOption;
 use App\Models\Service;
@@ -82,7 +81,6 @@ class LeadsController extends Controller
         }   
         
     }
-
     public function add(Request $request, $id = null){
         if($id > 0){
             $leadData = Lead::where('id',$id)->first();
@@ -289,55 +287,47 @@ class LeadsController extends Controller
         $header_title_name = 'Lead';
         return view('leads/sendquote', compact('header_title_name'));
     }
-
-    public function getLogs(Request $request){
-        
-        $rule = [
-            'lead_id' => 'required',
-        ];
-        $validator = Validator::make($request->all(), $rule);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
-        $lead = Lead::find($request->lead_id);
-
-        // foreach($lead->lead_logs as $log){
-        //     $a = getTask($log->task_id);
-        // }
-        
-        // $data = LeadLog::where('lead_id', $request->input('lead_id'))->get();
-        return response()->json([
-            'status'=> 200,
-            'lead'=> $lead,
-            'logs' => $lead->lead_logs
-        ]);
-    }
-
     public function leadLogs(Request $request)
-    {
-        $leads = Lead::orderBy('created_at', 'DESC')->get();
-        $query = LeadLog::orderBy('created_at');
-
-        if (!empty($request->query('lead_id'))) {
-            $lead_id = $request->query('lead_id');
-            $query->whereLeadId($lead_id);
+    {   
+        $header_title_name = 'Lead logs';
+        $leadData = lead::all();
+        $requestParams = $request->all();
+        $leadLogs = LeadLog::with('leadTask','leadTask.leadTaskDetails', 'leadTask.serviceSatge', 'leadService.service')->get();
+        if($request->lead_id > 0){
+            $leadLogs = LeadLog::with('leadTask','leadTask.leadTaskDetails', 'leadTask.serviceSatge', 'leadService.service')->where('lead_id', $request->lead_id)->get();
         }
+        return view('leads.logs', compact('leadData', 'header_title_name','leadLogs','requestParams'));
+    }
+    public function getLogs(Request $request){
+        if($request->lead_id > 0){
+            $lead_id = $request->lead_id; 
+            $leadLogs = LeadLog::with('leadTask','lead','leadTask.user','leadTask.leadTaskDetails', 'leadTask.serviceSatge', 'leadService.service')->where('id', $request->lead_id)->get();
+            $allLeadData = [];
+            foreach ($leadLogs as $lead) {
+                $data = [
+                    'client_name' => $lead->lead->client_name,
+                    'lead_id' => $lead->lead->lead_id,
+                    'stage' => $lead->leadTask->serviceSatge->title,
+                    'assignTo' => $lead->leadTask->user->name,
+                    'status' => $lead->leadTask->leadTaskDetails->status,
+                    'deadLine' => $lead->leadTask->leadTaskDetails->dead_line,
+                    'verifiedOn' => $lead->leadTask->leadTaskDetails->status_date,
+                    'remark' => $lead->leadTask->task_description,
 
-        $logs = $query->paginate('10');
+                    'logDescription' => $lead->description,
+                    'services' => [] 
+                ];
+                foreach ($lead->leadService as $services) {
+                    $data['services'][] = $services->service->serviceName;  
+                }
+                $allLeadData[] = $data;
+            }
+            return response()->json(['data' => $allLeadData, 'status' => 200]);
 
-        if(request()->ajax()){
-            return view('leads.logs.list', [
-                'logs' => $logs,
-                'leads' => $leads
-            ]);
+        }else{
+            return response()->json(['data' => 0, 'status' => 400 ]);
+
         }
-
-        return view('leads.logs.index', [
-            'logs' => $logs,
-            'leads' => $leads,
-            'header_title_name' => 'Lead Logs'
-        ]);
     }
 
 

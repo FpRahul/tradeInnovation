@@ -76,14 +76,11 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     //Leads Routes
     Route::prefix('leads')->controller(LeadsController::class)->group(function () {
         Route::match(['POST','GET'],'/', 'index')->name('leads.index');
-        Route::get('/lead-logs','leadLogs')->name('leadLogs.index');
         Route::match(['POST','GET'],'/add/{id?}', 'add')->name('leads.add');
         Route::post('/edit/{id?}','edit')->name('leads.edit');
         Route::match(['POST','GET'],'/fetch/{id?}','leadFetch')->name('leads.fetch');
         Route::get('/sendquote', 'sendquote')->name('leads.quote');
-
-        Route::get('/logs', 'leadLogs')->name('leads.logs');
-        
+        Route::get('lead-logs/{id?}', 'leadLogs')->name('leadLogs.index');
         Route::post('/get-logs', 'getLogs')->name('leads.getLogs');
         Route::POST('/getsubservice','getSubService')->name('lead.subservice');
         Route::match(['POST','GET'],'/getsourcetypename','getSourceTypeName')->name('lead.getsourcetypename');

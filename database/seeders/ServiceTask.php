@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class ServiceTask extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+    
     public function run(): void
     {
         DB::table('service_stages')->insert([

@@ -47,7 +47,7 @@ class LeadsController extends Controller
             $leadList->when(!empty($request->source), function ($q) use ($request) {
             $q->where('source', $request->source);
             })
-            ->when(!empty($request->status), function ($q) use ($request) {
+            ->when(isset($request->status), function ($q) use ($request) {
                 $q->where('status', $request->status);
             })
             ->when(!empty($request->service), function ($q) use ($request) {
@@ -61,17 +61,21 @@ class LeadsController extends Controller
         }
         $leadList = $leadList->latest()->paginate(env("PAGINATION_COUNT"));      
         if(empty($requestType)){
-            $sourceList = CategoryOption::where('type',3)->where('status',1)->get();
-            // $serviceList = Lead::with(['leadService.service'])
-            // ->whereHas('leadService')
-            // ->where('user_id', auth()->user()->id)
-            // ->get()
-            // ->pluck('leadService')
-            // ->flatten()
-            // ->pluck('service');        
-            // dd($serviceList);
-            // dd($serviceList[0]->leadService[0]->service->serviceName);
-            $serviceList = Service::where('status',1)->get();
+            $sourceList = Lead::where('user_id', auth()->user()->id)
+            ->select('source')
+            ->groupBy('source')
+            ->with('categoryOptions',function($q){
+                $q->where('type',3)->where('status',1);
+            })->get();
+            
+            $serviceList = Lead::with(['leadService.service'])
+            ->whereHas('leadService')
+            ->where('user_id', auth()->user()->id)
+            ->get()
+            ->pluck('leadService')
+            ->flatten()
+            ->pluck('service');
+
             $userList = User::where('role','>=',5)->get();
             $header_title_name = 'Leads';
             return view('leads/index',compact('allRequestData','header_title_name','leadList','sourceList','serviceList','userList','sourceKey','serviceKey','statusKey','searchKey'));
@@ -87,6 +91,7 @@ class LeadsController extends Controller
         }   
         
     }
+
     public function add(Request $request, $id = null){
         if($id > 0){
             $leadData = Lead::where('id',$id)->first();
@@ -95,7 +100,8 @@ class LeadsController extends Controller
             $leadAttachment = LeadAttachment::where('lead_id',$id)->get();
             $LeadLog = LeadLog::where('lead_id',$id)->first();
             $LeadTask = LeadTask::where('lead_id',$id)->first();
-            $LeadTaskDetail = LeadTaskDetail::where('task_id',$LeadTask->id)->first();
+            $leadTaskId = $LeadTask->id ?? 0;
+            $LeadTaskDetail = LeadTaskDetail::where('task_id',$leadTaskId)->first();
             $leadSelectedStage = LeadTask::where('lead_id',$id)->first();
             $leadStages = ServiceStages::where('service_id',$leadServiceData[0]->service_id)->get();
             $successMsg = 'Lead updated!';
@@ -178,7 +184,7 @@ class LeadsController extends Controller
                         $leadServiceData->save();
                     }                 
                 }   
-                if($id==null){
+                if($id==null || empty($LeadTask)){
                     $LeadTask = new LeadTask();
                 }     
                 $LeadTask->user_id = $request->assign;
@@ -187,7 +193,7 @@ class LeadsController extends Controller
                 $LeadTask->assign_by = auth()->user()->id;
                 $LeadTask->task_title = ServiceStages::find($request->stage_id)->title;
                 if($LeadTask->save()){
-                    if($id==null){
+                    if($id==null || empty($LeadTaskDetail)){
                         $LeadTaskDetail = new LeadTaskDetail();
                     }
                     $LeadTaskDetail->task_id = $LeadTask->id;
@@ -250,7 +256,6 @@ class LeadsController extends Controller
         $header_title_name = 'Lead';
         return view('leads/add',compact('header_title_name','sourceList','serviceList','userList','leadData','leadServiceData','leadAttachment','leadStages','LeadTask','LeadTaskDetail','leadSelectedStage'));
     }
-
     // lead fetch...........
     public function leadFetch(Request $request){
         $leadData = Lead::with('leadAttachments')->find($request->id);
@@ -306,12 +311,13 @@ class LeadsController extends Controller
         'data' =>$options
        ]);
     }
+
     public function sendQuote(){
         $header_title_name = 'Lead';
         return view('leads/sendquote', compact('header_title_name'));
     }
-    public function leadLogs(Request $request)
-    {   
+
+    public function leadLogs(Request $request){
         $header_title_name = 'Lead logs';
         $leadData = lead::all();
         $requestParams = $request->all();
@@ -321,6 +327,7 @@ class LeadsController extends Controller
         }
         return view('leads.logs', compact('leadData', 'header_title_name','leadLogs','requestParams'));
     }
+
     public function getLogs(Request $request){
         if($request->lead_id > 0){
             $lead_id = $request->lead_id; 
@@ -352,9 +359,6 @@ class LeadsController extends Controller
 
         }
     }
-
-
-
 
     public function getSourceTypeName(Request $request){
         if($request->value == 18){
@@ -402,13 +406,11 @@ class LeadsController extends Controller
             return back()->with('success', $message);
         }    
         return back()->with('error', 'Lead not found.');
-    }
-    
+    }    
 
     public function setAssignToUser(Request $request){
        
-    }
-   
+    }  
 
    
 }

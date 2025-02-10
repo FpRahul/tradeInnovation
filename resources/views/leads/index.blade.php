@@ -32,28 +32,32 @@
                         <select name="source"  class="sourceData allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
                             <option value="">Select Source</option>
                             @if (!empty($sourceList))
-                                @foreach ($sourceList as $sourceVal)                        
-                                    <option value="{{ $sourceVal->id}}" {{ !empty($sourceKey) && $sourceVal->id == $sourceKey ? 'selected':''}}>{{ $sourceVal->name}}</option>
+                                @foreach ($sourceList as $sourceVal)      
+                                    <option value="{{ $sourceVal['categoryOptions']['id']}}" @selected($sourceVal['categoryOptions']['id'] == $sourceKey)>{{ $sourceVal['categoryOptions']['name']}}</option>
                                 @endforeach                      
                             @endif                    
                         </select>
                     </div>
                     <div class="w-[100%] md:w-[40%]">
                         <label>Service</label>
-                        <select name="service"  class="serviceData allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[98px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
+                        @php
+                            $groupedServices = collect($serviceList)->unique('id'); 
+                        @endphp
+
+                        <select name="service" class="serviceData allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[98px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
                             <option value="">Select Service</option>    
-                            @if (!empty($serviceList))                            
-                                @foreach ($serviceList as $serviceK => $serviceListVal)
-                                    <option value="{{ $serviceListVal->id}}" {{ !empty($serviceK) && $serviceListVal->id == $serviceK  ? 'selected':''}}>{{ $serviceListVal->serviceName}}</option>
-                                @endforeach                      
-                            @endif  
-                        </select> 
+                            @foreach ($groupedServices as $service)
+                                <option value="{{ $service['id'] }}">{{ $service['serviceName'] }}</option>
+                            @endforeach
+                        </select>
+
                     </div>
                     <div class="w-[100%] md:w-[40%]">
                         <label>Status</label>
                         <select name="status"  class="statusData allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[90px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] " >
                             <option value="">Select Status</option>
                             <option value="0" {{ isset($statusKey) && $statusKey == 0 ? 'selected':''}}>Open</option>
+                            <option value="1" {{ isset($statusKey) && $statusKey == 1 ? 'selected':''}}>Assign</option>
                         </select>    
                     </div>  
                     <div class="flex items-end gap-[10px]">
@@ -146,7 +150,7 @@
                             $status = 'Open';
                             break;
                             case 1:
-                            $status = 'Completed';
+                            $status = 'Assigned';
                             break;
                             }
                             @endphp

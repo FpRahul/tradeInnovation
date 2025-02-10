@@ -118,7 +118,7 @@ class CheckPermission
             uasort($serializeMenus, function ($a, $b) {
                 return $a['menu']['sequence'] <=> $b['menu']['sequence'];
             });
-            
+            //dd($menuSubMenuRoutes);
             view()->share(compact('serializeMenus','menuSubMenuRoutes','permissionDetails'));
         }
 

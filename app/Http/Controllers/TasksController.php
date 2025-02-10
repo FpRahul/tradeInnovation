@@ -408,7 +408,7 @@ class TasksController extends Controller
         }
 
         // For Patent...............
-        elseif($taskDetails && $serviceId == 2 && $stageId == 6){
+        elseif($taskDetails && $serviceId == 2 && $stageId == 6){            
             return redirect()->route('task.patentPaymentVerification',['id'=> $id]); 
         }
        
@@ -417,9 +417,9 @@ class TasksController extends Controller
     public function patentPaymentVerification(Request $request){
         $taskId = $request->id;
         $taskList = LeadTask::find($taskId);
-        // $userList = User::where
+        $serviceStage = ServiceStages::where('id','>',$taskList->service_stage_id)->where('service_id',2)->get();
         $header_title_name = "Payment Verification";
-        return view('tasks/patent/payment-verification',compact('header_title_name','taskId','taskList'));
+        return view('tasks/patent/payment-verification',compact('header_title_name','taskId','taskList','serviceStage'));
     }
 
 

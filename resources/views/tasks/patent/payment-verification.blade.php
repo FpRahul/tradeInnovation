@@ -65,7 +65,10 @@
          <div class="w-full md:w-1/2 stageoftheservice">
             <label class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
             <select name="stage_id" class="allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none serviceStagesOption" required>
-                <option value="">abc</option>
+                <option value="">Select Stage</option>
+                {{-- @if (!empty($serviceStage)) --}}
+                   
+                @endif
             </select>
             @error('stage_id')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>

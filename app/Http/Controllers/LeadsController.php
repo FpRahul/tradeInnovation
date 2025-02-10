@@ -195,11 +195,7 @@ class LeadsController extends Controller
                     $LeadTaskDetail->status = 0;
                     $LeadTaskDetail->status_date = NULL;
                     $LeadTaskDetail->save();
-                    $followUp = new FollowUp();
-                    $followUp->task_id = $LeadTask->id;
-                    $followUp->service_id = $leadServiceData->service_id;
-                    $followUp->stage_id = $LeadTask->service_stage_id;
-                    $followUp->save(); 
+                    
 
                     if($request->savetype == 1 && $leadOldData->status==0){
                         // lead logs...

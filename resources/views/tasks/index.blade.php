@@ -38,7 +38,6 @@
                     <input type="search" name="search" id="search" placeholder="Search" class="search !outline-none border border-[#0000001A] h-[40px] w-full p-[10px] pl-[42px] bg-transparent text-[#000000] placeholder:text-[#6F6F6F] rounded-[10px] text-[14px] font-[400] leading-[16px]">
                 </div>
             </div>
-
             <div class="overflow-x-auto " id="search_table_data">
                 <table width="100%" cellpadding="0" cellspacing="0" class="min-w-[900px]">
                     <thead>
@@ -53,7 +52,6 @@
                                 Task Detail
                             </th>
                             <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
-
                                 Services
                             </th>
                             <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
@@ -93,6 +91,7 @@
                                 {{ $task->serviceSatge->title }}
                                 @php
                                 $stageId = $task->serviceSatge->id;
+                                $substageId =  $task->serviceSatge->sub_stage_id;
                                 @endphp
                                 @else
                                 Not Available
@@ -173,7 +172,7 @@
                                             @if(optional($task->leadTaskDetails)->status == 1)
                                             <p></p>
                                             @elseif(!empty($serviceID) && !empty($stageId))
-                                            <a href="{{ route('task.followup', ['id' => $task->id,'serviceId' => $serviceID , 'stageId' => $stageId ]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Follow Up</a>
+                                            <a href="{{ route('task.followup', ['id' => $task->id,'serviceId' => $serviceID , 'stageId' => $stageId,'substageId' => isset($substageId) ? $substageId : null  ]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Follow Up</a>
                                             @endif
                                             @if(!empty($task->lead->id))
                                                 @php
@@ -182,6 +181,8 @@
                                                 @else
                                                 Not Available
                                                 @endif
+
+                                               
                                                 
                                             <a href="{{route('leadLogs.index', ['lead_id' => $leadId])}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal" type="button">Logs</a>
                                             <a href="#" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Hold</a>

@@ -78,20 +78,26 @@
                                     <label class="text-[15px] font-[600] text-[#000]">
                                         Stage:
                                     </label>
-                                    {{ $log->leadTask->serviceSatge->title }}
+                                    {{ optional($log->leadTask)->serviceSatge->title ?? 'NA' }}
+
+
                                 </div>
                                 <div class="flex-inline items-center gap-[10px] w-[100%] lg:w-[30%] text-[14px] leading-[16px] font-[400] tracking-[-0.04em] text-[#666666] flex"><label class="text-[15px] font-[600] text-[#000]">Status:</label>
-                                    @if($log->leadTask->leadTaskDetails->status == 0)
+                                                                @if(optional(optional($log->leadTask)->leadTaskDetails)->status === 0)
                                     Pending
-                                    @elseif($log->leadTask->leadTaskDetails->status == 1)
+                                @elseif(optional(optional($log->leadTask)->leadTaskDetails)->status === 1)
                                     Completed
-                                    @elseif($log->leadTask->leadTaskDetails->status == 2)
+                                @elseif(optional(optional($log->leadTask)->leadTaskDetails)->status === 2)
                                     On Hold
-                                    @elseif($log->leadTask->leadTaskDetails->status == 3)
+                                @elseif(optional(optional($log->leadTask)->leadTaskDetails)->status === 3)
                                     Follow Up
-                                    @elseif($log->leadTask->leadTaskDetails->status == 'null')
+                                @elseif(optional(optional($log->leadTask)->leadTaskDetails)->status === null)
                                     Not Updated
-                                    @endif
+                                @else
+                                    NA
+                                @endif
+
+
                                 </div>
                                 <div class="relative flex flex-col items-center group">
                                     <a href="#" data-rowId="{{$log->id}}" class=" viewLogDeatails flex items-center gap-[8px] text-[15px] font-[600]  text-[#000]">

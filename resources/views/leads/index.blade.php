@@ -1,7 +1,6 @@
 @php
     namespace App;
     use App\Models\Service;
-
 @endphp
 @extends('layouts.default')
 @section('content')
@@ -10,7 +9,7 @@
         <div>
             <h3 class="text-[18px] md:text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">Manage Leads</h3>
             <ul class="flex items-center text-[14px] font-[400] leading-[16px] text-[#000000] gap-[5px]">
-                <li>Leads</li> /
+                <li>Leads</li> 
                 <li class="text-gray">Manage Leads</li>
             </ul>
         </div>
@@ -22,11 +21,9 @@
                 Add Lead
             </a> 
         @endif
-        
     </div>
-
     <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] overflow-hidden ">
-        <div class="py-[15px] md:py-[25px] px-[15px] md:px-[20px] gap-[10px] flex flex-col md:flex-row items-center justify-between">
+        <div class="py-[15px] md:py-[25px] px-[15px] md:px-[20px] gap-[10px] flex flex-col md:flex-row items-end justify-between">
             <div class="flex max-w-[800px] gap-[10px] w-full">
                 <form class="w-full flex flex-wrap lg:flex-nowrap gap-[10px]"  method="GET">
                     <input name="tab" type="hidden" class="leadtabbing" value="{{$allRequestData->tab}}">
@@ -34,7 +31,6 @@
                         <label>Source</label>
                         <select name="source"  class="sourceData allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
                             <option value="">Select Source</option>
-    
                             @if (!empty($sourceList))
                                 @foreach ($sourceList as $sourceVal)                        
                                     <option value="{{ $sourceVal->id}}" {{ !empty($sourceKey) && $sourceVal->id == $sourceKey ? 'selected':''}}>{{ $sourceVal->name}}</option>
@@ -42,7 +38,6 @@
                             @endif                    
                         </select>
                     </div>
-    
                     <div class="w-[100%] md:w-[40%]">
                         <label>Service</label>
                         <select name="service"  class="serviceData allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[98px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
@@ -54,7 +49,6 @@
                             @endif  
                         </select> 
                     </div>
-    
                     <div class="w-[100%] md:w-[40%]">
                         <label>Status</label>
                         <select name="status"  class="statusData allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[90px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] " >
@@ -68,8 +62,7 @@
                             Reset
                         </a>
                     </div>
-                </form>
-                              
+                </form>         
             </div>
             <div class="relative w-full md:w-[217px]">
                 <svg class="absolute top-[50%] left-[13px] translate-y-[-50%]" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -88,7 +81,6 @@
                     Archive
                 </a>                   
             </nav>
-            
         </div>
         <div class="overflow-x-auto px-[20px]" id="search_table_data">
             <table width="100%" cellpadding="0" cellspacing="0" class="min-w-[900px]">

@@ -17,8 +17,8 @@
             <label for="payment" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Payment status</label>
             <select name="payment" id="payment" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                <option value="" disabled selected>Select status</option>
-               <option value="1">Payed</option>
-               <option value="0">Not Payed</option>
+               <option value="1">Paid</option>
+               <option value="0">On Credit</option>
             </select>
             @error('payment')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
@@ -98,9 +98,9 @@
             @endforeach
             @endif
          </div>
-         <div class="w-full md:w-1/2" id="verifiedDate">
+         <div class="w-full md:w-1/2" id="deadLineDate">
             <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-               Dead line
+              Payment Dead line
             </label>
             <div class="w-[100%] relative">
                <input
@@ -156,15 +156,14 @@
          console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
       });
 
-      $("#status").on("change", function() {
+      $("#payment").on("change", function() {
          var changedValue = $(this).val();
-         if (changedValue == 1) {
-            $('label[for="verified"]').text('Sent On'); // Change label text
-            $("#verifiedDate").removeClass('Hidden'); // Ensure the input field is visible
+         if (changedValue == 0) {
+        $("#verifiedDate label").text("Verified On");
          } else {
-            $('label[for="verified"]').text('Verified On'); // Revert label text
-            $("#verifiedDate").addClass('Hidden'); // Hide the input field
+            $("#verifiedDate label").text("Payed On");
          }
+         alert(changedValue);
       });
    });
 </script>

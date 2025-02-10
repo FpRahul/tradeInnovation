@@ -18,7 +18,8 @@ class TasksController extends Controller
     public function index(Request $request)
     {
         $header_title_name = "Tasks";
-        $taskDetails = LeadTask::with(['user', 'lead', 'leadTaskDetails', 'leadServices.service', 'leadServices.subservice', 'serviceSatge']);
+        $taskDetails = LeadTask::with(['user', 'lead', 'leadTaskDetails', 'leadServices.service', 'leadServices.subservice', 'serviceSatge'])->orderBy('created_at', 'desc');
+        
         $searchKey = $request->input('key') ?? '';
         $requestType = $request->input('requestType') ?? '';
         if ($searchKey) {
@@ -89,7 +90,6 @@ class TasksController extends Controller
 
     public function duplicateVerified(Request $request, $id)
     {
-        // dd($request->all());
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         $deadLineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
         $existedTaskDetails = LeadTask::with(['leadServices.service'])->where('id',$id)->first();
@@ -127,7 +127,6 @@ class TasksController extends Controller
             $newExistedTaskDetails->lead_id = $existedTaskDetails->lead_id;
             $newExistedTaskDetails->assign_by = Auth::id();
             $newExistedTaskDetails->task_title =$servicename;
-
             $newExistedTaskDetails->task_description = $request->description;
             $newExistedTaskDetails->service_stage_id = $request->stage_id;
             if ($newExistedTaskDetails->save()) {
@@ -164,9 +163,10 @@ class TasksController extends Controller
                 $LeadLog->description = $request->description;
                 $LeadLog->save();
                 $id = $newExistedTaskDetails->id;
-                
-                return redirect()->route('task.followup', ['id' => $id ,'serviceId' => $serviceId,'stageId'=> $stageId])
+                return redirect()->route('task.index')
                     ->with('success', 'Document verified successfully');
+                    // return redirect()->route('task.index', ['id' => $id ,'serviceId' => $serviceId,'stageId'=> $stageId])
+                    // ->with('success', 'Document verified successfully');
             } else {
                 
                 return redirect()->back()->with('error', "there is something wrong");
@@ -178,7 +178,7 @@ class TasksController extends Controller
 
     public function documentVerifiedChildSatge($id)
     {
-        $header_title_name = "Client Approval";
+        $header_title_name = "Send Quotation";
         $taskDetails = LeadTask::with(['user', 'lead', 'leadTaskDetails', 'leadServices.service', 'leadServices.subservice', 'serviceSatge'])
             ->where('id', $id)
             ->get();
@@ -328,6 +328,8 @@ class TasksController extends Controller
                 $existedLeaedTaskDetails->status_date = $verifiedDate;
                 $newLeadTaskDeatails->task_id = $newLeadtask->id;
                 $newLeadTaskDeatails->dead_line = $deadlineDate;
+                $newLeadTaskDeatails->status = 0;
+
                 if ($request->hasFile('attachment')) {
                     $folderPath = public_path('Image/leads/lead_' . $existedLeaedTask->lead_id);
                     if (!file_exists($folderPath)) {
@@ -352,7 +354,7 @@ class TasksController extends Controller
                     $LeadLog->description = $request->description;
                     $LeadLog->save();
                     $id = $newLeadtask->id;
-                    return redirect()->route('task.followup', ['id' => $id ,'serviceId' => $serviceId,'stageId'=> $stageId])->with('success', 'payment status is Updated');
+                    return redirect()->route('task.index')->with('success', 'payment status is Updated');
                 } else {
                     return redirect()->back()->error('message', " there is something wrong ");
                 }

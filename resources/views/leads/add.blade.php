@@ -231,7 +231,7 @@
                                                 <div class="w-full md:w-1/2">
                                                     <div class="relative flex flex-wrap items-center gap-[10px]">
                                                         @php
-                                                            $imagePath = !empty($attachmentVal['document']) ? 'Image/'.$attachmentVal['document'] : 'assets/images/noimage.png';
+                                                            $imagePath = !empty($attachmentVal['document']) ? 'uploads/leads/'.$leadData->id.'/'.$attachmentVal['document'] : 'assets/images/noimage.png';
                                                             $extension = pathinfo($imagePath, PATHINFO_EXTENSION);
                                                         @endphp
 

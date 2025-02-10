@@ -28,7 +28,7 @@ class LeadsController extends Controller
             $baseId = base64_decode($request->id);
             $leadList = Lead::with(['leadService','leadTask'])->where('id',$baseId);
         }else{            
-            if(auth()->user()->role != 1 && auth()->user()->role != 5){
+            if(auth()->user()->role != 1 && auth()->user()->role != 4){
                 $leadList = Lead::with(['leadService','leadTask'])->where('archive',$request->tab);
             }else{
                 $leadList = Lead::with(['leadService','leadTask'])->where('archive',$request->tab);
@@ -40,6 +40,7 @@ class LeadsController extends Controller
         $statusKey = $request->input('status') ?? '';
         $searchKey = $request->input('key') ?? '';
         $requestType = $request->input('requestType') ?? '';
+        // dd($request);
         if($sourceKey != '' || $serviceKey != '' || $statusKey != '' || $searchKey != ''){
                      
 
@@ -58,15 +59,20 @@ class LeadsController extends Controller
                 $q->where('client_name', 'LIKE', '%' . $request->key . '%');
             }); 
         }
-        $leadList = $leadList->latest()->paginate(env("PAGINATION_COUNT"));
-      
+        $leadList = $leadList->latest()->paginate(env("PAGINATION_COUNT"));      
         if(empty($requestType)){
             $sourceList = CategoryOption::where('type',3)->where('status',1)->get();
-            // $serviceList = Lead::with('leadService')->whereHas('leadService')->where('user_id', auth()->user()->id)->groupBy('id')->get();
+            // $serviceList = Lead::with(['leadService.service'])
+            // ->whereHas('leadService')
+            // ->where('user_id', auth()->user()->id)
+            // ->get()
+            // ->pluck('leadService')
+            // ->flatten()
+            // ->pluck('service');        
             // dd($serviceList);
             // dd($serviceList[0]->leadService[0]->service->serviceName);
             $serviceList = Service::where('status',1)->get();
-            $userList = User::where('role',4)->get();
+            $userList = User::where('role','>=',5)->get();
             $header_title_name = 'Leads';
             return view('leads/index',compact('allRequestData','header_title_name','leadList','sourceList','serviceList','userList','sourceKey','serviceKey','statusKey','searchKey'));
         }else{
@@ -108,7 +114,7 @@ class LeadsController extends Controller
         // $allStages = ServiceStages::get();
         $sourceList = CategoryOption::where('type',3)->where('status',1)->get();
         $serviceList = Service::where('status',1)->get();
-        $userList = User::where('role',4)->where('status',1)->get();
+        $userList = User::where('role','>=',5)->where('status',1)->get();
         if($request->isMethod('POST')){
             if($request->sourcetypenamelist > 0){
                 $sourceId = $request->sourcetypenamelist;              
@@ -146,10 +152,11 @@ class LeadsController extends Controller
                                 $leadAttachment = new LeadAttachment();
                             } 
                             $leadAttachment->lead_id = $leadData->id;
-                            if (isset($attachmentVal['attachmentFile']) && $attachmentVal['attachmentFile'] instanceof \Illuminate\Http\UploadedFile) {
+                            if (isset($attachmentVal['attachmentFile']) && $attachmentVal['attachmentFile'] instanceof \Illuminate\Http\UploadedFile) {                               
+
                                 $image_name = $attachmentVal['attachmentFile'];
                                 $imageName = rand(100000, 999999).'.'.$image_name->getClientOriginalExtension();
-                                $image_name->move(public_path('Image'),$imageName);
+                                $image_name->move(public_path('uploads/leads/'.$leadData->id), $imageName);
                                 $leadAttachment->document = $imageName;
                             }                        
                             $leadAttachment->save();
@@ -252,7 +259,7 @@ class LeadsController extends Controller
            ]);
     }
 
-    public function edit(Request $request){
+    public function edit(Request $request){       
         $leadData = Lead::find($request->lead_id);
         if ($leadData) {
             $leadData->update([
@@ -262,9 +269,25 @@ class LeadsController extends Controller
                 'email' => $request->modalemail,
                 'description' => $request->modaldescription
             ]);
+            // if ($request->hasFile('modalfileattachment')) {
+            //     $image_name = $request->modalfileattachment;
+            //     $imageName = rand(100000, 999999) . '.' . $image_name->getClientOriginalExtension();
+            //     $image_name->move(public_path('uploads/leads/'.$newUser->id), $imageName);
+            //     $newUserDetails->uploadPhotograph = $imageName;
+            // }
         }
         
         if($leadData->save()){
+            // if(isset($request->modalfileattachment) && $request->modalfileattachment != null){
+                // foreach($request->modalfileattachment as $key => $val){
+                //     if (isset($val['attachmentFile']) && $val['attachmentFile'] instanceof \Illuminate\Http\UploadedFile) {
+                //         $leadAttachment = new LeadAttachment();
+                //         $leadAttachment->lead->id = $leadData->id;
+                //         $leadAttachment->document = $val
+                //     }
+                // }
+            // }
+            // LeadAttachment
             return redirect()->back()->with('success','Lead updated!');
         }else{
             return redirect()->back()->with('error','Some error is occur!');

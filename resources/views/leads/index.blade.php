@@ -46,13 +46,10 @@
                     <div class="w-[100%] md:w-[40%]">
                         <label>Service</label>
                         <select name="service"  class="serviceData allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[98px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
-                            <option value="">Select Service</option>
-    
-                            @if (!empty($serviceList))
-                            
-                                @foreach ($serviceList as $serviceKey => $serviceListVal)       
-                                           
-                                    {{-- <option value="{{ $serviceListVal->id}}" {{ !empty($serviceKey) && $serviceListVal->id == $serviceKey ? 'selected':''}}>{{ $serviceListVal->serviceName}}</option> --}}
+                            <option value="">Select Service</option>    
+                            @if (!empty($serviceList))                            
+                                @foreach ($serviceList as $serviceK => $serviceListVal)
+                                    <option value="{{ $serviceListVal->id}}" {{ !empty($serviceK) && $serviceListVal->id == $serviceK  ? 'selected':''}}>{{ $serviceListVal->serviceName}}</option>
                                 @endforeach                      
                             @endif  
                         </select> 
@@ -149,8 +146,21 @@
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                             {{$leadData->client_name}}
                         </td>
-                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">                           
-                            {{$leadData->status}}
+                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
+                            @php
+                            $status = 'Other';
+                            switch ($leadData->status) {
+                            case 0:
+                            $status = 'Open';
+                            break;
+                            case 1:
+                            $status = 'Completed';
+                            break;
+                            }
+                            @endphp
+                                <span class="text-[#13103A] bg-[#ADD8E6] inline-block text-center min-w-[100px] py-[5px] px-[10px] rounded-[5px]">
+                                {{ $status }}
+                            </span>                                
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">               
                           {{ isset($leadData->leadTask->task_title) ? $leadData->leadTask->task_title : 'NULL' }}
@@ -174,7 +184,12 @@
                                 <div class="dropdown_menus absolute right-0 z-10 mt-2 w-[100px] origin-top-right rounded-md bg-white shadow-md ring-1 ring-black/5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                                     <div class="text-start" role="none">
                                         @if(in_array('leads.add',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                            @if ($leadData->status)
                                             <a data-id="{{$leadData->id}}" class="lead_edit block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-modal-target="editLeadModal" data-modal-toggle="editLeadModal" type="button">Edit</a>
+                                            @else
+                                            <a href="{{ route('leads.add',['id'=>$leadData->id])}}" class=" block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" type="button">Edit</a>
+                                            @endif
+                                            
                                         @endif
                                         {{-- <a href="javascript:void(0)" data-id="{{$leadData->id}}" class="lead_assign_to_user block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal" type="button">Assign</a> --}}
                                         @if(in_array('leads.archive',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
@@ -256,7 +271,7 @@
                            <div id="existedAttachment">
 
                            </div>
-                           <input name="modalfileattachment" type="file" multiple/>
+                           <input name="modalfileattachment[]" type="file" multiple/>
                         </div>
                     </div>
                     <div class="">

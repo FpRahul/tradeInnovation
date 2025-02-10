@@ -27,22 +27,23 @@ class Lead extends Model
         return $this->hasMany(LeadService::class,'lead_id','id');
     }
 
-    public function leadTasks()
-    {
+    public function leadTasks(){
         return $this->hasMany(LeadTask::class, 'lead_id');
     }
 
-    public function leadTask()
-    {
+    public function leadTask(){
         return $this->hasOne(LeadTask::class, 'lead_id')->latest();
     }
 
-    public function lead_logs()
-    {
+    public function lead_logs(){
         return $this->hasMany(LeadLog::class, 'lead_id', 'id');
     }
 
     public function leadAttachments(){
         return $this->hasMany(LeadAttachment::class, 'lead_id','id');
+    }
+
+    public function categoryOptions(){
+        return $this->hasOne(CategoryOption::class, 'id','source');
     }
 }

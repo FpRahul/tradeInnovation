@@ -161,7 +161,7 @@
          if (changedValue == 0) {
         $("#verifiedDate label").text("Verified On");
          } else {
-            $("#verifiedDate label").text("Payed On");
+            $("#verifiedDate label").text("Paid On");
          }
       });
    });

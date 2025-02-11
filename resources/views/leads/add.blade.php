@@ -180,9 +180,9 @@
                              
                               
                         </div>
-                        {{-- <div class="mt-[20px]">
+                        <div class="mt-[20px]">
                             <a href="javascript:void(0)" data-repeater-create class="inline-block text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]"> Add More </a>
-                        </div> --}}
+                        </div>
                     </div>
                 </div>
                 {{-- service repeater end --}}               

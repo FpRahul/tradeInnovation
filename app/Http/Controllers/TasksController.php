@@ -399,7 +399,7 @@ class TasksController extends Controller
     }
 
     public function followUp($id, $serviceId , $stageId,$substageId = null){
-        
+        $taskId = $id;
         $taskDetails = LeadTask::find($id);
         if($id == $taskDetails->id && $serviceId == 1 && $stageId == 1 ){
             return redirect()->route('task.chekDuplication',['id'=> $id]); 
@@ -413,18 +413,18 @@ class TasksController extends Controller
         }
 
         // For Patent...............
-        elseif($taskDetails && $serviceId == 2 && $stageId == 6){            
-            return redirect()->route('task.patentPaymentVerification',['id'=> $id]); 
+        else if($taskDetails && $serviceId == 2 && $stageId == 6){  
+            return redirect()->route('task.patentPaymentVerification',['id'=> $taskId]); 
         }
-       
     }
 
-    public function patentPaymentVerification(Request $request){
-        $taskId = $request->id;
+    public function patentPaymentVerification(Request $request,$id=null){
+        $taskId = $id;
         $taskList = LeadTask::find($taskId);
         $serviceStage = ServiceStages::where('id','>',$taskList->service_stage_id)->where('service_id',2)->get();
+        $userList = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
         $header_title_name = "Payment Verification";
-        return view('tasks/patent/payment-verification',compact('header_title_name','taskId','taskList','serviceStage'));
+        return view('tasks/patent/payment-verification',compact('header_title_name','taskId','taskList','serviceStage','userList'));
     }
 
 

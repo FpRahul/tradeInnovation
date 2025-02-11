@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use App\Models\LeadTask;
 
 class ServiceStages extends Model
 {
@@ -16,4 +17,8 @@ class ServiceStages extends Model
     'description',
     'stage'
    ];
+
+   public function task(){
+    return $this->belongsTo(LeadTask::class, 'id', 'service_stage_id');
+   }
 }

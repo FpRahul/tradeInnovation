@@ -84,14 +84,6 @@ if (!function_exists('getOperatingSystem')) {
 
 
 }
-
-// if(!function_exists('getStageName')){
-//     function getStageName($stageId){
-//         $stageData = ServiceStages::find($stageId); 
-//         return $stageData;
-//     }
-// }
-
 if(!function_exists('getUserNameBySource')){
     function getUserNameBySource($userId){
         $userData = User::find($userId);
@@ -99,12 +91,8 @@ if(!function_exists('getUserNameBySource')){
     }
 }
 
-
-/**
- * Get Task
- * @param integer $id Task Id
- * @return mixed
-*/
-function getTask($id){
-    return LeadTask::find($id);
-}
+// function getSubStage($serviceID , $stageId){
+   
+//     $data =  ServiceStages::select('stage_id')->where('service_id', $serviceID)->where('sub_stage_id', $stageId)->first();
+//     return $data;
+// }

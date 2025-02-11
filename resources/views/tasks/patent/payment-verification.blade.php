@@ -9,7 +9,7 @@
    <x-client-task-details :taskID="$taskId" />
 </div>
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
-   <form action="" method="POST" class="space-y-[20px]">
+   <form action="{{ route('')}}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
       <div class="flex flex-col md:flex-row gap-[20px]">
          <input type="hidden" name="checkValid" id="checkValid" value="">
@@ -66,8 +66,10 @@
             <label class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
             <select name="stage_id" class="allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none serviceStagesOption" required>
                 <option value="">Select Stage</option>
-                {{-- @if (!empty($serviceStage)) --}}
-                   
+                @if (!empty($serviceStage))
+                   @foreach ($serviceStage as $stageK => $stageV)
+                      <option value="{{$stageV['id']}}">{{$stageV['title']}}</option>
+                   @endforeach
                 @endif
             </select>
             @error('stage_id')
@@ -82,6 +84,12 @@
             <label for="assignUser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign User</label>
             <select name="assignUser" id="assignUser" class="filterData assignUserData allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]">
                 <option value="" disabled selected>Select a user</option>
+                @if (!empty($userList))
+                @foreach ($userList as $userK => $userV)
+                   <option value="{{$userV['id']}}">{{$userV['name']}}</option>
+                @endforeach
+                   
+                @endif
             </select>
             <p style="color: skyblue; font-size: 14px; font-weight: 500;">
                 Current user assigned: abb.

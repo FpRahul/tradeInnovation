@@ -156,6 +156,7 @@ class UsersController extends Controller
             $logAct = 'updated';
             $mail = false;
             $type = 'User';  // Ensure type is defined
+            $uniqueUserId = $newUser->uni_user_id;
         } else {
             $newUser = new User();
             $newUserDetails = new UserDetail();
@@ -172,8 +173,11 @@ class UsersController extends Controller
             $logAct = 'added';
             $mail = true;
             $type = 'User';
+
+            //UniqueId
+            $uniqueUserId = $this->generateUniqueUserCode('I','>', 4);
         }
-        if($request->isMethod('POST')){           
+        if($request->isMethod('POST')){    
             $customMessages = [
                 'uploadPan.max' => 'File size exceeds 2MB limit.',
                 'uploadAadhar.max' => 'File size exceeds 2MB limit.',
@@ -192,7 +196,8 @@ class UsersController extends Controller
             $newUser->mobile = $request->mobileNumber;
             $newUser->altNumber = $request->altMobile;
             $newUser->password = $hashedPassword;
-            if ($newUser->save()) {
+            $newUser->uni_user_id=$uniqueUserId;
+            if ($newUser->save()) {                  
                 $newUserDetails->userId = $newUser->id;
                 $newUserDetails->fatherHusbandName = $request->fatherHusbandName;
                 $newUserDetails->qualification = $request->qualification;
@@ -200,8 +205,16 @@ class UsersController extends Controller
                 $newUserDetails->keyResponsibilityArea = $request->keyResponsibilityArea;
                 $newUserDetails->keyPerformanceIndicator = $request->keyPerformanceIndicator;
                 $newUserDetails->emergencyContactDetails = $request->emergencyContactDetails;
+
                 $newUserDetails->currentAddress = $request->currentAddress;
+                $newUserDetails->curr_city = $request->curr_city;
+                $newUserDetails->curr_state = $request->curr_state;
+                $newUserDetails->curr_zip = $request->curr_zip;
+
                 $newUserDetails->permanentAddress = $request->permanentAddress;
+                $newUserDetails->perma_city = $request->perma_city;
+                $newUserDetails->perma_state = $request->perma_state;
+                $newUserDetails->perma_zip = $request->perma_zip;
 
                 if ($request->hasFile('employeePhoto')) {
                     $image_name = $request->employeePhoto;
@@ -305,7 +318,7 @@ class UsersController extends Controller
                 $query->where('name', 'LIKE', $searchKey . '%')->orWhere('mobile', 'LIKE', $searchKey . '%');
             });
         }
-        $clientData = $clientData->paginate(env("PAGINATION_COUNT"));
+        $clientData = $clientData->latest()->paginate(env("PAGINATION_COUNT"));
 
         if (empty($requestType)) {
             $header_title_name = 'User';
@@ -333,6 +346,7 @@ class UsersController extends Controller
             $moduleName = "Update";
             $logAct = 'updated';
             $mail = false;
+            $uniqueUserId = $newClient->uni_user_id;
         } else {
             $newClient = new User();
             $newClientDetails = new UserDetail();
@@ -343,6 +357,7 @@ class UsersController extends Controller
             $logAct = 'added';
             $mail = true;
             $type = 'Client';
+            $uniqueUserId = $this->generateUniqueUserCode('C','=', 2);
         }
         if ($request->isMethod('POST')) {
             $credentials = $request->validate([
@@ -358,7 +373,9 @@ class UsersController extends Controller
             $newClient->address = $request->address;
             $newClient->communicationAdress = $request->communi_address;
             $newClient->password = $hashedPassword;
-            if ($newClient->save()) {
+            $newClient->uni_user_id=$uniqueUserId;
+
+            if ($newClient->save()) {               
                 $newClientDetails->userId = $newClient->id;
                 $newClientDetails->incorporationType = $request->incorporationtype;
                 $newClientDetails->registered = $request->registered;
@@ -402,7 +419,7 @@ class UsersController extends Controller
             });
         }
 
-        $associateData = $associateData->paginate(env("PAGINATION_COUNT"));
+        $associateData = $associateData->latest()->paginate(env("PAGINATION_COUNT"));
         if (empty($requestType)) {
             $header_title_name = 'User';
             return view('users/associate-listing', compact('associateData', 'header_title_name', 'searchKey'));
@@ -428,6 +445,7 @@ class UsersController extends Controller
             $moduleName = "Update ";
             $logAct = 'updated';
             $mail = false;
+            $uniqueUserId = $newAssociate->uni_user_id;
         } else {
             $newAssociate = new User();
             $randomNumber = substr(str_shuffle('9abcdefghijklmnopq045678rstuvwxyzABCDEFG123HIJKLMNOPQRSTUVWXYZ'), 0, 8);
@@ -437,6 +455,7 @@ class UsersController extends Controller
             $logAct = 'added';
             $mail = true;
             $type = 'Associate';
+            $uniqueUserId = $this->generateUniqueUserCode('A','=', 3);
         }
         if ($request->isMethod('POST')) {
             $credentials = $request->validate([
@@ -452,7 +471,9 @@ class UsersController extends Controller
             $newAssociate->companyName = $request->firmName;
             $newAssociate->address = $request->address;
             $newAssociate->password = $hashedPassword;
-            if ($newAssociate->save()) {
+            $newAssociate->uni_user_id=$uniqueUserId;
+
+            if ($newAssociate->save()) {               
                 $logActivity[] = [
                     'user_id' => auth()->user()->id,
                     'title' => 'Add/Edit Associate',
@@ -904,4 +925,16 @@ class UsersController extends Controller
             return view('users.logs', compact('getLogs'));
         }
     }
+
+    public function generateUniqueUserCode($type,$symb,$role){
+        $lastUser = User::where('role',$symb,$role)->latest()->first();
+        if ($lastUser && $lastUser->uni_user_id) {
+            $lastNumber = (int) substr($lastUser->uni_user_id, 1);
+            $newNumber = str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
+        } else {
+            $newNumber = '0001';
+        }
+        return $type . $newNumber;
+    }
+
 }

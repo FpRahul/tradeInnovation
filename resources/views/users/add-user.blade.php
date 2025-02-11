@@ -72,7 +72,7 @@
                 <div class="w-full md:w-1/2">
                     <label for="mobileNumber" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mobile Number <strong class="text-[#f83434]">*</strong></label>
                     <input type="number" name="mobileNumber" id="mobileNumber" value="{{ $newUser->mobile }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Mobile Number" required>
-                    @error('mobileNumber')
+                    @error('mobile')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
@@ -262,6 +262,16 @@
                     @error('currentAddress')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
+
+                    <label for="curr_city" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">City</label>
+                    <input type="text" name="curr_city" id="curr_city" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                   
+
+                    <label for="curr_state" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">State</label>
+                    <input type="text" name="curr_state" id="curr_state" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+
+                    <label for="curr_zip" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Zip Code</label>
+                    <input type="text" name="curr_zip" id="curr_zip" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="permanentAddress" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Permanent Address <strong class="text-[#f83434]">*</strong></label>
@@ -269,6 +279,15 @@
                     @error('permanentAddress')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
+
+                    <label for="perma_city" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">City</label>
+                    <input type="text" name="perma_city" id="perma_city" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+
+                    <label for="perma_state" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">State</label>
+                    <input type="text" name="perma_state" id="perma_state" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+
+                    <label for="perma_zip" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Zip Code</label>
+                    <input type="text" name="perma_zip" id="perma_zip" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
                 </div>
             </div>
             <div class="flex flex-col md:flex-row gap-[20px]">

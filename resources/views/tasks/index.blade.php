@@ -71,6 +71,8 @@
                     <tbody>
                         @if(!$taskDetails->isEmpty())
                         @foreach ($taskDetails as $task)
+                        @if ($task->leadTaskDetails->status != 1)
+                            
                         <tr>
                             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px] pl-[25px]">
                                 @if(!empty($task->lead->lead_id))
@@ -91,12 +93,11 @@
                                 {{ $task->serviceSatge->title }}
                                 @php
                                 $stageId = $task->serviceSatge->id;
-                                $substageId =  $task->serviceSatge->sub_stage_id;
+                                
                                 @endphp
                                 @else
                                 Not Available
                                 @endif
-                                {{-- {{dd($stageId)}} --}}
                             </td>
                             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                                 @foreach($task->leadServices as $service)
@@ -109,6 +110,7 @@
                                 Not Available
                                 @endif
                                 @endforeach
+                                
                             </td>
                             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                                 @php
@@ -137,23 +139,22 @@
                                 @php
                                 // Default status is 'Other'
                                 $status = 'Other';
-
                                 // Switch based on the value of 'status'
                                 switch ($task->leadTaskDetails->status) {
-                                case 0:
-                                $status = 'Pending';
-                                break;
-                                case 1:
-                                $status = 'Completed';
-                                break;
-                                case 2:
-                                $status = 'Hold';
-                                break;
-                                case 3:
+                                    case 0:
+                                        $status = 'Pending';
+                                        break;
+                                        case 1:
+                                            $status = 'Completed';
+                                            break;
+                                            case 2:
+                                                $status = 'Hold';
+                                                break;
+                                                case 3:
                                 $status = 'Follow-up';
                                 break;
-                                }
-                                @endphp
+                            }
+                            @endphp
                                 <span class="text-[#13103A] bg-[#ADD8E6] inline-block text-center min-w-[100px] py-[5px] px-[10px] rounded-[5px]">
                                     {{ $status }}
                                 </span>
@@ -170,21 +171,22 @@
                                     </a>
                                     <div class="dropdown_menus absolute right-0 z-10 mt-2 w-[100px] origin-top-right rounded-md bg-white shadow-md ring-1 ring-black/5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                                         <div class="text-start" role="none">
-                                            @if(optional($task->leadTaskDetails)->status == 1)
-                                            <p></p>
-                                            @elseif(!empty($serviceID) && !empty($stageId))
-                                            <a href="{{ route('task.followup', ['id' => $task->id,'serviceId' => $serviceID , 'stageId' => $stageId,'substageId' => isset($substageId) ? $substageId : null  ]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Follow Up</a>
-                                            @endif
-                                            @if(!empty($task->lead->id))
+                                            {{-- @php
+                                                $data = getSubStage( $serviceID, $stageId);
+                                                $finalStageId = $data &&  $data->stage_id ? $data->stage_id : $stageId;
+                                                @endphp --}}
+                                                @if(optional($task->leadTaskDetails)->status == 1)
+                                                <p></p>
+                                                @elseif(!empty($serviceID) && !empty($stageId))
+                                                <a href="{{ route('task.followup', ['id' => $task->id,'serviceId' => $serviceID , 'stageId' => $stageId ])}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Follow Up</a>
+                                                @endif
+                                                @if(!empty($task->lead->id))
                                                 @php
-                                                    $leadId = $task->lead->id;
+                                                $leadId = $task->lead->id;
                                                 @endphp
                                                 @else
                                                 Not Available
                                                 @endif
-
-                                               
-                                                
                                             <a href="{{route('leadLogs.index', ['lead_id' => $leadId])}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal" type="button">Logs</a>
                                             <a href="#" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Hold</a>
                                         </div>
@@ -192,6 +194,7 @@
                                 </div>
                             </td>
                         </tr>
+                        @endif
                         @endforeach
                         @else
                         <tr>
@@ -204,7 +207,6 @@
             </div>
         </div>
     </div>
-
     <script>
         $(document).on('keyup', '.z', function() {
             var key = $(this).val();

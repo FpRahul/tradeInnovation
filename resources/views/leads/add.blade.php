@@ -310,10 +310,24 @@
    
     $(document).on('click','.lead_submit_btn',function(){
         if($(this).attr('name') == 'saveAssign'){
-            if(confirm("Are you sure you want to process this lead to the assigned stage? You won't be able to edit the lead anymore once confirmed.")){
-                $("#submitLeadForm").find("#savetype").val('1');
-                $("#submitLeadForm").trigger("submit");
-            }
+            swal("Are you sure you want to process this lead to the assigned stage? You won't be able to edit the lead anymore once confirmed.", {
+            buttons: {
+                cancel: "Cancel",
+                catch: {
+                    text: "Yes, proceed!",
+                    value: "proceed",
+                },
+            },
+            }).then((value) => {
+                switch (value) {
+                    case "proceed":
+                        $("#submitLeadForm").find("#savetype").val('1');
+                        $("#submitLeadForm").trigger("submit");
+                    break;
+                    default:
+                    swal("No Action Performed");
+                }
+            });
         }else{
             $("#submitLeadForm").trigger("submit");
         }
@@ -459,5 +473,7 @@
         }
         
     }
+
+    
 </script>
 @stop

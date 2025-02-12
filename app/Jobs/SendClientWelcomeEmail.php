@@ -17,7 +17,7 @@ class SendClientWelcomeEmail implements ShouldQueue
 
     public function __construct($userOrClient, $randomNumber, $filePath, $type)
     {   
-        ;
+        
 
         $this->userOrClient = $userOrClient;
         $this->filePath = $filePath;

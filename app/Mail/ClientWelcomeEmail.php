@@ -12,7 +12,7 @@ class ClientWelcomeEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $userOrClient;  // This can hold User, Client, or Associate object
+    public $userOrClient;  
     public $filePath;
     public $randomNumber;
     public $type;

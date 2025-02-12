@@ -5,6 +5,7 @@
 @extends('layouts.default')
 @section('content')
 <div>
+   
     <div class="flex items-center justify-between mb-[20px]">
         <div>
             <h3 class="text-[18px] md:text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">Manage Leads</h3>
@@ -40,17 +41,19 @@
                     </div>
                     <div class="w-[100%] md:w-[40%]">
                         <label>Service</label>
-                        @php
-                            $groupedServices = collect($serviceList)->unique('id'); 
-                        @endphp
-
                         <select name="service" class="serviceData allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[98px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
-                            <option value="">Select Service</option>    
-                            @foreach ($groupedServices as $service)
-                                <option value="{{ $service['id'] }}">{{ $service['serviceName'] }}</option>
-                            @endforeach
+                            <option value="">Select Service</option>   
+                            @if (!empty($serviceList))
+                                @foreach ($serviceList as $serviceK => $serviceV)
+                                    @if($serviceV > 0)
+                                        @php
+                                            $serviceListData = Service::find($serviceV)
+                                        @endphp
+                                        <option value="{{$serviceListData->id}}" @selected($serviceListData->id == $serviceKey)>{{$serviceListData->serviceName}}</option>
+                                    @endif
+                                @endforeach
+                            @endif 
                         </select>
-
                     </div>
                     <div class="w-[100%] md:w-[40%]">
                         <label>Status</label>
@@ -165,8 +168,11 @@
                             {{ date('d M Y H:i:A', strtotime($leadData->created_at) ) }}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            @if (!empty($leadData->leadService))
-                                {{ implode(', ', collect(getServiceData($leadData->leadService))->pluck('serviceName')->toArray()) }}                           
+                           
+                            @if ($leadData->leadTasks && $leadData->leadTasks->isNotEmpty())
+                             {{ getServiceData($leadData->leadTasks); }}
+                                                           
+                                
                             @endif                               
                         </td>
                         <td class="text-center border-b-[1px] border-[#0000001A] py-[12px] px-[15px]">

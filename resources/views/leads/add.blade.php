@@ -56,7 +56,6 @@
                     <input type="text" name="clientname" id="clientname" value="{{ !empty($leadData) ? $leadData->client_name : ''}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                 </div>
             </div>
-            
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="companyname" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Company Name</label>
@@ -82,7 +81,6 @@
                            {{!empty($LeadTask) && $LeadTask->user_id == $userListData->id ? 'selected':''}}>
                             {{ $userListData->name }}
                         </option>
-                        
                             @endforeach                            
                     </select>
                 </div>

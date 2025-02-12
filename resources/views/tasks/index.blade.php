@@ -72,7 +72,9 @@
                         @if(!$taskDetails->isEmpty())
                         @foreach ($taskDetails as $task)
                         @if ($task->leadTaskDetails->status != 1)
+                        @foreach($task->leadServices as $service)
                             
+                            @endforeach
                         <tr>
                             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px] pl-[25px]">
                                 @if(!empty($task->lead->lead_id))
@@ -110,7 +112,6 @@
                                 Not Available
                                 @endif
                                 @endforeach
-                                
                             </td>
                             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                                 @php

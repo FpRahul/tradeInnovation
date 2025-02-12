@@ -9,6 +9,7 @@
    <x-client-task-details :taskID="$id" />
 </div>
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
+   <strong>Task Update</strong>
    <form action="{{route('task.sendQuotation',['id'=>$id]) }}" method="POST" class="space-y-[20px]">
       @csrf
       <div class="flex flex-col md:flex-row gap-[20px]">
@@ -31,7 +32,6 @@
                </div>
             </div>
          </div>
-         
          <div class="flex justify-start flex-wrap w-[100%] md:w-[49%]">
          <label class="block w-full text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload</label>
             <label for="attachment" class="flex items-center gap-[10px] w-full text-[13px] font-[500] leading-[15px] text-[#666666] tracking-[0.01em] bg-[#fff] border-dashed border-[1px] border-[#ccc] rounded-[6px] py-[6px] px-[10px] cursor-pointer">
@@ -47,7 +47,7 @@
          @enderror
       </div>
       <div class="flex flex-col md:flex-row gap-[20px]">
-      <div class="w-full md:w-1/2">
+       <div class="w-full md:w-1/2">
             <input type="hidden" name="stageId" value="{{$stageId}}">
             <label for="assignUser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign User</label>
             <select name="assignUser" id="assignUser" class="filterData assignUserData allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]">
@@ -83,7 +83,6 @@
                   id="deadline"
                   class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                   value=""
-
                   autocomplete="off">
                <div class="absolute right-[10px] top-[10px]">
                   <i class="ri-calendar-line"></i>
@@ -94,14 +93,42 @@
             </p>
          </div>
       </div>
-
       <div class="">
          <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
-         <textarea type="text" name="description" id="description" class="w-full h-[155px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
+         <textarea type="text" name="description" id="description" class="w-full h-[60px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
+        
       </div>
+   <strong class="mt-4 block">Quotation Template</strong>
+   <div class="flex flex-col md:flex-row gap-[20px]">
+      <div class="w-full md:w-1/2">
+         <label for="subject"  class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Subject<strong class="text-[#f83434]">*</strong></label>
+         <input type="text" name="subject" id="subject" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+      </div>
+      <div class="w-full md:w-1/2">
+         <label for="subject"  class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Service<strong class="text-[#f83434]">*</strong></label>
+         <input type="text"  value="{{$serviceName}}" disabled class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+         <input type="hidden" name="service" value="{{$serviceName}}">
+      </div>
+      
+   </div>
+   <div class="flex flex-col md:flex-row gap-[20px]">
+   <div class="w-full md:w-1/2">
+         <label for="subject"  class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Price<strong class="text-[#f83434]">*</strong></label>
+         <input type="text" name="service_price" id="service_price" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+      </div>
+      <div class="w-full md:w-1/2">
+         <label for="subject"  class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Govt Price<strong class="text-[#f83434]">*</strong> </label>
+         <input type="text" name = "govt_price" id="govt_price" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+      </div>
+   </div>
+   <div class="w-full md:w-1/2 flex items-center gap-[10px]">
+   <input type="checkbox" name="gst" id="gst" value="1" class="w-auto h-[20px] !outline-none">
+   <label for="govt_price" class="text-[14px] font-[400] leading-[16px] text-[#000000]">GST</label>
+   </div>
       <div class="flex justify-end gap-[15px]">
-         <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Assign</button>
+         <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Sent Quotation</button>
       </div>
+
    </form>
 </div>
 <script>

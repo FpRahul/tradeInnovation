@@ -81,9 +81,9 @@ class TasksController extends Controller
         $taskID = $id;
         foreach ($taskDetails as $value) {
             $serviceID = $value->serviceSatge->service_id;
+            $stage_id = $value->service_stage_id;
         }
-        $getStage = ServiceStages::where('service_id', $serviceID)->where('id', '>', $serviceID)->get();
-
+        $getStage = ServiceStages::where('service_id', $serviceID)->where('id', '>', $stage_id)->get();
         $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
         return view('tasks/tradeMark/check_duplication', compact('header_title_name', 'taskID', 'taskDetails', 'users', 'getStage'));
     }
@@ -184,7 +184,12 @@ class TasksController extends Controller
             ->get();
         foreach ($taskDetails as $task) {
             $taskDetailsId = $task->id;
+            foreach($task->leadServices as  $services){
+                $serviceName = $services->service->serviceName;
+               
+            }
         }
+        
         $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
         foreach ($taskDetails as $value) {
             $stageId = $value->service_stage_id;
@@ -192,10 +197,12 @@ class TasksController extends Controller
 
         // dd($stageId);
         $leadTaskdetials = LeadTaskDetail::find($taskDetailsId);
-        return view('tasks.tradeMark.send_quotation', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'stageId'));
+        return view('tasks.tradeMark.send_quotation', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'stageId','serviceName'));
     }
     public function sendQuotation(Request $request, $id)
-    {   
+    {    
+
+        dd($request->all());
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
         $existedTask = LeadTask::with(['leadServices.service'])->where('id',$id)->first();
@@ -206,7 +213,8 @@ class TasksController extends Controller
             $serviceId = $task->service->id;
             $servicename  = $task->service->serviceName;
        }
-       $substage_id = 2;
+       $stageID = $request->stageId + 1;
+       
         $rule = [
             'verified' => 'required',
             'attachment' => 'array',
@@ -219,8 +227,7 @@ class TasksController extends Controller
         if ($id) {
             $newTaskAssigned->user_id = $request->assignUser ?? $existedTask->user_id;
             $newTaskAssigned->lead_id = $existedTask->lead_id;
-            $newTaskAssigned->service_stage_id = $existedTask->service_stage_id;
-            $newTaskAssigned->sub_stage_id = 2;
+            $newTaskAssigned->service_stage_id = $stageID;
             $newTaskAssigned->assign_by = Auth::id();
             $newTaskAssigned->task_title = $servicename;
             $newTaskAssigned->task_description = $request->description;
@@ -270,7 +277,8 @@ class TasksController extends Controller
     }
 
     public function checkPayment($id)
-    {
+    { 
+        
         $header_title_name = "payment Status";
         $taskDetails = LeadTask::with(['user', 'lead', 'leadTaskDetails', 'leadServices.service', 'leadServices.subservice', 'serviceSatge'])
             ->where('id', $id)
@@ -281,15 +289,15 @@ class TasksController extends Controller
         $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
         foreach ($taskDetails as $value) {
             $stageId = $value->service_stage_id;
-            $substageId = ServiceStages::where('sub_stage_id', $value->serviceSatge->stage_id)->get();
         }
         $getStage = ServiceStages::where('service_id', 1)->where('id', '>', $stageId)->get();
         $leadTaskdetials = LeadTaskDetail::find($taskDetailsId);
-        return view('tasks.tradeMark.payment_status', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage','substageId'));
+        return view('tasks.tradeMark.payment_status', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage'));
     }
 
     public function paymentStatus(Request $request, $id)
     { 
+        
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
         $existedLeaedTask = LeadTask::with(['leadServices.service'])->where('id',$id)->first();
@@ -404,8 +412,8 @@ class TasksController extends Controller
             return redirect()->route('task.chekDuplication',['id'=> $id]); 
         }else if($id == $taskDetails->id && $serviceId == 1 && $stageId == 2){
             return redirect()->route('task.documentVerifiedChildSatge',['id'=> $id]); 
-        }else if($id = $taskDetails->id && $serviceId == 1 && $stageId == 10){
-            return redirect()->route('task.checkPayment',['id'=> $id]); 
+        }else if($id == $taskDetails->id && $serviceId == 1 && $stageId == 3){ 
+             return redirect()->route('task.checkPayment',['id'=> $id]); 
         }
         else if($id == $taskDetails->id && $serviceId == 1 && $stageId == 3){
             return redirect()->route('task.documentation',['id'=> $id]); 

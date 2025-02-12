@@ -31,17 +31,17 @@ class ServiceSubTask extends Seeder
             ],
             [
                 'stage_id' => '3',
-                'title' => 'Confirm if all documents are available which will be used to draft the application.',
+                'title' => 'Check internally if all required documents are available for drafting the application.',
                 'sub_stage_id' => NULL,
             ],
             [
                 'stage_id' => '3',
-                'title' => 'Take Acknowledgment for the documents used while submitting the application.',
+                'title' => 'Obtain acknowledgment from the client for the documents submitted with the application.',
                 'sub_stage_id' => NULL,
             ],
             [
                 'stage_id' => '4',
-                'title' => 'Draft application on the portal',
+                'title' => 'Draft application on the online portal',
                 'sub_stage_id' => NULL,
             ],
             [

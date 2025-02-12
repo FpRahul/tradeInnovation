@@ -24,8 +24,6 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/chart-data', [DashboardController::class, 'chartData'])->name('chart.data');   
-
-
     //Users Routes
     Route::prefix('users')->controller(UsersController::class)->group(function () {
         Route::match(['POST','GET'],'/', 'index')->name('users.listing');
@@ -65,12 +63,10 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::match(['POST','GET'],'/add-role/{id?}', 'addRole')->name('settings.addrole');
         Route::get('assign-menu','viewMenu')->name('setting.viewMenu');
         Route::post('get-menu','getMenu')->name('setting.getMenu');
-        
          //stages controller
         Route::prefix('stages')->controller(StagesController::class)->group(function (){
           Route::get('/', 'index')->name('stages.index');
           Route::post('/create', 'create')->name('stages.create');
-
         });
     });
     //Leads Routes

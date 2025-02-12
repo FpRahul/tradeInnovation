@@ -103,11 +103,17 @@
       <div class="w-full md:w-1/2">
          <label for="subject"  class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Subject<strong class="text-[#f83434]">*</strong></label>
          <input type="text" name="subject" id="subject" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+         @error('subject')
+            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+            @enderror
       </div>
       <div class="w-full md:w-1/2">
          <label for="subject"  class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Service<strong class="text-[#f83434]">*</strong></label>
          <input type="text"  value="{{$serviceName}}" disabled class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
          <input type="hidden" name="service" value="{{$serviceName}}">
+         @error('service')
+            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+            @enderror
       </div>
       
    </div>
@@ -115,10 +121,16 @@
    <div class="w-full md:w-1/2">
          <label for="subject"  class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Price<strong class="text-[#f83434]">*</strong></label>
          <input type="text" name="service_price" id="service_price" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+         @error('service_price')
+            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+            @enderror
       </div>
       <div class="w-full md:w-1/2">
          <label for="subject"  class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Govt Price<strong class="text-[#f83434]">*</strong> </label>
          <input type="text" name = "govt_price" id="govt_price" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+         @error('govt_price')
+            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+            @enderror
       </div>
    </div>
    <div class="w-full md:w-1/2 flex items-center gap-[10px]">

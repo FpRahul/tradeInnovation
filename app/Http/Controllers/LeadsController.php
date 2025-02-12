@@ -26,32 +26,29 @@ class LeadsController extends Controller
             $baseNotifyId = base64_decode($request->NotifyId);
             $notifyData = LeadNotification::where('id',$baseNotifyId)->update(['status'=>1]);
             $baseId = base64_decode($request->id);
-            $leadList = Lead::with(['leadService','leadTask'])->where('id',$baseId);
-        }else{            
+            $leadList = Lead::with('leadTasks')->where('id',$baseId);
+        }else{
             if(auth()->user()->role != 1 && auth()->user()->role != 4){
-                $leadList = Lead::with(['leadService','leadTask'])->where('archive',$request->tab);
+                $leadList = Lead::with('leadTasks')->where('archive',$request->tab);
             }else{
-                $leadList = Lead::with(['leadService','leadTask'])->where('archive',$request->tab);
+                $leadList = Lead::with('leadTasks')->where('archive',$request->tab);
             }           
         }
-
         $sourceKey = $request->input('source') ?? '';
         $serviceKey = $request->input('service') ?? '';
         $statusKey = $request->input('status') ?? '';
         $searchKey = $request->input('key') ?? '';
         $requestType = $request->input('requestType') ?? '';
-        // dd($request);
         if($sourceKey != '' || $serviceKey != '' || $statusKey != '' || $searchKey != ''){
                      
-
             $leadList->when(!empty($request->source), function ($q) use ($request) {
-            $q->where('source', $request->source);
+                $q->where('source', $request->source);
             })
             ->when(isset($request->status), function ($q) use ($request) {
                 $q->where('status', $request->status);
             })
             ->when(!empty($request->service), function ($q) use ($request) {
-                $q->whereHas('leadService', function ($q) use ($request) {
+                $q->whereHas('leadTasks', function ($q) use ($request) {
                     $q->where('service_id', $request->service);
                 });
             })
@@ -59,6 +56,7 @@ class LeadsController extends Controller
                 $q->where('client_name', 'LIKE', '%' . $request->key . '%');
             }); 
         }
+
         $leadList = $leadList->latest()->paginate(env("PAGINATION_COUNT"));      
         if(empty($requestType)){
             $sourceList = Lead::where('user_id', auth()->user()->id)
@@ -66,16 +64,10 @@ class LeadsController extends Controller
             ->groupBy('source')
             ->with('categoryOptions',function($q){
                 $q->where('type',3)->where('status',1);
-            })->get();
+            })->get();            
             
-            $serviceList = Lead::with(['leadService.service'])
-            ->whereHas('leadService')
-            ->where('user_id', auth()->user()->id)
-            ->get()
-            ->pluck('leadService')
-            ->flatten()
-            ->pluck('service');
-
+            $serviceList = Lead::with('leadTasks')->whereHas('leadTasks')->where('user_id', auth()->user()->id)->get()->pluck('leadTasks')->flatten()->pluck('service_id');
+            
             $userList = User::where('role','>=',5)->get();
             $header_title_name = 'Leads';
             return view('leads/index',compact('allRequestData','header_title_name','leadList','sourceList','serviceList','userList','sourceKey','serviceKey','statusKey','searchKey'));
@@ -96,31 +88,20 @@ class LeadsController extends Controller
         if($id > 0){
             $leadData = Lead::where('id',$id)->first();
             $leadOldData = Lead::where('id',$id)->first();
-            $leadServiceData = LeadService::where('lead_id',$id)->get();
             $leadAttachment = LeadAttachment::where('lead_id',$id)->get();
-            $LeadLog = LeadLog::where('lead_id',$id)->first();
-            $LeadTask = LeadTask::where('lead_id',$id)->first();
-            $leadTaskId = $LeadTask->id ?? 0;
-            $LeadTaskDetail = LeadTaskDetail::where('task_id',$leadTaskId)->first();
-            $leadSelectedStage = LeadTask::where('lead_id',$id)->first();
-            $leadStages = ServiceStages::where('service_id',$leadServiceData[0]->service_id)->get();
+            $LeadTask = LeadTask::with('leadTaskDetails')->where('lead_id',$id)->get();
             $successMsg = 'Lead updated!';
         }else{
             $leadData = new Lead();
             $leadOldData =new Lead();
-            $leadServiceData =[];
-            $leadAttachment = [];
-            $LeadLog = [];
+            $leadAttachment = [];            
             $LeadTask = [];
-            $LeadTaskDetail = [];
-            $leadStages = [];
-            $leadSelectedStage = [];
             $successMsg = 'Lead added!';
-        }
-        // $allStages = ServiceStages::get();
+        }       
         $sourceList = CategoryOption::where('type',3)->where('status',1)->get();
         $serviceList = Service::where('status',1)->get();
         $userList = User::where('role','>=',5)->where('status',1)->get();
+
         if($request->isMethod('POST')){
             if($request->sourcetypenamelist > 0){
                 $sourceId = $request->sourcetypenamelist;              
@@ -172,85 +153,80 @@ class LeadsController extends Controller
                 // lead service repeater...
                 if(!empty($request->leadRepeater)){
                     foreach($request->leadRepeater as $serviceKey => $serviceVal){
-                        if($serviceVal['lead_service_id'] > 0){
-                            $leadServiceData = LeadService::where('id',$serviceVal['lead_service_id'])->first();
+                        if($serviceVal['lead_task_id'] > 0){
+                            $leadTaskData = LeadTask::where('id',$serviceVal['lead_task_id'])->first();
+                            $LeadTaskDetail = LeadTaskDetail::where('task_id',$serviceVal['lead_task_id'])->first();
                         }else{
-                            $leadServiceData = new LeadService();
-                        }            
-                        $leadServiceData->lead_id = $leadData->id;                            
-                        $leadServiceData->service_id = $serviceVal['serviceid'];
+                            $leadTaskData = new LeadTask();
+                            $LeadTaskDetail = new LeadTaskDetail();
+                        }     
+                          
+                        $leadTaskData->lead_id = $leadData->id;                            
+                        $leadTaskData->service_id = $serviceVal['serviceid'];
                         $serviceidArray[] = $serviceVal['serviceid'];
-                        $leadServiceData->subservice_id = $serviceVal['subserviceid'];                   
-                        $leadServiceData->save();
+                        $leadTaskData->subservice_id = $serviceVal['subserviceid']; 
+                        $leadTaskData->user_id = $serviceVal['assign'];
+                        $leadTaskData->service_stage_id = $serviceVal['stage_id'];
+                        $leadTaskData->assign_by = auth()->user()->id;
+                        $leadTaskData->task_title = ServiceStages::find($serviceVal['stage_id'])->description;
+
+                        if($leadTaskData->save()){                            
+                            $LeadTaskDetail->task_id = $leadTaskData->id;
+                            $LeadTaskDetail->dead_line = date('Y-m-d',strtotime($serviceVal['taskdeadline']));
+                            $LeadTaskDetail->status = 0;
+                            $LeadTaskDetail->status_date = NULL;
+                            $LeadTaskDetail->save();
+                            if($request->savetype == 1 && $leadOldData->status==0){
+                                // lead logs...
+                                $LeadLog = new LeadLog();
+                                $LeadLog->user_id = $serviceVal['assign'];
+                                $LeadLog->lead_id =  $leadData->id;
+                                $LeadLog->task_id = $leadTaskData->id;
+                                $LeadLog->assign_by = auth()->user()->id;
+                                $LeadLog->description = 'Lead added in the system';
+                                $LeadLog->save();
+        
+                                $LeadLog = new LeadLog();
+                                $LeadLog->user_id = $serviceVal['assign'];
+                                $LeadLog->lead_id =  $leadData->id;
+                                $LeadLog->task_id = $leadTaskData->id;
+                                $LeadLog->assign_by = auth()->user()->id;
+                                $LeadLog->description = 'Lead assigned to the user';
+                                $LeadLog->save();
+                            
+                                // lead notification...
+                                $serviceNames = '';
+                                if(!empty($serviceidArray)){                        
+                                    $serviceNames = Service::whereIn('id', $serviceidArray)->get()->pluck('serviceName')->implode(', ');                        
+                                }
+                                
+                                $LeadNotification = new LeadNotification();
+                                $LeadNotification->user_id = $serviceVal['assign'];
+                                $LeadNotification->lead_id = $leadData->id;
+                                $LeadNotification->task_id = $leadTaskData->id;
+                                $LeadNotification->title = 'Lead Assigned';
+                                $LeadNotification->description = 'New lead is assigned to you for '.$serviceNames;
+                                $LeadNotification->status = 0;
+                                $LeadNotification->save();
+        
+                                $LeadNotification = new LeadNotification();
+                                $LeadNotification->user_id = $serviceVal['assign'];
+                                $LeadNotification->task_id = $leadTaskData->id;
+                                $LeadNotification->lead_id = $leadData->id;
+                                $LeadNotification->title = 'Task Assigned';
+                                $LeadNotification->description = 'New task assigned - '.$leadTaskData->task_title;
+                                $LeadNotification->status = 0;
+                                $LeadNotification->save();
+                            }           
+                        } 
                     }                 
                 }   
-                if($id==null || empty($LeadTask)){
-                    $LeadTask = new LeadTask();
-                }     
-                $LeadTask->user_id = $request->assign;
-                $LeadTask->lead_id = $leadData->id;
-                $LeadTask->service_stage_id = $request->stage_id;
-                $LeadTask->assign_by = auth()->user()->id;
-                $LeadTask->task_title = ServiceStages::find($request->stage_id)->title;
-                if($LeadTask->save()){
-                    if($id==null || empty($LeadTaskDetail)){
-                        $LeadTaskDetail = new LeadTaskDetail();
-                    }
-                    $LeadTaskDetail->task_id = $LeadTask->id;
-                    $LeadTaskDetail->dead_line = date('Y-m-d',strtotime($request->taskdeadline));
-                    $LeadTaskDetail->status = 0;
-                    $LeadTaskDetail->status_date = NULL;
-                    $LeadTaskDetail->save();
-                    
-
-                    if($request->savetype == 1 && $leadOldData->status==0){
-                        // lead logs...
-                        $LeadLog = new LeadLog();
-                        $LeadLog->user_id = $request->assign;
-                        $LeadLog->lead_id =  $leadData->id;
-                        $LeadLog->task_id = $LeadTask->id;
-                        $LeadLog->assign_by = auth()->user()->id;
-                        $LeadLog->description = 'Lead added to the system';
-                        $LeadLog->save();
-
-                        $LeadLog = new LeadLog();
-                        $LeadLog->user_id = $request->assign;
-                        $LeadLog->lead_id =  $leadData->id;
-                        $LeadLog->task_id = $LeadTask->id;
-                        $LeadLog->assign_by = auth()->user()->id;
-                        $LeadLog->description = 'Lead assigned to the user';
-                        $LeadLog->save();
-                    
-                        // lead notification...
-                        $serviceNames = '';
-                        if(!empty($serviceidArray)){                        
-                            $serviceNames = Service::whereIn('id', $serviceidArray)->get()->pluck('serviceName')->implode(', ');                        
-                        }
-                        
-                        $LeadNotification = new LeadNotification();
-                        $LeadNotification->user_id = $request->assign;
-                        $LeadNotification->lead_id = $leadData->id;
-                        $LeadNotification->task_id = $LeadTask->id;
-                        $LeadNotification->title = 'Lead Assigned';
-                        $LeadNotification->description = 'New lead is assigned to you for '.$serviceNames;
-                        $LeadNotification->status = 0;
-                        $LeadNotification->save();
-
-                        $LeadNotification = new LeadNotification();
-                        $LeadNotification->user_id = $request->assign;
-                        $LeadNotification->task_id = $LeadTask->id;
-                        $LeadNotification->lead_id = $leadData->id;
-                        $LeadNotification->title = 'Task Assigned';
-                        $LeadNotification->description = 'New task assigned - '.$LeadTask->task_title;
-                        $LeadNotification->status = 0;
-                        $LeadNotification->save();
-                    }           
-                }  
+                 
                 return redirect()->route("leads.index", ['tab' => 1])->withSuccess($successMsg);
             }
         }
         $header_title_name = 'Lead';
-        return view('leads/add',compact('header_title_name','sourceList','serviceList','userList','leadData','leadServiceData','leadAttachment','leadStages','LeadTask','LeadTaskDetail','leadSelectedStage'));
+        return view('leads/add',compact('header_title_name','sourceList','serviceList','userList','leadData','leadAttachment','LeadTask'));
     }
     // lead fetch...........
     public function leadFetch(Request $request){

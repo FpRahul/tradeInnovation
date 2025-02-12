@@ -257,40 +257,69 @@
             <div class="flex flex-col md:flex-row gap-[20px]">
 
                 <div class="w-full md:w-1/2">
-                    <label for="currentAddress" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Current Address <strong class="text-[#f83434]">*</strong></label>
+                    <div class="shadow-lg p-[25px] rounded-[8px] border-[1px] border-[#ccc]">
+                        
+                    <div class="mb-[10px]">
+                        <label for="currentAddress" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Current Address <strong class="text-[#f83434]">*</strong></label>
                     <textarea type="text" name="currentAddress" id="currentAddress" class="w-full h-[120px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Current Address" required>{{ !empty($newUserDetails->currentAddress) ? $newUserDetails->currentAddress:'' }}</textarea>
                     @error('currentAddress')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
 
-                    <label for="curr_city" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">City</label>
-                    <input type="text" name="curr_city" id="curr_city" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
-                   
+                    </div>
 
-                    <label for="curr_state" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">State</label>
-                    <input type="text" name="curr_state" id="curr_state" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                    <div class="mb-[10px]">
+                        <label for="curr_city" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">City</label>
+                        <input type="text" name="curr_city" id="curr_city" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                    </div>
 
-                    <label for="curr_zip" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Zip Code</label>
+                    <div class="mb-[10px]">
+                        <label for="curr_state" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">State</label>
+                        <input type="text" name="curr_state" id="curr_state" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                    </div>
+
+                    <div class="mb-[10px]">
+                        <label for="curr_zip" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Zip Code</label>
                     <input type="text" name="curr_zip" id="curr_zip" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                    </div>
+                    
+                    
+                    
                 </div>
+                </div>
+
+
                 <div class="w-full md:w-1/2">
-                    <label for="permanentAddress" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Permanent Address <strong class="text-[#f83434]">*</strong></label>
+                    <div class="shadow-lg p-[25px] rounded-[8px] border-[1px] border-[#ccc]">
+
+                        <div class="mb-[10px]">
+                            <label for="permanentAddress" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Permanent Address <strong class="text-[#f83434]">*</strong></label>
                     <textarea R type="text" name="permanentAddress" id="permanentAddress" class="w-full h-[120px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Permanent Address" required>{{ !empty($newUserDetails->permanentAddress) ? $newUserDetails->permanentAddress :'' }}</textarea>
                     @error('permanentAddress')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
+                        </div>
 
-                    <label for="perma_city" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">City</label>
-                    <input type="text" name="perma_city" id="perma_city" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                        <div class="mb-[10px]">
+                            <label for="perma_city" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">City</label>
+                            <input type="text" name="perma_city" id="perma_city" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                        </div>
 
-                    <label for="perma_state" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">State</label>
+                        <div class="mb-[10px]">
+                            <label for="perma_state" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">State</label>
                     <input type="text" name="perma_state" id="perma_state" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                        </div>
 
-                    <label for="perma_zip" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Zip Code</label>
-                    <input type="text" name="perma_zip" id="perma_zip" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                        <div class="mb-[10px]">
+                            <label for="perma_zip" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Zip Code</label>
+                            <input type="text" name="perma_zip" id="perma_zip" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                        </div>
+
+                    
                 </div>
             </div>
-            <div class="flex flex-col md:flex-row gap-[20px]">
+            </div>
+            <div class="flex flex-col md:flex-row gap-[20px] pt-[5px] lg:pt-[50px]">
                 <div class="w-full md:w-1/2">
                     <label for="uploadPan" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload Pan <strong class="text-[#f83434]">*</strong> <span class="text-[12px] italic font-[400] text-[#e70e0e]"> (only jpg,jpeg,png and pdf format supported & max:2 MB)</span></label>
                     <div class="relative flex flex-wrap gap-[10px]">

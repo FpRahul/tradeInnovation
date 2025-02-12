@@ -12,29 +12,36 @@
                 <tr>
                     <td style="padding: 40px 20px; text-align: left;">
                         <p style="font-size: 16px; line-height: 1.8; margin: 0 0 10px; color: #555;">
-                            Hi <strong>{{ $associate->name }}</strong>,
+                            Hello <strong>{{ $clientName }}</strong>,
                         </p>
                         <p style="font-size: 16px; line-height: 1.8; margin: 0 0 20px; color: #555;"> 
-                            Your account has been register as a associate ! You can now log in using the details provided below:
+                            Your service request for <strong>{{ $service }}</strong> has been processed. Below are the details of your service and the associated pricing:
                         </p>
 
                         <!-- Details Table -->
                         <table width="100%" border="0" cellspacing="0" cellpadding="10" style="border-collapse: collapse; border: 1px solid #ddd; background-color: #fafafa;">
                             <tr>
-                                <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">Email:</td>
-                                <td width="50%" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">{{ $associate->email }}</td>
+                                <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">Service:</td>
+                                <td width="50%" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">{{ $service }}</td>
                             </tr>
                             <tr>
-                                <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">Password:</td>
-                                <td width="50%" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">{{ $randomNumber }}</td>
+                                <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">Service Price:</td>
+                                <td width="50%" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">${{ number_format($service_price, 2) }}</td>
                             </tr>
+                            <tr>
+                                <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">Government Price:</td>
+                                <td width="50%" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">${{ number_format($govt_price, 2) }}</td>
+                            </tr>
+                            
                         </table>
 
                         <p style="font-size: 16px; text-align: center; line-height: 1.2; margin: 35px 0 0; color: #555;">
-                            Click here for login <br> <a href="#" style="color: #1c194d; text-decoration: underline;">Login Page</a>
+                            Thank you for choosing us! <br>
+                            If you have any questions, feel free to reach out to us at 
                         </p>
                         <p style="text-align: center; margin: 15px 0 0;">
-                                             
+                            Best regards,<br>
+                            The Support Team
                         </p>
                     </td>
                 </tr>

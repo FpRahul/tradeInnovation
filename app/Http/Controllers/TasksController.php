@@ -12,6 +12,7 @@ use App\Models\ServiceStages;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Jobs\SendTaskCommanMailJob;
 class TasksController extends Controller
 {
     private $viewPath = "tasks.";
@@ -202,11 +203,13 @@ class TasksController extends Controller
     public function sendQuotation(Request $request, $id)
     {    
 
-        dd($request->all());
+        
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
-        $existedTask = LeadTask::with(['leadServices.service'])->where('id',$id)->first();
+        $existedTask = LeadTask::with(['leadServices.service', 'lead'])->where('id',$id)->first();
         $existedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
+        
+
         $newTaskAssigned = new LeadTask();
         $newTaskDetails = new LeadTaskDetail();
         foreach($existedTask->leadServices as $task ){
@@ -219,12 +222,33 @@ class TasksController extends Controller
             'verified' => 'required',
             'attachment' => 'array',
             'attachment.*' => 'nullable',
+            'subject' => 'required',
+            'service_price' => 'required|numeric',
+            'govt_price' => 'required|numeric',
+
         ];
         $validtor =  Validator::make($request->all(), $rule);
         if ($validtor->fails()) {
             return redirect()->back()->withErrors($validtor)->withInput();
         }   
+        $mail = false;
+        $subject = $request->subject;
+        $service = $request->service;
+        $service_price = $request->service_price;
+        $govt_price = $request->govt_price;
+        $gst = $request->gst ?? 'Not Apply';
+        if(!empty($gst)){
+            $service_price = $service_price + ($service_price * 0.18);
+        } else {
+            $service_price = $request->service_price;
+        }
+        $clientName = $existedTask->lead->client_name;
+        $clientEmail = $existedTask->lead->email;
+       
+        $userName = Auth::user()->name;
+      
         if ($id) {
+            $mail = true;
             $newTaskAssigned->user_id = $request->assignUser ?? $existedTask->user_id;
             $newTaskAssigned->lead_id = $existedTask->lead_id;
             $newTaskAssigned->service_stage_id = $stageID;
@@ -261,7 +285,12 @@ class TasksController extends Controller
                         $LeadLog->assign_by = Auth::id();
                         $LeadLog->description = $request->description;
                         $LeadLog->save();
+                       if($mail){
+                        
+                        SendTaskCommanMailJob::dispatch($subject,$service,$service_price,$govt_price,$clientName,$clientEmail,$userName);
+                       }
                     }
+                    
                     $id = $newTaskAssigned->id;
                     return redirect()->route('task.index')
                         ->with('success', 'Quotation sent successfully');

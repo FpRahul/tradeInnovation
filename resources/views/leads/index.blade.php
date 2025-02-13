@@ -162,18 +162,17 @@
                             </span>                                
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">               
-                          {{ isset($leadData->leadTask->task_title) ? $leadData->leadTask->task_title : 'NULL' }}
+                            @if ($leadData->leadTasks && $leadData->leadTasks->isNotEmpty())
+                                {{ getStageData($leadData->leadTasks); }}
+                            @endif                           
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                             {{ date('d M Y H:i:A', strtotime($leadData->created_at) ) }}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                           
                             @if ($leadData->leadTasks && $leadData->leadTasks->isNotEmpty())
-                             {{ getServiceData($leadData->leadTasks); }}
-                                                           
-                                
-                            @endif                               
+                                {{ getServiceData($leadData->leadTasks); }}
+                            @endif                             
                         </td>
                         <td class="text-center border-b-[1px] border-[#0000001A] py-[12px] px-[15px]">
                             @if((in_array('leads.add',$permissionDetails['accessableRoutes']) || in_array('leads.logs',$permissionDetails['accessableRoutes']) || in_array('leads.archive',$permissionDetails['accessableRoutes'])) || auth()->user()->role==1)

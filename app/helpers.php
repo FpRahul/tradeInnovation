@@ -91,6 +91,16 @@ if(!function_exists('getUserNameBySource')){
     }
 }
 
+if(!function_exists('getStageData')){
+    function getStageData($taskLeadData){
+        $stageArray = [];
+        foreach ($taskLeadData as $stageKey => $stageValue){
+            $stageData = ServiceStages::where('id',$stageValue->service_stage_id)->first();
+            $stageArray[] = $stageData->title ?? 'N/A';
+        }
+        return implode(',',$stageArray);
+    }
+}
 // function getSubStage($serviceID , $stageId){
    
 //     $data =  ServiceStages::select('stage_id')->where('service_id', $serviceID)->where('sub_stage_id', $stageId)->first();

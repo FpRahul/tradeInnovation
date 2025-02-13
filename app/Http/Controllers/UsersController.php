@@ -184,7 +184,7 @@ class UsersController extends Controller
                 'uploadDrivingLicence.max' => 'File size exceeds 2MB limit.',
                 'mimes' => 'The :attribute must be a file of type: jpeg, png, jpg, pdf.'
             ];
-            $credentials = $request->validate([               
+            $credentials = $request->validate([                
                 'email' => $email,           
                 'uploadPan' => $pImage,      
                 'uploadAadhar' => $aImage,   
@@ -370,8 +370,6 @@ class UsersController extends Controller
             $newClient->mobile = $request->number;
             $newClient->altNumber = $request->alternatePhone;
             $newClient->companyName = $request->companyname;
-            $newClient->address = $request->address;
-            $newClient->communicationAdress = $request->communi_address;
             $newClient->password = $hashedPassword;
             $newClient->uni_user_id=$uniqueUserId;
 
@@ -379,8 +377,19 @@ class UsersController extends Controller
                 $newClientDetails->userId = $newClient->id;
                 $newClientDetails->incorporationType = $request->incorporationtype;
                 $newClientDetails->registered = $request->registered;
+                $newClientDetails->msmem = $request->msmem;
                 $newClientDetails->referralPartner = $request->referralPartner;
                 $newClientDetails->source_type_id = $request->sourcetypenamelist;
+
+                $newClientDetails->currentAddress = $request->currentAddress;
+                $newClientDetails->curr_city = $request->curr_city;
+                $newClientDetails->curr_state = $request->curr_state;
+                $newClientDetails->curr_zip = $request->curr_zip;
+
+                $newClientDetails->permanentAddress = $request->permanentAddress;
+                $newClientDetails->perma_city = $request->perma_city;
+                $newClientDetails->perma_state = $request->perma_state;
+                $newClientDetails->perma_zip = $request->perma_zip;
 
                 if ($newClientDetails->save()) {
                     $logActivity[] = [
@@ -440,6 +449,7 @@ class UsersController extends Controller
 
         if ($id > 0) {
             $newAssociate = User::find($id);
+            $newAssociateDetails = UserDetail::where('userId', $id)->first();
             $hashedPassword = $newAssociate->password;
             $email = "required|email";
             $moduleName = "Update ";
@@ -448,6 +458,7 @@ class UsersController extends Controller
             $uniqueUserId = $newAssociate->uni_user_id;
         } else {
             $newAssociate = new User();
+            $newAssociateDetails = new UserDetail();
             $randomNumber = substr(str_shuffle('9abcdefghijklmnopq045678rstuvwxyzABCDEFG123HIJKLMNOPQRSTUVWXYZ'), 0, 8);
             $hashedPassword = Hash::make($randomNumber);
             $email = "required|email|unique:users,email";
@@ -469,32 +480,46 @@ class UsersController extends Controller
             $newAssociate->mobile = $request->number;
             $newAssociate->altNumber = $request->alternatePhone;
             $newAssociate->companyName = $request->firmName;
-            $newAssociate->address = $request->address;
             $newAssociate->password = $hashedPassword;
             $newAssociate->uni_user_id=$uniqueUserId;
 
-            if ($newAssociate->save()) {               
-                $logActivity[] = [
-                    'user_id' => auth()->user()->id,
-                    'title' => 'Add/Edit Associate',
-                    'description' => auth()->user()->name . ' has ' . $logAct . ' Associate ' . $newAssociate->name . ' (' . $newAssociate->id . ')',
-                    'created_at' => date('Y-m-d H:i:s'),
-                    'ip_address' => $clientIP,
-                    'operating_system' => $operatingSystem
-                ];
-                $logActivity = new LogActivity($logActivity);
-                $logActivity->log();
-                    if($mail == true){
-                        SendClientWelcomeEmail::dispatch($newAssociate,$randomNumber,$filePath = null,$type);
-                    }
-               
-                return redirect()->route('associate.listing')->withSuccess('Associate is successfully inserted!');
+            if ($newAssociate->save()) { 
+                $newAssociateDetails->userId = $newAssociate->id;
+                $newAssociateDetails->currentAddress = $request->currentAddress;
+                $newAssociateDetails->curr_city = $request->curr_city;
+                $newAssociateDetails->curr_state = $request->curr_state;
+                $newAssociateDetails->curr_zip = $request->curr_zip;
+
+                $newAssociateDetails->permanentAddress = $request->permanentAddress;
+                $newAssociateDetails->perma_city = $request->perma_city;
+                $newAssociateDetails->perma_state = $request->perma_state;
+                $newAssociateDetails->perma_zip = $request->perma_zip; 
+                if ($newAssociateDetails->save()) {
+                    $logActivity[] = [
+                        'user_id' => auth()->user()->id,
+                        'title' => 'Add/Edit Associate',
+                        'description' => auth()->user()->name . ' has ' . $logAct . ' Associate ' . $newAssociate->name . ' (' . $newAssociate->id . ')',
+                        'created_at' => date('Y-m-d H:i:s'),
+                        'ip_address' => $clientIP,
+                        'operating_system' => $operatingSystem
+                    ];
+                    $logActivity = new LogActivity($logActivity);
+                    $logActivity->log();
+                        if($mail == true){
+                            SendClientWelcomeEmail::dispatch($newAssociate,$randomNumber,$filePath = null,$type);
+                        }
+                   
+                    return redirect()->route('associate.listing')->withSuccess('Associate is successfully inserted!');
+                } else {
+                    return back()->with('error', 'Some error is occur.');
+                }          
+                
             } else {
                 return back()->with('error', 'Some error is occur.');
             }
         }
         $header_title_name = 'User';
-        return view('users/add-associate', compact('newAssociate', 'header_title_name', 'moduleName', 'professionDataList'));
+        return view('users/add-associate', compact('newAssociate','newAssociateDetails', 'header_title_name', 'moduleName', 'professionDataList'));
     }
 
     public function userStatus(Request $request){  
@@ -937,4 +962,8 @@ class UsersController extends Controller
         return $type . $newNumber;
     }
 
+    public function userPartner(){
+        $header_title_name = 'User';
+            return view('users.partner', compact('header_title_name'));
+    }
 }

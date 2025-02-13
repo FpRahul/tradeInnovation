@@ -36,7 +36,7 @@
             <ul>
                 @foreach($leadLogs as $log)
                 <li class="py-[6px] pt-0 flex items-start flex-wrap gap-[16px] relative">
-                    <div class="static min-w-[34px] w-[34px] h-[34px] bg-[#13103A] rounded-[100%] flex items-center justify-center ">
+                    <div class="static min-w-[34px] w-[34px] h-[34px] bg-[#13103A] rounded-[100%] flex items-center justify-center">
                         <img src="{{ asset('assets/images/list-icon-img.png') }}" alt="icon" class="relative z-2">
                         <div class="absolute top-0 left-[17px] h-full border-dashed w-[1px] border-r border-[rgba(0,0,0,0.2)]"></div>
                     </div>
@@ -68,9 +68,9 @@
                                     </svg>
                                 </span>
                             </div>
-                            @foreach ( $log->leadService as $servicesas )
+                           {{-- @foreach ( $log->leadService as $servicesas )
                             <span class="border border-[#0000001A] text-[13px] leading-[12px] font-[400] tracking-[-0.04em] text-[#000000] px-[10px] py-[5px] rounded-[5px] ">{{ $servicesas->service->serviceName}}</span>
-                            @endforeach
+                            @endforeach --}}
                         </div>
                         <div class="flex  flex-wrap lg-flex-nowrap items-center justify-between gap-[10px] mt-[20px]">
                             <div class="flex flex-wrap lg:flex-nowrap  items-center justify-between w-[100%] lg:w-[80%]">

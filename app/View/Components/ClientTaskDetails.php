@@ -22,8 +22,8 @@ class ClientTaskDetails extends Component
                 'user', 
                 'lead', 
                 'leadTaskDetails', 
-                'leadServices.service', 
-                'leadServices.subservice',
+                'services',
+                 'subService',
                 'serviceSatge'
             ])
           ->where('id', $this->taskID)->first();

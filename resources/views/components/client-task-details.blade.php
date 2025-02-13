@@ -42,19 +42,13 @@
             <li>
                 <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Services</span>
                 <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize">
-                    @php
-                        $serviceNames = [];
-                    @endphp
-                    @foreach ($taskDetails->leadServices as $leadService)
-                        @if ($leadService->service)
-                            @php
-                                $serviceNames[] = $leadService->service->serviceName;
-                            @endphp
-                        @else
+                @if( $taskDetails->services)
+                              {{ $taskDetails->services->serviceName }}
+                             
+                            
+                            @else
                             Not Available
-                        @endif
-                    @endforeach
-                    {{ implode(', ', $serviceNames) }}
+                            @endif
                 </strong>
             </li>
 

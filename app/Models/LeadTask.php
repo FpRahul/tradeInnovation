@@ -35,4 +35,12 @@ class LeadTask extends Model
     {
         return $this->belongsTo(ServiceStages::class, 'service_stage_id');
     }
+    public function services()
+    {
+        return $this->belongsTo(Service::class, 'service_id');
+    }
+    public function subService()
+    {
+        return $this->belongsTo(SubService::class, 'subservice_id');
+    }
 }

@@ -99,31 +99,27 @@
                                 @endif
                             </td>
                             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                                @foreach($task->leadServices as $service)
-                                @if($service->service && $service->service->serviceName)
-                                {{ $service->service->serviceName }}
-                                @php
-                                $serviceID = $service->service->id;
-                                @endphp
-                                @else
-                                Not Available
-                                @endif
-                                @endforeach
+                             @if( $task->services)
+                              {{ $task->services->serviceName }}
+                              @php
+                                  
+                              $serviceID = $task->services->id;
+                              @endphp
+                            
+                            @else
+                            Not Available
+                            @endif
+
                             </td>
                             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                                @php
-                                $subServicesname = [];
-                                @endphp
-                                @foreach ($task->leadServices as $leadService)
-                                @if ($leadService->subservice)
-                                @php
-                                $subServicesname[] = $leadService->subservice->subServiceName;
-                                @endphp
-                                @else
-                                Not Available
-                                @endif
-                                @endforeach
-                                {{ implode(', ', $subServicesname) }}
+
+                            @if( $task->subService)
+                              {{ $task->subService->subServiceName }}
+                            
+
+                            @else
+                            Not Available
+                            @endif
                             </td>
                             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                                 @if($task->leadTaskDetails && $task->leadTaskDetails->dead_line)
@@ -169,13 +165,10 @@
                                     </a>
                                     <div class="dropdown_menus absolute right-0 z-10 mt-2 w-[100px] origin-top-right rounded-md bg-white shadow-md ring-1 ring-black/5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                                         <div class="text-start" role="none">
-                                            {{-- @php
-                                                $data = getSubStage( $serviceID, $stageId);
-                                                $finalStageId = $data &&  $data->stage_id ? $data->stage_id : $stageId;
-                                                @endphp --}}
-                                                @if(optional($task->leadTaskDetails)->status == 1)
-                                                <p></p>
-                                                @elseif(!empty($serviceID) && !empty($stageId))
+                                            
+                                            @if(optional($task->leadTaskDetails)->status == 1)
+                                            <p></p>
+                                            @elseif(!empty($serviceID) && !empty($stageId))
                                                 <a href="{{ route('task.followup', ['id' => $task->id,'serviceId' => $serviceID , 'stageId' => $stageId ])}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Follow Up</a>
                                                 @endif
                                                 @if(!empty($task->lead->id))

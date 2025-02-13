@@ -15,10 +15,10 @@ if (!function_exists('getServiceData')) {
     {
         $serviceArray = [];
         foreach ($serviceDetails as $serviceKey => $serviceValue){
-            $serviceData = Service::where('id',$serviceValue['service_id'])->first();
-            $serviceArray[] = $serviceData;
+            $serviceData = Service::where('id',$serviceValue->service_id)->first();
+            $serviceArray[] = $serviceData->serviceName ?? 'N/A';
         }
-        return $serviceArray;
+        return implode(',',$serviceArray);
     }
 }
 if(!function_exists('getSourceData')){

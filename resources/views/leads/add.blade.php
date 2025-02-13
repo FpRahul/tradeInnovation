@@ -1,3 +1,7 @@
+@php
+    namespace App;
+    use App\Models\ServiceStages;
+@endphp
 @extends('layouts.default')
 @section('content')
 
@@ -71,19 +75,7 @@
                     <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Email-Id</label>
                     <input type="text" name="email" id="email" value="{{!empty($leadData) ? $leadData->email : ''}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                 </div>
-                <div class="w-full md:w-1/2">
-                    <label for="assign" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign to</label>
-                    <select name="assign" id="assign" class="allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
-                        <option value="">Assign To Users</option>
-                            @foreach ($userList as $userListData)
-                            <option 
-                            value="{{ $userListData->id }}" 
-                           {{!empty($LeadTask) && $LeadTask->user_id == $userListData->id ? 'selected':''}}>
-                            {{ $userListData->name }}
-                        </option>
-                            @endforeach                            
-                    </select>
-                </div>
+                
             </div>
             <div>
                 {{-- service repeater start --}}
@@ -91,40 +83,77 @@
                 <div class="leadServiceRepeater md:border-[1px] border-[#0000001A] rounded-[10px] md:p-[20px] employee_repeater_wrapper">
                     <div class="repeater-default">
                         <div data-repeater-list="leadRepeater" class="flex flex-col gap-[20px]">  
-                            @if ($leadServiceData && $leadServiceData->isNotEmpty())
-                          
-                                @foreach ($leadServiceData as $serviceKey => $serviceVal)
-                                {{-- {{$serviceVal}} --}}
+                            @if ($LeadTask && $LeadTask->isNotEmpty())                          
+                                @foreach ($LeadTask as $serviceKey => $serviceVal)
                                     <div data-repeater-item class="flex flex-wrap items-end gap-[20px]">
                                         <div class="w-[calc(100%-75px)] ">
-                                            <input type="hidden" name="lead_service_id" class="lead_service_id" value="{{$serviceVal->id}}">
+                                            <input type="hidden" name="lead_task_id" value="{{$serviceVal->id}}">
                                             <div class="flex flex-col md:flex-row gap-[20px]">
                                                 <div class="w-full md:w-1/2">
-                                                    <select name="serviceid" id="serviceid" class="lead_service_id allform-select2 setSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                    <select name="assign" id="assign" class=" w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                        <option value="">Assign To Users</option>
+                                                            @foreach ($userList as $userListData)
+                                                            <option 
+                                                            value="{{ $userListData->id }}" 
+                                                            @selected($userListData->id == $serviceVal->user_id)>
+                                                            {{ $userListData->name }}
+                                                        </option>
+                                                        
+                                                            @endforeach                            
+                                                    </select>
+                                                </div>
+                                                <div class="w-full md:w-1/2">
+                                                    <select name="serviceid" class="lead_service_id  setSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                         <option value="">Service Name</option>
                                                         @if (count($serviceList) > 0)
                                                             @foreach ($serviceList as $serviceListData)
-                                                                <option value="{{ $serviceListData->id}}" {{$serviceVal->service_id == $serviceListData->id ? "selected":''}}>{{ $serviceListData->serviceName}}</option>
+                                                                <option value="{{ $serviceListData->id}}" @selected($serviceListData->id == $serviceVal->service_id)>{{ $serviceListData->serviceName}}</option>
                                                             @endforeach  
                                                         @endif
                                                         
                                                     </select>
                                                 </div>
                                                 <div class="relative w-full md:w-1/2">
-                                                    <select name="subserviceid" id="subserviceid" class="allform-select2 getSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                    <select name="subserviceid" class=" getSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                         <option value="">Service Type</option>  
                                                         @if ($serviceVal->subservice_id)                                                           
                                                             @php 
                                                                 $subServiceData = getSubService($serviceVal->service_id);
                                                             @endphp                                                      
                                                             @foreach ($subServiceData as $subServiceDataKey => $subServiceDataVal)                                                                
-                                                                <option value="{{$subServiceDataVal->id}}" {{$subServiceDataVal->id == $serviceVal->subservice_id ? 'selected':''}}>{{$subServiceDataVal->subServiceName}}</option>                                                                
+                                                                <option value="{{$subServiceDataVal->id}}" @selected($subServiceDataVal->id == $serviceVal->subservice_id)>{{$subServiceDataVal->subServiceName}}</option>                                                                
                                                             @endforeach    
                                                         @endif                                              
                                                     </select>
                                                     <div class="loader serviceNameLoader flex items-center justify-center bg-[#ffffffa8] h-[45px] absolute top-[20px] left-[0] right-[0] m-auto hidden">
                                                         <span class="loader-1"> </span>   
                                                     </div>
+                                                </div>
+                                                <div class="w-full md:w-1/2 stageoftheservice">
+                                                    <select name="stage_id" class=" w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none serviceStagesOption" required>
+                                                        <option value="">Select Stage</option>
+                                                        @php
+                                                            $allStagesData = ServiceStages::where('service_id',$serviceVal->service_id)->get();
+                                                        @endphp
+                                                        @if ($allStagesData && $allStagesData->isNotEmpty())
+                                                            @foreach ($allStagesData as $stageVal)
+                                                            <option value="{{$stageVal['id']}}" @selected($stageVal['id'] == $serviceVal->service_stage_id)>{{$stageVal['title']}}</option>
+                                                            @endforeach
+                                                        @endif
+                                                    </select>
+                                                </div>
+                                                <div class="w-full md:w-1/2">
+                                                                           
+                                                    <div class="w-[100%] relative">
+                                                        <input 
+                                                            type="text" 
+                                                            placeholder="Dead Line" 
+                                                            name="taskdeadline" 
+                                                            class="daterangepicker-taskdeadline daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
+                                                            value="{{!empty($serviceVal->leadTaskDetails) ? date('d M Y',strtotime($serviceVal->leadTaskDetails->dead_line)) : ''}}" 
+                                                            autocomplete="off"
+                                                        >                                                        
+                                                    </div>     
                                                 </div>
                                             </div>
                                         </div>
@@ -142,10 +171,22 @@
                            
                                 <div data-repeater-item class="flex flex-wrap items-end gap-[20px]">
                                     <div class="w-[calc(100%-75px)] ">
-                                        <input type="hidden" name="lead_service_id" class="lead_service_id" value="0">
+                                        <input type="hidden" name="lead_task_id" value="0">
                                         <div class="flex flex-col md:flex-row gap-[20px]">
                                             <div class="w-full md:w-1/2">
-                                                <select name="serviceid" id="serviceid" class="lead_service_id allform-select2 setSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                <select name="assign" id="assign" class=" w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                    <option value="">Assign To Users</option>
+                                                        @foreach ($userList as $userListData)
+                                                        <option 
+                                                        value="{{ $userListData->id }}">
+                                                        {{ $userListData->name }}
+                                                    </option>
+                                                    
+                                                        @endforeach                            
+                                                </select>
+                                            </div>
+                                            <div class="w-full md:w-1/2">
+                                                <select name="serviceid" class="lead_service_id  setSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                     <option value="">Service Name</option>
                                                     @if (count($serviceList) > 0)
                                                         @foreach ($serviceList as $serviceListData)
@@ -156,15 +197,34 @@
                                                 </select>
                                             </div>
                                             <div class="relative w-full md:w-1/2">
-                                                <select name="subserviceid" id="subserviceid" class="allform-select2 getSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                <select name="subserviceid" class=" getSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                     <option value="">Service Type</option>                                                
                                                 </select>
                                                 <div class="loader serviceNameLoader flex items-center justify-center bg-[#ffffffa8] h-[45px] absolute top-[0px] left-[0] right-[0] m-auto hidden">
                                                     <span class="loader-1"> </span>   
                                                 </div>
                                             </div>
+                                            <div class="w-full md:w-1/2 stageoftheservice">
+                                                <select name="stage_id" class=" w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none serviceStagesOption" required>
+                                                    <option value="">Select Stage</option>                                                   
+                                                </select>
+                                            </div>
+                                            <div class="w-full md:w-1/2">                                                                        
+                                                <div class="w-[100%] relative">
+                                                    <input 
+                                                        type="text" 
+                                                        placeholder="Dead Line" 
+                                                        name="taskdeadline" 
+                                                        class="daterangepicker-taskdeadline daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
+                                                        value="" 
+                                                        autocomplete="off"
+                                                    >
+                                                    
+                                                </div>     
+                                            </div>
                                         </div>
                                     </div>
+                                   
                                     <div class="w-[55px]">
                                         <span data-repeater-delete data-id="0" class="deleteRepeaterRow w-full h-[45px] flex items-center justify-center border-[1px] border-[#0000001A] rounded-[10px] text-center">
                                             <span class="glyphicon glyphicon-remove"></span>
@@ -173,6 +233,7 @@
                                             </svg>
                                         </span>
                                     </div>
+                                   
                                 </div> 
                             @endif
                              
@@ -185,35 +246,7 @@
                 </div>
                 {{-- service repeater end --}}               
             </div>
-            <div class="flex flex-col md:flex-row gap-[20px]">
-                <div class="w-full md:w-1/2 stageoftheservice">
-                    <label class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
-                    <select name="stage_id" class="allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none serviceStagesOption" required>
-                        <option value="">Select Stage</option>
-                       @if ($leadStages && $leadStages->isNotEmpty())
-                           @foreach ($leadStages as $stageVal)
-                           <option value="{{$stageVal['id']}}" {{!empty($leadSelectedStage) ? ($leadSelectedStage->service_stage_id == $stageVal['id'] ? 'selected':'') : ''}}>{{$stageVal['title']}}</option>
-                           @endforeach
-                       @endif
-                    </select>
-                </div>
-                <div class="w-full md:w-1/2">
-                    <label for="taskdeadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-                       Task DeadLine
-                    </label>                           
-                    <div class="w-[100%] relative">
-                        <input 
-                            type="text" 
-                            placeholder="Dead Line" 
-                            name="taskdeadline" 
-                            class="daterangepicker-taskdeadline daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
-                            value="{{!empty($LeadTaskDetail) ? date('d M Y',strtotime($LeadTaskDetail->dead_line)) : ''}}" 
-                            autocomplete="off"
-                        >
-                        
-                    </div>     
-                </div>
-            </div>
+            
             {{-- multi attachment --}}
             <div>
                 <label class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Attachments <span class="text-[12px] italic font-[400] text-[#e70e0e]"> (only jpg,jpeg png and pdf format supported & max:2 MB)</span></label>
@@ -232,14 +265,10 @@
                                                             $imagePath = !empty($attachmentVal['document']) ? 'uploads/leads/'.$leadData->id.'/'.$attachmentVal['document'] : 'assets/images/noimage.png';
                                                             $extension = pathinfo($imagePath, PATHINFO_EXTENSION);
                                                         @endphp
-
                                                         <img src="{{ asset(strtolower($extension) === 'pdf' ? 'assets/images/pdf_logo.jpg' : $imagePath) }}" 
-                                                            class="getpreviewImage w-[100%] max-w-[100px] rounded-[10px] object-cover" />
-
-                                                        
+                                                            class="getpreviewImage w-[100%] max-w-[100px] rounded-[10px] object-cover" />                                                       
                                                         <div class="relative">
-                                                            <input class="previewImage" type="file" name="attachmentFile" >
-                                                            
+                                                            <input class="previewImage" type="file" name="attachmentFile" >                                                            
                                                         </div>
                                                         <div class="imageErrorMsg text-[12px] italic font-[400] text-[#e70e0e]"></div>
                                                     </div>
@@ -376,8 +405,8 @@
    
     $(document).on('change','.setSubService',function(){
         var serviceId = $(this).val();
-        $('.serviceNameLoader').removeClass('hidden');
-
+        $(this).parent().parent().find('.serviceNameLoader').removeClass('hidden');
+        
         var e = $(this);
         $.ajax({
             method:'POST',
@@ -406,8 +435,8 @@
             },
             dataType:'json',
             success:function(res){
-                $('.stageoftheservice').find('.serviceStagesOption').html(res.options);
-                $('.serviceNameLoader').addClass('hidden');
+                e.parent().parent().find('.stageoftheservice').find('.serviceStagesOption').html(res.options);
+                e.parent().parent().find('.serviceNameLoader').addClass('hidden');
 
             }
         });

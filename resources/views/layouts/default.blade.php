@@ -175,10 +175,21 @@
             $('.leadServiceRepeater').repeater({
                 initEmpty: false,
                 show: function() {
+                    $(this).find('.daterangepicker-taskdeadline').daterangepicker({
+                        singleDatePicker: true, 
+                        opens: 'right',
+                        locale: {
+                            format: 'DD MMM YYYY' 
+                        }
+                    }).on('apply.daterangepicker', function(ev, picker) {
+                        console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+                    });
+
                     $(this).slideDown();
+                   
                 },
                 hide: function(deleteElement) {
-                    if (confirm('Are you sure you want to delete this element?')) {
+                    if (confirm('Are you sure you want to delete this element??')) {
                         var deleteId = $(this).find('.deleteLeadRepeaterRow').data('id');
                         if(deleteId > 0){
                             // $.ajax({

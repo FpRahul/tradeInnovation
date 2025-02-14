@@ -158,8 +158,14 @@
 </div>
 <script>
     $(document).ready(function() {
+    // Calculate the default date range (last 7 days to today)
+        var startDate = moment().subtract(7, 'days');
+        var endDate = moment();
+
         $('.daterangepicker-item').daterangepicker({
             opens: 'right',
+            startDate: startDate,
+            endDate: endDate,
             locale: {
                 format: 'DD MMM YYYY'
             }
@@ -167,12 +173,13 @@
             console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
         });
 
-        $("#resetButton").on('click', function() {
+        $("#resetButton").on('click', function(event) {
             event.preventDefault();
             window.history.replaceState({}, document.title, window.location.pathname);
             window.location.reload();
             $("#filterForm")[0].reset();
         });
-    })
+    });
+
 </script>
 @stop

@@ -37,7 +37,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
 
         Route::match(['POST', 'GET'], '/user-professions', 'userProfessions')->name('professions.index');
         Route::match(['POST', 'GET'], '/add-professions/{id?}', 'addProfessions')->name('professions.add');
-        Route::get('/profession-status/{id?}','professionStatus')->name('professions.status');
+        Route::get('/profession-status/{id}','professionStatus')->name('professions.status');
 
         Route::match(['POST', 'GET'], '/user-incorporation', 'userIncorporation')->name('incorporation.index');
         Route::match(['POST', 'GET'], '/add-incorporation/{id?}', 'addIncorporation')->name('incorporation.add');
@@ -45,11 +45,11 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
 
         Route::match(['POST', 'GET'], '/user-referral', 'userReferral')->name('referral.index');
         Route::match(['POST', 'GET'], '/add-referral/{id?}', 'addReferral')->name('referral.add');
-        Route::get('referral-status/{id?}','referralStatus')->name('referral.status');
+        Route::get('referral-status/{id}','referralStatus')->name('referral.status');
 
         Route::match(['POST', 'GET'], '/user-partners', 'userPartner')->name('partner.index');
         Route::match(['POST', 'GET'], '/add-partner/{id?}', 'addPartner')->name('partner.add');
-        Route::get('/profession-status/{id?}','partnertatus')->name('partner.status');
+        Route::get('/partner-status/{id}','partnerStatus')->name('partner.status');
 
         // Route::get('/category-status/{id?}', 'categoryStatus')->name('users.category.status');
         // Route::get('/category-delete/{id?}', 'categoryDelete')->name('users.category.delete');

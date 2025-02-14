@@ -37,10 +37,10 @@ class ServicesController extends Controller
 
     $operatingSystem = getOperatingSystem($userAgent);
         if($request->service_id > 0){
-            $logAct = 'Update';
+            $logAct = 'updated';
             $serviceData = Service::find($request->service_id);
         }else{
-            $logAct = 'Add';
+            $logAct = 'added';
             $serviceData = new Service();
         }
         $serviceData->serviceName = $request->name;
@@ -49,7 +49,7 @@ class ServicesController extends Controller
             $logActivity[] = [
                 'user_id' => auth()->user()->id,
                 'title' => 'Add/Edit Services',
-                'description' => auth()->user()->name .' '. $logAct .' '. $serviceData->serviceName .' '. ' (' . $serviceData->id . ')',
+                'description' => auth()->user()->name .' has '. $logAct .' service as '. $serviceData->serviceName .' #' . $serviceData->id . '',
                 'created_at' => date('Y-m-d H:i:s'),
                 'ip_address' => $clientIP,
                 'operating_system' => $operatingSystem
@@ -72,10 +72,10 @@ class ServicesController extends Controller
         $userAgent = \Request::header('User-Agent');
         $operatingSystem = getOperatingSystem($userAgent);
         if($id > 0){
-            $logAct = 'Update';
+            $logAct = 'updated';
             $subServiceList = Service::with('subService')->where('id', $id)->get()->toArray();
         }else{
-            $logAct = 'Add';
+            $logAct = 'added';
             $subServiceList = [];
         }
         if($request->isMethod('POST')){
@@ -94,7 +94,7 @@ class ServicesController extends Controller
           $logActivity[] = [
             'user_id' => auth()->user()->id,
             'title' => 'Add/Edit SubServices',
-            'description' => auth()->user()->name .' '. $logAct . $subServiceList->subServiceName .' '.' (' . $subServiceList->id . ')',
+            'description' => auth()->user()->name .' has '. $logAct .' '. $subServiceList->subServiceName .' #' . $subServiceList->id . '',
             'created_at' => date('Y-m-d H:i:s'),
             'ip_address' => $clientIP,
             'operating_system' => $operatingSystem
@@ -109,22 +109,20 @@ class ServicesController extends Controller
 
     public function serviceStatus(Request $request,$id=null){
         $clientIP = \Request::ip();
-        
         $userAgent = \Request::header('User-Agent');
         $operatingSystem = getOperatingSystem($userAgent);
-        $logAct = 'Status Change';
-       $serviceData = Service::find($id);
-       if($request->val){
-        $status = 0;
-       }else{
-        $status = 1;
-       }
-       $serviceData->status = $status;
-       if($serviceData->save()){
+        $serviceData = Service::find($id);
+        if($request->val){
+            $status = 0;
+        }else{
+            $status = 1;
+        }
+        $serviceData->status = $status;
+        if($serviceData->save()){
         $logActivity[] = [
             'user_id' => auth()->user()->id,
             'title' => 'Update Service Status',
-            'description' => auth()->user()->name .' '. $logAct .' '. $serviceData->serviceName .' '. ' (' . $serviceData->id . ')',
+            'description' => auth()->user()->name .' has updated status of '. $serviceData->serviceName .' #' . $serviceData->id.'',
             'created_at' => date('Y-m-d H:i:s'),
             'ip_address' => $clientIP,
             'operating_system' => $operatingSystem
@@ -147,7 +145,7 @@ class ServicesController extends Controller
            $logActivity[] = [
                 'user_id' => auth()->user()->id,
                 'title' => 'Archive SUbServices',
-                'description' => auth()->user()->name . ' '. ' has deleted SubServices '.' '. $subServiceDel->subServiceName .' '.' (' . $subServiceDel->id . ')',
+                'description' => auth()->user()->name . ' has deleted Sub Service '. $subServiceDel->subServiceName .' #' . $subServiceDel->id . '',
                 'created_at' => date('Y-m-d H:i:s'),
                 'ip_address' => $clientIP,
                 'operating_system' => $operatingSystem

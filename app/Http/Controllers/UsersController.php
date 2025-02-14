@@ -19,6 +19,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Mail;
 use App\Jobs\SendClientWelcomeEmail;
 use App\Jobs\SentForgetPasswordmail;
+use App\Models\Partner;
 use Carbon\Carbon;
 
 
@@ -338,6 +339,7 @@ class UsersController extends Controller
         $operatingSystem = getOperatingSystem($userAgent);
         $incorporationDataList = CategoryOption::where('status', 1)->where('type', 2)->get();
         $referDataList = CategoryOption::where('status', 1)->where('type', 3)->get();
+        $partnerDataList = Partner::where('status',1)->get();
         if ($id > 0) {
             $newClient = User::find($id);
             $newClientDetails = UserDetail::where('userId', $id)->first();
@@ -380,6 +382,7 @@ class UsersController extends Controller
                 $newClientDetails->msmem = $request->msmem;
                 $newClientDetails->referralPartner = $request->referralPartner;
                 $newClientDetails->source_type_id = $request->sourcetypenamelist;
+                $newClientDetails->partner_id = implode(',',$request->partnerNamelist);
 
                 $newClientDetails->currentAddress = $request->currentAddress;
                 $newClientDetails->curr_city = $request->curr_city;
@@ -414,8 +417,7 @@ class UsersController extends Controller
             }
         }
         $header_title_name = 'User';
-        // dd($newClientDetails);
-        return view('users.add-client', compact('newClient', 'newClientDetails', 'header_title_name', 'moduleName', 'referDataList','incorporationDataList'));
+        return view('users.add-client', compact('newClient', 'newClientDetails', 'header_title_name', 'moduleName', 'referDataList','incorporationDataList','partnerDataList'));
     }
  
     public function associates(Request $request){
@@ -551,7 +553,64 @@ class UsersController extends Controller
             }
         }
     }
-
+    public function clientStatus(Request $request){  
+        $clientIP = \Request::ip();
+        $userAgent = \Request::header('User-Agent');
+        $operatingSystem = getOperatingSystem($userAgent);
+        if ($request->isMethod('GET')) {
+            if ($request->val) {
+                $status = 0;
+            } else {
+                $status = 1;
+            }
+            $existedUser = User::where('id', $request->id)->first();
+            $existedUser->status = $status;
+            if ($existedUser->save()) {
+                $logActivity[] = [
+                    'user_id' => auth()->user()->id,
+                    'title' => 'Update User Status',
+                    'description' => auth()->user()->name . ' has changed status of ' . $existedUser->name . ' #' . $existedUser->id,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'ip_address' => $clientIP,
+                    'operating_system' => $operatingSystem
+                ];
+                $logActivity = new LogActivity($logActivity);
+                $logActivity->log();
+                return redirect()->back()->with('success', 'Your status is successfully updated!');
+            } else {
+                return back()->withError('Some error is occur');
+            }
+        }
+    }
+    public function associateStatus(Request $request){  
+        $clientIP = \Request::ip();
+        $userAgent = \Request::header('User-Agent');
+        $operatingSystem = getOperatingSystem($userAgent);
+        if ($request->isMethod('GET')) {
+            if ($request->val) {
+                $status = 0;
+            } else {
+                $status = 1;
+            }
+            $existedUser = User::where('id', $request->id)->first();
+            $existedUser->status = $status;
+            if ($existedUser->save()) {
+                $logActivity[] = [
+                    'user_id' => auth()->user()->id,
+                    'title' => 'Update User Status',
+                    'description' => auth()->user()->name . ' has changed status of ' . $existedUser->name . ' #' . $existedUser->id,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'ip_address' => $clientIP,
+                    'operating_system' => $operatingSystem
+                ];
+                $logActivity = new LogActivity($logActivity);
+                $logActivity->log();
+                return redirect()->back()->with('success', 'Your status is successfully updated!');
+            } else {
+                return back()->withError('Some error is occur');
+            }
+        }
+    }
     public function myprofile(Request $request, $id = null){  
         $clientIP = \Request::ip();
         $userAgent = \Request::header('User-Agent');
@@ -725,7 +784,7 @@ class UsersController extends Controller
         }
     }
    
-    public function referralStatus(Request $request, $id = null){    
+    public function referralStatus(Request $request, $id = null){
         $clientIP = \Request::ip();
         $userAgent = \Request::header('User-Agent');
         $operatingSystem = getOperatingSystem($userAgent);
@@ -962,8 +1021,90 @@ class UsersController extends Controller
         return $type . $newNumber;
     }
 
-    public function userPartner(){
-        $header_title_name = 'User';
-            return view('users.partner', compact('header_title_name'));
+    public function userPartner(Request $request){
+        $partnerList = Partner::where('id','>',0);
+        $searchKey = $request->input('key') ?? '';
+        $requestType = $request->input('requestType') ?? '';
+        if($searchKey){
+            $partnerList->where(function($q) use($searchKey){
+                $q->where('name', 'LIKE', "%{$searchKey}%");
+            });
+        }
+        $partnerList = $partnerList->paginate(env("PAGINATION_COUNT"));
+        if(empty($requestType)){
+            $header_title_name = 'User';
+            return view('users.partner', compact('header_title_name', 'partnerList','searchKey'));
+        }else{
+            $trData = view('users/partner-page-search-data', compact('partnerList', 'searchKey'))->render();
+            $dataArray = [
+                'trData' => $trData,
+            ];
+            return response()->json($dataArray);
+        }
+    }
+
+    public function addPartner(Request $request){
+        $clientIP = \Request::ip();        
+        $userAgent = \Request::header('User-Agent');
+        $operatingSystem = getOperatingSystem($userAgent);
+        if($request->partner_model_id > 0){
+            $partnerData = Partner::find($request->partner_model_id);
+            $logAct = "Update";
+          }else{
+              $partnerData = new Partner();
+              $logAct = "Add";
+          }
+        if($request->isMethod('POST')){            
+            $partnerData->name = $request->name;
+            if($partnerData->save()){
+                $logActivity[] = [
+                    'user_id' => auth()->user()->id,
+                    'title' => 'Add/Edit Partner',
+                    'description' => auth()->user()->name . ' has ' . $logAct . ' user ' . $partnerData->name . ' #' . $partnerData->id,                    
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'ip_address' => $clientIP,
+                    'operating_system' => $operatingSystem
+                ];
+                $logActivity = new LogActivity($logActivity);
+                $logActivity->log();
+                if($request->partner_model_id > 0){
+                    return redirect()->back()->with('success','Successfully Updated!');
+                }else{
+                    return redirect()->back()->with('success','Successfully Inserted!');
+                }
+                
+            }else{
+                return redirect()->back()->with('error','Some error is occur!');
+            }
+        }
+        return view('users.partner', compact('partnerData'));
+    }
+
+    public function partnertatus(Request $request , $id=null){
+        $clientIP = \Request::ip();
+        $userAgent = \Request::header('User-Agent');
+        $operatingSystem = getOperatingSystem($userAgent);
+        $logAct = 'Partner Status Change';
+        $partnerData = Partner::find($id);
+        if (!$partnerData) {
+            return redirect()->back()->with('error', 'Partner not found!');
+        }
+        $partnerData->status = $partnerData->status == 1 ? 0 : 1;
+        
+        if ($partnerData->save()) {
+            $logActivity[] = [
+                'user_id' => auth()->user()->id,
+                'title' => 'Update Partner Status',
+                'description' => auth()->user()->name . ' has ' . $logAct . ' partner ' . $partnerData->name . ' #' . $partnerData->id ,
+                'created_at' => date('Y-m-d H:i:s'),
+                'ip_address' => $clientIP,
+                'operating_system' => $operatingSystem
+            ];
+            $logActivity = new LogActivity($logActivity);
+            $logActivity->log();
+            return redirect()->back()->with('success', 'Status is successfully updated!');
+        } else {
+            return redirect()->back()->with('error', 'Some error is occur!');
+        }
     }
 }

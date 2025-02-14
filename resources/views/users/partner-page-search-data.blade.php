@@ -1,39 +1,35 @@
 <table width="100%" cellpadding="0" cellspacing="0" class="min-w-[700px]">
     <thead>
         <tr>
-            <th width="25%" class="text-start w-[200px] bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
+            <th width="33%" class="text-start w-[200px] bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
                 name
             </th>
-            <th width="25%" class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
-                mobile number
-            </th>
-            <th width="25%" class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+           
+            <th width="33%" class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                 status
             </th>
-            <th width="25%" class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+            <th width="33%" class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                 Action
             </th>
         </tr>
     </thead>
-    <tbody>
-        @if (count($clientData) > 0)
-            @foreach ($clientData as $clientDetails)
+    <tbody id="get_dynamic_data">                    
+        @if (!empty($partnerList)) 
+            @foreach ($partnerList as $partnerListV)
                 <tr>
                     <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
-                        {{$clientDetails->name}}
+                        {{$partnerListV->name}}
                     </td>
+                    
                     <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
-                        {{$clientDetails->mobile}}
-                    </td>
-                    <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
-                        @if ($clientDetails->status == 1)
+                        @if ($partnerListV->status == 1)
                         <span class="text-[#13103A] bg-[#99F98C] inline-block text-center min-w-[100px] py-[5px] px-[10px] rounded-[5px] ">Active</span>
                         @else
                         <span class="text-[#13103A] bg-[#f98c8c] inline-block text-center min-w-[100px] py-[5px] px-[10px] rounded-[5px] ">Inactive</span>
                         @endif
                     </td>
                     <td class="border-b-[1px] border-[#0000001A] py-[12px] px-[15px]">
-                        @if((in_array('users.addclient',$permissionDetails['accessableRoutes']) || in_array('client.status',$permissionDetails['accessableRoutes']) || in_array('users.delete',$permissionDetails['accessableRoutes'])) || auth()->user()->role==1)
+                        @if((in_array('partner.add',$permissionDetails['accessableRoutes']) || in_array('partner.status',$permissionDetails['accessableRoutes'])) || auth()->user()->role==1)
                         <div class="dropdown inline-block relative ml-[auto] mr-[20px] ">
                             <a href="javascript:void(0)" type="button" class="button flex items-center justify-center bg-[#13103a] px-[12px] py-[15px] rounded-[5px] text-[#fff]">
                                 <svg width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -42,17 +38,14 @@
                             </a>
                             <div class="dropdown_menus absolute right-0 z-10 mt-2 w-[100px] origin-top-right rounded-md bg-white shadow-md ring-1 ring-black/5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                                 <div class="text-start" role="none">
-                                    @if(in_array('users.addclient',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
-                                    <a href="{{ route('users.addclient', ['id' => $clientDetails->id]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Edit</a>
+                                    @if(in_array('partner.add',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                        <a href="javascript:void(0)" type="button" data-btn-name="edit" data-name="{{$partnerListV->name}}" data-id="{{$partnerListV->id}}" class="openModalPartner block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal">Edit</a>
                                     @endif
-                                    {{-- @if(in_array('users.delete',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
-                                    <a href="#" data-id="{{$clientDetails->id}}" class="delete_client block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Archive</a>
-                                    @endif --}}
-                                    @if(in_array('client.status',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
-                                    <a href="{{ route('client.status', ['id' => $clientDetails->id, 'val' => $clientDetails->status]) }}" class="client_status block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">
-                                        {{ $clientDetails->status ? 'Inactive' : 'Active' }}
-                                    </a>
+                                    @if(in_array('partner.status',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                        <a href="{{ route('partner.status',['id'=>$partnerListV->id,'val' => $partnerListV->status])}}" class="client_status block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">
+                                        {{ $partnerListV->status ? 'Inactive' : 'Active' }} </a>
                                     @endif
+                                  
                                 </div>
                             </div>
                         </div>
@@ -61,14 +54,14 @@
                         @endif
                     </td>
                 </tr>
-            @endforeach
+             @endforeach
         @else
             <tr>
-                <td colspan="4" class="text-center text-red-500">No Record Found!</td>
+                <td colspan="3" class="text-center text-red-500">No Record Found!</td>
             </tr>
         @endif
     </tbody>
 </table>
-<div class=" py-[15px] px-[20px]">
-    {{ $clientData->appends(['key' => $searchKey])->links() }}
+<div id="dynamic-pagination" class="py-[15px] px-[20px]">
+    {{ $partnerList->appends(['key' => $searchKey])->links() }}
 </div>

@@ -256,8 +256,8 @@ class UsersController extends Controller
                 if ($newUserDetails->save()) {
                     $logActivity[] = [
                         'user_id' => auth()->user()->id,
-                        'title' => 'Add/Edit User',
-                        'description' => auth()->user()->name . ' has ' . $logAct . ' user ' . $newUser->name . ' (' . $newUser->id . ')',
+                        'title' => 'Add/Edit '.Role::find($request->role)->name,
+                        'description' => auth()->user()->name . ' has ' . $logAct . ' user ' . $newUser->name . ' #' . $uniqueUserId . '',
                         'created_at' => date('Y-m-d H:i:s'),
                         'ip_address' => $clientIP,
                         'operating_system' => $operatingSystem
@@ -289,7 +289,7 @@ class UsersController extends Controller
             $logActivity[] = [
                 'user_id' => auth()->user()->id,
                 'title' => 'Archive User',
-                'description' => auth()->user()->name . ' has deleted user ' . $employeeData->name . ' (' . $employeeData->id . ')',
+                'description' => auth()->user()->name . ' has deleted user ' . $employeeData->name . ' #' . $employeeData->id . '',
                 'created_at' => date('Y-m-d H:i:s'),
                 'ip_address' => $clientIP,
                 'operating_system' => $operatingSystem
@@ -395,7 +395,7 @@ class UsersController extends Controller
                     $logActivity[] = [
                         'user_id' => auth()->user()->id,
                         'title' => 'Add/Edit Client',
-                        'description' => auth()->user()->name . ' has ' . $logAct . ' client ' . $newClient->name . ' (' . $newClient->id . ')',
+                        'description' => auth()->user()->name . ' has ' . $logAct . ' client ' . $newClient->name . ' #' . $uniqueUserId . '',
                         'created_at' => date('Y-m-d H:i:s'),
                         'ip_address' => $clientIP,
                         'operating_system' => $operatingSystem
@@ -498,7 +498,7 @@ class UsersController extends Controller
                     $logActivity[] = [
                         'user_id' => auth()->user()->id,
                         'title' => 'Add/Edit Associate',
-                        'description' => auth()->user()->name . ' has ' . $logAct . ' Associate ' . $newAssociate->name . ' (' . $newAssociate->id . ')',
+                        'description' => auth()->user()->name . ' has ' . $logAct . ' Associate ' . $newAssociate->name . ' #' . $uniqueUserId . '',
                         'created_at' => date('Y-m-d H:i:s'),
                         'ip_address' => $clientIP,
                         'operating_system' => $operatingSystem
@@ -538,7 +538,7 @@ class UsersController extends Controller
                 $logActivity[] = [
                     'user_id' => auth()->user()->id,
                     'title' => 'Update User Status',
-                    'description' => auth()->user()->name . ' has changed status of ' . $existedUser->name . ' (' . $existedUser->id . ')',
+                    'description' => auth()->user()->name . ' has changed status of ' . $existedUser->name . ' #' . $existedUser->uni_user_id . '',
                     'created_at' => date('Y-m-d H:i:s'),
                     'ip_address' => $clientIP,
                     'operating_system' => $operatingSystem
@@ -586,7 +586,7 @@ class UsersController extends Controller
                 $logActivity[] = [
                     'user_id' => auth()->user()->id,
                     'title' => 'Add/Edit Profile',
-                    'description' => auth()->user()->name . ' has ' . $logAct . ' user ' . $userData->name . ' (' . $userData->id . ')',
+                    'description' => auth()->user()->name . ' has ' . $logAct . ' user ' . $userData->name . ' #' . $userData->id . '',
                     'created_at' => date('Y-m-d H:i:s'),
                     'ip_address' => $clientIP,
                     'operating_system' => $operatingSystem
@@ -649,7 +649,7 @@ class UsersController extends Controller
                 $logActivity[] = [
                     'user_id' => auth()->user()->id,
                     'title' => 'Add/Edit Professions',
-                    'description' => auth()->user()->name . ' has ' . $logAct . ' Professions ' . $newCategory->name . ' (' . $newCategory->id . ')',
+                    'description' => auth()->user()->name . ' has ' . $logAct . ' Professions ' . $newCategory->name . '',
                     'created_at' => date('Y-m-d H:i:s'),
                     'ip_address' => $clientIP,
                     'operating_system' => $operatingSystem
@@ -672,7 +672,6 @@ class UsersController extends Controller
         $clientIP = \Request::ip();
         $userAgent = \Request::header('User-Agent');
         $operatingSystem = getOperatingSystem($userAgent);
-        $logAct = 'Profession Status Change';
         $categoryData = CategoryOption::find($id);
         if (!$categoryData) {
             return redirect()->back()->with('error', 'Category not found!');
@@ -682,8 +681,8 @@ class UsersController extends Controller
         if ($categoryData->save()) {
             $logActivity[] = [
                 'user_id' => auth()->user()->id,
-                'title' => 'Update Category Status',
-                'description' => auth()->user()->name . ' has ' . $logAct . ' category ' . $categoryData->name . ' (' . $categoryData->id . ')',
+                'title' => 'Update Profession Status',
+                'description' => auth()->user()->name . ' has updated the status of ' . $categoryData->name,
                 'created_at' => now(),
                 'ip_address' => $clientIP,
                 'operating_system' => $operatingSystem
@@ -701,7 +700,6 @@ class UsersController extends Controller
         $clientIP = \Request::ip();
         $userAgent = \Request::header('User-Agent');
         $operatingSystem = getOperatingSystem($userAgent);
-        $logAct = 'Incorporation Status Change';
         $categoryData = CategoryOption::find($id);
         if (!$categoryData) {
             return redirect()->back()->with('error', 'Category not found!');
@@ -711,8 +709,8 @@ class UsersController extends Controller
         if ($categoryData->save()) {
             $logActivity[] = [
                 'user_id' => auth()->user()->id,
-                'title' => 'Update Category Status',
-                'description' => auth()->user()->name . ' has ' . $logAct . ' category ' . $categoryData->name . ' (' . $categoryData->id . ')',
+                'title' => 'Update Incorporation Status',
+                'description' => auth()->user()->name . ' has updated the status of ' . $categoryData->name,
                 'created_at' => date('Y-m-d H:i:s'),
                 'ip_address' => $clientIP,
                 'operating_system' => $operatingSystem
@@ -729,7 +727,6 @@ class UsersController extends Controller
         $clientIP = \Request::ip();
         $userAgent = \Request::header('User-Agent');
         $operatingSystem = getOperatingSystem($userAgent);
-        $logAct = 'Referral Status Change';
         $categoryData = CategoryOption::find($id);
         if (!$categoryData) {
             return redirect()->back()->with('error', 'Category not found!');
@@ -739,8 +736,8 @@ class UsersController extends Controller
         if ($categoryData->save()) {
             $logActivity[] = [
                 'user_id' => auth()->user()->id,
-                'title' => 'Update Category Status',
-                'description' => auth()->user()->name . ' has ' . $logAct . ' category ' . $categoryData->name . ' (' . $categoryData->id . ')',
+                'title' => 'Update Referral Status',
+                'description' => auth()->user()->name . ' has updated the status of ' . $categoryData->name,
                 'created_at' => date('Y-m-d H:i:s'),
                 'ip_address' => $clientIP,
                 'operating_system' => $operatingSystem
@@ -762,7 +759,7 @@ class UsersController extends Controller
             $logActivity[] = [
                 'user_id' => auth()->user()->id,
                 'title' => 'Archive User',
-                'description' => auth()->user()->name . ' has deleted user ' . $categoryData->name . ' (' . $categoryData->id . ')',
+                'description' => auth()->user()->name . ' has deleted user ' . $categoryData->name . ' #' . $categoryData->id . '',
                 'created_at' => date('Y-m-d H:i:s'),
                 'ip_address' => $clientIP,
                 'operating_system' => $operatingSystem
@@ -821,7 +818,7 @@ class UsersController extends Controller
                 $logActivity[] = [
                     'user_id' => auth()->user()->id,
                     'title' => 'Add/Edit Incorporation',
-                    'description' => auth()->user()->name . $logAct . $newCategory->name . ' (' . $newCategory->id . ')',
+                    'description' => auth()->user()->name .' has '. $logAct.' '.$newCategory->name . ' #' . $newCategory->id . '',
                     'created_at' => date('Y-m-d H:i:s'),
                     'ip_address' => $clientIP,
                     'operating_system' => $operatingSystem
@@ -884,7 +881,7 @@ class UsersController extends Controller
                 $logActivity[] = [
                     'user_id' => auth()->user()->id,
                     'title' => 'Add/Edit Referral',
-                    'description' => auth()->user()->name .' has '. $logAct .' Referral '. $newCategory->name . ' (' . $newCategory->id . ')',
+                    'description' => auth()->user()->name .' has '. $logAct .' Referral '. $newCategory->name . ' #' . $newCategory->id . '',
                     'created_at' => date('Y-m-d H:i:s'),
                     'ip_address' => $clientIP,
                     'operating_system' => $operatingSystem
@@ -906,40 +903,39 @@ class UsersController extends Controller
     public function panelLogs(Request $request){
         $header_title_name = 'System Logs';
         if(empty($request->input('auto'))){
-        $activityTitles = Log::select('title')->distinct()->orderBy('title', 'asc')->pluck('title');
-        $activityUsers = Log::select('user_id')->distinct()->orderBy('user_id', 'asc')->pluck('user_id');
+            $activityTitles = Log::select('title')->distinct()->orderBy('title', 'asc')->pluck('title');
+            $activityUsers = Log::select('user_id')->distinct()->orderBy('user_id', 'asc')->pluck('user_id');
         
-        if(!empty($request->input('dateRange'))){
-            $filterOptions['completeDate']= $request->dateRange ?? '';
-            list($startDateStr, $endDateStr) = explode(' - ', $filterOptions['completeDate']);
-            $startDate = Carbon::createFromFormat('d M Y', $startDateStr);
-            $endDate = Carbon::createFromFormat('d M Y', $endDateStr);
-            $startDateFormatted = $startDate->format('Y-m-d');
-            $endDateFormatted = $endDate->format('Y-m-d');
-        }
-        $filterOptions['user_id'] = $request->user_id ?? '';
-        $filterOptions['activity'] = $request->activity ?? '';
-        $query = Log::with(['user' => function ($query) {
-                $query->select('id','name', 'ip_address', 'operating_system'); // Specify the columns you want from the `user` table
+            if(!empty($request->input('dateRange'))){
+                $filterOptions['completeDate']= $request->dateRange ?? '';
+                list($startDateStr, $endDateStr) = explode(' - ', $filterOptions['completeDate']);
+                $startDate = Carbon::createFromFormat('d M Y', $startDateStr);
+                $endDate = Carbon::createFromFormat('d M Y', $endDateStr);
+                $startDateFormatted = $startDate->format('Y-m-d');
+                $endDateFormatted = $endDate->format('Y-m-d');
+            }
+            $filterOptions['user_id'] = $request->user_id ?? '';
+            $filterOptions['activity'] = $request->activity ?? '';
+            $query = Log::with(['user' => function ($query) {
+                $query->select('id','name', 'ip_address', 'operating_system');
             }])->orderBy('id', 'desc');
-        if (!empty($startDateFormatted) && !empty($endDateFormatted)) {
-            $query->whereDate('created_at', '>=', $startDateFormatted)->whereDate('created_at', '<=', $endDateFormatted);
-        }
-        if (!empty($filterOptions['user_id'])) {
-            $query->where('user_id', $filterOptions['user_id']);
-        }
-        if (!empty($filterOptions['activity'])) {
-            $query->where('title', 'like', '%' . $filterOptions['activity'] . '%');
-        }
-        $systemLogs = $query->paginate(env("PAGINATION_COUNT"))->appends($request->query());
-        return view('users.logs', compact('header_title_name', 'systemLogs', 'activityTitles', 'activityUsers', 'filterOptions'))->with('isAutoId', false);;
-     } else{
-        $autoId = $request->input('auto');
-        $query = Log::with(['user' => function ($query) {
-            $query->select('id','name'); 
-        }])->where('id' ,$autoId )->orderBy('id', 'desc')->first();
+            if (!empty($startDateFormatted) && !empty($endDateFormatted)) {
+                $query->whereDate('created_at', '>=', $startDateFormatted)->whereDate('created_at', '<=', $endDateFormatted);
+            }
+            if (!empty($filterOptions['user_id'])) {
+                $query->where('user_id', $filterOptions['user_id']);
+            }
+            if (!empty($filterOptions['activity'])) {
+                $query->where('title', 'like', '%' . $filterOptions['activity'] . '%');
+            }
+            $systemLogs = $query->paginate(env("PAGINATION_COUNT"))->appends($request->query());
+            return view('users.logs', compact('header_title_name', 'systemLogs', 'activityTitles', 'activityUsers', 'filterOptions'))->with('isAutoId', false);;
+        } else{
+            $autoId = $request->input('auto');
+            $query = Log::with(['user' => function ($query) {
+                $query->select('id','name'); 
+            }])->where('id' ,$autoId )->orderBy('id', 'desc')->first();
             return view('users.logs', compact('query' , 'header_title_name'))->with('isAutoId' , true);
-    
         }
     }
 

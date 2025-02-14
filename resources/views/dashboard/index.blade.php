@@ -12,7 +12,7 @@
             </a>
             <a href="{{route('services.index')}}" class="flex items-center justify-between w-[calc(100%-76px)] p-4">
                 <h5 class="text-[14px] leading-[16px] text-[#6F6F6F] font-[400] ">Services</h5>
-                <span class="text-[14px] leading-[16px] text-[#6F6F6F] font-[400] "><strong class="font-[700] text-[#13103A]"></strong>{{$activeServices> 0 ? $activeServices : 0}}</span>
+                <span class="text-[14px] leading-[16px] text-[#6F6F6F] font-[400] "><strong class="font-[700] text-[#13103A]">{{$activeServices> 0 ? $activeServices : 0}}</strong></span>
             </a>
         </div>
         <div class="flex shadow-[0px_0px_14px_2px_#0000001F] bg-white border border-[#0000001A] rounded-[10px] overflow-hidden">
@@ -21,7 +21,7 @@
             </a>
             <a href="{{ route('leads.index') }}" class="flex items-center justify-between w-[calc(100%-76px)] p-4">
                 <h5 class="text-[14px] leading-[16px] text-[#6F6F6F] font-[400] ">Leads</h5>
-                <span class="text-[14px] leading-[16px] text-[#6F6F6F] font-[400] "><strong class="font-[700] text-[#13103A]"></strong>{{$activeLeads > 0 ? $activeLeads : 0}}</span>
+                <span class="text-[14px] leading-[16px] text-[#6F6F6F] font-[400] "><strong class="font-[700] text-[#13103A]">{{$activeLeads > 0 ? $activeLeads : 0}}</strong></span>
             </a>
         </div>
         <div class="flex shadow-[0px_0px_14px_2px_#0000001F] bg-white border border-[#0000001A] rounded-[10px] overflow-hidden">

@@ -9,7 +9,7 @@
    <x-client-task-details :taskID="$id" />
 </div>
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
-   <form action="{{route('task.documenStatus',['id'=>$id]) }}" method="POST" class="space-y-[20px]">
+   <form action="{{route('task.documenStatus',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
       <div class="flex flex-col md:flex-row gap-[20px]">
          <input type="hidden" name="checkValid" id="checkValid" value="">
@@ -125,7 +125,7 @@
          <textarea type="text" name="description" id="description" class="w-full h-[155px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
       </div>
       <div class="flex justify-end gap-[15px]">
-         <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Assign</button>
+         <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
       </div>
    </form>
 </div>

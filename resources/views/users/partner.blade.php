@@ -10,7 +10,7 @@
             </ul>
         </div>
         @if(in_array('partner.add',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
-        <a href="javascript:void(0)" type="button" data-btn-name="Add"  data-name="" data-id="0" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal"  class="openModalIncor inline-flex items-center gap-[10px] text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px] ">
+        <a href="javascript:void(0)" type="button" data-btn-name="Add"  data-name="" data-id="0" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal"  class="openModalPartner inline-flex items-center gap-[10px] text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px] ">
             <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M8.75 5.625H5.625V8.75C5.625 9.09375 5.34375 9.375 5 9.375C4.65625 9.375 4.375 9.09375 4.375 8.75V5.625H1.25C0.90625 5.625 0.625 5.34375 0.625 5C0.625 4.65625 0.90625 4.375 1.25 4.375H4.375V1.25C4.375 0.90625 4.65625 0.625 5 0.625C5.34375 0.625 5.625 0.90625 5.625 1.25V4.375H8.75C9.09375 4.375 9.375 4.65625 9.375 5C9.375 5.34375 9.09375 5.625 8.75 5.625Z" fill="white" />
             </svg>
@@ -44,18 +44,59 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody id="get_dynamic_data">                   
-                    
+                <tbody id="get_dynamic_data">                    
+                    @if (!empty($partnerList)) 
+                        @foreach ($partnerList as $partnerListV)
+                            <tr>
+                                <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
+                                    {{$partnerListV->name}}
+                                </td>
+                                
+                                <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                                    @if ($partnerListV->status == 1)
+                                    <span class="text-[#13103A] bg-[#99F98C] inline-block text-center min-w-[100px] py-[5px] px-[10px] rounded-[5px] ">Active</span>
+                                    @else
+                                    <span class="text-[#13103A] bg-[#f98c8c] inline-block text-center min-w-[100px] py-[5px] px-[10px] rounded-[5px] ">Inactive</span>
+                                    @endif
+                                </td>
+                                <td class="border-b-[1px] border-[#0000001A] py-[12px] px-[15px]">
+                                    @if((in_array('partner.add',$permissionDetails['accessableRoutes']) || in_array('partner.status',$permissionDetails['accessableRoutes'])) || auth()->user()->role==1)
+                                    <div class="dropdown inline-block relative ml-[auto] mr-[20px] ">
+                                        <a href="javascript:void(0)" type="button" class="button flex items-center justify-center bg-[#13103a] px-[12px] py-[15px] rounded-[5px] text-[#fff]">
+                                            <svg width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M4 2C4 2.53043 3.78929 3.03914 3.41421 3.41421C3.03914 3.78929 2.53043 4 2 4C1.46957 4 0.960859 3.78929 0.585786 3.41421C0.210714 3.03914 0 2.53043 0 2C0 1.46957 0.210714 0.96086 0.585786 0.585787C0.960859 0.210714 1.46957 0 2 0C2.53043 0 3.03914 0.210714 3.41421 0.585787C3.78929 0.96086 4 1.46957 4 2ZM11 2C11 2.53043 10.7893 3.03914 10.4142 3.41421C10.0391 3.78929 9.53043 4 9 4C8.46957 4 7.96086 3.78929 7.58579 3.41421C7.21071 3.03914 7 2.53043 7 2C7 1.46957 7.21071 0.96086 7.58579 0.585787C7.96086 0.210714 8.46957 0 9 0C9.53043 0 10.0391 0.210714 10.4142 0.585787C10.7893 0.96086 11 1.46957 11 2ZM18 2C18 2.53043 17.7893 3.03914 17.4142 3.41421C17.0391 3.78929 16.5304 4 16 4C15.4696 4 14.9609 3.78929 14.5858 3.41421C14.2107 3.03914 14 2.53043 14 2C14 1.46957 14.2107 0.96086 14.5858 0.585787C14.9609 0.210714 15.4696 0 16 0C16.5304 0 17.0391 0.210714 17.4142 0.585787C17.7893 0.96086 18 1.46957 18 2Z" fill="currentColor" />
+                                            </svg>
+                                        </a>
+                                        <div class="dropdown_menus absolute right-0 z-10 mt-2 w-[100px] origin-top-right rounded-md bg-white shadow-md ring-1 ring-black/5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                                            <div class="text-start" role="none">
+                                                @if(in_array('partner.add',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                                    <a href="javascript:void(0)" type="button" data-btn-name="edit" data-name="{{$partnerListV->name}}" data-id="{{$partnerListV->id}}" class="openModalPartner block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal">Edit</a>
+                                                @endif
+                                                @if(in_array('partner.status',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                                    <a href="{{ route('partner.status',['id'=>$partnerListV->id,'val' => $partnerListV->status])}}" class="client_status block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">
+                                                    {{ $partnerListV->status ? 'Inactive' : 'Active' }} </a>
+                                                @endif
+                                              
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @else
+                                    <x-nopermission />
+                                    @endif
+                                </td>
+                            </tr>
+                         @endforeach
+                    @else
                         <tr>
                             <td colspan="3" class="text-center text-red-500">No Record Found!</td>
                         </tr>
-                    
+                    @endif
                 </tbody>
             </table>
         </div>
         <!-- Pagination Links -->        
         <div id="dynamic-pagination" class="py-[15px] px-[20px]">
-            {{-- {{ $categoryData->appends(['key' => $searchKey])->links() }} --}}
+            {{ $partnerList->appends(['key' => $searchKey])->links() }}
         </div>
     </div>
 </div>
@@ -79,15 +120,14 @@
             </div>
             <!-- Modal body -->
             <div class="p-[20px]">
-                <form method="POST" action={{ route('incorporation.add')}} class="space-y-[20px]">
+                <form method="POST" action={{ route('partner.add')}} class="space-y-[20px]">
                     @csrf
-                    <input type="hidden" name="type" id="type" value="2">
-                    <input type="hidden" name="incorporation_id" id="incorporation_id" value="">
+                    <input type="hidden" name="partner_model_id" id="partner_model_id" value="">
                     <div class="flex flex-col md:flex-row gap-[20px]">
                         
                         <div class="w-full">
                             <label for="name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Name</label>
-                            <input type="text" name="name" id="incorporationName" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                            <input type="text" name="name" id="partnerModelName" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                         </div>
                     </div>
                    
@@ -100,34 +140,33 @@
     </div>
 </div>
 <script>
-    // $(document).on('click','.openModalIncor',function(){
-    //     let type = $(this).attr('data-btn-name');
-    //     let name = $(this).attr('data-name');
-    //     let id = $(this).attr('data-id');
-    //     $('#incorporation_id').val(id);
-    //     $('#incorporationName').val(name);
-    // });
+    $(document).on('click','.openModalPartner',function(){
+        let name = $(this).attr('data-name');
+        let id = $(this).attr('data-id');
+        $('#partner_model_id').val(id);
+        $('#partnerModelName').val(name);
+    });
 
-    // $(document).on('keyup', '.search', function() {
-    //     var key = $(this).val();
-    //     $.ajax({
-    //         method: 'POST',
-    //         url: "{{ route('incorporation.index')}}",
-    //         headers: {
-    //             'X-CSRF-TOKEN': '{{ csrf_token() }}'
-    //         },
-    //         data: {
-    //             key: key,
-    //             requestType: 'ajax',
-    //         },
-    //         dataType: 'json',
-    //         success: function(res) {
-    //             console.log(res);
-    //             $('#search_table_data').html(res.trData);
+    $(document).on('keyup', '.search', function() {
+        var key = $(this).val();
+        $.ajax({
+            method: 'POST',
+            url: "{{ route('partner.index')}}",
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            data: {
+                key: key,
+                requestType: 'ajax',
+            },
+            dataType: 'json',
+            success: function(res) {
+                console.log(res);
+                $('#search_table_data').html(res.trData);
 
-    //         }
-    //     })
+            }
+        })
 
-    // });
+    });
 </script>
 @stop

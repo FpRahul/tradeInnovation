@@ -77,7 +77,7 @@
                                                     <a href="javascript:void(0)" type="button" data-btn-name="edit" data-name="{{$newCategorylist->name}}" data-id="{{$newCategorylist->id}}" class="openModalProf block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal">Edit</a>
                                                 @endif
                                                 @if(in_array('professions.status',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
-                                                    <a href="{{ route('professions.status',['id'=>$newCategorylist->id])}}" class="client_status block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">
+                                                <a href="{{ route('professions.status',['id'=>$newCategorylist->id])}}" class="client_status block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">
                                                     {{ $newCategorylist->status ? 'Inactive' : 'Active' }}
                                                     </a>
                                                 @endif

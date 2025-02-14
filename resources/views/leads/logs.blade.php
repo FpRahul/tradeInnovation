@@ -68,7 +68,7 @@
                                     </svg>
                                 </span>
                             </div>
-                           {{-- @foreach ( $log->leadService as $servicesas )
+                            {{-- @foreach ( $log->leadService as $servicesas )
                             <span class="border border-[#0000001A] text-[13px] leading-[12px] font-[400] tracking-[-0.04em] text-[#000000] px-[10px] py-[5px] rounded-[5px] ">{{ $servicesas->service->serviceName}}</span>
                             @endforeach --}}
                         </div>
@@ -83,19 +83,19 @@
 
                                 </div>
                                 <div class="flex-inline items-center gap-[10px] w-[100%] lg:w-[30%] text-[14px] leading-[16px] font-[400] tracking-[-0.04em] text-[#666666] flex"><label class="text-[15px] font-[600] text-[#000]">Status:</label>
-                                                                @if(optional(optional($log->leadTask)->leadTaskDetails)->status === 0)
+                                    @if(optional(optional($log->leadTask)->leadTaskDetails)->status === 0)
                                     Pending
-                                @elseif(optional(optional($log->leadTask)->leadTaskDetails)->status === 1)
+                                    @elseif(optional(optional($log->leadTask)->leadTaskDetails)->status === 1)
                                     Completed
-                                @elseif(optional(optional($log->leadTask)->leadTaskDetails)->status === 2)
+                                    @elseif(optional(optional($log->leadTask)->leadTaskDetails)->status === 2)
                                     On Hold
-                                @elseif(optional(optional($log->leadTask)->leadTaskDetails)->status === 3)
+                                    @elseif(optional(optional($log->leadTask)->leadTaskDetails)->status === 3)
                                     Follow Up
-                                @elseif(optional(optional($log->leadTask)->leadTaskDetails)->status === null)
+                                    @elseif(optional(optional($log->leadTask)->leadTaskDetails)->status === null)
                                     Not Updated
-                                @else
+                                    @else
                                     NA
-                                @endif
+                                    @endif
 
 
                                 </div>
@@ -111,7 +111,7 @@
                             </div>
                             <div class="flex items-center justify-end gap-[10px] w-[5%] text-[14px] leading-[16px] font-[400] tracking-[-0.04em] text-[#666666] flex">
                                 <div class="relative flex flex-col pr-[10px] items-center group">
-                                    <a href="#" class="flex items-center gap-[8px] text-[15px] font-[600]  text-[#000] py-[10px] px-[10px]" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal">
+                                    <a href="#" class="flex items-center gap-[8px] text-[15px] font-[600]  text-[#000] py-[10px] px-[10px]">
                                         <i class="ri-download-2-line text-[22px]"></i>
                                     </a>
                                     <div class=" absolute bottom-[18px] flex flex-col items-center hidden mb-[15px] group-hover:flex">
@@ -148,94 +148,94 @@
             </div>
             <!-- Modal body -->
             <div class="p-[20px]">
-            <form method="POST" class="space-y-[20px]">
-                @csrf
-                <div class="flex flex-col md:flex-row gap-[20px]">
-                    <div class="w-full border-[1px] border-[#f2f2f2] min-h-[150px] p-[15px] rounded-[8px] text-[#000] text-[15px] leading-[22px] font-[400]">
-                        <!-- Client Name -->
-                        <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626]">
-                            <label class="text-[15px] font-[600] text-[#000] w-[40%]">
-                                Client Name:
-                            </label>
-                            <p id="rowClient" class="text-[15px] font-[500] text-[#262626] w-[60%] overflow-hidden truncate"></p>
-                        </div>
+                <form method="POST" class="space-y-[20px]">
+                    @csrf
+                    <div class="flex flex-col md:flex-row gap-[20px]">
+                        <div class="w-full border-[1px] border-[#f2f2f2] min-h-[150px] p-[15px] rounded-[8px] text-[#000] text-[15px] leading-[22px] font-[400]">
+                            <!-- Client Name -->
+                            <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626]">
+                                <label class="text-[15px] font-[600] text-[#000] w-[40%]">
+                                    Client Name:
+                                </label>
+                                <p id="rowClient" class="text-[15px] font-[500] text-[#262626] w-[60%] overflow-hidden truncate"></p>
+                            </div>
 
 
-                        <!-- Service -->
-                        <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
-                            <label class="text-[15px] font-[600] text-[#000] w-[40%]">
-                                Service:
-                            </label>
-                            <p id="rowService" class="w-[60%]"></p>
-                        </div>
+                            <!-- Service -->
+                            <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
+                                <label class="text-[15px] font-[600] text-[#000] w-[40%]">
+                                    Service:
+                                </label>
+                                <p id="rowService" class="w-[60%]"></p>
+                            </div>
 
-                        <!-- Stage -->
-                        <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
-                            <label class="text-[15px] font-[600] text-[#000] w-[40%]">
-                                Stage:
-                            </label>
-                            <p id="rowStage" class="w-[60%]"></p>
-                        </div>
+                            <!-- Stage -->
+                            <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
+                                <label class="text-[15px] font-[600] text-[#000] w-[40%]">
+                                    Stage:
+                                </label>
+                                <p id="rowStage" class="w-[60%]"></p>
+                            </div>
 
-                        <!-- Assigned To -->
-                        <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
-                            <label class="text-[15px] font-[600] text-[#000] w-[40%]">
-                                Assigned To:
-                            </label>
-                            <p id="rowAssignedTo" class="w-[60%]"></p>
-                        </div>
+                            <!-- Assigned To -->
+                            <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
+                                <label class="text-[15px] font-[600] text-[#000] w-[40%]">
+                                    Assigned To:
+                                </label>
+                                <p id="rowAssignedTo" class="w-[60%]"></p>
+                            </div>
 
-                        <!-- Status -->
-                        <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
-                            <label class="text-[15px] font-[600] text-[#000] w-[40%]">
-                                Status:
-                            </label>
-                            <p id="rowStatus" class="w-[60%]"></p>
-                        </div>
+                            <!-- Status -->
+                            <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
+                                <label class="text-[15px] font-[600] text-[#000] w-[40%]">
+                                    Status:
+                                </label>
+                                <p id="rowStatus" class="w-[60%]"></p>
+                            </div>
 
-                        <!-- Verified On -->
-                        <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
-                            <label class="text-[15px] font-[600] text-[#000] w-[40%]">
-                                Verified On:
-                            </label>
-                            <p id="rowVerifiedOn" class="w-[60%]"></p>
-                        </div>
+                            <!-- Verified On -->
+                            <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
+                                <label class="text-[15px] font-[600] text-[#000] w-[40%]">
+                                    Verified On:
+                                </label>
+                                <p id="rowVerifiedOn" class="w-[60%]"></p>
+                            </div>
 
-                        <!-- Clarification -->
-                        <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
-                            <label class="text-[15px] font-[600] text-[#000] w-[40%]">
-                                Clarification:
-                            </label>
-                            <p id="rowClarification" class="w-[60%]"></p>
-                        </div>
+                            <!-- Clarification -->
+                            <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
+                                <label class="text-[15px] font-[600] text-[#000] w-[40%]">
+                                    Clarification:
+                                </label>
+                                <p id="rowClarification" class="w-[60%]"></p>
+                            </div>
 
-                        <!-- Dead Line -->
-                        <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
-                            <label class="text-[15px] font-[600] text-[#000] w-[40%]">
-                                Dead Line:
-                            </label>
-                            <p id="rowDeadLine" class="w-[60%]"></p>
+                            <!-- Dead Line -->
+                            <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
+                                <label class="text-[15px] font-[600] text-[#000] w-[40%]">
+                                    Dead Line:
+                                </label>
+                                <p id="rowDeadLine" class="w-[60%]"></p>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="flex items-center justify-between p-4 md:px-5 md:py-[20px] border-b border-[#f2f2f2]">
-                    <h3 class="text-[24px] font-[600] leading-[17px] text-[#000]">
-                        Remark
-                    </h3>
-                </div>
-
-                <!-- Textarea Section -->
-                <div class="flex flex-col md:flex-row gap-[20px]">
-                    <div class="w-full">
-                        <textarea id="remark" class="w-full border-[1px] border-[#f2f2f2] min-h-[80px] p-[15px] rounded-[8px] text-[#000] text-[15px] leading-[22px] font-[400] focus:outline-none"></textarea>
+                    <div class="flex items-center justify-between p-4 md:px-5 md:py-[20px] border-b border-[#f2f2f2]">
+                        <h3 class="text-[24px] font-[600] leading-[17px] text-[#000]">
+                            Remark
+                        </h3>
                     </div>
-                </div>
-            </form>
 
+                    <!-- Textarea Section -->
+                    <div class="flex flex-col md:flex-row gap-[20px]">
+                        <div class="w-full">
+                            <textarea id="remark" class="w-full border-[1px] border-[#f2f2f2] min-h-[80px] p-[15px] rounded-[8px] text-[#000] text-[15px] leading-[22px] font-[400] focus:outline-none"></textarea>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
         </div>
     </div>
-</div>
 </div>
 <script>
     $(document).ready(function() {

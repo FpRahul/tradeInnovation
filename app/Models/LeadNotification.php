@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\LeadTask;
 class LeadNotification extends Model
 {
     protected $fillable = [
@@ -12,4 +12,8 @@ class LeadNotification extends Model
         'description',
         'status',
     ];
+
+    public function taskDeatials(){
+        return $this->belongsTo(LeadTask::class , 'task_id');
+    }
 }

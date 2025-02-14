@@ -31,10 +31,10 @@
                     </svg>
                 </strong>
                 <span class="block text-[10px] font-[500] leading-[12px] text-[#5F5F66] tracking-[0.01em]">
-                    @php
+                     @php
                         $role = Role::find(auth()->user()->role);
                         echo $role->name;
-                    @endphp                   
+                    @endphp 
                 </span>
             </div>
         </div>

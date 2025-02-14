@@ -15,7 +15,7 @@
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Name <strong class="text-[#f83434]">*</strong></label>
-                    <input type="text" name="name" id="name" value="{{ $newUser->name }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Name" required>
+                    <input type="text" name="name" id="name" value="{{ old('name') ? old('name') : $newUser->name }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Name" required>
                     @error('name')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -27,10 +27,14 @@
                         <option value="">Select Role</option>
                         @if (count($roleData) > 0)
                             @foreach ($roleData as $roles)
-                                <option value="{{$roles->id}}" {{$newUser->role == $roles->id ? 'selected':''}}>{{$roles->name}}</option>
+                                <option value="{{ $roles->id }}" 
+                                    {{ old('role', $newUser->role ?? '') == $roles->id ? 'selected' : '' }}>
+                                    {{ $roles->name }}
+                                </option>
                             @endforeach
                         @endif
                     </select>
+                    
                     @error('role')
                         <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
                     @enderror
@@ -39,7 +43,7 @@
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="fatherHusbandName" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Father/Husband Name <strong class="text-[#f83434]">*</strong></label>
-                    <input type="text" name="fatherHusbandName" id="fatherHusbandName" value="{{ !empty($newUserDetails->fatherHusbandName) ? $newUserDetails->fatherHusbandName : '' }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Company Name" required>
+                    <input type="text" name="fatherHusbandName" id="fatherHusbandName" value="{{ old('fatherHusbandName') ? old('fatherHusbandName') : (!empty($newUserDetails->fatherHusbandName) ? $newUserDetails->fatherHusbandName : '') }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Company Name" required>
                     @error('fatherHusbandName')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -71,14 +75,14 @@
 
                 <div class="w-full md:w-1/2">
                     <label for="mobileNumber" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mobile Number <strong class="text-[#f83434]">*</strong></label>
-                    <input type="number" name="mobileNumber" id="mobileNumber" value="{{ $newUser->mobile }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Mobile Number" required>
+                    <input type="number" name="mobileNumber" id="mobileNumber" value="{{ old('mobileNumber') ? old('mobileNumber') : $newUser->mobile }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Mobile Number" required>
                     @error('mobile')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="altMobile" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Alternate Mobile Number</label>
-                    <input type="number" name="altMobile" id="altMobile" value="{{ $newUser->altNumber }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Alternate Mobile Number" >
+                    <input type="number" name="altMobile" id="altMobile" value="{{ old('altMobile') ? old('altMobile') : $newUser->altNumber }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Alternate Mobile Number" >
                     @error('altMobile')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -88,14 +92,14 @@
 
                 <div class="w-full md:w-1/2">
                     <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Email-Id <strong class="text-[#f83434]">*</strong></label>
-                    <input type="text" name="email" id="email" value="{{ $newUser->email }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Email" required>
+                    <input type="text" name="email" id="email" value="{{ old('email') ? old('email') : $newUser->email }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Email" required>
                     @error('email')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="qualification" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Qualification <strong class="text-[#f83434]">*</strong></label>
-                    <input type="text" name="qualification" id="qualification" value="{{ !empty($newUserDetails->qualification) ? $newUserDetails->qualification :'' }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Qualification" required>
+                    <input type="text" name="qualification" id="qualification" value="{{ old('qualification') ? old('qualification') : (!empty($newUserDetails->qualification) ? $newUserDetails->qualification :'') }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Qualification" required>
                     @error('qualification')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -221,17 +225,16 @@
                 </div>
             </div>
             <div class="flex flex-col md:flex-row gap-[20px]">
-
                 <div class="w-full md:w-1/2">
                     <label for="skill" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Skills <strong class="text-[#f83434]">*</strong></label>
-                    <input type="text" name="skill" id="skill" value="{{ !empty($newUserDetails->skills) ? $newUserDetails->skills :'' }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255"  required>
+                    <input type="text" name="skill" id="skill" value="{{ old('skill') ? old('skill') : (!empty($newUserDetails->skills) ? $newUserDetails->skills :'') }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255"  required>
                     @error('skill')
                     <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="keyResponsibilityArea" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Key Responsibility Area <strong class="text-[#f83434]">*</strong></label>
-                    <input type="text" name="keyResponsibilityArea" id="keyResponsibilityArea" value="{{ !empty($newUserDetails->keyResponsibilityArea) ? $newUserDetails->keyResponsibilityArea :'' }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" required>
+                    <input type="text" name="keyResponsibilityArea" id="keyResponsibilityArea" value="{{ old('keyResponsibilityArea') ? old('keyResponsibilityArea') : (!empty($newUserDetails->keyResponsibilityArea) ? $newUserDetails->keyResponsibilityArea :'') }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" required>
                     @error('keyResponsibilityArea')
                     <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
                     @enderror
@@ -241,83 +244,76 @@
 
                 <div class="w-full md:w-1/2">
                     <label for="keyPerformanceIndicator" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Key Performance Indicator</label>
-                    <input type="text" name="keyPerformanceIndicator" id="keyPerformanceIndicator" value="{{ !empty($newUserDetails->keyPerformanceIndicator) ? $newUserDetails->keyPerformanceIndicator :'' }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255">
+                    <input type="text" name="keyPerformanceIndicator" id="keyPerformanceIndicator" value="{{ old('keyPerformanceIndicator') ? old('keyPerformanceIndicator') : (!empty($newUserDetails->keyPerformanceIndicator) ? $newUserDetails->keyPerformanceIndicator :'' )}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255">
                     @error('keyPerformanceIndicator')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="emergencyContactDetails" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Emergency Contact Details</label>
-                    <input type="text" name="emergencyContactDetails" id="emergencyContactDetails" value="{{ !empty($newUserDetails->emergencyContactDetails) ? $newUserDetails->emergencyContactDetails :'' }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                    <input type="text" name="emergencyContactDetails" id="emergencyContactDetails" value="{{ old('emergencyContactDetails') ? old('emergencyContactDetails') : (!empty($newUserDetails->emergencyContactDetails) ? $newUserDetails->emergencyContactDetails :'' )}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                     @error('emergencyContactDetails')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
             </div>
-            <div class="flex flex-col md:flex-row gap-[20px]">
-
-                <div class="w-full md:w-1/2">
+            <div class="flex flex-col lg:flex-row gap-[20px]">
+                <div class="w-full lg:w-1/2">
+                    <div class="shadow-lg p-[25px] rounded-[8px] border-[1px] border-[#ccc] currentAddressDiv">                        
+                        <div class="mb-[10px]">
+                            <label for="currentAddress" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Current Address <strong class="text-[#f83434]">*</strong></label>
+                            <textarea type="text" name="currentAddress" id="currentAddress" class="w-full h-[120px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Current Address" required>{{ old('currentAddress') ? old('currentAddress') : (!empty($newUserDetails->currentAddress) ? $newUserDetails->currentAddress:'') }}</textarea>
+                            @error('currentAddress')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mb-[10px]">
+                            <label for="curr_city" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">City</label>
+                            <input type="text" name="curr_city" id="curr_city" value="{{old('curr_city') ? old('curr_city') :  (!empty($newUserDetails) ? $newUserDetails->curr_city : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                        </div>
+                        <div class="mb-[10px]">
+                            <label for="curr_state" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">State</label>
+                            <input type="text" name="curr_state" id="curr_state" value="{{old('curr_state') ? old('curr_state') : (!empty($newUserDetails) ? $newUserDetails->curr_state : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                        </div>
+                        <div class="mb-[10px]">
+                            <label for="curr_zip" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Zip Code</label>
+                            <input type="text" name="curr_zip" id="curr_zip" value="{{old('curr_zip') ? old('curr_zip') : (!empty($newUserDetails) ? $newUserDetails->curr_zip : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                        </div>                        
+                    </div>
+                </div>
+                <div class="w-full lg:w-1/2">
                     <div class="shadow-lg p-[25px] rounded-[8px] border-[1px] border-[#ccc]">
                         
-                    <div class="mb-[10px]">
-                        <label for="currentAddress" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Current Address <strong class="text-[#f83434]">*</strong></label>
-                    <textarea type="text" name="currentAddress" id="currentAddress" class="w-full h-[120px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Current Address" required>{{ !empty($newUserDetails->currentAddress) ? $newUserDetails->currentAddress:'' }}</textarea>
-                    @error('currentAddress')
-                    <div class="alert alert-danger">{{ $message }}</div>
-                    @enderror
-
-                    </div>
-
-                    <div class="mb-[10px]">
-                        <label for="curr_city" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">City</label>
-                        <input type="text" name="curr_city" id="curr_city" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
-                    </div>
-
-                    <div class="mb-[10px]">
-                        <label for="curr_state" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">State</label>
-                        <input type="text" name="curr_state" id="curr_state" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
-                    </div>
-
-                    <div class="mb-[10px]">
-                        <label for="curr_zip" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Zip Code</label>
-                    <input type="text" name="curr_zip" id="curr_zip" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
-                    </div>
-                    
-                    
-                    
-                </div>
-                </div>
-
-
-                <div class="w-full md:w-1/2">
-                    <div class="shadow-lg p-[25px] rounded-[8px] border-[1px] border-[#ccc]">
-
                         <div class="mb-[10px]">
-                            <label for="permanentAddress" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Permanent Address <strong class="text-[#f83434]">*</strong></label>
-                    <textarea R type="text" name="permanentAddress" id="permanentAddress" class="w-full h-[120px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Permanent Address" required>{{ !empty($newUserDetails->permanentAddress) ? $newUserDetails->permanentAddress :'' }}</textarea>
-                    @error('permanentAddress')
-                    <div class="alert alert-danger">{{ $message }}</div>
-                    @enderror
+                            <label for="permanentAddress" class="flex flex-col md:flex-row md:justify-between md:items-center text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+                                <div class="mb-[10px] md:mb-0">
+                                    Permanent Address <strong class="text-[#f83434]">*</strong>
+                                </div>
+                                <div>                            
+                                    <input type="checkbox" name="sameascurrentaddress" class="sameAsCurrentAddress"/>  
+                                    <label>Same as current address</label>                          
+                                </div>
+                            </label>
+                            <textarea R type="text" name="permanentAddress" id="permanentAddress" class="w-full h-[120px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Permanent Address" required>{{old('permanentAddress') ? old('permanentAddress') : (!empty($newUserDetails->permanentAddress) ? $newUserDetails->permanentAddress :'') }}</textarea>
+                            @error('permanentAddress')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
                         </div>
-
                         <div class="mb-[10px]">
                             <label for="perma_city" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">City</label>
-                            <input type="text" name="perma_city" id="perma_city" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                            <input type="text" name="perma_city" id="perma_city" value="{{old('perma_city') ? old('perma_city') : (!empty($newUserDetails) ? $newUserDetails->perma_city : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
                         </div>
-
                         <div class="mb-[10px]">
                             <label for="perma_state" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">State</label>
-                    <input type="text" name="perma_state" id="perma_state" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                            <input type="text" name="perma_state" id="perma_state" value="{{old('perma_state') ? old('perma_state') : (!empty($newUserDetails) ? $newUserDetails->perma_state : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
                         </div>
-
                         <div class="mb-[10px]">
                             <label for="perma_zip" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Zip Code</label>
-                            <input type="text" name="perma_zip" id="perma_zip" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
-                        </div>
-
-                    
+                            <input type="text" name="perma_zip" id="perma_zip" value="{{old('perma_zip') ? old('perma_zip') : (!empty($newUserDetails) ? $newUserDetails->perma_zip : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                        </div> 
+                                          
+                    </div>
                 </div>
-            </div>
             </div>
             <div class="flex flex-col md:flex-row gap-[20px] pt-[5px] lg:pt-[50px]">
                 <div class="w-full md:w-1/2">
@@ -327,9 +323,7 @@
                             $imagePath = !empty($newUserDetails->uploadPan) ? 'uploads/users/'.$newUser->id.'/'.$newUserDetails->uploadPan : 'assets/images/noimage.png';
                             $extension = pathinfo($imagePath, PATHINFO_EXTENSION);
                         @endphp
-
                         <img class="getpreviewImage" src="{{ asset(strtolower($extension) === 'pdf' ? 'assets/images/pdf_logo.jpg' : $imagePath) }}" width="70" height="70" class="w-[83px] h-[45px] rounded-[10px] object-cover shadow-[0_0_5px_rgba(0,0,0,0.3)]" />
-                        
                         <div class="relative">
                             <label for="uploadPan" class="cursor-pointer w-[83px] h-[45px] rounded-[10px] flex items-center justify-center border border-dashed border-[#13103a4d] ">
                                 <svg class="cursor-pointer" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -360,7 +354,6 @@
                             </label>
                             <input type="file" name="uploadAadhar" id="uploadAadhar" class="previewImage w-0 opacity-0 absolute top-0 left-0" {{empty($newUserDetails->uploadAadhar) ? 'required' :''}} >
                             <div class="imageErrorMsg text-[12px] italic font-[400] text-[#e70e0e]"></div>
-
                         </div>
                     </div>
                     @error('uploadAadhar')
@@ -383,7 +376,6 @@
                             </label>
                             <input type="file" name="uploadDrivingLicence" id="uploadDrivingLicence" class="previewImage w-0 opacity-0 absolute top-0 left-0" {{empty($newUserDetails->uploadDrivingLicence) ? 'required' :''}}>
                             <div class="imageErrorMsg text-[12px] italic font-[400] text-[#e70e0e]"></div>
-
                         </div>
                     </div>
                     @error('uploadDrivingLicence')
@@ -397,8 +389,34 @@
         </form>
     </div>
 </div>
-
 <script>
+    $(document).on('click','.sameAsCurrentAddress',function(){
+        let address = $('.currentAddressDiv').find('#currentAddress').val();
+        let city = $('.currentAddressDiv').find('#curr_city').val();
+        let state = $('.currentAddressDiv').find('#curr_state').val();
+        let zipCode = $('.currentAddressDiv').find('#curr_zip').val();
+        
+        let peraddress = $(this).parent().parent().parent().find("#permanentAddress");
+        let perCity = $(this).parent().parent().parent().parent().find("#perma_city");
+        let perState = $(this).parent().parent().parent().parent().parent().find("#perma_state");
+        let perZipCode = $(this).parent().parent().parent().parent().parent().find("#perma_zip");
+        if($(this).is(':checked')){
+            if(address == '' || city == '' || state == '' || zipCode == ''){
+                alert("Please fill the current address details");
+                $(this).prop("checked", false);
+            }else{
+                peraddress.val(address);
+                perCity.val(city);
+                perState.val(state);
+                perZipCode.val(zipCode);
+            }            
+        }else{
+            peraddress.val('');
+            perCity.val('');
+            perState.val('');
+            perZipCode.val('');
+        }        
+    });
 
     $(document).on('change','.previewImage' ,function () { 
         var file = this.files[0]; 
@@ -408,14 +426,12 @@
             var fileSize = file.size;
             var fileName = file.name;
             var fileExtension = fileName.split('.').pop().toLowerCase();
-
             // Check file extension
             if (!allowedExtensions.includes(fileExtension)) {
                 $(this).parent().find('.imageErrorMsg').text("Invalid file type. Allowed types: " + allowedExtensions.join(", "));
                 $(this).val(""); // Clear file input
                 return false;
             }
-
             // Check file size
             if (fileSize > maxSize) {
                 $(this).parent().find('.imageErrorMsg').text("File size exceeds 2MB limit.");
@@ -439,7 +455,7 @@
                 previewContainer.hide();
                 previewContainer.attr('src', '');
             }
-        }                  
+        }           
        
     });
   

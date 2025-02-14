@@ -47,6 +47,10 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::match(['POST', 'GET'], '/add-referral/{id?}', 'addReferral')->name('referral.add');
         Route::get('referral-status/{id?}','referralStatus')->name('referral.status');
 
+        Route::match(['POST', 'GET'], '/user-partners', 'userPartner')->name('partner.index');
+        Route::match(['POST', 'GET'], '/add-partner/{id?}', 'addPartner')->name('partner.add');
+        Route::get('/profession-status/{id?}','partnertatus')->name('partner.status');
+
         // Route::get('/category-status/{id?}', 'categoryStatus')->name('users.category.status');
         // Route::get('/category-delete/{id?}', 'categoryDelete')->name('users.category.delete');
 

@@ -78,21 +78,19 @@
             @error('attachment[]')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
-            <div class="w-full md:w-1/2 stageoftheservice">
-                <label class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
-                <select name="stage_id" class="allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none serviceStagesOption" required>
+            <div class="w-full md:w-1/2">
+                    <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Satge</label>
                     @if($getStage->count() > 0)
-                    @foreach ( $getStage as $stage )
-                    <option value="{{$stage->id}}">{{ $stage->title }}</option>
-                    @endforeach
+                    <input type="text" name="stage_id" id="stage_id" value="{{$getStage->title}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
+                    <input type="hidden" name="stage_id" value="{{$getStage->id}}">
                     @endif
-                </select>
-                @error('stage_id')
-                <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
-                @enderror
+                    <!-- <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+                        Next stage will be: {{$getStage->title}}
+                    </p> -->
+                </div>
+                
+                
             </div>
-
-        </div>
         <div class="flex flex-col md:flex-row gap-[20px]">
 
             <div class="w-full md:w-1/2">

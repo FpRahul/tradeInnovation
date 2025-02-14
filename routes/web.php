@@ -104,6 +104,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::post('/payment-status/{id}','paymentStatus')->name('task.paymentStatus');
         Route::get('documentation/{id}','documentation')->name('task.documentation');
         Route::Post('documentation-status/{id}','documenStatus')->name('task.documenStatus');
+        Route::Post('hold-task','holdtask')->name('task.hold');
+
         
         //For patent.........
         Route::get('/patent/payment-verification/{id?}','patentPaymentVerification')->name('task.patentPaymentVerification');

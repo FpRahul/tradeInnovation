@@ -39,7 +39,7 @@ class UsersController extends Controller
                 $logActivity[] = [
                     'user_id' => auth()->user()->id,
                     'title' => 'Login',
-                    'description' => auth()->user()->name . ' logged into portal',
+                    'description' => auth()->user()->name . 'has logged into the portal',
                     'created_at' => date('Y-m-d H:i:s'),
                     'ip_address' => $clientIP,
                     'operating_system' => $operatingSystem
@@ -258,7 +258,7 @@ class UsersController extends Controller
                     $logActivity[] = [
                         'user_id' => auth()->user()->id,
                         'title' => 'Add/Edit User',
-                        'description' => auth()->user()->name . ' has ' . $logAct . ' user ' . $newUser->name . ' (' . $newUser->id . ')',
+                        'description' => auth()->user()->name . ' has ' . $logAct . ' the user ' . $newUser->name . ' #' . $newUser->id,
                         'created_at' => date('Y-m-d H:i:s'),
                         'ip_address' => $clientIP,
                         'operating_system' => $operatingSystem
@@ -290,7 +290,7 @@ class UsersController extends Controller
             $logActivity[] = [
                 'user_id' => auth()->user()->id,
                 'title' => 'Archive User',
-                'description' => auth()->user()->name . ' has deleted user ' . $employeeData->name . ' (' . $employeeData->id . ')',
+                'description' => auth()->user()->name . ' has deleted the user ' . $employeeData->name . ' #' . $employeeData->id,
                 'created_at' => date('Y-m-d H:i:s'),
                 'ip_address' => $clientIP,
                 'operating_system' => $operatingSystem
@@ -398,7 +398,7 @@ class UsersController extends Controller
                     $logActivity[] = [
                         'user_id' => auth()->user()->id,
                         'title' => 'Add/Edit Client',
-                        'description' => auth()->user()->name . ' has ' . $logAct . ' client ' . $newClient->name . ' (' . $newClient->id . ')',
+                        'description' => auth()->user()->name . ' has ' . $logAct . ' the client ' . $newClient->name . ' #' . $newClient->id,
                         'created_at' => date('Y-m-d H:i:s'),
                         'ip_address' => $clientIP,
                         'operating_system' => $operatingSystem
@@ -500,7 +500,7 @@ class UsersController extends Controller
                     $logActivity[] = [
                         'user_id' => auth()->user()->id,
                         'title' => 'Add/Edit Associate',
-                        'description' => auth()->user()->name . ' has ' . $logAct . ' Associate ' . $newAssociate->name . ' (' . $newAssociate->id . ')',
+                        'description' => auth()->user()->name . ' has ' . $logAct . ' the Associate ' . $newAssociate->name . ' #' . $newAssociate->id,
                         'created_at' => date('Y-m-d H:i:s'),
                         'ip_address' => $clientIP,
                         'operating_system' => $operatingSystem
@@ -540,7 +540,7 @@ class UsersController extends Controller
                 $logActivity[] = [
                     'user_id' => auth()->user()->id,
                     'title' => 'Update User Status',
-                    'description' => auth()->user()->name . ' has changed status of ' . $existedUser->name . ' (' . $existedUser->id . ')',
+                    'description' => auth()->user()->name . ' has changed the status of ' . $existedUser->name . ' #' . $existedUser->id,
                     'created_at' => date('Y-m-d H:i:s'),
                     'ip_address' => $clientIP,
                     'operating_system' => $operatingSystem
@@ -569,7 +569,7 @@ class UsersController extends Controller
                 $logActivity[] = [
                     'user_id' => auth()->user()->id,
                     'title' => 'Update User Status',
-                    'description' => auth()->user()->name . ' has changed status of ' . $existedUser->name . ' #' . $existedUser->id,
+                    'description' => auth()->user()->name . ' has changed the status of ' . $existedUser->name . ' #' . $existedUser->id,
                     'created_at' => date('Y-m-d H:i:s'),
                     'ip_address' => $clientIP,
                     'operating_system' => $operatingSystem
@@ -598,7 +598,7 @@ class UsersController extends Controller
                 $logActivity[] = [
                     'user_id' => auth()->user()->id,
                     'title' => 'Update User Status',
-                    'description' => auth()->user()->name . ' has changed status of ' . $existedUser->name . ' #' . $existedUser->id,
+                    'description' => auth()->user()->name . ' has changed the status of ' . $existedUser->name . ' #' . $existedUser->id,
                     'created_at' => date('Y-m-d H:i:s'),
                     'ip_address' => $clientIP,
                     'operating_system' => $operatingSystem
@@ -645,7 +645,7 @@ class UsersController extends Controller
                 $logActivity[] = [
                     'user_id' => auth()->user()->id,
                     'title' => 'Add/Edit Profile',
-                    'description' => auth()->user()->name . ' has ' . $logAct . ' user ' . $userData->name . ' (' . $userData->id . ')',
+                    'description' => auth()->user()->name . ' has ' . $logAct . ' the user ' . $userData->name . ' #' . $userData->id,
                     'created_at' => date('Y-m-d H:i:s'),
                     'ip_address' => $clientIP,
                     'operating_system' => $operatingSystem
@@ -696,7 +696,7 @@ class UsersController extends Controller
             $logAct = 'updated';
         } else {
             $newCategory = new CategoryOption;
-            $logAct = 'Add';
+            $logAct = 'Added';
         }
         if ($request->isMethod('POST')) {
             $authUser = Auth::user();
@@ -708,7 +708,7 @@ class UsersController extends Controller
                 $logActivity[] = [
                     'user_id' => auth()->user()->id,
                     'title' => 'Add/Edit Professions',
-                    'description' => auth()->user()->name . ' has ' . $logAct . ' Professions ' . $newCategory->name . ' (' . $newCategory->id . ')',
+                    'description' => auth()->user()->name . ' has ' . $logAct . ' the Professions ' . $newCategory->name . ' #' . $newCategory->id,
                     'created_at' => date('Y-m-d H:i:s'),
                     'ip_address' => $clientIP,
                     'operating_system' => $operatingSystem
@@ -731,7 +731,7 @@ class UsersController extends Controller
         $clientIP = \Request::ip();
         $userAgent = \Request::header('User-Agent');
         $operatingSystem = getOperatingSystem($userAgent);
-        $logAct = 'Profession Status Change';
+        $logAct = 'changed the profession status';
         $categoryData = CategoryOption::find($id);
         if (!$categoryData) {
             return redirect()->back()->with('error', 'Category not found!');
@@ -742,7 +742,7 @@ class UsersController extends Controller
             $logActivity[] = [
                 'user_id' => auth()->user()->id,
                 'title' => 'Update Category Status',
-                'description' => auth()->user()->name . ' has ' . $logAct . ' category ' . $categoryData->name . ' (' . $categoryData->id . ')',
+                'description' => auth()->user()->name . ' has ' . $logAct . ' of the category ' . $categoryData->name . ' #' . $categoryData->id,
                 'created_at' => now(),
                 'ip_address' => $clientIP,
                 'operating_system' => $operatingSystem
@@ -760,7 +760,7 @@ class UsersController extends Controller
         $clientIP = \Request::ip();
         $userAgent = \Request::header('User-Agent');
         $operatingSystem = getOperatingSystem($userAgent);
-        $logAct = 'Incorporation Status Change';
+        $logAct = 'changed the incorporation status';
         $categoryData = CategoryOption::find($id);
         if (!$categoryData) {
             return redirect()->back()->with('error', 'Category not found!');
@@ -771,7 +771,7 @@ class UsersController extends Controller
             $logActivity[] = [
                 'user_id' => auth()->user()->id,
                 'title' => 'Update Category Status',
-                'description' => auth()->user()->name . ' has ' . $logAct . ' category ' . $categoryData->name . ' (' . $categoryData->id . ')',
+                'description' => auth()->user()->name . ' has ' . $logAct . ' of the category ' . $categoryData->name . ' (' . $categoryData->id . ')',
                 'created_at' => date('Y-m-d H:i:s'),
                 'ip_address' => $clientIP,
                 'operating_system' => $operatingSystem
@@ -821,7 +821,7 @@ class UsersController extends Controller
             $logActivity[] = [
                 'user_id' => auth()->user()->id,
                 'title' => 'Archive User',
-                'description' => auth()->user()->name . ' has deleted user ' . $categoryData->name . ' (' . $categoryData->id . ')',
+                'description' => auth()->user()->name . ' has deleted the user ' . $categoryData->name . ' #' . $categoryData->id,
                 'created_at' => date('Y-m-d H:i:s'),
                 'ip_address' => $clientIP,
                 'operating_system' => $operatingSystem
@@ -864,10 +864,10 @@ class UsersController extends Controller
         $operatingSystem = getOperatingSystem($userAgent);
         if ($request->incorporation_id > 0) {
             $newCategory = CategoryOption::where('id', $request->incorporation_id)->first();
-            $logAct = "Update";
+            $logAct = "Updated";
         } else {
             $newCategory = new CategoryOption;
-            $logAct = "Add";
+            $logAct = "Added";
 
         }
         if ($request->isMethod('POST')) {
@@ -880,7 +880,7 @@ class UsersController extends Controller
                 $logActivity[] = [
                     'user_id' => auth()->user()->id,
                     'title' => 'Add/Edit Incorporation',
-                    'description' => auth()->user()->name . $logAct . $newCategory->name . ' (' . $newCategory->id . ')',
+                    'description' => auth()->user()->name . 'has' .$logAct . $newCategory->name . ' #' . $newCategory->id,
                     'created_at' => date('Y-m-d H:i:s'),
                     'ip_address' => $clientIP,
                     'operating_system' => $operatingSystem
@@ -927,11 +927,11 @@ class UsersController extends Controller
         $userAgent = \Request::header('User-Agent');
         $operatingSystem = getOperatingSystem($userAgent);
         if ($request->referral_id > 0) {
-            $logAct = "Update";
+            $logAct = "Updated";
             $newCategory = CategoryOption::where('id', $request->referral_id)->first();
         } else {
             $newCategory = new CategoryOption;
-            $logAct = "Add";
+            $logAct = "Added";
 
         }
         if ($request->isMethod('POST')) {
@@ -943,7 +943,7 @@ class UsersController extends Controller
                 $logActivity[] = [
                     'user_id' => auth()->user()->id,
                     'title' => 'Add/Edit Referral',
-                    'description' => auth()->user()->name .' has '. $logAct .' Referral '. $newCategory->name . ' (' . $newCategory->id . ')',
+                    'description' => auth()->user()->name .' has '. $logAct .' the referral '. $newCategory->name . ' #' . $newCategory->id,
                     'created_at' => date('Y-m-d H:i:s'),
                     'ip_address' => $clientIP,
                     'operating_system' => $operatingSystem
@@ -1049,10 +1049,10 @@ class UsersController extends Controller
         $operatingSystem = getOperatingSystem($userAgent);
         if($request->partner_model_id > 0){
             $partnerData = Partner::find($request->partner_model_id);
-            $logAct = "Update";
+            $logAct = "Updated";
           }else{
               $partnerData = new Partner();
-              $logAct = "Add";
+              $logAct = "Added";
           }
         if($request->isMethod('POST')){            
             $partnerData->name = $request->name;
@@ -1060,7 +1060,7 @@ class UsersController extends Controller
                 $logActivity[] = [
                     'user_id' => auth()->user()->id,
                     'title' => 'Add/Edit Partner',
-                    'description' => auth()->user()->name . ' has ' . $logAct . ' user ' . $partnerData->name . ' #' . $partnerData->id,                    
+                    'description' => auth()->user()->name . ' has ' . $logAct . ' the user ' . $partnerData->name . ' #' . $partnerData->id,                    
                     'created_at' => date('Y-m-d H:i:s'),
                     'ip_address' => $clientIP,
                     'operating_system' => $operatingSystem
@@ -1080,11 +1080,11 @@ class UsersController extends Controller
         return view('users.partner', compact('partnerData'));
     }
 
-    public function partnertatus(Request $request , $id=null){
+    public function partnerStatus(Request $request , $id=null){
         $clientIP = \Request::ip();
         $userAgent = \Request::header('User-Agent');
         $operatingSystem = getOperatingSystem($userAgent);
-        $logAct = 'Partner Status Change';
+        $logAct = 'changed the partner';
         $partnerData = Partner::find($id);
         if (!$partnerData) {
             return redirect()->back()->with('error', 'Partner not found!');
@@ -1095,7 +1095,7 @@ class UsersController extends Controller
             $logActivity[] = [
                 'user_id' => auth()->user()->id,
                 'title' => 'Update Partner Status',
-                'description' => auth()->user()->name . ' has ' . $logAct . ' partner ' . $partnerData->name . ' #' . $partnerData->id ,
+                'description' => auth()->user()->name . ' has ' . $logAct .' status of '. $partnerData->name . ' #' . $partnerData->id ,
                 'created_at' => date('Y-m-d H:i:s'),
                 'ip_address' => $clientIP,
                 'operating_system' => $operatingSystem

@@ -11,7 +11,7 @@
     @if($taskDetails)
         <!-- Display Task Title and Client Info -->
         <p class="text-[14px] leading-[16px] font-[600] text-[#2C2C2C]">
-            {{ $taskDetails->serviceSatge->title ?? "Title not fiund" }} 
+            {{ $taskDetails->serviceSatge->description ?? "Title not found" }} 
             (lead <span class="text-[#2196F3]">#{{ $taskDetails->lead->lead_id ?? 'N/A' }}</span>)
         </p>
     @else
@@ -64,7 +64,8 @@
             <li>
                 <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Inbound Date</span>
                 <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize">
-                    {{ $taskDetails->leadTaskDetails->dead_line ?? 'N/A' }}
+                {{ \Carbon\Carbon::parse($taskDetails->leadTaskDetails->dead_line)->format('d M Y') ?? 'N/A' }}
+
                 </strong>
             </li>
             <!-- Display Associate -->

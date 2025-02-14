@@ -111,7 +111,6 @@ class TasksController extends Controller
 
         $serviceId = $existedTaskDetails->services->id;
         $subServiceId = $existedTaskDetails->subService->id;
-        $stageDescription =  $existedTaskDetails->serviceSatge->description;
 
         $stageId = (int) $request->stage_id;
       
@@ -240,7 +239,7 @@ class TasksController extends Controller
     }
     public function sendQuotation(Request $request, $id)
     {   
-
+        
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
         $existedTask = LeadTask::with(['services', 'subService', 'lead', 'serviceSatge'])->where('id', $id)->first();
@@ -302,6 +301,7 @@ class TasksController extends Controller
                     $existedTaskDetails->status_date = $verifiedDate;
                     $existedTaskDetails->status = 1;
                     if ($request->hasFile('attachment')) {
+                        
                         $folderPath = public_path('Image/leads/lead_' . $existedTask->lead_id);
                         if (!file_exists($folderPath)) {
                             mkdir($folderPath, 0755, true);

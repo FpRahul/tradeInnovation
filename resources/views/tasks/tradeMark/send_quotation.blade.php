@@ -10,7 +10,7 @@
 </div>
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
    <strong>Task Update</strong>
-   <form action="{{route('task.sendQuotation',['id'=>$id]) }}" method="POST" class="space-y-[20px]">
+   <form action="{{route('task.sendQuotation',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
       <div class="flex flex-col md:flex-row gap-[20px]">
          <input type="hidden" name="checkValid" id="checkValid" value="">

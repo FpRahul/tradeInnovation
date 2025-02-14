@@ -73,7 +73,7 @@
                                 @endif
                             </td>
                             <td class="border-b-[1px] border-[#0000001A] py-[12px] px-[15px]">
-                                @if((in_array('users.addclient',$permissionDetails['accessableRoutes']) || in_array('users.status',$permissionDetails['accessableRoutes']) || in_array('users.delete',$permissionDetails['accessableRoutes'])) || auth()->user()->role==1)
+                                @if((in_array('users.addclient',$permissionDetails['accessableRoutes']) || in_array('associate.status',$permissionDetails['accessableRoutes']) || in_array('users.delete',$permissionDetails['accessableRoutes'])) || auth()->user()->role==1)
                                 <div class="dropdown inline-block relative ml-[auto] mr-[20px] ">
                                     <a href="javascript:void(0)" type="button" class="button flex items-center justify-center bg-[#13103a] px-[12px] py-[15px] rounded-[5px] text-[#fff]">
                                         <svg width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -88,8 +88,8 @@
                                             {{-- @if(in_array('users.delete',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
                                                 <a href="#" data-id="{{$associateDetails->id}}" class="delete_associate block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Archive</a>
                                             @endif --}}
-                                            @if(in_array('users.status',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
-                                                <a href="{{ route('users.status', ['id' => $associateDetails->id, 'val' => $associateDetails->status]) }}" class="associate_status block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">
+                                            @if(in_array('associate.status',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                                <a href="{{ route('associate.status', ['id' => $associateDetails->id, 'val' => $associateDetails->status]) }}" class="associate_status block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">
                                                 {{ $associateDetails->status ? 'Inactive' : 'Active' }}
                                             </a>
                                             @endif

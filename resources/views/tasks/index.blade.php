@@ -14,22 +14,22 @@
     </div>
     <div>
         <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] overflow-hidden ">
-        <div class="py-[15px] md:py-[25px] px-[15px] md:px-[20px] gap-[10px] flex flex-col md:flex-row items-end justify-between">
+            <div class="py-[15px] md:py-[25px] px-[15px] md:px-[20px] gap-[10px] flex flex-col md:flex-row items-end justify-between">
                 <form action="" class="w-full flex flex-col md:flex-row gap-[20px]">
-                <div class="w-full md:w-6/12 flex items-center gap-[20px]">
-                    <div class="w-full flex items-end gap-[10px]">
-                        <div class="w-full">
-                            <label for="mobilenumber" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Lead ID</label>
-                            <input type="text" name="leadId" id="leadId"  class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter here Lead ID">
+                    <div class="w-full md:w-6/12 flex items-center gap-[20px]">
+                        <div class="w-full flex items-end gap-[10px]">
+                            <div class="w-full">
+                                <label for="mobilenumber" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Lead ID</label>
+                                <input type="text" name="leadId" id="leadId" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter here Lead ID">
+                            </div>
+                            <button class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[15px] px-[30px]">
+                                Filter
+                            </button>
+                            <button id="resetButton" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[15px] px-[30px]">
+                                Reset
+                            </button>
                         </div>
-                        <button class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[15px] px-[30px]">
-                            Filter
-                        </button>
-                        <button id="resetButton" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[15px] px-[30px]">
-                        Reset
-                    </button>
                     </div>
-                </div>
                 </form>
                 <div class="relative w-full md:w-[217px] mt-[10px] md:mt-0">
                     <svg class="absolute top-[50%] left-[13px] translate-y-[-50%]" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -71,7 +71,7 @@
                     <tbody>
                         @if(!$taskDetails->isEmpty())
                         @foreach ($taskDetails as $task)
-                        
+
                         <tr>
                             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px] pl-[25px]">
                                 @if(!empty($task->lead->lead_id))
@@ -92,34 +92,34 @@
                                 {{ $task->serviceSatge->title }}
                                 @php
                                 $stageId = $task->serviceSatge->id;
-                                
+
                                 @endphp
                                 @else
                                 Not Available
                                 @endif
                             </td>
                             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                             @if( $task->services)
-                              {{ $task->services->serviceName }}
-                              @php
-                                  
-                              $serviceID = $task->services->id;
-                              @endphp
-                            
-                            @else
-                            Not Available
-                            @endif
+                                @if( $task->services)
+                                {{ $task->services->serviceName }}
+                                @php
+
+                                $serviceID = $task->services->id;
+                                @endphp
+
+                                @else
+                                Not Available
+                                @endif
 
                             </td>
                             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
 
-                            @if( $task->subService)
-                              {{ $task->subService->subServiceName }}
-                            
+                                @if( $task->subService)
+                                {{ $task->subService->subServiceName }}
 
-                            @else
-                            Not Available
-                            @endif
+
+                                @else
+                                Not Available
+                                @endif
                             </td>
                             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                                 @if($task->leadTaskDetails && $task->leadTaskDetails->dead_line)
@@ -135,20 +135,20 @@
                                 $status = 'Other';
                                 // Switch based on the value of 'status'
                                 switch ($task->leadTaskDetails->status) {
-                                    case 0:
-                                        $status = 'Pending';
-                                        break;
-                                        case 1:
-                                            $status = 'Completed';
-                                            break;
-                                            case 2:
-                                                $status = 'Hold';
-                                                break;
-                                                case 3:
+                                case 0:
+                                $status = 'Pending';
+                                break;
+                                case 1:
+                                $status = 'Completed';
+                                break;
+                                case 2:
+                                $status = 'Hold';
+                                break;
+                                case 3:
                                 $status = 'Follow-up';
                                 break;
-                            }
-                            @endphp
+                                }
+                                @endphp
                                 <span class="text-[#13103A] bg-[#ADD8E6] inline-block text-center min-w-[100px] py-[5px] px-[10px] rounded-[5px]">
                                     {{ $status }}
                                 </span>
@@ -157,6 +157,7 @@
                                 @endif
                             </td>
                             <td class="text-center border-b-[1px] border-[#0000001A] py-[12px] px-[15px]">
+                            @if((in_array('task.followup',$permissionDetails['accessableRoutes']) || in_array('leadLogs.index',$permissionDetails['accessableRoutes']) || in_array('task.hold',$permissionDetails['accessableRoutes'])) || auth()->user()->role==1)
                                 <div class="dropdown inline-block relative ml-[auto] mr-[20px] ">
                                     <a href="javascript:void(0)" type="button" class="button flex items-center justify-center bg-[#13103a] px-[12px] py-[15px] rounded-[5px] text-[#fff]">
                                         <svg width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -165,32 +166,35 @@
                                     </a>
                                     <div class="dropdown_menus absolute right-0 z-10 mt-2 w-[100px] origin-top-right rounded-md bg-white shadow-md ring-1 ring-black/5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                                         <div class="text-start" role="none">
-                                            
-                                            @if(optional($task->leadTaskDetails)->status == 1)
-                                            <p></p>
-                                            @elseif(!empty($serviceID) && !empty($stageId))
-                                                <a href="{{ route('task.followup', ['id' => $task->id,'serviceId' => $serviceID , 'stageId' => $stageId ])}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Follow Up</a>
-                                                @endif
-                                                @if(!empty($task->lead->id))
-                                                @php
-                                                $leadId = $task->lead->id;
-                                                @endphp
-                                                @else
-                                                Not Available
-                                                @endif
-                                            <a href="{{route('leadLogs.index', ['lead_id' => $leadId])}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal" type="button">Logs</a>
-                                            <a href="#" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Hold</a>
+                                        @if(in_array('task.followup',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                            @if(!empty($serviceID) && !empty($stageId))
+                                            <a href="{{ route('task.followup', ['id' => $task->id,'serviceId' => $serviceID , 'stageId' => $stageId ])}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Follow Up</a>
+                                            @endif
+                                        @endif
+                                            @if(!empty($task->lead->id))
+                                            @php
+                                            $leadId = $task->lead->id;
+                                            @endphp
+                                            @endif
+                                            <a href="{{route('leadLogs.index', ['lead_id' => $leadId])}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Logs</a>
+                                            <a href="#" class="hold-on-pop block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700"  data-taskId = "{{$task->leadTaskDetails->task_id}}" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal">Hold</a>
                                         </div>
                                     </div>
                                 </div>
+                                @else
+                                    <x-nopermission />
+                                @endif
                             </td>
                         </tr>
-                     
+                        
+                        
                         @endforeach
                         @else
                         <tr>
                             <td colspan="8" class="text-center text-red-500 py-[12px]">No task found</td>
                         </tr>
+
+                     
                         @endif
                     </tbody>
 
@@ -198,32 +202,110 @@
             </div>
         </div>
     </div>
-    <script>
-        $(document).on('keyup', '.z', function() {
-            var key = $(this).val();
-            $.ajax({
-                method: 'GET',
-                url: "{{ route('task.index')}}",
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                data: {
-                    key: key,
-                    requestType: 'ajax',
-                },
-                dataType: 'json',
-                success: function(res) {
-                    console.log(res);
-                    $('#search_table_data').html(res.trData);
-                }
-            })
+</div>
+<div id="assignUserModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[100%)] max-h-full bg-[rgba(0,0,0,0.6)] ">
+    <div class="relative p-4 w-full max-w-[780px] max-h-full m-auto">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-[20px] shadow">
+           
+            <div class="flex items-center justify-between p-4 md:px-5 md:py-[20px] border-b border-[#f2f2f2]">
+                <h3 class="flex items-center gap-[8px] text-[24px] font-[600] leading-[17px] text-[#000]">
+                    Hold Task<p id="rowLeadId" class="text-sky-500"></p>
 
-            $("#resetButton").on('click', function() {
+                </h3>
+
+                <button type="button" class=" absolute top-[-10px] right-[-10px] w-[35px] h-[35px] bg-[#13103A] flex items-center justify-center text-[#fff] rounded-[60px]" data-modal-hide="assignUserModal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                    </svg>
+
+                </button>
+            </div>
+           
+            <!-- Modal body -->
+            <div class="p-[20px]">
+                <form method="POST" action="{{ route('task.hold') }}"  class="space-y-[20px]">
+                    @csrf
+                    <div class="w-full md:w-1/2" id="verifiedDate">
+                        <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+                            Hold On
+                        </label>
+                        <input type="hidden" name="task_hidden_id" id="task_hidden_id">
+                        <div class="w-full">
+                            <div class="w-full relative">
+                                <input
+                                    type="text"
+                                    placeholder="Hold On"
+                                    name="verified"
+                                    class="daterangepicker-verified w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
+                                    value=""
+                                    id="verified"
+                                    autocomplete="off">
+                                <div class="absolute right-[10px] top-[10px]">
+                                    <i class="ri-calendar-line"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Reason</label>
+                        <textarea type="text" name="description" id="description" class="w-full h-[155px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
+                    </div>
+                    <div class="flex justify-end gap-[15px]">
+                        <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[10px] px-[30px]">Hold Task</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).on('click', '.hold-on-pop', function(){
+        var task_id = $(this).attr('data-taskId')
+        $("#task_hidden_id").val(task_id);
+    });
+        
+    $(document).on('keyup', '.z', function() {
+        var key = $(this).val();
+        $.ajax({
+            method: 'GET',
+            url: "{{ route('task.index')}}",
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            data: {
+                key: key,
+                requestType: 'ajax',
+            },
+            dataType: 'json',
+            success: function(res) {
+                console.log(res);
+                $('#search_table_data').html(res.trData);
+            }
+        })
+
+        $("#resetButton").on('click', function() {
             event.preventDefault();
             window.history.replaceState({}, document.title, window.location.pathname);
             window.location.reload();
             $("#filterForm")[0].reset();
         });
+
+
+    });
+    $(document).ready(function() {
+        $('.daterangepicker-verified').daterangepicker({
+            singleDatePicker: true,
+            opens: 'right',
+            locale: {
+                format: 'DD MMM YYYY'
+            },
+            minDate: moment().startOf('day'),
+        }).on('apply.daterangepicker', function(ev, picker) {
+            console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
         });
-    </script>
-    @stop
+    })
+</script>
+@stop

@@ -131,7 +131,9 @@ class CheckPermission
             '0' => 'task.chekDuplication',
             '1' => 'task.documentVerified',
             '2' => 'task.documentVerifiedChildSatge',
-            '3' => 'task.sendQuotation'
+            '3' => 'task.sendQuotation',
+            '4' => 'task.checkPayment',
+            '5' => 'task.paymentStatus'
         ];
     }
 }

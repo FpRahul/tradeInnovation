@@ -105,7 +105,6 @@
 
                                 $serviceID = $task->services->id;
                                 @endphp
-
                                 @else
                                 Not Available
                                 @endif
@@ -115,15 +114,14 @@
 
                                 @if( $task->subService)
                                 {{ $task->subService->subServiceName }}
-
-
                                 @else
                                 Not Available
                                 @endif
                             </td>
                             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                                 @if($task->leadTaskDetails && $task->leadTaskDetails->dead_line)
-                                {{ $task->leadTaskDetails->dead_line }}
+                                {{ \Carbon\Carbon::parse($task->leadTaskDetails->dead_line)->format('d M Y') }}
+
                                 @else
                                 Not Available
                                 @endif
@@ -157,7 +155,7 @@
                                 @endif
                             </td>
                             <td class="text-center border-b-[1px] border-[#0000001A] py-[12px] px-[15px]">
-                            @if((in_array('task.followup',$permissionDetails['accessableRoutes']) || in_array('leadLogs.index',$permissionDetails['accessableRoutes']) || in_array('task.hold',$permissionDetails['accessableRoutes'])) || auth()->user()->role==1)
+                                @if((in_array('task.followup',$permissionDetails['accessableRoutes']) || in_array('leadLogs.index',$permissionDetails['accessableRoutes']) || in_array('task.hold',$permissionDetails['accessableRoutes'])) || auth()->user()->role==1)
                                 <div class="dropdown inline-block relative ml-[auto] mr-[20px] ">
                                     <a href="javascript:void(0)" type="button" class="button flex items-center justify-center bg-[#13103a] px-[12px] py-[15px] rounded-[5px] text-[#fff]">
                                         <svg width="18" height="4" viewBox="0 0 18 4" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -166,35 +164,37 @@
                                     </a>
                                     <div class="dropdown_menus absolute right-0 z-10 mt-2 w-[100px] origin-top-right rounded-md bg-white shadow-md ring-1 ring-black/5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                                         <div class="text-start" role="none">
-                                        @if(in_array('task.followup',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                            @if(in_array('task.followup',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
                                             @if(!empty($serviceID) && !empty($stageId))
                                             <a href="{{ route('task.followup', ['id' => $task->id,'serviceId' => $serviceID , 'stageId' => $stageId ])}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Follow Up</a>
                                             @endif
-                                        @endif
+                                            @endif
                                             @if(!empty($task->lead->id))
                                             @php
                                             $leadId = $task->lead->id;
                                             @endphp
                                             @endif
                                             <a href="{{route('leadLogs.index', ['lead_id' => $leadId])}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Logs</a>
-                                            <a href="#" class="hold-on-pop block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700"  data-taskId = "{{$task->leadTaskDetails->task_id}}" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal">Hold</a>
+                                            @if(in_array('task.hold',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                            <a href="#" class="hold-on-pop block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-taskId="{{$task->leadTaskDetails->task_id }}" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal">Hold</a>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
                                 @else
-                                    <x-nopermission />
+                                <x-nopermission />
                                 @endif
                             </td>
                         </tr>
-                        
-                        
+
+
                         @endforeach
                         @else
                         <tr>
                             <td colspan="8" class="text-center text-red-500 py-[12px]">No task found</td>
                         </tr>
 
-                     
+
                         @endif
                     </tbody>
 
@@ -207,7 +207,7 @@
     <div class="relative p-4 w-full max-w-[780px] max-h-full m-auto">
         <!-- Modal content -->
         <div class="relative bg-white rounded-[20px] shadow">
-           
+
             <div class="flex items-center justify-between p-4 md:px-5 md:py-[20px] border-b border-[#f2f2f2]">
                 <h3 class="flex items-center gap-[8px] text-[24px] font-[600] leading-[17px] text-[#000]">
                     Hold Task<p id="rowLeadId" class="text-sky-500"></p>
@@ -221,10 +221,10 @@
 
                 </button>
             </div>
-           
+
             <!-- Modal body -->
             <div class="p-[20px]">
-                <form method="POST" action="{{ route('task.hold') }}"  class="space-y-[20px]">
+                <form method="POST" action="{{ route('task.hold') }}" class="space-y-[20px]">
                     @csrf
                     <div class="w-full md:w-1/2" id="verifiedDate">
                         <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
@@ -262,11 +262,11 @@
 </div>
 
 <script>
-    $(document).on('click', '.hold-on-pop', function(){
+    $(document).on('click', '.hold-on-pop', function() {
         var task_id = $(this).attr('data-taskId')
         $("#task_hidden_id").val(task_id);
     });
-        
+
     $(document).on('keyup', '.z', function() {
         var key = $(this).val();
         $.ajax({

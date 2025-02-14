@@ -60,6 +60,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/view-logs', 'viewLogs')->name('logs.view');
 
         Route::get('/userstatus','userStatus')->name('users.status');
+        Route::get('/clientstatus','clientStatus')->name('client.status');
+        Route::get('/associatestatus','associateStatus')->name('associate.status');
     });
     //Settings Routes
     Route::prefix('settings')->controller(SettingsController::class)->group(function () {

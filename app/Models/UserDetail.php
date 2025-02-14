@@ -29,7 +29,8 @@ class UserDetail extends Model
         'uploadDrivingLicence',
         'incorporationType',
         'registered	',
-        'referralPartner',        
+        'referralPartner', 
+        'partner_id'       
     ];
 
     public function user(){

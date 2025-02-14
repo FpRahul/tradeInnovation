@@ -28,7 +28,7 @@
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="incorporationtype" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Incorporation Type <strong class="text-[#f83434]">*</strong></label>
-                    <select name="incorporationtype" class="selectedValue allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <select name="incorporationtype" class="showPartnerListName selectedValue allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                         <option value="">Select Incorporation Type</option>
                     
                         @if (!empty($incorporationDataList) && $incorporationDataList->isNotEmpty())
@@ -40,8 +40,34 @@
                             @endforeach                                                            
                         @endif
                     </select>
-                    
-                    
+                </div>
+                @php
+                    $displaypartnerClass = 'hidden';
+                @endphp
+                @if (!empty($partnerDataList))
+                    @if ($newClientDetails->incorporationType == 7)
+                        @php               
+                            $displaypartnerClass = '';
+                        @endphp
+                    @endif                       
+                @endif
+                <div class="partnerNameDiv w-full md:w-1/2 {{$displaypartnerClass}}" id="source_type">
+                    <label for="partnerNameList" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Partners Name</label>
+                    <select name="partnerNamelist[]" id="partnerNameList" class="allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none is_required" multiple>
+                        <option value="">Select Source Type</option>                    
+                        @if ($partnerDataList && $partnerDataList->isNotEmpty())
+                            @php
+                                // Convert comma-separated partner_id into an array
+                                $selectedPartners = explode(',', $newClientDetails->partner_id ?? '');
+                            @endphp
+                            @foreach ($partnerDataList as $value)
+                                <option value="{{ $value->id }}" {{ in_array($value->id, $selectedPartners) ? 'selected' : '' }}>
+                                    {{ $value->name }}
+                                </option>
+                            @endforeach                            
+                        @endif
+                    </select>
+                                  
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="number" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mobile Number <strong class="text-[#f83434]">*</strong></label>
@@ -154,16 +180,15 @@
                     
                 </div>
                 @php
-                $sourceTypeData = [];
-                $displayClass = 'hidden';
-            @endphp
+                    $sourceTypeData = [];
+                    $displayClass = 'hidden';
+                @endphp
 
             @if (!empty($newClientDetails))
 
                 @if ($newClientDetails->referralPartner == 17 || $newClientDetails->referralPartner == 18 || $newClientDetails->referralPartner == 19)
                     @if ($newClientDetails->source_type_id > 0)           
-                        @php
-                        
+                        @php                        
                             $sourceTypeData = collect(getUserSourceTypeName($newClientDetails->referralPartner));
                             $displayClass = '';
                         @endphp                        
@@ -240,6 +265,14 @@
         }else{
             $('.sourceTypeNameDiv').css('display','none');
         }
+    });
+
+    $(document).on('change','.showPartnerListName',function(){ 
+        if($(this).val() == 7){
+            $('.partnerNameDiv').removeClass('hidden');
+        }else{
+            $('.partnerNameDiv').addClass('hidden');
+        }       
     });
 
     $(document).on('click','.sameAsCurrentAddress',function(){

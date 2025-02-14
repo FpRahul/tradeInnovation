@@ -8,32 +8,28 @@ use Illuminate\Support\Facades\Validator;
 
 class SettingsController extends Controller
 {
-    public function roles(Request $request)
-{ 
-    $allRoles = Role::where('id', '!=', '1')->with('roleMenus')->get();
-    $searchKey = $request->input('key') ?? '';
-    $requestType = $request->input('requestType') ?? '';
-    if ($searchKey) {
-    $allRoles = Role::where('id', '!=', '1')  
-    ->where('name', 'LIKE', '%' . $searchKey . '%') 
-    ->with('roleMenus')  
-    ->get();
-    } 
-    // $allRoles = $allRoles->paginate(env("PAGINATION_COUNT"));
-    if(empty($requestType)) {
-        $header_title_name = 'User';
+    public function roles(Request $request){ 
         $allRoles = Role::where('id', '!=', '1')->with('roleMenus')->get();
-        return view('settings/roles', compact('allRoles','header_title_name', 'searchKey'));
+        $searchKey = $request->input('key') ?? '';
+        $requestType = $request->input('requestType') ?? '';
+        if ($searchKey) {
+            $allRoles = Role::where('id', '!=', '1')  
+            ->where('name', 'LIKE', '%' . $searchKey . '%') 
+            ->with('roleMenus')  
+            ->get();
+        } 
+        if(empty($requestType)) {
+            $header_title_name = 'User';
+            $allRoles = Role::where('id', '!=', '1')->with('roleMenus')->get();
+            return view('settings/roles', compact('allRoles','header_title_name', 'searchKey'));
+        }else{
+            $trData = view('settings/role-listing-data',compact('allRoles', 'searchKey'))->render();
+            $dataArray = [
+                'trData' => $trData,
+            ];
+            return response()->json($dataArray);
+        }
     }
-    else {
-        $trData = view('settings/role-listing-data',compact('allRoles', 'searchKey'))->render();
-        $dataArray = [
-            'trData' => $trData,
-        ];
-        return response()->json($dataArray);
-    }
-    
-}
     public function addRole(Request $request, $id = null){
         $header_title_name="Setting";
         $menuAddedAction = [];
@@ -50,9 +46,6 @@ class SettingsController extends Controller
             $roleData = new Role();
         }
         if($request->isMethod('post')){
-            // $credentials = $request->validate([
-            //     'rolename' => 'required|unique:roles,name'
-            // ]);
             //Saving Role
             $name = $request->rolename;
             if(!$name){
@@ -60,13 +53,10 @@ class SettingsController extends Controller
             }else{
                 $name = $request->rolename;
             }
-          
             $roleData->name = $name;
             $roleData->save();
-
             //Saving Role Permission
             $allSavedPermissions = $request->permission;
-            
             $roleMenuPermission = [];
             $recordCounter = 0;
             if(!empty($allSavedPermissions)){
@@ -94,8 +84,6 @@ class SettingsController extends Controller
                                         $roleMenuPermission[$recordCounter]['menuId'] = $subMenuId;
                                         
                                         $roleMenuPermission[$recordCounter]['permission'] =implode(',',$allActions);
-                                        // dd($allActions);
-
                                         $recordCounter++; 
                                     }else{
                                         if(isset($subMenuItems['subSubMenu'])){
@@ -145,12 +133,9 @@ class SettingsController extends Controller
             }
             if($id>0){
                 $updatedIds = [];
-                
                 if(!empty($roleMenuPermission)){
-                    // dd($roleMenuPermission);    
                     foreach ($roleMenuPermission as $rolePermission) {
                         if ($rolePermission['permission'] !== null) {
-                            // dd($rolePermission['permission']);
                             $oldPermission = RoleMenu::where('roleId', $rolePermission['roleId'])
                                 ->where('menuId', $rolePermission['menuId'])
                                 ->first();
@@ -166,21 +151,15 @@ class SettingsController extends Controller
                                 $oldPermission->save();
                                 $updatedIds[] = $oldPermission->id;
                             }
-                        }
-
-                        else{
-                            
+                        }else{
                             if ($rolePermission['permission'] == null && $rolePermission['menuId'] == 1) {
                                 $oldPermission = RoleMenu::where('roleId', $rolePermission['roleId'])
                                 ->first();
                                 $oldPermission->delete();
                             }
-
                         }
                     }
-                    
                 }
-
                 if(!empty($updatedIds)){
                     RoleMenu::whereNotIn('id', $updatedIds)->where('roleId',$id)->delete();
                 }
@@ -199,7 +178,6 @@ class SettingsController extends Controller
                     return redirect()->route('settings.roles')->with('error','Invalid permission request.');
                 }
             }
-            
             return redirect()->back()->withSuccess('Permission updated successfully.');
         }
         return view('settings/add-role',compact('header_title_name','roleData','menuAddedAction'));
@@ -213,7 +191,6 @@ class SettingsController extends Controller
 
     public function getMenu(Request $request){
         $menuParentID = $request->menuName ?? 0;
-        
         $rule = [
             'name' => 'required',
             'icon' => 'nullable',
@@ -226,17 +203,16 @@ class SettingsController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
         $menu = new Menu();
-         $menu->parentId = $menuParentID;
-         $menu->menuName = $request->name;
-         $menu->icon = $request->icon;
-         $menu->url = $request->url;
-         $menu->actionRoutes = $request->action;
-         if ($menu) {
+        $menu->parentId = $menuParentID;
+        $menu->menuName = $request->name;
+        $menu->icon = $request->icon;
+        $menu->url = $request->url;
+        $menu->actionRoutes = $request->action;
+        if ($menu) {
             $menu->save();
             return response()->json(['message' => 'success' ,  'status' => 200]);
         }else{
             return response()->json(['message' => 'error' ,  'status' => 400]);
-
         }
     }
 }

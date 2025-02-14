@@ -77,6 +77,7 @@ class CheckPermission
         
         $serializeMenus = [];
         $menuSubMenuRoutes = [];
+        $subMenuActions = [];
         if($systemMenus->isNotEmpty()){
             foreach($systemMenus as $k =>$v){
                 if($v->parentId==0){
@@ -104,6 +105,7 @@ class CheckPermission
                 //Grouping routes per menu for active class
                 if($v->parentId>0){
                     $groupedRoutes = explode(',',$v->actionRoutes);
+                    $subMenuActions[$v->id] = $groupedRoutes;
                     if(!empty($groupedRoutes)){
                         foreach($groupedRoutes as $groupedRoute){
                             $menuSubMenuRoutes[$v->parentId][] = $groupedRoute;
@@ -118,8 +120,7 @@ class CheckPermission
             uasort($serializeMenus, function ($a, $b) {
                 return $a['menu']['sequence'] <=> $b['menu']['sequence'];
             });
-            //dd($menuSubMenuRoutes);
-            view()->share(compact('serializeMenus','menuSubMenuRoutes','permissionDetails'));
+            view()->share(compact('serializeMenus','menuSubMenuRoutes','permissionDetails','subMenuActions'));
         }
 
         return $next($request);

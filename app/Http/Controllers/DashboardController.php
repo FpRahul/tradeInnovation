@@ -16,10 +16,9 @@ class DashboardController extends Controller
         $header_title_name = 'Dashboard';
         $activeAssociate = User::where('role', 3)->where('status', 1)->where('archive',1)->count();
         $activeClient = User::where('role', 2)->where('status', 1)->where('archive',1)->count();
-        $activeClient = User::where('role', 2)->where('status', 1)->where('archive',1)->count();
-        $activeLeads = Lead::where('status', 1)->count();
+        $activeLeads = Lead::where('id','>', 0)->count();
         $activeServices = Service::where('status', 1)->count();
-
+        // dd($activeLeads);
         $getLogs = Log::with(['user' => function ($getLogs) {
             $getLogs->select('id','name'); // Specify the columns you want from the `user` table
         }])->orderBy('id', 'desc');

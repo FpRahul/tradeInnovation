@@ -17,7 +17,7 @@
         </div>
         <div class="flex shadow-[0px_0px_14px_2px_#0000001F] bg-white border border-[#0000001A] rounded-[10px] overflow-hidden">
             <a href="{{ route('leads.index') }}" class="bg-[#F5F5F5] w-[76px] min-h-[64px] flex justify-center items-center">
-                <img src="{{asset('assets/images/dash_icon2.png')}}" alt="icon">
+                <img src="{{asset('assets/images/followups.png')}}" alt="icon">
             </a>
             <a href="{{ route('leads.index') }}" class="flex items-center justify-between w-[calc(100%-76px)] p-4">
                 <h5 class="text-[14px] leading-[16px] text-[#6F6F6F] font-[400] ">Leads</h5>
@@ -26,7 +26,7 @@
         </div>
         <div class="flex shadow-[0px_0px_14px_2px_#0000001F] bg-white border border-[#0000001A] rounded-[10px] overflow-hidden">
             <a href="{{route('client.listing')}}" class="bg-[#F5F5F5] w-[76px] min-h-[64px] flex justify-center items-center">
-                <img src="{{asset('assets/images/dash_icon3.png')}}" alt="icon">
+                <img src="{{asset('assets/images/clients-icon.png')}}" alt="icon">
             </a>
             <a href="{{route('client.listing')}}" class="flex items-center justify-between w-[calc(100%-76px)] p-4">
                 <h5 class="text-[14px] leading-[16px] text-[#6F6F6F] font-[400] ">Clients</h5>
@@ -35,7 +35,7 @@
         </div>
         <div class="flex shadow-[0px_0px_14px_2px_#0000001F] bg-white border border-[#0000001A] rounded-[10px] overflow-hidden">
             <a href="{{route('associate.listing')}}" class="bg-[#F5F5F5] w-[76px] min-h-[64px] flex justify-center items-center">
-                <img src="{{asset('assets/images/dash_icon4.png')}}" alt="icon">
+                <img src="{{asset('assets/images/associate.png')}}" alt="icon">
             </a>
             <a href="{{route('associate.listing')}}" class="flex items-center justify-between w-[calc(100%-76px)] p-4">
                 <h5 class="text-[14px] leading-[16px] text-[#6F6F6F] font-[400] ">Associates</h5>

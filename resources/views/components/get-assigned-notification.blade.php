@@ -15,9 +15,9 @@
                         <li class="py-3 pr-[10px] border-b-[1px] border-[#e5e7eb]">
                             @if ($notificationDataList->title == 'Lead Assigned' )
                             <a href="{{route('leads.index',['id'=>base64_encode($notificationDataList->lead_id),'NotifyId'=>base64_encode($notificationDataList->id)])}}" class="w-full flex gap-[7px]">
-                            @elseif ($notificationDataList->title == 'Task Assigned')
-                            <a href="{{route('task.index',['id'=>base64_encode($notificationDataList->task_id),'NotifyId'=>base64_encode($notificationDataList->id)])}}" class="w-full flex gap-[7px]">
-                            @endif
+                            @else
+                            <a href="{{ route('task.followup', ['id' =>$notificationDataList->taskDeatials->id, 'serviceId' => $notificationDataList->taskDeatials->service_id, 'stageId' => $notificationDataList->taskDeatials->service_stage_id]) }}" class="w-full flex gap-[7px]">
+                                @endif
                                 <img src="{{asset('assets/images/bell.webp')}}" alt="profile" class="min-w-[35px] w-[35px] h-[35px] rounded-[100%] object-cover border-[1px] border-[#13103A] ">
                                 <div class="w-full flex flex-col">                        
                                     <div class="w-full flex items-center justify-between">

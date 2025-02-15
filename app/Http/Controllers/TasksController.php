@@ -104,10 +104,12 @@ class TasksController extends Controller
     }
 
     public function duplicateVerified(Request $request, $id)
-    {
+    {  
+
+        
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         $deadLineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
-        $existedTaskDetails = LeadTask::with(['services', 'subService', 'serviceSatge'])->where('id', $id)->first();
+        $existedTaskDetails = LeadTask::with(['user','services', 'subService', 'serviceSatge'])->where('id', $id)->first();
 
         $serviceId = $existedTaskDetails->services->id;
         $subServiceId = $existedTaskDetails->subService->id;
@@ -182,17 +184,22 @@ class TasksController extends Controller
                     $notification->user_id = $userAssign;
                     $notification->lead_id = $existedTaskDetails->lead_id;
                     $notification->task_id = $newTaskassign->id;
-                    $notification->title = $user_assign_by . ' assigned you ' . $assignedStageName->title . ' task';
+                    $notification->title = "Task Assigned";
 
-                    $notification->description =  "send quotation is assigend";
+                    $notification->description =  $user_assign_by . ' assigned you ' . $assignedStageName->title . ' task';;
                     $notification->status = 0;
                     if ($notification->save()) {
                         $LeadLog = new LeadLog();
-                        $LeadLog->user_id = $assignUser;
+                        $LeadLog->user_id = $existedTaskDetails->user_id;
                         $LeadLog->lead_id =  $existedTaskDetails->lead_id;
-                        $LeadLog->task_id = $newTaskassign->id;
+                        $LeadLog->task_id = $existedTaskDetails->id;
                         $LeadLog->assign_by = Auth::id();
-                        $LeadLog->description = $request->description;
+                        if($request->status == 1){
+                            $LeadLog->description ="Trademark search status marked as not registered";
+                        }else if($request->status == 0){
+                            $LeadLog->description ="Trademark mark as registered and conversion status marked as".' '. $request->ifRegister;
+
+                        }
                         $LeadLog->save();
                     }
                     $id = $newExistedTaskDetails->id;
@@ -239,18 +246,16 @@ class TasksController extends Controller
     }
     public function sendQuotation(Request $request, $id)
     {   
-        
+        // dd($request->all());
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
         $existedTask = LeadTask::with(['services', 'subService', 'lead', 'serviceSatge'])->where('id', $id)->first();
         $existedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
-
+        
         $newTaskAssigned = new LeadTask();
         $newTaskDetails = new LeadTaskDetail();
         $serviceId = $existedTask->services->id;
         $subServiceID = $existedTask->subService->id;
-        
-
         $rule = [
             'verified' => 'required',
             'attachment' => 'array',
@@ -300,8 +305,11 @@ class TasksController extends Controller
                 if ($newTaskDetails->save()) {
                     $existedTaskDetails->status_date = $verifiedDate;
                     $existedTaskDetails->status = 1;
+                    $existedTaskDetails->mail_subject = $request->subject;
+                    $existedTaskDetails->service_price = $request->service_price;
+                    $existedTaskDetails->govt_price = $request->govt_price;
+                    $existedTaskDetails->gst = $request->gst ?? null;
                     if ($request->hasFile('attachment')) {
-                        
                         $folderPath = public_path('Image/leads/lead_' . $existedTask->lead_id);
                         if (!file_exists($folderPath)) {
                             mkdir($folderPath, 0755, true);
@@ -320,26 +328,26 @@ class TasksController extends Controller
                        
                         $userAssign =  $request->assignUser ?? $existedTask->user_id;
                         $notification = new LeadNotification();
-                        $notification->user_id = $userAssign;
+                        $notification->user_id =  $userAssign ;
                         $notification->lead_id = $existedTask->lead_id;
                         $notification->task_id = $newTaskAssigned->id;
-                        $notification->title = $userName . ' assigned you ' . $assignedStageName->title . ' task';
-                        $notification->description =  "Payment verification is assigend";
+                        $notification->title = "Task Assigned";
+                        $notification->description =  $userName . ' assigned you ' . $assignedStageName->title . ' task';
                         $notification->status = 0;
                         if($notification->save()){
+                            
                             $LeadLog = new LeadLog();
-                            $LeadLog->user_id = $request->assignUser ?? $existedTask->user_id;
+                            $LeadLog->user_id =  $existedTask->user_id;
                             $LeadLog->lead_id =  $existedTask->lead_id;
-                            $LeadLog->task_id = $newTaskAssigned->id;
+                            $LeadLog->task_id =  $existedTask->id;
                             $LeadLog->assign_by = Auth::id();
-                            $LeadLog->description = $request->description;
+                            $LeadLog->description = "Quotation sent to the client";
                             $LeadLog->save();
                             if ($mail) {
                                 SendTaskCommanMailJob::dispatch($subject, $service, $service_price, $govt_price, $clientName, $clientEmail, $userName);
                             }
                         }
                     }
-
                     $id = $newTaskAssigned->id;
                     return redirect()->route('task.index')
                         ->with('success', 'Quotation sent successfully');
@@ -377,7 +385,7 @@ class TasksController extends Controller
     }
 
     public function paymentStatus(Request $request, $id)
-    {
+    {  
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
         $existedLeaedTask = LeadTask::with(['services', 'subService', 'serviceSatge'])->where('id', $id)->first();
@@ -445,17 +453,25 @@ class TasksController extends Controller
                         $notification->user_id = $userAssign;
                         $notification->lead_id = $existedLeaedTask->lead_id;
                         $notification->task_id = $newLeadtask->id;
-                        $notification->title = $userName . ' assigned you ' . $assignedStageName->title . ' task';
-                        $notification->description =  "Payment verification is assigend";
+                        $notification->title = "Task Assigned";
+                        $notification->description =  $userName . ' assigned you ' . $assignedStageName->title . ' task';
                         $notification->status = 0;
                         if($notification->save()){
 
                             $LeadLog = new LeadLog();
-                            $LeadLog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+                            $LeadLog->user_id =  $existedLeaedTask->user_id;
                             $LeadLog->lead_id =  $existedLeaedTask->lead_id;
-                            $LeadLog->task_id = $newLeadtask->id;
+                            $LeadLog->task_id =  $existedLeaedTask->id;
                             $LeadLog->assign_by = Auth::id();
-                            $LeadLog->description = $request->description;
+                           
+                            if($request->payment == 1){
+
+                                $LeadLog->description = " Payment status marked as Paid ";
+                            }else if($request->payment == 0){
+                                $LeadLog->description = " Payment status marked as on Credit ";
+
+                            }
+                      
                             $LeadLog->save();
                             $id = $newLeadtask->id;
                             return redirect()->route('task.index')->with('success', 'payment status is Updated');

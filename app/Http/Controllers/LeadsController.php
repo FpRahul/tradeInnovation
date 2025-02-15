@@ -12,6 +12,7 @@ use App\Models\LeadLog;
 use App\Models\FollowUp;
 use App\Models\LeadNotification;
 use App\Models\LeadTask;
+
 use App\Models\LeadTaskDetail;
 use App\Models\ServiceStages;
 use Illuminate\Support\Facades\Validator;
@@ -293,17 +294,19 @@ class LeadsController extends Controller
         $header_title_name = 'Lead logs';
         $leadData = lead::all();
         $requestParams = $request->all();
-        $leadLogs = LeadLog::with('leadTask','leadTask.leadTaskDetails', 'leadTask.serviceSatge')->get();
+        $leadLogs = LeadLog::with('leadTask','leadTask.leadTaskDetails','leadTask.serviceSatge')->get();
         if($request->lead_id > 0){
+            
             $leadLogs = LeadLog::with('leadTask','leadTask.leadTaskDetails', 'leadTask.serviceSatge')->where('lead_id', $request->lead_id) ->orderBy('created_at', 'desc')->get();
         }
-        return view('leads.logs', compact('leadData', 'header_title_name','leadLogs','requestParams'));
+        // echo "<pre>"; print_R($leadLogs->toArray());die;
+        return view('leads.logs', compact('leadData','leadLogs', 'header_title_name','requestParams'));
     }
 
     public function getLogs(Request $request){
         if($request->lead_id > 0){
             $lead_id = $request->lead_id; 
-            $leadLogs = LeadLog::with('leadTask','lead','leadTask.user','leadTask.leadTaskDetails', 'leadTask.serviceSatge', 'leadService.service')->where('id', $request->lead_id)->get();
+            $leadLogs = LeadLog::with('leadTask','lead','leadTask.user','leadTask.leadTaskDetails', 'leadTask.serviceSatge')->where('id', $request->lead_id)->get();
             $allLeadData = [];
             foreach ($leadLogs as $lead) {
                 $data = [
@@ -315,13 +318,13 @@ class LeadsController extends Controller
                     'deadLine' => $lead->leadTask->leadTaskDetails->dead_line,
                     'verifiedOn' => $lead->leadTask->leadTaskDetails->status_date,
                     'remark' => $lead->leadTask->task_description,
-
                     'logDescription' => $lead->description,
                     'services' => [] 
                 ];
-                foreach ($lead->leadService as $services) {
-                    $data['services'][] = $services->service->serviceName;  
-                }
+                
+                $data['services'][] = $lead->leadTask->services->serviceName;  
+                
+                
                 $allLeadData[] = $data;
             }
             return response()->json(['data' => $allLeadData, 'status' => 200]);
@@ -383,6 +386,9 @@ class LeadsController extends Controller
     public function setAssignToUser(Request $request){
        
     }  
+
+    
+    
 
    
 }

@@ -71,6 +71,14 @@
 
          
       </div>
+      @if($taskDetails->count() > 0)
+                @foreach ($taskDetails as $task )
+                @php
+            $selectedId = $task->user->id;
+        @endphp
+                
+                @endforeach
+         @endif
       <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2">
             <label for="assignUser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign User</label>
@@ -79,7 +87,7 @@
                @if($users->count() > 0)
                <option value="" disabled selected>Select a user</option>
                @foreach ($users as $user)
-               <option value="{{ $user->id }}" {{ !empty($selectedUserId) && $user->id == $selectedUserId ? 'selected' : '' }}>
+               <option value="{{ $user->id }}" {{ !empty($selectedId) && $user->id == $selectedId ? 'selected' : '' }}>
                   {{ $user->name }}
                </option>
                @endforeach

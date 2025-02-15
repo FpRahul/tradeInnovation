@@ -33,6 +33,8 @@
                     <option value="Prior Use">Prior Use</option>
                     <option value="Goods are different">Goods are different</option>
                     <option value="Proceed anyway (on client risk)">Proceed anyway (on client risk)</option>
+                    <option value="Abandoned">Abandoned</option>
+
                 </select>
                 @error('ifRegister')
                 <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
@@ -92,21 +94,27 @@
                 
             </div>
         <div class="flex flex-col md:flex-row gap-[20px]">
-
+        @if($taskDetails->count() > 0)
+                @foreach ($taskDetails as $user )
+                @php
+            $selectedId = $task->user->id;
+        @endphp
+                
+                @endforeach
+         @endif
             <div class="w-full md:w-1/2">
                 <label for="assignUser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign User</label>
                 <select name="assignUser" id="assignUser" class="filterData assignUserData allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]">
                     @if($users->count() > 0)
                     <option value="" disabled selected>Select a user</option>
                     @foreach ($users as $user)
-                    <option value="{{ $user->id }}" {{ !empty($selectedUserId) && $user->id == $selectedUserId ? 'selected' : '' }}>
+                    <option value="{{ $user->id }}" {{ !empty($selectedId) && $user->id == $selectedId ? 'selected' : '' }}>
                         {{ $user->name }}
                     </option>
                     @endforeach
                     @else
                     <option value="" disabled>No users available</option>
                     @endif
-
                 </select>
                 @if($taskDetails->count() > 0)
                 @foreach ($taskDetails as $user )

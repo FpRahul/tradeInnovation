@@ -56,9 +56,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
 
         Route::get('/panel-logs', 'panelLogs')->name('logs.index');
         Route::get('/get/action/logs' ,'panelLogs')->name('getActionLog.log');
-
         Route::get('/view-logs', 'viewLogs')->name('logs.view');
-
         Route::get('/userstatus','userStatus')->name('users.status');
         Route::get('/clientstatus','clientStatus')->name('client.status');
         Route::get('/associatestatus','associateStatus')->name('associate.status');
@@ -90,6 +88,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::post('/deleteattchmentrepeater', 'deleteAttachmentRepeaterLead')->name('lead.deleteattachmentrepeater');
         Route::match(['POST','GET'],'/archive/{id?}', 'archiveLead')->name('leads.archive');
         Route::POST('/setassign','setAssignToUser')->name('leads.assign');
+
+        
     });
     //Tasks Routes
     Route::prefix('tasks')->controller(TasksController::class)->group(function () {

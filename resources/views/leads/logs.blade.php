@@ -35,6 +35,7 @@
         <div>
             <ul>
                 @foreach($leadLogs as $log)
+               
                 <li class="py-[6px] pt-0 flex items-start flex-wrap gap-[16px] relative">
                     <div class="static min-w-[34px] w-[34px] h-[34px] bg-[#13103A] rounded-[100%] flex items-center justify-center">
                         <img src="{{ asset('assets/images/list-icon-img.png') }}" alt="icon" class="relative z-2">
@@ -109,9 +110,20 @@
                                     </div>
                                 </div>
                             </div>
+                            @php $allAttachments = []; @endphp
+                            @if(isset($log->leadTask->leadTaskDetails))
+                               @php $allAttachments = json_decode($log->leadTask->leadTaskDetails->attachment); @endphp
+                            @endif
+                            
+                            @if(!empty($allAttachments))
+                                @foreach($allAttachments as $attachment)
+                                <a style="display:none;" href="/image/leads/lead_{{ $log->lead_id }}/{{ $attachment }}" class="laod-file-{{ $log->task_id }}" download="{{$attachment}}"></a>
+                                @endforeach
+                            @endif
+                            
                             <div class="flex items-center justify-end gap-[10px] w-[5%] text-[14px] leading-[16px] font-[400] tracking-[-0.04em] text-[#666666] flex">
                                 <div class="relative flex flex-col pr-[10px] items-center group">
-                                    <a href="#" class="flex items-center gap-[8px] text-[15px] font-[600]  text-[#000] py-[10px] px-[10px]">
+                                    <a href="javascript:void(0);" data-taskId="{{$log->task_id}}" class=" download flex items-center gap-[8px] text-[15px] font-[600]  text-[#000] py-[10px] px-[10px]">
                                         <i class="ri-download-2-line text-[22px]"></i>
                                     </a>
                                     <div class=" absolute bottom-[18px] flex flex-col items-center hidden mb-[15px] group-hover:flex">
@@ -268,16 +280,15 @@
                 success: function(response) {
                     if (response.status == 200) {
                         console.log(response);
-
-                        var lead = response.data[0]; // Assuming you have an array in data
-
+                        var lead = response.data[0]; 
                         $('#rowClient').text(lead.client_name);
                         $('#rowLeadId').text(lead.lead_id);
                         $('#rowService').text(lead.services.join(", "));
                         $('#rowStage').text(lead.stage);
                         $('#rowAssignedTo').text(lead.assignTo);
-                        $('#remark').val(lead.remark);
+                        $('#remark').val(lead.logDescription);
                         $('#rowStatus').text(function() {
+                            
                             switch (lead.status) {
                                 case 0:
                                     return 'Pending';
@@ -292,14 +303,19 @@
                             }
                         });
                         $('#rowVerifiedOn').text(lead.verifiedOn ? lead.verifiedOn : 'Not Updated');
-                        $('#rowClarification').text(lead.logDescription);
+                        $('#rowClarification').text(lead.remark);
                         $('#rowDeadLine').text(lead.deadLine);
                     }
                 }
             })
         })
 
-
+      $('.download').on('click',function(){
+        var task_id = $(this).attr('data-taskId');
+        $('.laod-file-'+task_id).each(function(){
+            $(this).get(0).click();
+        })
+      })
     })
 </script>
 @stop

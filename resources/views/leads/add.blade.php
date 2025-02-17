@@ -326,6 +326,19 @@
                 <textarea type="text" name="description" id="description" class="w-full h-[155px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">{{!empty($leadData) ? $leadData->description : ''}}</textarea>
             </div>
             <div class="">
+                <label for="msmem" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">MSMEM</label>
+                <div class="flex flex-wrap gap-[20px]">
+                    <div>
+                        <input type="radio" name="msmem" id="msmem" value='1' {{$leadData->msmem == 1 ?'checked':''}} >
+                        <label for="msmem" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Yes</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="msmem" id="msmem2" value='0' {{$leadData->msmem == 0 ?'checked':''}} >
+                        <label for="msmem2" class="text-[12px] font-[400] leading-[14px] text-[#000000]">No</label>
+                    </div>
+                </div>
+            </div>
+            <div class="">
                 <button type="button" name="save" class="lead_submit_btn text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
                 <button type="button" name="saveAssign" class="lead_submit_btn text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save & Assign</button>
             </div>

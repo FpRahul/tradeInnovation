@@ -21,7 +21,8 @@ class Lead extends Model
         'status',
         'completed_date',
         'quotation_sent',
-        'quotation_sent_date'
+        'quotation_sent_date',
+        'msmem'
     ];
     public function leadService(){
         return $this->hasMany(LeadService::class,'lead_id','id');

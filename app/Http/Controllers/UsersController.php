@@ -112,7 +112,8 @@ class UsersController extends Controller
         if ($searchKey) {
             $employeeData->where(function ($query) use ($searchKey) {
                 $query->where('name', 'LIKE', $searchKey . '%')
-                    ->orWhere('mobile', 'LIKE', $searchKey . '%');
+                    ->orWhere('mobile', 'LIKE','%'. $searchKey . '%')
+                    ->orWhere('uni_user_id', 'LIKE', '%'.$searchKey . '%');
             });
         }
 
@@ -316,7 +317,7 @@ class UsersController extends Controller
         $requestType = $request->input('requestType') ?? '';
         if ($searchKey) {
             $clientData->where(function ($query) use ($searchKey) {
-                $query->where('name', 'LIKE', $searchKey . '%')->orWhere('mobile', 'LIKE', $searchKey . '%');
+                $query->where('name', 'LIKE', $searchKey . '%')->orWhere('mobile', 'LIKE','%'. $searchKey . '%')->orWhere('uni_user_id', 'LIKE','%'. $searchKey . '%');
             });
         }
         $clientData = $clientData->latest()->paginate(env("PAGINATION_COUNT"));
@@ -333,7 +334,7 @@ class UsersController extends Controller
         }
     }
 
-    public function addClient(Request $request, $id = null){  
+    public function addClient(Request $request, $id = null){
         $clientIP = \Request::ip();
         $userAgent = \Request::header('User-Agent');
         $operatingSystem = getOperatingSystem($userAgent);
@@ -426,7 +427,7 @@ class UsersController extends Controller
         $requestType = $request->input('requestType') ?? '';
         if ($searchKey) {
             $associateData->where(function ($query) use ($searchKey) {
-                $query->where('name', 'LIKE', $searchKey . '%')->orWhere('mobile', 'LIKE', $searchKey . '%');
+                $query->where('name', 'LIKE', $searchKey . '%')->orWhere('mobile', 'LIKE', '%'.$searchKey . '%')->orWhere('uni_user_id', 'LIKE','%'. $searchKey . '%');
             });
         }
 
@@ -1105,4 +1106,17 @@ class UsersController extends Controller
             return redirect()->back()->with('error', 'Some error is occur!');
         }
     }
+
+    public function checkDuplicate(Request $request){
+        if ($request->isMethod('POST')) {
+            if ($request->id > 0) {
+                $checkUserData = User::where('id', '!=', $request->id)->where('mobile', $request->val)->exists();
+            } else {
+                $checkUserData = User::where('mobile', $request->val)->exists();
+            }
+            return response()->json(['exists' => $checkUserData]);
+        }
+        return response()->json(['error' => 'Invalid request'], 400);
+    }
+
 }

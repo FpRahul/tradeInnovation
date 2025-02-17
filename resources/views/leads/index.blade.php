@@ -242,6 +242,31 @@
             </div>
             <!-- Modal body -->
             <div class="p-[20px]">
+            <div class="servicModalTable">
+                <table>
+                    <tr>
+                        <th>Service Name:</th>
+                        <th>Assigned User:</th>                        
+                    </tr>
+                    <tbody>
+                        <tr>
+                            <td>Trademark</td>
+                            <td>Piyush</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
                 <form method="POST" action="{{ route('leads.edit')}}" enctype="multipart/form-data" class="space-y-[20px]">
                     @csrf
                     <input type="hidden" name="lead_id" id="modal_lead_id" value="">

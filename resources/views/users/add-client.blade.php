@@ -27,6 +27,20 @@
             </div>
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
+                    <label for="scopeofbusiness" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Scope Of Business <strong class="text-[#f83434]">*</strong></label>
+                    <select name="scopeofbusiness" class="selectedValue allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                        <option value="">Select Scope Of Business</option>                    
+                        {{-- @if (!empty($incorporationDataList) && $incorporationDataList->isNotEmpty())
+                            @foreach ($incorporationDataList as $incorporationDataListDetails)  
+                                <option value="{{ $incorporationDataListDetails->id }}" 
+                                    @selected(old('incorporationtype', $newClientDetails->incorporationType ?? '') == $incorporationDataListDetails->id)>
+                                    {{ $incorporationDataListDetails->name }}
+                                </option>                      
+                            @endforeach                                                            
+                        @endif --}}
+                    </select>
+                </div>
+                <div class="w-full md:w-1/2">
                     <label for="incorporationtype" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Incorporation Type <strong class="text-[#f83434]">*</strong></label>
                     <select name="incorporationtype" class="showPartnerListName selectedValue allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                         <option value="">Select Incorporation Type</option>
@@ -69,16 +83,18 @@
                     </select>
                                   
                 </div>
+                
+            </div>
+            <div class="flex flex-col md:flex-row gap-[20px]">
+                {{-- //hhhhhhhhh --}}
                 <div class="w-full md:w-1/2">
                     <label for="number" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mobile Number <strong class="text-[#f83434]">*</strong></label>
-                    <input type="text" name="number" id="number" value="{{ old('number') ? old('number') : $newClient->mobile}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Number" required>
+                    <input type="text" name="number" id="number" data-id="{{$newClient->id > 0 ? $newClient->id : 0}}" value="{{ old('number') ? old('number') : $newClient->mobile}}" class="checkDuplicateMobile w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Number" required>
+                    <span class="mobile_exist_error text-[#df2727] text-[12px] hidden">Please try with another mobile number!</span>
                     @error('number')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
-            </div>
-            <div class="flex flex-col md:flex-row gap-[20px]">
-                {{-- //hhhhhhhhh --}}
                 <div class="w-full md:w-1/2">
                     <label for="alternatePhone" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Alternate Mobile Number</label>
                     <input type="text" name="alternatePhone" id="alternatePhone" value="{{ old('alternatePhone') ? old('alternatePhone') : $newClient->altNumber}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Alternate mobile number">
@@ -86,6 +102,9 @@
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
+                
+            </div>
+            <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Email-Id <strong class="text-[#f83434]">*</strong></label>
                     <input type="text" name="email" id="email" value="{{ old('email') ? old('email') : $newClient->email}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Email" required>
@@ -93,9 +112,6 @@
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
-            </div>
-            <div class="flex flex-col md:flex-row gap-[20px]">
-                
                 <div class="w-full md:w-1/2">
                     <label for="alternateEmail" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Alternate Email-Id</label>
                     <input type="text" name="alternateEmail" id="alternateEmail" value="{{ old('alternateEmail') ? old('alternateEmail') : $newClient->altEmail}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Alternate Email">
@@ -244,6 +260,34 @@
     </div>
 </div>
 <script>
+    $(document).on('keyup','.checkDuplicateMobile',function(){
+        if($(this).val().length >=10){
+            let id = $(this).data('id');
+            let val = $(this).val();
+            let e = $(this);
+            $.ajax({
+                method:'POST',
+                url:"{{ route('user.checkDuplicate')}}",
+                headers:{
+                    'X-CSRF-TOKEN':'{{csrf_token()}}'
+                },
+                data:{
+                    id:id,
+                    val:val
+                },
+                success:function(res){
+                    if(res.exists){
+                        e.val('');
+                        $('.mobile_exist_error').removeClass('hidden');
+                    }else{
+                        $('.mobile_exist_error').addClass('hidden');
+                    }
+                }
+            });
+        }
+        
+    });
+
     $(document).on('change','.showSourceListName',function(){
         var value = $(this).val();
         if(value == 17 || value == 18 || value == 19){            

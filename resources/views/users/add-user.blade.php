@@ -75,7 +75,8 @@
 
                 <div class="w-full md:w-1/2">
                     <label for="mobileNumber" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mobile Number <strong class="text-[#f83434]">*</strong></label>
-                    <input type="number" name="mobileNumber" id="mobileNumber" value="{{ old('mobileNumber') ? old('mobileNumber') : $newUser->mobile }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Mobile Number" required>
+                    <input type="number" name="mobileNumber" id="mobileNumber" value="{{ old('mobileNumber') ? old('mobileNumber') : $newUser->mobile }}" class="checkDuplicateMobile w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Mobile Number" required>
+                    <span class="mobile_exist_error text-[#df2727] text-[12px] hidden">Please try with another mobile number!</span>
                     @error('mobile')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -390,6 +391,34 @@
     </div>
 </div>
 <script>
+    $(document).on('keyup','.checkDuplicateMobile',function(){
+        if($(this).val().length >=10){
+            let id = $(this).data('id');
+            let val = $(this).val();
+            let e = $(this);
+            $.ajax({
+                method:'POST',
+                url:"{{ route('user.checkDuplicate')}}",
+                headers:{
+                    'X-CSRF-TOKEN':'{{csrf_token()}}'
+                },
+                data:{
+                    id:id,
+                    val:val
+                },
+                success:function(res){
+                    if(res.exists){
+                        e.val('');
+                        $('.mobile_exist_error').removeClass('hidden');
+                    }else{
+                        $('.mobile_exist_error').addClass('hidden');
+                    }
+                }
+            });
+        }
+        
+    });
+
     $(document).on('click','.sameAsCurrentAddress',function(){
         let address = $('.currentAddressDiv').find('#currentAddress').val();
         let city = $('.currentAddressDiv').find('#curr_city').val();

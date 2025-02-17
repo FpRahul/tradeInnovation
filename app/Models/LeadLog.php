@@ -2,6 +2,8 @@
 namespace App\Models;
 use App\Models\LeadTask;
 use App\Models\LeadService;
+use App\Models\LeadAttachment;
+
 use Illuminate\Database\Eloquent\Model;
 class LeadLog extends Model
 {
@@ -21,5 +23,8 @@ class LeadLog extends Model
     }
     public function lead(){
         return $this->belongsTo(Lead::class, 'lead_id' , 'id');
+    }
+    public function leadAttch(){
+        return $this->belongsTo(LeadAttachment::class, 'lead_id');
     }
 }

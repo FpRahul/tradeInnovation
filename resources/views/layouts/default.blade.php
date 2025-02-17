@@ -390,6 +390,41 @@
         }
 
 
+        $(document).ready(function(){
+            const fileInput = $('#attachment');
+        const fileList = $('#file-list');
+        fileInput.on('change', function(event) {
+            fileList.empty();
+            $.each(event.target.files, function(index, file) {
+                const fileItem = $('<div>', {
+                    class: 'file-item flex items-center justify-between bg-gray-100 p-2 mb-2 rounded-lg'
+                });
+                const fileName = $('<span>').text(file.name);
+                const removeIcon = $('<span>', {
+                    html: '&times;',
+                    class: 'text-red-500 cursor-pointer ml-2',
+                    click: function() {
+                        removeFile(file, fileItem);
+                    }
+                });
+                fileItem.append(fileName).append(removeIcon);
+                fileList.append(fileItem);
+            });
+        });
+        function removeFile(file, fileItem) {
+            const dt = new DataTransfer();
+            const files = fileInput[0].files;
+            $.each(files, function(index, f) {
+                if (f !== file) {
+                    dt.items.add(f);
+                }
+            });
+            fileInput[0].files = dt.files;
+            fileItem.remove();
+        }
+        })
+
+
 
     </script>
 

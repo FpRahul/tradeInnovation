@@ -15,17 +15,34 @@
     <div>
         <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] overflow-hidden ">
             <div class="py-[15px] md:py-[25px] px-[15px] md:px-[20px] gap-[10px] flex flex-col md:flex-row items-end justify-between">
-                <form action="" class="w-full flex flex-col md:flex-row gap-[20px]">
-                    <div class="w-full md:w-6/12 flex items-center gap-[20px]">
-                        <div class="w-full flex items-end gap-[10px]">
-                            <div class="w-full">
-                                <label for="mobilenumber" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Lead ID</label>
-                                <input type="text" name="leadId" id="leadId" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter here Lead ID">
+                <form action="" class="w-full flex flex-col md:flex-row gap-[30px]">
+                    <div class="w-full md:w-9/12 flex items-center gap-[30px]">
+                        <div class="w-full flex items-end gap-[20px]">
+                            <div class="w-full md:w-1/2">
+                                <label for="leadId" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Lead ID</label>
+                                <select name="leadId" id="leadId" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
+                                    <option value="">Select Status</option>
+                                     @if(!$DistinctleadId->isEmpty())
+                                     @foreach ( $DistinctleadId as $leadID )
+                                     <option value="{{ $leadID->lead->lead_id }}">{{ $leadID->lead->lead_id }}</option>
+                                     @endforeach
+                                     @endif
+                                </select>
                             </div>
-                            <button class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[15px] px-[30px]">
+                            <div class="w-full md:w-1/2">
+                                <label for="status" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
+                                <select name="status" id="status" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
+                                    <option value="">Select Status</option>
+                                    <option value="0">Pending</option>
+                                    <option value="1">Completed</option>
+                                    <option value="2">On Hold</option>
+                                    <option value="3">Follow Up</option>
+                                </select>
+                            </div>
+                            <button class="text-[14px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[12px] py-[16px] px-[35px]">
                                 Filter
                             </button>
-                            <button id="resetButton" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[15px] px-[30px]">
+                            <button id="resetButton" class="text-[14px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[12px] py-[16px] px-[35px]">
                                 Reset
                             </button>
                         </div>
@@ -71,7 +88,6 @@
                     <tbody>
                         @if(!$taskDetails->isEmpty())
                         @foreach ($taskDetails as $task)
-
                         <tr>
                             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px] pl-[25px]">
                                 @if(!empty($task->lead->lead_id))
@@ -92,7 +108,6 @@
                                 {{ $task->serviceSatge->description }}
                                 @php
                                 $stageId = $task->serviceSatge->id;
-
                                 @endphp
                                 @else
                                 Not Available
@@ -102,7 +117,6 @@
                                 @if( $task->services)
                                 {{ $task->services->serviceName }}
                                 @php
-
                                 $serviceID = $task->services->id;
                                 @endphp
                                 @else
@@ -164,7 +178,7 @@
                                     </a>
                                     <div class="dropdown_menus absolute right-0 z-10 mt-2 w-[100px] origin-top-right rounded-md bg-white shadow-md ring-1 ring-black/5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                                         <div class="text-start" role="none">
-                                            @if(in_array('task.followup',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                            @if(in_array('task.followup',$permissionDetails['accessableRoutes']) || auth()->user()->role == 1)
                                             @if(!empty($serviceID) && !empty($stageId))
                                             <a href="{{ route('task.followup', ['id' => $task->id,'serviceId' => $serviceID , 'stageId' => $stageId ])}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Follow Up</a>
                                             @endif
@@ -174,7 +188,9 @@
                                             $leadId = $task->lead->id;
                                             @endphp
                                             @endif
+                                            @if(in_array('leadLogs.index',$permissionDetails['accessableRoutes']) || auth()->user()->role == 1)
                                             <a href="{{route('leadLogs.index', ['lead_id' => $leadId])}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Logs</a>
+                                            @endif
                                             @if(in_array('task.hold',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
                                             <a href="#" class="hold-on-pop block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-taskId="{{$task->leadTaskDetails->task_id }}" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal">Hold</a>
                                             @endif
@@ -186,15 +202,11 @@
                                 @endif
                             </td>
                         </tr>
-
-
                         @endforeach
                         @else
                         <tr>
                             <td colspan="8" class="text-center text-red-500 py-[12px]">No task found</td>
                         </tr>
-
-
                         @endif
                     </tbody>
 
@@ -211,7 +223,6 @@
             <div class="flex items-center justify-between p-4 md:px-5 md:py-[20px] border-b border-[#f2f2f2]">
                 <h3 class="flex items-center gap-[8px] text-[24px] font-[600] leading-[17px] text-[#000]">
                     Hold Task<p id="rowLeadId" class="text-sky-500"></p>
-
                 </h3>
 
                 <button type="button" class=" absolute top-[-10px] right-[-10px] w-[35px] h-[35px] bg-[#13103A] flex items-center justify-center text-[#fff] rounded-[60px]" data-modal-hide="assignUserModal">
@@ -267,11 +278,11 @@
         $("#task_hidden_id").val(task_id);
     });
 
-    $(document).on('keyup', '.z', function() {
+    $(document).on('keyup', '.search', function() {
         var key = $(this).val();
         $.ajax({
-            method: 'GET',
             url: "{{ route('task.index')}}",
+            method: 'GET',
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },

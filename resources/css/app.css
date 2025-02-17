@@ -228,7 +228,33 @@ nav.tabs a.active {
 }
 
 
+.servicModalTable table tr th {
+    background: #f7f7f7;
+    padding: 10px 10px;
+    font-size: 12px;
+    font-weight: 400;
+    border-right: 1px solid #e7e7e7;
+    text-align: left;
+}
 
+.servicModalTable table {
+    width: 100%;
+    border: 1px solid #ededed;
+}
+
+.servicModalTable table tr td {
+    padding: 10px 10px;
+    font-size: 12px;
+    border-right: 1px solid #e7e7e7;
+}
+
+.servicModalTable table tr th:last-child {
+    border-right: none;
+}
+
+.servicModalTable table tr td:last-child {
+    border-right: none;
+}
 
 
 

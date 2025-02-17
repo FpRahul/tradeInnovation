@@ -127,6 +127,7 @@ class LeadsController extends Controller
             $leadData->mobile_number = $request->mobilenumber;
             $leadData->email = $request->email;
             $leadData->description = $request->description;
+            $leadData->msmem = $request->msmem;
             $leadData->status = $request->savetype;
             if($leadData->save()){
                 $serviceidArray = [];
@@ -231,7 +232,19 @@ class LeadsController extends Controller
     }
     // lead fetch...........
     public function leadFetch(Request $request){
-        $leadData = Lead::with('leadAttachments')->find($request->id);
+        $leadData = Lead::with(['leadTasks','leadAttachments'])->find($request->id);
+        $serviceDataArray = [];
+        foreach($leadData->leadTasks as $dataKey => $dataVal){
+            $userData = User::find($dataVal->user_id);
+            $serviceData = Service::find($dataVal->service_id);
+            $serviceDataArray['user'][] = $userData->name;
+            $serviceDataArray['service'][] = $serviceData->serviceName;
+        }
+        // $userData = User::find($leadData->lead_tasks->user_id)->pluck('name');
+        // $serviceData = Service::find($leadData->lead_tasks->service_id)->pluck('serviceName');
+        // $serviceDataArray['user'] = $userData;
+        // $serviceDataArray['service'] = $serviceData;
+        // dd($serviceDataArray);
         return response()->json([
             'data' =>$leadData
            ]);

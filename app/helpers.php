@@ -6,9 +6,10 @@ use App\Models\User;
 use App\Models\Log;
 use App\Models\LeadTask;
 use App\Models\ServiceStages;
-
+use App\Models\UserDetail;
 use Illuminate\Support\Facades\Auth;
 use App\Models\SubService;
+use Termwind\Components\Raw;
 
 if (!function_exists('getServiceData')) {
     function getServiceData($serviceDetails)
@@ -99,6 +100,13 @@ if(!function_exists('getStageData')){
             $stageArray[] = $stageData->title ?? 'N/A';
         }
         return implode(',',$stageArray);
+    }
+}
+
+if(!function_exists('getTotalClientCount')){
+    function getTotalClientCount($assocId){
+        $clientCount = UserDetail::where('referralPartner',18)->where('source_type_id',$assocId)->count();
+        return $clientCount;
     }
 }
 // function getSubStage($serviceID , $stageId){

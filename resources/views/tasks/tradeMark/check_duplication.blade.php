@@ -76,6 +76,7 @@
                     Upload File
                 </label>
                 <input type="file" id="attachment" name="attachment[]" multiple style="display: none;" />
+                <div id="file-list" class = "mt-2"></div>
             </div>
             @error('attachment[]')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
@@ -90,8 +91,6 @@
                         Next stage will be: {{$getStage->title}}
                     </p> -->
                 </div>
-                
-                
             </div>
         <div class="flex flex-col md:flex-row gap-[20px]">
         @if($taskDetails->count() > 0)
@@ -99,7 +98,6 @@
                 @php
             $selectedId = $task->user->id;
         @endphp
-                
                 @endforeach
          @endif
             <div class="w-full md:w-1/2">
@@ -132,7 +130,6 @@
             <input type="hidden" value="{{$user->user->id}}" name="alreadyAssign">
             @endforeach
             @endif
-
             <div class="w-full md:w-1/2">
                 <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
                     Task DeadLine
@@ -155,9 +152,6 @@
                 </p>
             </div>
         </div>
-
-
-
         <div class="">
             <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
             @if($taskDetails->count() > 0)
@@ -205,6 +199,9 @@
                 $(".ifRegister").show();
             }
         });
+
+  
+     
     });
 </script>
 @stop

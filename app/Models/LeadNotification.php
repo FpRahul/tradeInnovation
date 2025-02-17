@@ -10,6 +10,7 @@ class LeadNotification extends Model
         'user_id',
         'lead_id',
         'description',
+        'deadline_date',
         'status',
     ];
 

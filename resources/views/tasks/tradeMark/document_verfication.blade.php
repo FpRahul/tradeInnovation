@@ -55,6 +55,7 @@
                Upload File
             </label>
             <input type="file" id="attachment" name="attachment[]" multiple style="display: none;" />
+            <div id="file-list" class = "mt-2"></div>
          </div>
          @error('attachment.*')
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>

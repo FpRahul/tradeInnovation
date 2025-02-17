@@ -46,4 +46,7 @@ class Lead extends Model
     public function categoryOptions(){
         return $this->hasOne(CategoryOption::class, 'id','source');
     }
+    public function referral(){
+        return $this->belongsTo(User::class, 'source_id');
+    }
 }

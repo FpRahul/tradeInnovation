@@ -22,61 +22,49 @@
     {{-- Display task details if they exist --}}
     <ul class="grid grid-cols-2 lg:grid-cols-3 gap-[20px]">
         @if($taskDetails)
-            <!-- Display Client Name -->
+           
             <li>
                 <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Client Name</span>
                 <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize">
                     {{ $taskDetails->lead->client_name ?? 'N/A' }}
                 </strong>
             </li>
-
-            <!-- Display Company Name -->
             <li>
                 <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Company Name</span>
                 <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize">
                     {{ $taskDetails->lead->company_name ?? 'N/A' }}
                 </strong>
             </li>
-
-            <!-- Display Services -->
             <li>
                 <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Services</span>
                 <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize">
                 @if( $taskDetails->services)
                               {{ $taskDetails->services->serviceName }}
-                             
-                            
                             @else
                             Not Available
                             @endif
                 </strong>
             </li>
-
-            <!-- Display Mobile Number -->
             <li>
                 <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Mobile Number</span>
                 <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize">
                     {{ $taskDetails->lead->mobile_number ?? 'N/A' }}
                 </strong>
             </li>
-
-            <!-- Display Inbound Date -->
             <li>
                 <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Inbound Date</span>
                 <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize">
                 {{ \Carbon\Carbon::parse($taskDetails->leadTaskDetails->dead_line)->format('d M Y') ?? 'N/A' }}
-
                 </strong>
             </li>
-            <!-- Display Associate -->
+          
             <li>
-                <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Associate</span>
+                <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Referral</span>
                 <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize">
-                    N/A
+                    {{ $taskDetails->lead->referral->name ?? 'N/A' }}
                 </strong>
             </li>
         @else
-            <!-- If no task details are found -->
             <li>No task details found</li>
         @endif
     </ul>

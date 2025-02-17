@@ -185,6 +185,8 @@ class LeadsController extends Controller
                                 $LeadLog->task_id = $leadTaskData->id;
                                 $LeadLog->assign_by = auth()->user()->id;
                                 $LeadLog->description = 'Lead added in the system';
+                                $LeadLog->status = 0;
+
                                 $LeadLog->save();
         
                                 $LeadLog = new LeadLog();
@@ -193,6 +195,7 @@ class LeadsController extends Controller
                                 $LeadLog->task_id = $leadTaskData->id;
                                 $LeadLog->assign_by = auth()->user()->id;
                                 $LeadLog->description = 'Lead assigned to the user';
+                                $LeadLog->status = 0;
                                 $LeadLog->save();
                             
                                 // lead notification...
@@ -296,10 +299,11 @@ class LeadsController extends Controller
         $requestParams = $request->all();
         $leadLogs = LeadLog::with('leadTask','leadTask.leadTaskDetails','leadTask.serviceSatge')->get();
         if($request->lead_id > 0){
-            
-            $leadLogs = LeadLog::with('leadTask','leadTask.leadTaskDetails', 'leadTask.serviceSatge')->where('lead_id', $request->lead_id) ->orderBy('created_at', 'desc')->get();
+            $leadLogs = LeadLog::with('leadAttch','leadTask','leadTask.leadTaskDetails', 'leadTask.serviceSatge')->where('lead_id', $request->lead_id) ->orderBy('created_at', 'desc')->get();
+         
         }
-        // echo "<pre>"; print_R($leadLogs->toArray());die;
+       
+        
         return view('leads.logs', compact('leadData','leadLogs', 'header_title_name','requestParams'));
     }
 

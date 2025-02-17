@@ -32,10 +32,10 @@
         </form>
     </div>
     <div hidden id="showLog" class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] p-[23px]">
+        
         <div>
             <ul>
                 @foreach($leadLogs as $log)
-               
                 <li class="py-[6px] pt-0 flex items-start flex-wrap gap-[16px] relative">
                     <div class="static min-w-[34px] w-[34px] h-[34px] bg-[#13103A] rounded-[100%] flex items-center justify-center">
                         <img src="{{ asset('assets/images/list-icon-img.png') }}" alt="icon" class="relative z-2">
@@ -80,11 +80,13 @@
                                         Stage:
                                     </label>
                                     {{ optional($log->leadTask)->serviceSatge->title ?? 'NA' }}
-
-
                                 </div>
                                 <div class="flex-inline items-center gap-[10px] w-[100%] lg:w-[30%] text-[14px] leading-[16px] font-[400] tracking-[-0.04em] text-[#666666] flex"><label class="text-[15px] font-[600] text-[#000]">Status:</label>
-                                    @if(optional(optional($log->leadTask)->leadTaskDetails)->status === 0)
+                                    @if($log->description == 'Lead added in the system')
+                                    Lead Added
+                                    @elseif($log->description == 'Lead assigned to the user')
+                                    Lead Assign
+                                    @elseif(optional(optional($log->leadTask)->leadTaskDetails)->status === 0)
                                     Pending
                                     @elseif(optional(optional($log->leadTask)->leadTaskDetails)->status === 1)
                                     Completed
@@ -93,7 +95,6 @@
                                     @elseif(optional(optional($log->leadTask)->leadTaskDetails)->status === 3)
                                     Follow Up
                                     @elseif(optional(optional($log->leadTask)->leadTaskDetails)->status === null)
-                                    Not Updated
                                     @else
                                     NA
                                     @endif
@@ -110,21 +111,31 @@
                                     </div>
                                 </div>
                             </div>
-                            @php $allAttachments = []; @endphp
-                            @if(isset($log->leadTask->leadTaskDetails))
-                               @php $allAttachments = json_decode($log->leadTask->leadTaskDetails->attachment); @endphp
-                            @endif
-                            
-                            @if(!empty($allAttachments))
-                                @foreach($allAttachments as $attachment)
-                                <a style="display:none;" href="/image/leads/lead_{{ $log->lead_id }}/{{ $attachment }}" class="laod-file-{{ $log->task_id }}" download="{{$attachment}}"></a>
-                                @endforeach
-                            @endif
-                            
+                           
+                            @php
+                                    $allAttachments = [];
+                                @endphp
+                                @if ($log->status == 0 && $log->leadAttch)
+                                    @php
+                                        
+                                        $allAttachments = $log->leadAttch->document ? (array) $log->leadAttch->document : [];
+                                    @endphp
+                                @elseif($log->status == 1 && isset($log->leadTask->leadTaskDetails) && $log->leadTask->leadTaskDetails->attachment)
+                                    @php 
+                                       
+                                        $allAttachments = json_decode($log->leadTask->leadTaskDetails->attachment, true); 
+                                    @endphp
+                                @endif
+                                @if (!empty($allAttachments))
+                                    @foreach($allAttachments as $attachment)
+                                        <a style="display:none;" href="/uploads/leads/{{ $log->lead_id }}/{{ $attachment }}" class="laod-file-{{ $log->task_id }}" download="{{ $attachment }}"></a>
+                                    @endforeach
+                                @endif
+
                             <div class="flex items-center justify-end gap-[10px] w-[5%] text-[14px] leading-[16px] font-[400] tracking-[-0.04em] text-[#666666] flex">
                                 <div class="relative flex flex-col pr-[10px] items-center group">
                                     <a href="javascript:void(0);" data-taskId="{{$log->task_id}}" class=" download flex items-center gap-[8px] text-[15px] font-[600]  text-[#000] py-[10px] px-[10px]">
-                                        <i class="ri-download-2-line text-[22px]"></i>
+                                        <i class=" donwloadFile ri-download-2-line text-[22px]"></i>
                                     </a>
                                     <div class=" absolute bottom-[18px] flex flex-col items-center hidden mb-[15px] group-hover:flex">
                                         <span class="flex items-center justify-center relative rounded-md z-10 px-[2px]  w-[70px] h-[30px] text-xs leading-none text-white whitespace-no-wrap bg-[#13103a] shadow-lg">Download file</p></span>
@@ -265,6 +276,8 @@
         $(document).on('click', '[data-modal-hide="assignUserModal"]', function() {
             $('#assignUserModal').addClass('hidden');
         });
+
+        
         $(".viewLogDeatails").on('click', function() {
             var lead_id = $(this).data('rowid');
 
@@ -278,9 +291,11 @@
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 success: function(response) {
+                    console.log(response);
                     if (response.status == 200) {
-                        console.log(response);
+                        
                         var lead = response.data[0]; 
+                            
                         $('#rowClient').text(lead.client_name);
                         $('#rowLeadId').text(lead.lead_id);
                         $('#rowService').text(lead.services.join(", "));
@@ -309,13 +324,15 @@
                 }
             })
         })
-
+     
       $('.download').on('click',function(){
         var task_id = $(this).attr('data-taskId');
-        $('.laod-file-'+task_id).each(function(){
+        $(this).parent().parent().parent().find($('.laod-file-'+task_id)).each(function(){
+            console.table($(this))
             $(this).get(0).click();
         })
       })
+
     })
 </script>
 @stop

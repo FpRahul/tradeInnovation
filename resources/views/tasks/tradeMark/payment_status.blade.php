@@ -54,6 +54,7 @@
                Upload File
             </label>
             <input type="file" id="attachment" name="attachment[]" multiple style="display: none;" />
+            <div id="file-list" class = "mt-2"></div>
          </div>
          @error('attachment.*')
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
@@ -164,9 +165,12 @@
       $("#payment").on("change", function() {
          var changedValue = $(this).val();
          if (changedValue == 0) {
-        $("#verifiedDate label").text("Verified On");
+         $("#verifiedDate label").text("Verified On");
+         $("#deadLineDate label").text("Payment Dead line");
          } else {
             $("#verifiedDate label").text("Paid On");
+            $("#deadLineDate label").text("Document Dead line");
+
          }
       });
    });

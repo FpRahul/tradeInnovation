@@ -362,13 +362,16 @@ class LeadsController extends Controller
     public function getSourceTypeName(Request $request){
         if($request->value == 18){
             $value = 3;
+            $sign = '=';
         }elseif($request->value == 19){
-            $value = 4;
+            $value = 5;
+            $sign = '>=';
         }elseif($request->value == 17){
             //CLIENT
             $value = 2;
+            $sign = '=';
         }
-        $userData = User::where('role',$value)->get();
+        $userData = User::where('role',$sign,$value)->get();
         $options = '<option value="">Select</option>';
         foreach($userData as $k => $v){
             $options .="<option value=\"{$v['id']}\">{$v['name']}</option>";

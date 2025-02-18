@@ -17,4 +17,8 @@ class LeadNotification extends Model
     public function taskDeatials(){
         return $this->belongsTo(LeadTask::class , 'task_id');
     }
+    public function leadTaskDetail()
+    {
+        return $this->belongsTo(LeadTaskDetail::class, 'task_id', 'task_id');
+    }
 }

@@ -30,6 +30,7 @@ class TasksController extends Controller
             ->select('lead_id')
             ->distinct()
             ->get();
+        $users =  User::get();
 
         if ($request->id && $request->NotifyId) {
             $baseNotifyId = base64_decode($request->NotifyId);
@@ -65,6 +66,9 @@ class TasksController extends Controller
             })
                 ->whereHas('leadTaskDetails', function ($q) use ($request) {
                     $q->where('status', $request->status);
+                })
+                ->whereHas('lead', function ($q) use ($request) {
+                    $q->where('user_id', $request->user);
                 });
         } else if ($request->leadId) {
             $taskDetails = $taskDetails->whereHas('lead', function ($q) use ($request) {
@@ -77,17 +81,17 @@ class TasksController extends Controller
             $taskDetails = $taskDetails->whereHas('leadTaskDetails', function ($q) use ($request) {
                 $q->where('status', $request->status);
             });
+        } else if ($request->user) {
+            $taskDetails = $taskDetails->whereHas('lead', function ($q) use ($request) {
+                $q->where('user_id', $request->user);
+            });
         } else {
 
             $taskDetails = $taskDetails->whereHas('leadTaskDetails', function ($query) {
                 $query->where('status', '!=', 1);
             });
         }
-
-
         $taskDetailsDrp = $taskDetails->get();
-
-
         $taskDetails = $taskDetails->paginate(env("PAGINATION_COUNT"));
         if (empty($requestType)) {
             $header_title_name = 'User';
@@ -96,7 +100,8 @@ class TasksController extends Controller
                 'taskDetails' => $taskDetails,
                 'searchKey' => $searchKey,
                 'taskDetailsDrp' => $taskDetailsDrp,
-                'DistinctleadId' => $DistinctleadId
+                'DistinctleadId' => $DistinctleadId,
+                'users' => $users
             ]);
         } else {
             $trData = view($this->viewPath . 'task_fillter_data_listing', compact('taskDetails', 'searchKey'))->render();
@@ -266,6 +271,7 @@ class TasksController extends Controller
             $taskDetailsId = $task->id;
             $serviceName = $task->services->serviceName;
             $serviceID = $task->services->id;
+            $clientName = $task->lead->client_name;
         }
 
         $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
@@ -276,7 +282,7 @@ class TasksController extends Controller
 
 
         $leadTaskdetials = LeadTaskDetail::find($taskDetailsId);
-        return view('tasks.tradeMark.send_quotation', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'serviceName'));
+        return view('tasks.tradeMark.send_quotation', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'serviceName', 'clientName'));
     }
     public function sendQuotation(Request $request, $id)
     {
@@ -420,7 +426,10 @@ class TasksController extends Controller
 
     public function paymentStatus(Request $request, $id)
     {
+
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
+        $paymentDeadlineDate = Carbon::createFromFormat('d M Y', $request->input('paymentDeadline'))->format('Y-m-d');
+
         $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
         $existedLeaedTask = LeadTask::with(['lead', 'services', 'subService', 'serviceSatge'])->where('id', $id)->first();
         $mail = false;
@@ -453,7 +462,7 @@ class TasksController extends Controller
             $newLeadtask->task_title = $assignedStageName->description;
             $newLeadtask->task_description = $request->description ?? null;
             if ($newLeadtask->save()) {
-                $existedLeaedTaskDetails->status = 1;
+                $existedLeaedTaskDetails->status = $request->payment;
                 $existedLeaedTaskDetails->status_date = $verifiedDate;
                 $newLeadTaskDeatails->task_id = $newLeadtask->id;
                 $newLeadTaskDeatails->dead_line = $deadlineDate;
@@ -475,57 +484,39 @@ class TasksController extends Controller
                 }
                 if ($existedLeaedTaskDetails->save() && $newLeadTaskDeatails->save()) {
                     $userAssign =  $request->assignUser ?? $existedLeaedTask->user_id;
-                    $notification = new LeadNotification();
-                    $notification->user_id = $userAssign;
-                    $notification->lead_id = $existedLeaedTask->lead_id;
-                    $notification->task_id = $newLeadtask->id;
-                    $notification->title = "Task Assigned";
-                    $notification->description =  $userName . ' assigned you ' . $assignedStageName->title . ' task';
-                    if($request->payment == 0){
-
-                        $notification->deadline_date = $deadlineDate;
-                    }else{
-                        $notification->deadline_date = null;
-
+                    $existedNotification = LeadNotification::where('task_id',$id)->first();
+                    if ($request->payment == 3) {
+                        $existedNotification->deadline_date = $paymentDeadlineDate;
+                    } else {
+                        $existedNotification->deadline_date = null;
                     }
-                    $notification->status = 0;
+                    
+                    if($existedNotification->save()){
+                        $notification = new LeadNotification();
+                        $notification->user_id = $userAssign;
+                        $notification->lead_id = $existedLeaedTask->lead_id;
+                        $notification->task_id = $newLeadtask->id;
+                        $notification->title = "Task Assigned";
+                        $notification->description =  $userName . ' assigned you ' . $assignedStageName->title . ' task';
+                        $notification->status = 0;
+                        if ($notification->save()) {
+                            $LeadLog = new LeadLog();
+                            $LeadLog->user_id =  $existedLeaedTask->user_id;
+                            $LeadLog->lead_id =  $existedLeaedTask->lead_id;
+                            $LeadLog->task_id =  $existedLeaedTask->id;
+                            $LeadLog->assign_by = Auth::id();
+                            if ($request->payment == 1) {
+                                $LeadLog->description = " Payment status marked as Paid ";
+                            } else if ($request->payment == 0) {
+                                $LeadLog->description = " Payment status marked as on Credit ";
+                            }
+                            $LeadLog->save();
+                        
+                    }
 
-                    if ($notification->save()) {
-                        $LeadLog = new LeadLog();
-                        $LeadLog->user_id =  $existedLeaedTask->user_id;
-                        $LeadLog->lead_id =  $existedLeaedTask->lead_id;
-                        $LeadLog->task_id =  $existedLeaedTask->id;
-                        $LeadLog->assign_by = Auth::id();
-                        if ($request->payment == 1) {
-                            $LeadLog->description = " Payment status marked as Paid ";
-                        } else if ($request->payment == 0) {
-                            $LeadLog->description = " Payment status marked as on Credit ";
-                        }
-                        $LeadLog->save();
-                        // $type = 'Client';
-                        // $mail = true;
-                        // $randomNumber = substr(str_shuffle('9abcdefghijklmnopq045678rstuvwxyzABCDEFG123HIJKLMNOPQRSTUVWXYZ'), 0, 8);
-                        // $hashedPassword = Hash::make($randomNumber);
-                        // $newClient = new User();
-                        // $newClient->uni_user_id =  $this->generateUniqueUserCode('C', '=', 2);
-                        // $newClient->name = $existedLeaedTask->lead->client_name;
-                        // $newClient->role = 2;
-                        // if (User::where('email', $existedLeaedTask->lead->email)->exists()) {
-                        //     $newClient->email = null;
-                        // }else{
-                        //     $newClient->email = $existedLeaedTask->lead->email;
-                     
-                        // }
-                        // $newClient->mobile = $existedLeaedTask->lead->mobile_number;
-                        // $newClient->companyName = $existedLeaedTask->lead->company_name;
-                        // $newClient->password = $hashedPassword;
-                        // if($mail == true && $newClient->save() ){
-                        //     SendClientWelcomeEmail::dispatch($newClient,$randomNumber, $filePath = null,$type);
-                        // }
-                        // if($LeadLog->save()){
-                            $id = $newLeadtask->id;
-                            return redirect()->route('task.index')->with('success', 'payment status is Updated');
-                        // }
+                        $id = $newLeadtask->id;
+                        return redirect()->route('task.index')->with('success', 'payment status is Updated');
+                        
                     }
                 } else {
                     return redirect()->back()->error('message', " there is something wrong ");
@@ -635,4 +626,42 @@ class TasksController extends Controller
         }
         return $type . $newNumber;
     }
+
+    public function sendNotification()
+    {
+
+        $followUpDate = LeadTaskDetail::with('leadNotifications')->where('status' , 3)
+            ->orderBy('id', 'desc')
+            ->get();
+        dd($followUpDate);
+        foreach ($followUpDate as $followDate) {
+            foreach ($followDate->leadNotifications as $notification) {
+                dd($notification->dead_line);  
+            }
+        }
+    }
 }
+
+
+
+                        // $type = 'Client';
+                        // $mail = true;
+                        // $randomNumber = substr(str_shuffle('9abcdefghijklmnopq045678rstuvwxyzABCDEFG123HIJKLMNOPQRSTUVWXYZ'), 0, 8);
+                        // $hashedPassword = Hash::make($randomNumber);
+                        // $newClient = new User();
+                        // $newClient->uni_user_id =  $this->generateUniqueUserCode('C', '=', 2);
+                        // $newClient->name = $existedLeaedTask->lead->client_name;
+                        // $newClient->role = 2;
+                        // if (User::where('email', $existedLeaedTask->lead->email)->exists()) {
+                        //     $newClient->email = null;
+                        // }else{
+                        //     $newClient->email = $existedLeaedTask->lead->email;
+
+                        // }
+                        // $newClient->mobile = $existedLeaedTask->lead->mobile_number;
+                        // $newClient->companyName = $existedLeaedTask->lead->company_name;
+                        // $newClient->password = $hashedPassword;
+                        // if($mail == true && $newClient->save() ){
+                        //     SendClientWelcomeEmail::dispatch($newClient,$randomNumber, $filePath = null,$type);
+                        // }
+                        // if($LeadLog->save()){

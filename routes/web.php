@@ -91,6 +91,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::match(['POST','GET'],'/archive/{id?}', 'archiveLead')->name('leads.archive');
         Route::POST('/setassign','setAssignToUser')->name('leads.assign');
 
+        Route::post('/checkduplicate','checkDuplicate')->name('lead.checkDuplicate');
         
     });
     //Tasks Routes
@@ -112,7 +113,9 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
 
         
         //For patent.........
+        // For payment verification........
         Route::get('/patent/payment-verification/{id?}','patentPaymentVerification')->name('task.patentPaymentVerification');
+        Route::post('/patent/submitpaymentdata','submitPatentPaymentData')->name('task.submitpatentpayment');
         
     });
     //Services Routes

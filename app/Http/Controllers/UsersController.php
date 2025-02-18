@@ -339,6 +339,7 @@ class UsersController extends Controller
         $userAgent = \Request::header('User-Agent');
         $operatingSystem = getOperatingSystem($userAgent);
         $incorporationDataList = CategoryOption::where('status', 1)->where('type', 2)->get();
+        $scopeOfBussinessList = CategoryOption::where('status', 1)->where('type', 4)->get();
         $referDataList = CategoryOption::where('status', 1)->where('type', 3)->get();
         $partnerDataList = Partner::where('status',1)->get();
         if ($id > 0) {
@@ -394,6 +395,8 @@ class UsersController extends Controller
                 $newClientDetails->perma_city = $request->perma_city;
                 $newClientDetails->perma_state = $request->perma_state;
                 $newClientDetails->perma_zip = $request->perma_zip;
+                $newClientDetails->business_scope = implode(',',$request->scopeofbusiness);
+                
 
                 if ($newClientDetails->save()) {
                     $logActivity[] = [
@@ -418,7 +421,7 @@ class UsersController extends Controller
             }
         }
         $header_title_name = 'User';
-        return view('users.add-client', compact('newClient', 'newClientDetails', 'header_title_name', 'moduleName', 'referDataList','incorporationDataList','partnerDataList'));
+        return view('users.add-client', compact('newClient', 'newClientDetails', 'header_title_name', 'moduleName', 'referDataList','incorporationDataList','partnerDataList','scopeOfBussinessList'));
     }
  
     public function associates(Request $request){

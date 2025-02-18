@@ -21,8 +21,8 @@ use App\Models\MenuAction;
             </div>
             <input type="hidden" name="name" value="{{ $roleData->name }}">
             <div class="px-[20px] flex flex-col md:flex-row gap-[30px]">
-                <div class="w-[100%] md:w-[230px] max-h-[100%] overflow-y-auto ">
-                    <ul class="accordian createRoll">
+                <div class="w-[230px] max-h-[100%] overflow-y-auto ">
+                    <ul class="activeUl accordian space-y-[7px]">
                     @foreach($serializeMenus as $menuKey => $menu)
                         <li class="item border-b-[1px] border-b-[#E8E7FF] py-[10px] active">
                             <a href="javascript:void(0)" data-id="tab{{ $menuKey }}" class="text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center justify-between px-[0] py-[5px]  ">
@@ -381,6 +381,7 @@ use App\Models\MenuAction;
 
         }     
     })
+
     $(document).on('click','.parent-element',function (){
         if($(this).is(':checked')){
             $(this).parent().parent().parent().parent().find('input:checkbox').prop('checked',true);

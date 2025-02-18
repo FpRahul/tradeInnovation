@@ -115,7 +115,6 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         //For patent.........
         // For payment verification........
         Route::get('/patent/payment-verification/{id?}','patentPaymentVerification')->name('task.patentPaymentVerification');
-        Route::post('/patent/submitpaymentdata','submitPatentPaymentData')->name('task.submitpatentpayment');
         
     });
     //Services Routes

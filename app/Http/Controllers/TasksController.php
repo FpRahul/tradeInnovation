@@ -426,7 +426,6 @@ class TasksController extends Controller
 
     public function paymentStatus(Request $request, $id)
     {
-
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         $paymentDeadlineDate = Carbon::createFromFormat('d M Y', $request->input('paymentDeadline'))->format('Y-m-d');
 
@@ -587,15 +586,14 @@ class TasksController extends Controller
     {
         $taskId = $id;
         $taskList = LeadTask::find($taskId);
-        $serviceStage = ServiceStages::where('id', '>', $taskList->service_stage_id)->where('service_id', 2)->get();
+        $serviceStage = ServiceStages::where('id', '>', $taskList->service_stage_id)->where('service_id', 2)->first();
         $userList = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
+        $currentUser = User::find($taskList->user_id);
         $header_title_name = "Payment Verification";
-        return view('tasks/patent/payment-verification', compact('header_title_name', 'taskId', 'taskList', 'serviceStage', 'userList'));
+        return view('tasks/patent/payment-verification', compact('header_title_name', 'taskId', 'taskList', 'serviceStage', 'userList','currentUser'));
     }
 
-    public function submitPatentPaymentData(Request $request){
-        dd($request);
-    }
+
 
     public function holdtask(Request $request)
     {

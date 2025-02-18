@@ -22,10 +22,10 @@ use App\Models\MenuAction;
             <input type="hidden" name="name" value="{{ $roleData->name }}">
             <div class="px-[20px] flex flex-col md:flex-row gap-[30px]">
                 <div class="w-[230px] max-h-[100%] overflow-y-auto ">
-                    <ul class="activeUl accordian space-y-[7px]">
+                    <ul class="activeUl accordian ">
                     @foreach($serializeMenus as $menuKey => $menu)
                         <li class="item border-b-[1px] border-b-[#E8E7FF] py-[10px] active">
-                            <a href="javascript:void(0)" data-id="tab{{ $menuKey }}" class="text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center justify-between px-[0] py-[5px]  ">
+                            <a href="javascript:void(0)" data-id="tab{{ $menuKey }}" class=" bg-[#f3f3f5] text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center justify-between px-[10px] py-[10px]  ">
                                     @if($menuKey==1)
                                         @php $isChecked = 'disabled checked';  @endphp
                                     @else
@@ -73,7 +73,7 @@ use App\Models\MenuAction;
                                
 
 
-                                    <a href="javascript:void(0)" class="text-[13px] font-[400] leading-[16px] text-[#000000] flex items-center justify-between px-[6px] py-[5px] pl-[20px]">
+                                    <a href="javascript:void(0)" class=" text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center justify-between px-[6px] py-[5px] pl-[20px]">
                                         <!-- <span class="inline-flex items-center gap-[7px] ">
                                             <input type="checkbox" name="permission[mainMenu][{{ $menuKey }}][subMenu][{{ $smid }}]" id="sub-menu-id-{{ $smid }}" subid="{{ $smid }}" class="peer w-[15px] h-[15px] parent-sub-element" {{ $isChecked }}>
 
@@ -115,7 +115,7 @@ use App\Models\MenuAction;
                                             @php $isChecked = '';  @endphp
                                         @endif
                                         <li class="item">
-                                            <a href="javascript:void(0)" data-id="tab{{ $smid }}" class="text-[12px] font-[400] leading-[16px] text-[#000000] flex items-center justify-between  px-[6px] py-[5px] pl-[20px] ">
+                                            <a href="javascript:void(0)" data-id="tab{{ $smid }}" class="text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center justify-between  px-[6px] py-[5px] pl-[20px] ">
                                                 <div class="inline-flex items-center gap-[7px] ">
                                                     <label class="flex justify-start gap-[8px] items-center cursor-pointer relative">
                                                         <input type="checkbox" class="peer h-4 w-4 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-[#13103a] checked:border-[#13103a] parent-sub-sub-element"  m-id="{{ $menuKey }}" id="sub-sub-menu-id-{{ $ssubmid }}" name="permission[mainMenu][{{ $menuKey }}][subMenu][{{ $smid }}][subSubMenu][{{ $ssubmid }}]" {{ $isChecked }}>

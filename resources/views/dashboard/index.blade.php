@@ -45,12 +45,12 @@
     </div>
     <div class="flex flex-col lg:flex-row gap-[30px] mb-[30px]">
         <div class="w-full lg:w-[75%]">
-            <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] p-0 md:p-6">
+            <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[10px] md:rounded-[20px] p-0 md:p-6">
                 <canvas id="roundedLineChart" width="400" height="200"></canvas>
             </div>
         </div>
         <div class="w-full lg:w-[25%]">
-            <div class="shadow-[0px_0px_13px_5px_#0000000f] h-full bg-white rounded-[20px] p-6">
+            <div class="shadow-[0px_0px_13px_5px_#0000000f] h-full bg-white rounded-[10px] md:rounded-[20px] p-3 md:p-6">
                 <h4 class="text-[14px] leading-[16px] text-[#000000] font-[500] tracking-[0.04em] mb-3">Status Matrix</h4>
                 <ul class="flex flex-col gap-[10px]">
                     <li class="bg-[#F4F4F4] text-[#13103A] text-[14px] leading-[16px] font-[400] rounded-[7px] overflow-hidden pl-[10px] flex justify-between items-center ">
@@ -98,7 +98,7 @@
         </div>
     </div>
 
-    <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] overflow-hidden">
+    <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[10px] md:rounded-[20px] overflow-hidden">
         <div class="py-[25px] px-[20px] flex items-center justify-between">
             <h4 class="text-[14px] leading-[16px] text-[#000000] font-[500] tracking-[0.04em] ">Recent Activity</h4>
         </div>
@@ -106,27 +106,27 @@
         <table width="100%" cellpadding="0" cellspacing="0" class="min-w-[600px]">
                 <thead>
                     <tr>
-                        <th class="text-start w-[200px] bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
+                        <th class="text-start whitespace-nowrap text-[12px] w-[200px] bg-[#D9D9D933] md:text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
                             User
                         </th>
-                        <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                        <th class="text-start whitespace-nowrap text-[12px] bg-[#D9D9D933] md:text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                             Activity
                         </th>
-                        <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                        <th class="text-start whitespace-nowrap text-[12px] bg-[#D9D9D933] md:text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                             Details
                         </th>
                         <!-- ip -->
-                        <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                        <th class="text-start whitespace-nowrap text-[12px] bg-[#D9D9D933] md:text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                             IP
                         </th>
                         <!-- User Agent -->
-                        <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                        <th class="text-start whitespace-nowrap text-[12px] bg-[#D9D9D933] md:text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                         User Agent
                         </th>
-                        <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                        <th class="text-start whitespace-nowrap text-[12px] bg-[#D9D9D933] md:text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                             Action Date
                         </th>
-                        <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                        <th class="text-start whitespace-nowrap text-[12px] bg-[#D9D9D933] md:text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                             Action Date
                         </th>
                     </tr>
@@ -135,34 +135,34 @@
                     @if ($systemLogs && $systemLogs->isNotEmpty())
                     @foreach ($systemLogs as $logs)
                     <tr>
-                        <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
+                        <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start whitespace-nowrap text-[12px] md:text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
                             {{$logs->user->name}}
                         </td>
-                        <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                        <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start whitespace-nowrap text-[12px] md:text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                             {{$logs->title}}
                         </td>
-                        <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                        <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start whitespace-nowrap text-[12px] md:text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                             {{$logs->description}}
                         </td>
                         @if($logs->ip_address)
-                        <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                        <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start whitespace-nowrap text-[12px] md:text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                         {{$logs->ip_address}}
                         </td>
                         @else
-                        <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                        <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start whitespace-nowrap text-[12px] md:text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                         Not Available
                        </td>
                         @endif
                         @if($logs->operating_system)
-                        <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                        <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start whitespace-nowrap text-[12px] md:text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                         {{$logs->operating_system}}
                         </td>
                         @else
-                        <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                        <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start whitespace-nowrap text-[12px] md:text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                         Not Available
                         </td>
                         @endif
-                        <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                        <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start whitespace-nowrap text-[12px] md:text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                             {{ date('d M Y',strtotime($logs->created_at))}}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-center  text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">

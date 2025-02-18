@@ -16,7 +16,7 @@ Route::match(['get','post'],'/', [UsersController::class,'login'])->name('login'
 Route::match(['get','post'],'forget_password', [UsersController::class,'forgetPassword'])->name('forgetPassword');
 Route::get('reset/password/{token?}',[UsersController::class, 'resetPassword'])->name('resetPassword.resetPassword');
 Route::post('password/reset',[UsersController::class, 'passwordReset'])->name('passwordReset.passwordReset');
-
+Route::get('send_nontification',[TasksController::class, 'sendNotification'])->name('send-notification');
 Route::middleware(['auth', CheckPermission::class])->group(function () {
     //Dashboard Routes
     Route::get('/logout',[UsersController::class,'logout'])->name('user.logout');

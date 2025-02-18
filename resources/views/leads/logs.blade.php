@@ -296,12 +296,12 @@
                         
                         var lead = response.data[0]; 
                             
-                        $('#rowClient').text(lead.client_name);
-                        $('#rowLeadId').text(lead.lead_id);
+                        $('#rowClient').text(lead.client_name ? lead.client_name : 'Not Updated');
+                        $('#rowLeadId').text(lead.lead_id ? lead.lead_id : 'Not Updated');
                         $('#rowService').text(lead.services.join(", "));
-                        $('#rowStage').text(lead.stage);
-                        $('#rowAssignedTo').text(lead.assignTo);
-                        $('#remark').val(lead.logDescription);
+                        $('#rowStage').text(lead.stage ? lead.stage : 'Not Updated');
+                        $('#rowAssignedTo').text(lead.assignTo ? lead.assignTo : 'Not Updated');
+                        $('#remark').val(lead.logDescription ? lead.logDescription : 'Not Updated');
                         $('#rowStatus').text(function() {
                             
                             switch (lead.status) {
@@ -318,13 +318,12 @@
                             }
                         });
                         $('#rowVerifiedOn').text(lead.verifiedOn ? lead.verifiedOn : 'Not Updated');
-                        $('#rowClarification').text(lead.remark);
-                        $('#rowDeadLine').text(lead.deadLine);
+                        $('#rowClarification').text(lead.remark ? lead.remark : 'Not Updated');
+                        $('#rowDeadLine').text(lead.deadLine ? lead.deadLine : 'Not Updated');
                     }
                 }
             })
         })
-     
       $('.download').on('click',function(){
         var task_id = $(this).attr('data-taskId');
         $(this).parent().parent().parent().find($('.laod-file-'+task_id)).each(function(){

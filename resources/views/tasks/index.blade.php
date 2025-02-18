@@ -2,7 +2,6 @@
 @section('content')
 
 <div>
-
     <div class="flex items-center justify-between mb-[20px]">
         <div>
             <h3 class="text-[18px] md:text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">Manage Task</h3>
@@ -18,18 +17,21 @@
                 <form action="" class="w-full flex flex-col md:flex-row gap-[30px]">
                     <div class="w-full md:w-9/12 flex items-center gap-[30px]">
                         <div class="w-full flex items-end gap-[20px]">
-                            <div class="w-full md:w-1/2">
+                            <!-- Lead ID Select (Increased width to 5/12) -->
+                            <div class="w-full md:w-5/12">
                                 <label for="leadId" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Lead ID</label>
                                 <select name="leadId" id="leadId" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
-                                    <option value="">Select Status</option>
-                                     @if(!$DistinctleadId->isEmpty())
-                                     @foreach ( $DistinctleadId as $leadID )
-                                     <option value="{{ $leadID->lead->lead_id }}">{{ $leadID->lead->lead_id }}</option>
-                                     @endforeach
-                                     @endif
+                                    <option value="">Select Lead ID</option>
+                                    @if(!$DistinctleadId->isEmpty())
+                                    @foreach ($DistinctleadId as $leadID)
+                                    <option value="{{ $leadID->lead->lead_id }}">{{ $leadID->lead->lead_id }}</option>
+                                    @endforeach
+                                    @endif
                                 </select>
                             </div>
-                            <div class="w-full md:w-1/2">
+
+                            <!-- Status Select (Increased width to 5/12) -->
+                            <div class="w-full md:w-5/12">
                                 <label for="status" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
                                 <select name="status" id="status" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
                                     <option value="">Select Status</option>
@@ -39,9 +41,28 @@
                                     <option value="3">Follow Up</option>
                                 </select>
                             </div>
+
+                            <!-- User Select (visible only for roles 1 or 4, increased width to 5/12) -->
+                            @if (Auth::user()->role == 1 || Auth::user()->role == 4)
+                            <div class="w-full md:w-5/12">
+                                <label for="user" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">User</label>
+                                <select name="user" id="user" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
+                                    @if(!$users->isEmpty())
+                                    <option value="">Select user</option>
+                                    @foreach($users as $user)
+                                    <option value="{{$user->id}}">{{$user->name}}</option>
+                                    @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                            @endif
+
+                            <!-- Filter Button -->
                             <button class="text-[14px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[12px] py-[16px] px-[35px]">
                                 Filter
                             </button>
+
+                            <!-- Reset Button -->
                             <button id="resetButton" class="text-[14px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[12px] py-[16px] px-[35px]">
                                 Reset
                             </button>

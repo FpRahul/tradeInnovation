@@ -22,7 +22,7 @@ use App\Models\MenuAction;
             <input type="hidden" name="name" value="{{ $roleData->name }}">
             <div class="px-[20px] flex flex-col md:flex-row gap-[30px]">
                 <div class="w-[230px] max-h-[100%] overflow-y-auto ">
-                    <ul class="accordian space-y-[7px]">
+                    <ul class="activeUl accordian space-y-[7px]">
                     @foreach($serializeMenus as $menuKey => $menu)
                         <li class="item">
                             <a href="javascript:void(0)" data-id="tab{{ $menuKey }}" class="text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center justify-between p-[15px] bg-[#f7f7f7] ">
@@ -200,6 +200,7 @@ use App\Models\MenuAction;
 
         }     
     })
+
     $(document).on('click','.parent-element',function (){
         if($(this).is(':checked')){
             $(this).parent().parent().parent().find('input:checkbox').prop('checked',true);

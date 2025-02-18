@@ -225,12 +225,12 @@
 
 <!-- Main modal -->
 <div id="editLeadModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[100%)] max-h-full bg-[rgba(0,0,0,0.6)] ">
-    <div class="relative p-4 w-full max-w-[780px] max-h-full">
+    <div class="relative p-4 w-full max-w-[780px] max-h-full editModalBx">
         <!-- Modal content -->
-        <div class="relative bg-white rounded-[20px] shadow dark:bg-gray-700">
+        <div class="relative bg-white rounded-[10px] md:rounded-[20px] shadow dark:bg-gray-700">
             <!-- Modal header -->
-            <div class="flex items-center justify-between p-4 md:px-5 md:py-[20px] border-b border-[#0000001A] rounded-t dark:border-gray-600">
-                <h3 class="text-[14px] font-[400] leading-[17px] text-[#000000] dark:text-white">
+            <div class="flex items-center justify-between p-2 md:p-4 md:px-5 md:py-[20px] border-b border-[#0000001A] rounded-[10px] md:rounded-t dark:border-gray-600">
+                <h3 class="text-[12px] md:text-[14px] font-[400] leading-[17px] text-[#000000] dark:text-white">
                     Update Lead
                 </h3>
                 <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="editLeadModal">
@@ -241,68 +241,54 @@
                 </button>
             </div>
             <!-- Modal body -->
-            <div class="p-[20px]">
-            <div class="servicModalTable">
-                <table>
-                    <tr>
-                        <th>Service Name:</th>
-                        <th>Assigned User:</th>                        
-                    </tr>
-                    <tbody>
+            <div class="p-[10px] md:p-[20px]">
+                <div class="servicModalTable">
+                    <table>
                         <tr>
-                            <td>Trademark</td>
-                            <td>Piyush</td>
+                            <th>Service Name:</th>
+                            <th>Assigned User:</th>                        
                         </tr>
-                    </tbody>
-                </table>
-            </div>
-
-
-
-
-
-
-
-
-
-
-
-                <form method="POST" action="{{ route('leads.edit')}}" enctype="multipart/form-data" class="space-y-[20px]">
+                        <tbody class="show_service_user_list">
+                            
+                        </tbody>
+                    </table>
+                </div>       
+                <form method="POST" action="{{ route('leads.edit')}}" enctype="multipart/form-data" class="space-y-[10px] md:space-y-[20px]">
                     @csrf
                     <input type="hidden" name="lead_id" id="modal_lead_id" value="">
-                    <div class="flex flex-col md:flex-row gap-[20px]">
+                    <div class="flex flex-col md:flex-row gap-[10px] md:gap-[20px]">
                         <div class="w-full md:w-1/2">
-                            <label for="modalclientname" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Client Name</label>
+                            <label for="modalclientname" class="block text-[12px] md:text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Client Name</label>
                             <input type="text" name="modalclientname" id="modalclientname" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                         </div>
                         <div class="w-full md:w-1/2">
-                            <label for="modalcompanyname" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Company Name</label>
+                            <label for="modalcompanyname" class="block text-[12px] md:text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Company Name</label>
                             <input type="text" name="modalcompanyname" id="modalcompanyname" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                         </div>
                         
                     </div>
-                    <div class="flex flex-col md:flex-row gap-[20px]">  
+                    <div class="flex flex-col md:flex-row gap-[10px] md:gap-[20px]">  
                         <div class="w-full md:w-1/2">
-                            <label for="modalmobilenumber" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mobile number</label>
+                            <label for="modalmobilenumber" class="block text-[12px] md:text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mobile number</label>
                             <input type="text" name="modalmobilenumber" id="modalmobilenumber" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                         </div>                      
                         <div class="w-full md:w-1/2">
-                            <label for="modalemail" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Email-Id</label>
+                            <label for="modalemail" class="block text-[12px] md:text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Email-Id</label>
                             <input type="text" name="modalemail" id="modalemail" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                         </div>
                     </div>
                     <div>
-                        <label class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Attachments <span class="text-[12px] italic font-[400] text-[#e70e0e]"> (only jpg,jpeg png and pdf format supported & max:2 MB)</span></label>
+                        <label class="block text-[12px] md:text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Attachments <span class="text-[12px] italic font-[400] text-[#e70e0e]"> (only jpg,jpeg png and pdf format supported & max:2 MB)</span></label>
                         <div class="leadAttachmentRepeater md:border-[1px] border-[#0000001A] rounded-[10px] md:p-[20px] employee_repeater_wrapper">
-                           <div id="existedAttachment">
+                           <div id="existedAttachment" class="text-[12px] md:text-[14px] ">
 
                            </div>
-                           <input name="modalfileattachment[]" type="file" multiple/>
+                           <input class="text-[12px] md:text-[14px] " name="modalfileattachment[]" type="file" multiple/>
                         </div>
                     </div>
                     <div class="">
-                        <label for="modaldescription" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
-                        <textarea type="text" name="modaldescription" id="modaldescription" class="w-full h-[155px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
+                        <label for="modaldescription" class="block text-[12px] md:text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
+                        <textarea type="text" name="modaldescription" id="modaldescription" class="w-full h-[100px] md:h-[155px] border-[1px] border-[#0000001A] text-[12px] md:text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
                     </div>
                     <div class="flex justify-end gap-[15px]">
                         <button data-modal-hide="editLeadModal" type="button" class="rounded-[10px] py-[12px] px-[30px] text-[13px] font-[500] leading-[15px] tracking-[0.01em] text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Cancel</button>
@@ -345,6 +331,8 @@
                     `;
                     attachData.append(row);
                 });
+                $('.show_service_user_list').html(res.serviceData);
+                
             }
         })
     });

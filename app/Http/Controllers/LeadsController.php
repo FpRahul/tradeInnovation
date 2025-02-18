@@ -100,6 +100,7 @@ class LeadsController extends Controller
             $successMsg = 'Lead added!';
         }       
         $sourceList = CategoryOption::where('type',3)->where('status',1)->get();
+        $scopeOfBussinessList = CategoryOption::where('status', 1)->where('type', 4)->get();
         $serviceList = Service::where('status',1)->get();
         $userList = User::where('role','>=',5)->where('status',1)->get();
 
@@ -128,6 +129,7 @@ class LeadsController extends Controller
             $leadData->email = $request->email;
             $leadData->description = $request->description;
             $leadData->msmem = $request->msmem;
+            $leadData->business_scope = implode(',',$request->scopeofbusiness);
             $leadData->status = $request->savetype;
             if($leadData->save()){
                 $serviceidArray = [];
@@ -231,7 +233,7 @@ class LeadsController extends Controller
             }
         }
         $header_title_name = 'Lead';
-        return view('leads/add',compact('header_title_name','sourceList','serviceList','userList','leadData','leadAttachment','LeadTask'));
+        return view('leads/add',compact('header_title_name','sourceList','serviceList','userList','leadData','leadAttachment','LeadTask','scopeOfBussinessList'));
     }
     // lead fetch...........
     public function leadFetch(Request $request){
@@ -240,15 +242,22 @@ class LeadsController extends Controller
         foreach($leadData->leadTasks as $dataKey => $dataVal){
             $userData = User::find($dataVal->user_id);
             $serviceData = Service::find($dataVal->service_id);
-            $serviceDataArray['user'][] = $userData->name;
-            $serviceDataArray['service'][] = $serviceData->serviceName;
+            $serviceDataArray['users'][] = $userData->name;
+            $serviceDataArray['services'][] = $serviceData->serviceName;
         }
-        // $userData = User::find($leadData->lead_tasks->user_id)->pluck('name');
-        // $serviceData = Service::find($leadData->lead_tasks->service_id)->pluck('serviceName');
-        // $serviceDataArray['user'] = $userData;
-        // $serviceDataArray['service'] = $serviceData;
-        // dd($serviceDataArray);
+        $serviceData='';
+        foreach($serviceDataArray['users'] as $index => $user) {
+            $service = $serviceDataArray['services'][$index] ?? 'No Service';
+            $serviceData .= "
+            <tr>                
+                <td class='border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px] pl-[25px]'>{$service}</td>
+                <td class='border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px] pl-[25px]'>{$user}</td>
+            </tr>
+            ";
+        }
+        
         return response()->json([
+            'serviceData'=>$serviceData,
             'data' =>$leadData
            ]);
     }
@@ -404,6 +413,17 @@ class LeadsController extends Controller
        
     }  
 
+    public function checkDuplicate(Request $request){
+        if ($request->isMethod('POST')) {
+            if ($request->id > 0) {
+                $checkUserData = Lead::where('id', '!=', $request->id)->where('mobile_number', $request->val)->exists();
+            } else {
+                $checkUserData = Lead::where('mobile_number', $request->val)->exists();
+            }
+            return response()->json(['exists' => $checkUserData]);
+        }
+        return response()->json(['error' => 'Invalid request'], 400);
+    }
     
     
 

@@ -30,7 +30,8 @@ class UserDetail extends Model
         'incorporationType',
         'registered	',
         'referralPartner', 
-        'partner_id'       
+        'partner_id',
+        'business_scope'     
     ];
 
     public function user(){

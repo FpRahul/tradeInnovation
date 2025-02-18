@@ -28,16 +28,18 @@
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="scopeofbusiness" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Scope Of Business <strong class="text-[#f83434]">*</strong></label>
-                    <select name="scopeofbusiness" class="selectedValue allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <select name="scopeofbusiness[]" id="scopeofbusiness" 
+                        class="selectedValue allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                        required multiple>
                         <option value="">Select Scope Of Business</option>                    
-                        {{-- @if (!empty($incorporationDataList) && $incorporationDataList->isNotEmpty())
-                            @foreach ($incorporationDataList as $incorporationDataListDetails)  
-                                <option value="{{ $incorporationDataListDetails->id }}" 
-                                    @selected(old('incorporationtype', $newClientDetails->incorporationType ?? '') == $incorporationDataListDetails->id)>
-                                    {{ $incorporationDataListDetails->name }}
+                        @if (!empty($scopeOfBussinessList) && $scopeOfBussinessList->isNotEmpty())
+                            @foreach ($scopeOfBussinessList as $scopeOfBussinessListDetails)  
+                                <option value="{{ $scopeOfBussinessListDetails->id }}" 
+                                    @selected(in_array($scopeOfBussinessListDetails->id, old('scopeofbusiness', explode(',', $newClientDetails->business_scope ?? ''))))>
+                                    {{ $scopeOfBussinessListDetails->name }}
                                 </option>                      
                             @endforeach                                                            
-                        @endif --}}
+                        @endif
                     </select>
                 </div>
                 <div class="w-full md:w-1/2">

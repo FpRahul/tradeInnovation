@@ -66,11 +66,29 @@
                     <input type="text" name="companyname" id="companyname" value="{{!empty($leadData) ? $leadData->company_name : ''}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                 </div>
                 <div class="w-full md:w-1/2">
-                    <label for="mobilenumber" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mobile number</label>
-                    <input type="text" name="mobilenumber" id="mobilenumber" value="{{!empty($leadData) ? $leadData->mobile_number : ''}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <label for="scopeofbusiness" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Scope Of Business <strong class="text-[#f83434]">*</strong></label>
+                    <select name="scopeofbusiness[]" id="scopeofbusiness" 
+                        class="selectedValue allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                        required multiple>
+                        <option value="">Select Scope Of Business</option>                    
+                        @if (!empty($scopeOfBussinessList) && $scopeOfBussinessList->isNotEmpty())
+                            @foreach ($scopeOfBussinessList as $scopeOfBussinessListDetails)  
+                                <option value="{{ $scopeOfBussinessListDetails->id }}" 
+                                    @selected(in_array($scopeOfBussinessListDetails->id, old('scopeofbusiness', explode(',', $leadData->business_scope ?? ''))))>
+                                    {{ $scopeOfBussinessListDetails->name }}
+                                </option>                      
+                            @endforeach                                                            
+                        @endif
+                    </select>
                 </div>
+                
             </div>
             <div class="flex flex-col md:flex-row gap-[20px]">
+                <div class="w-full md:w-1/2">
+                    <label for="mobilenumber" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mobile number</label>
+                    <input type="text" data-id="{{$leadData->id}}" name="mobilenumber" id="mobilenumber" value="{{!empty($leadData) ? $leadData->mobile_number : ''}}" class="checkDuplicateMobile w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <span class="mobile_exist_error text-[#df2727] text-[12px] hidden">Please try with another mobile number!</span>
+                </div>
                 <div class="w-full md:w-1/2">
                     <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Email-Id</label>
                     <input type="text" name="email" id="email" value="{{!empty($leadData) ? $leadData->email : ''}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
@@ -349,6 +367,12 @@
 <script>
    
     $(document).on('click','.lead_submit_btn',function(){
+
+        let form = $("#submitLeadForm")[0];
+        if (!form.checkValidity()) {
+            form.reportValidity(); 
+            return;
+        }
         if($(this).attr('name') == 'saveAssign'){
             swal("Are you sure you want to process this lead to the assigned stage? You won't be able to edit the lead anymore once confirmed.", {
             buttons: {
@@ -513,7 +537,33 @@
         }
         
     }
-
+    $(document).on('keyup','.checkDuplicateMobile',function(){
+        if($(this).val().length >=10){
+            let id = $(this).data('id');
+            let val = $(this).val();
+            let e = $(this);
+            $.ajax({
+                method:'POST',
+                url:"{{ route('lead.checkDuplicate')}}",
+                headers:{
+                    'X-CSRF-TOKEN':'{{csrf_token()}}'
+                },
+                data:{
+                    id:id,
+                    val:val
+                },
+                success:function(res){
+                    if(res.exists){
+                        e.val('');
+                        $('.mobile_exist_error').removeClass('hidden');
+                    }else{
+                        $('.mobile_exist_error').addClass('hidden');
+                    }
+                }
+            });
+        }
+        
+    });
     
 </script>
 @stop

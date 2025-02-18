@@ -134,6 +134,30 @@ class CategoryOptions extends Seeder
                 'name' => 'Website',
                 'status' => '1',
             ],
+            [
+                'authId' => '1',
+                'type' => '4',
+                'name' => 'Textiles',
+                'status' => '1',
+            ],
+            [
+                'authId' => '1',
+                'type' => '4',
+                'name' => 'Garments',
+                'status' => '1',
+            ],
+            [
+                'authId' => '1',
+                'type' => '4',
+                'name' => 'IT Consultant',
+                'status' => '1',
+            ],
+            [
+                'authId' => '1',
+                'type' => '4',
+                'name' => 'Automobile',
+                'status' => '1',
+            ],
         ]);
     }
 }

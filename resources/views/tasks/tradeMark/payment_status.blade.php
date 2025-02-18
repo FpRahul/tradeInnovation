@@ -18,12 +18,32 @@
             <select name="payment" id="payment" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                <option value="" disabled selected>Select status</option>
                <option value="1">Paid</option>
-               <option value="0">On Credit</option>
+               <option value="3">On Credit</option>
             </select>
             @error('payment')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
          </div>
+         <!--  -->
+         <div class="w-full md:w-1/2 hidden" id="paymentReminder" >
+            <label for="paymentDeadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+             Payment Deadlin
+            </label>
+            <div class="w-[100%] relative">
+               <input
+                  type="text"
+                  placeholder="Dead Line"
+                  name="paymentDeadline"
+                  class="daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
+                  value=""
+                  id="paymentDeadline"
+                  autocomplete="off">
+               <div class="absolute right-[10px] top-[10px]">
+                  <i class="ri-calendar-line"></i>
+               </div>
+            </div>
+         </div>
+         <!--  -->
          <div class="w-full md:w-1/2" id="verifiedDate">
             <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
              Paid  On
@@ -106,7 +126,7 @@
          </div>
          <div class="w-full md:w-1/2" id="deadLineDate">
             <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-              Payment Dead line
+            Documentation Dead line
             </label>
             <div class="w-[100%] relative">
                <input
@@ -164,12 +184,15 @@
 
       $("#payment").on("change", function() {
          var changedValue = $(this).val();
-         if (changedValue == 0) {
+         if (changedValue == 3) {
          $("#verifiedDate label").text("Verified On");
-         $("#deadLineDate label").text("Payment Dead line");
+         $("#paymentReminder").removeClass("hidden");
+
+         
          } else {
             $("#verifiedDate label").text("Paid On");
-            $("#deadLineDate label").text("Document Dead line");
+            $("#paymentReminder").addClass("hidden");
+            
 
          }
       });

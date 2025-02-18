@@ -32,6 +32,11 @@
                </div>
             </div>
          </div>
+         @if(!empty($clientName))
+         <input type="hidden" id="clientName" value="{{$clientName}}">
+         @endif
+
+
          <div class="flex justify-start flex-wrap w-[100%] md:w-[49%]">
             <label class="block w-full text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload</label>
             <label for="attachment" class="flex items-center gap-[10px] w-full text-[13px] font-[500] leading-[15px] text-[#666666] tracking-[0.01em] bg-[#fff] border-dashed border-[1px] border-[#ccc] rounded-[6px] py-[6px] px-[10px] cursor-pointer">
@@ -41,20 +46,20 @@
                Upload File
             </label>
             <input type="file" id="attachment" name="attachment[]" multiple style="display: none;" />
-            <div id="file-list" class = "mt-2"></div>
+            <div id="file-list" class="mt-2"></div>
          </div>
          @error('attachment.*')
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
       </div>
       @if($taskDetails->count() > 0)
-                @foreach ($taskDetails as $user )
-                @php
-            $selectedId = $user->user->id;
-        @endphp
-                
-                @endforeach
-         @endif
+      @foreach ($taskDetails as $user )
+      @php
+      $selectedId = $user->user->id;
+      @endphp
+
+      @endforeach
+      @endif
       <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2">
 
@@ -109,8 +114,8 @@
          <input type="hidden" name="stage_id" value="{{$getStage->id}}">
          @endif
          <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-                        Next stage will be: {{$getStage->title}}
-                    </p>
+            Next stage will be: {{$getStage->title}}
+         </p>
       </div>
 
 
@@ -130,8 +135,8 @@
             @enderror
          </div>
          <div class="w-full md:w-1/2">
-            <label for="subject" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Service<strong class="text-[#f83434]">*</strong></label>
-            <input type="text" value="{{$serviceName}}" disabled class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+            <label for="Service" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Service<strong class="text-[#f83434]">*</strong></label>
+            <input type="text" id="serviceNameInput" value="{{$serviceName}}" disabled class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
             <input type="hidden" name="service" value="{{$serviceName}}">
             @error('service')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
@@ -160,13 +165,65 @@
          <label for="govt_price" class="text-[14px] font-[400] leading-[16px] text-[#000000]">GST</label>
       </div>
       <div class="flex justify-end gap-[15px]">
+         <a class="preview text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Preview</a>
          <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Sent Quotation</button>
       </div>
-
    </form>
 </div>
+
+<div id="assignUserModal" class="hidden fixed inset-0 z-50 bg-[rgba(0,0,0,0.6)] flex justify-center items-center">
+   <!-- Modal content: Only the table -->
+   <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); overflow: hidden;">
+      <tr>
+         <td style="background: url('assets/images/login-bg.jpg') center/cover no-repeat; padding: 60px 30px; text-align: center;">
+            <img src="https://futureprofilez.com/wp-content/themes/fptheme/assets2/img/logo.png?dshf" alt="Your Logo" style="max-width: 200px; margin-bottom: 10px;">
+            <h1 style="color: #ffffff; font-size: 26px; margin: 0; font-weight: bold;">Welcome to Our Platform!</h1>
+         </td>
+      </tr>
+      <tr>
+         <td style="padding: 40px 20px; text-align: left;">
+            <p style="font-size: 16px; line-height: 1.8; margin: 0 0 10px; color: #555;">
+               Hello <strong id="mailClientName"></strong>,
+            </p>
+            <p style="font-size: 16px; line-height: 1.8; margin: 0 0 20px; color: #555;">
+               Your service request for <strong></strong> has been processed. Below are the details of your service and the associated pricing:
+            </p>
+            <table width="100%" border="0" cellspacing="0" cellpadding="10" style="border-collapse: collapse; border: 1px solid #ddd; background-color: #fafafa;">
+               <tr>
+                  <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">Service:</td>
+                  <td id='mailService' width="50%" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;"> </td>
+               </tr>
+               <tr>
+                  <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">Service Price:</td>
+                  <td width="50%" id="mailServicePrice" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">₹</td>
+               </tr>
+               <tr>
+                  <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">Government Price:</td>
+                  <td width="50%" id="mailGovtPrice" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">₹</td>
+               </tr>
+            </table>
+            <p style="font-size: 16px; text-align: center; line-height: 1.2; margin: 35px 0 0; color: #555;">
+               Thank you for choosing us! <br>
+            </p>
+            <p style="text-align: center; margin: 15px 0 0;">
+               Best regards,<br>
+               The Support Team
+            </p>
+         </td>
+      </tr>
+      <!-- Footer Section -->
+      <tr>
+         <td style="background-color: #1c194d; text-align: center; padding: 15px; font-size: 12px; color: #ffffff;">
+            © 2025 Your Company Name. All rights reserved.
+            <a href="https://yourcompany.com" style="color: #fff; text-decoration: none;">Visit Our Website</a>
+         </td>
+      </tr>
+   </table>
+</div>
+
 <script>
    $(document).ready(function() {
+
       $('.daterangepicker-verified').daterangepicker({
          singleDatePicker: true,
          opens: 'right',
@@ -193,11 +250,39 @@
       $("#status").on("change", function() {
          var changedValue = $(this).val();
          if (changedValue == 1) {
-            $('label[for="verified"]').text('Sent On'); // Change label text
-            $("#verifiedDate").removeClass('Hidden'); // Ensure the input field is visible
+            $('label[for="verified"]').text('Sent On');
+            $("#verifiedDate").removeClass('Hidden');
          } else {
-            $('label[for="verified"]').text('Verified On'); // Revert label text
-            $("#verifiedDate").addClass('Hidden'); // Hide the input field
+            $('label[for="verified"]').text('Verified On');
+            $("#verifiedDate").addClass('Hidden');
+         }
+      });
+
+      var name = $("#serviceNameInput").val()
+      $("#mailService").text(name)
+      var clientName = $("#clientName").val()
+      $("#mailClientName").text(clientName)
+
+      $('#service_price').on('input', function() {
+         let servicePrice = $(this).val();
+         $('#mailServicePrice').text('₹' + servicePrice);
+      });
+
+
+      $('#govt_price').on('input', function() {
+         let govtPrice = $(this).val();
+         $('#mailGovtPrice').text("₹" + govtPrice);
+      });
+
+      $('.preview').on('click', function() {
+         $('#assignUserModal').removeClass('hidden');
+      });
+
+
+      $('#assignUserModal').on('click', function(e) {
+         if ($(e.target).is('#assignUserModal')) {
+            
+            $('#assignUserModal').addClass('hidden');
          }
       });
    });

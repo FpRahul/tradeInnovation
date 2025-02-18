@@ -187,9 +187,7 @@ class LeadsController extends Controller
                                 $LeadLog->assign_by = auth()->user()->id;
                                 $LeadLog->description = 'Lead added in the system';
                                 $LeadLog->status = 0;
-
                                 $LeadLog->save();
-        
                                 $LeadLog = new LeadLog();
                                 $LeadLog->user_id = $serviceVal['assign'];
                                 $LeadLog->lead_id =  $leadData->id;

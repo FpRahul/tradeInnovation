@@ -19,8 +19,5 @@ class LeadTaskDetail extends Model
         return $this->belongsTo(LeadTask::class, 'task_id', 'id');
     }
 
-    public function leadNotifications()
-    {
-        return $this->hasMany(LeadNotification::class, 'task_id', 'task_id');
-    }
+    
 }

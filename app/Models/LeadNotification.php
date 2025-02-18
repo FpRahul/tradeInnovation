@@ -10,6 +10,8 @@ class LeadNotification extends Model
         'user_id',
         'lead_id',
         'description',
+        'task_id',
+        'title',
         'deadline_date',
         'status',
     ];
@@ -17,8 +19,5 @@ class LeadNotification extends Model
     public function taskDeatials(){
         return $this->belongsTo(LeadTask::class , 'task_id');
     }
-    public function leadTaskDetail()
-    {
-        return $this->belongsTo(LeadTaskDetail::class, 'task_id', 'task_id');
-    }
+   
 }

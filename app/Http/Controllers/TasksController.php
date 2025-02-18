@@ -587,8 +587,8 @@ class TasksController extends Controller
             return redirect()->route('task.documentation', ['id' => $id]);
         }
         // For Patent...............
-        else if ($taskDetails && $serviceId == 2 && $stageId == 6) {
-            return redirect()->route('task.patentPaymentVerification', ['id' => $taskId]);
+        else if ($taskDetails && $serviceId == 2 && $stageId == 19) {
+            return redirect()->route('task.patentPaymentVerification', ['id' => $id]);
         }
     }
 
@@ -600,6 +600,10 @@ class TasksController extends Controller
         $userList = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
         $header_title_name = "Payment Verification";
         return view('tasks/patent/payment-verification', compact('header_title_name', 'taskId', 'taskList', 'serviceStage', 'userList'));
+    }
+
+    public function submitPatentPaymentData(Request $request){
+        dd($request);
     }
 
     public function holdtask(Request $request)

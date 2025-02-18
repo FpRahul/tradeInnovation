@@ -147,11 +147,11 @@ class TasksController extends Controller
     public function duplicateVerified(Request $request, $id)
     {
 
-
+        
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         $deadLineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
         $existedTaskDetails = LeadTask::with(['user', 'services', 'subService', 'serviceSatge'])->where('id', $id)->first();
-
+        
         $serviceId = $existedTaskDetails->services->id;
         $subServiceId = $existedTaskDetails->subService->id;
 
@@ -166,6 +166,7 @@ class TasksController extends Controller
         } else {
             $assignUser = $request->input('alreadyAssign');
         }
+       
         $rule = [
             'status' => 'required',
             'verified' => 'required',
@@ -182,6 +183,22 @@ class TasksController extends Controller
         }
         if ($id) {
             $existedLeadTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
+            if($request->ifRegister == 'Abandoned'){
+                $existedLeadTaskDetails->status = 1;
+                $existedLeadTaskDetails->status_date = $verifiedDate;
+                $existedLeadTaskDetails->dead_line = null;
+                if($existedLeadTaskDetails->save()){
+                    $LeadLog = new LeadLog();
+                        $LeadLog->user_id = $existedTaskDetails->user_id;
+                        $LeadLog->lead_id =  $existedTaskDetails->lead_id;
+                        $LeadLog->task_id = $existedTaskDetails->id;
+                        $LeadLog->assign_by = Auth::id();
+                        $LeadLog->description = 'This trademark is already registered, and therefore, it is abandoned after the clients approval.';
+                        if($LeadLog->save()){
+                            return redirect()->route('task.index')->with('error', "Trademark is already Register");
+                        }
+                }
+            }
             $newExistedTaskDetails->user_id = $assignUser;
             $newExistedTaskDetails->lead_id = $existedTaskDetails->lead_id;
             $newExistedTaskDetails->service_id = $serviceId;
@@ -463,6 +480,11 @@ class TasksController extends Controller
             if ($newLeadtask->save()) {
                 $existedLeaedTaskDetails->status = $request->payment;
                 $existedLeaedTaskDetails->status_date = $verifiedDate;
+                if ($request->payment == 3) {
+                    $existedLeaedTaskDetails->reminderDate = $paymentDeadlineDate;
+                } else {
+                    $existedLeaedTaskDetails->reminderDate = null;
+                }
                 $newLeadTaskDeatails->task_id = $newLeadtask->id;
                 $newLeadTaskDeatails->dead_line = $deadlineDate;
                 $newLeadTaskDeatails->status = 0;
@@ -484,11 +506,7 @@ class TasksController extends Controller
                 if ($existedLeaedTaskDetails->save() && $newLeadTaskDeatails->save()) {
                     $userAssign =  $request->assignUser ?? $existedLeaedTask->user_id;
                     $existedNotification = LeadNotification::where('task_id',$id)->first();
-                    if ($request->payment == 3) {
-                        $existedNotification->deadline_date = $paymentDeadlineDate;
-                    } else {
-                        $existedNotification->deadline_date = null;
-                    }
+                   
                     
                     if($existedNotification->save()){
                         $notification = new LeadNotification();
@@ -632,15 +650,30 @@ class TasksController extends Controller
     public function sendNotification()
     {
 
-        $followUpDate = LeadTaskDetail::with('leadNotifications')->where('status' , 3)
-            ->orderBy('id', 'desc')
-            ->get();
-        dd($followUpDate);
+        $followUpDate = LeadTaskDetail::with('leadTask')->where('status', 3)
+        ->orderBy('id', 'desc')
+        ->get();
         foreach ($followUpDate as $followDate) {
-            foreach ($followDate->leadNotifications as $notification) {
-                dd($notification->dead_line);  
+            
+            $currentDate = Carbon::now(); 
+            $deadlineDate = Carbon::parse($followDate->reminderDate); 
+            if ($currentDate->diffInDays($deadlineDate) <= 2) {
+                LeadNotification::create([  
+                    'user_id' => $followDate->leadTask->user_id, 
+                    'lead_id' =>  $followDate->leadTask->lead_id, 
+                    'title' => 'dead line reminder',
+                    'description' => 'apki plan ki vaidhata jald hi samapt hojye gi kirpya jaldi recharge krein',
+                    'task_id' => $followDate->task_id, 
+                     
+                    'status' => 0, 
+                ]);
+
+                dd('New notification created for task_id ' . $followDate->task_id);
             }
-        }
+        // foreach ($followDate->leadNotifications as $deadLineDate) {
+        //     
+        // }
+    }
     }
 }
 

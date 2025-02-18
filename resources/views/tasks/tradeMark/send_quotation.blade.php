@@ -195,11 +195,15 @@
                </tr>
                <tr>
                   <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">Service Price:</td>
-                  <td width="50%" id="mailServicePrice" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">₹</td>
+                  <td width="50%" id="mailServicePrice" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">Not Updated</td>
                </tr>
                <tr>
                   <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">Government Price:</td>
-                  <td width="50%" id="mailGovtPrice" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">₹</td>
+                  <td width="50%" id="mailGovtPrice" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">Not Updated</td>
+               </tr>
+               <tr>
+                  <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">GST</td>
+                  <td width="50%" id="mailGst" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">Not Updated</td>
                </tr>
             </table>
             <p style="font-size: 16px; text-align: center; line-height: 1.2; margin: 35px 0 0; color: #555;">
@@ -273,6 +277,14 @@
          let govtPrice = $(this).val();
          $('#mailGovtPrice').text("₹" + govtPrice);
       });
+      $('#gst').on('change', function() {
+         if ($(this).prop('checked')) {
+            $('#mailGst').text("18%");
+         } else {
+            $('#mailGst').text("Not apply"); 
+         }
+      });
+
 
       $('.preview').on('click', function() {
          $('#assignUserModal').removeClass('hidden');
@@ -281,7 +293,7 @@
 
       $('#assignUserModal').on('click', function(e) {
          if ($(e.target).is('#assignUserModal')) {
-            
+
             $('#assignUserModal').addClass('hidden');
          }
       });

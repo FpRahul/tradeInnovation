@@ -531,6 +531,7 @@ class TasksController extends Controller
                 }
                 if ($existedLeaedTaskDetails->save() && $newLeadTaskDeatails->save()) {
                     $userAssign =  $request->assignUser ?? $existedLeaedTask->user_id;
+
                     $notification = new LeadNotification();
                     $notification->user_id = $userAssign;
                     $notification->lead_id = $existedLeaedTask->lead_id;

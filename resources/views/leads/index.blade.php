@@ -137,7 +137,10 @@
                                 <button data-tooltip-target="tooltip-default{{$leadKey}}"><img src="{{ asset('assets/images/i-icon.png') }}" alt="icon"></button>
 
                                 <div id="tooltip-default{{$leadKey}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-[#13103A] rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
-                                    {{getUserNameBySource($leadData->source_id)->name}}
+                                    <?php 
+                                    $user = getUserNameBySource($leadData->source_id);
+                                    echo $user ? $user->name : 'N/A'; 
+                                    ?>
                                     <div class="tooltip-arrow" data-popper-arrow></div>
                                 </div>
                             @endif
@@ -253,7 +256,7 @@
                         </tbody>
                     </table>
                 </div>       
-                <form method="POST" action="{{ route('leads.edit')}}" enctype="multipart/form-data" class="space-y-[10px] md:space-y-[20px]">
+                <form method="POST" action="{{ route('leads.edit')}}" enctype="multipart/form-data" class="submitLeadModelFormData space-y-[10px] md:space-y-[20px]">
                     @csrf
                     <input type="hidden" name="lead_id" id="modal_lead_id" value="">
                     <div class="flex flex-col md:flex-row gap-[10px] md:gap-[20px]">
@@ -274,7 +277,8 @@
                         </div>                      
                         <div class="w-full md:w-1/2">
                             <label for="modalemail" class="block text-[12px] md:text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Email-Id</label>
-                            <input type="text" name="modalemail" id="modalemail" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                            <input type="text" name="modalemail" id="modalemail" value="" class="checkDuplicateEmail w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                            <span class="email_exist_error text-[#df2727] text-[12px] hidden">Please try with another email!</span>
                         </div>
                     </div>
                     <div>
@@ -292,7 +296,7 @@
                     </div>
                     <div class="flex justify-end gap-[15px]">
                         <button data-modal-hide="editLeadModal" type="button" class="rounded-[10px] py-[12px] px-[30px] text-[13px] font-[500] leading-[15px] tracking-[0.01em] text-gray-900 focus:outline-none bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Cancel</button>
-                        <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Update</button>
+                        <button type="button" class="submitLeadModelData text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Update</button>
                     </div>
                 </form>
             </div>
@@ -399,7 +403,31 @@
            
         })
     });
-   
+    $(document).on('click','.submitLeadModelData',function(){
+        let id = $('.submitLeadModelFormData').find('#modal_lead_id').val();
+        let email = $('.submitLeadModelFormData').find('.checkDuplicateEmail').val();
+        $.ajax({
+            method:'POST',
+            headers:{
+                'X-CSRF-TOKEN':'{{csrf_token()}}'
+            },
+            url:"{{ route('lead.checkDuplicateEmail')}}",
+            data:{
+                email:email,
+                id:id
+            },
+            success:function(res){
+                if(res.exists){
+                    $('.submitLeadModelFormData').find('.email_exist_error').removeClass('hidden');
+                    $('.submitLeadModelFormData').find('.checkDuplicateEmail').val('');
+                    return false;
+                }else{
+                    $('.submitLeadModelFormData').find('.email_exist_error').addClass('hidden');
+                    $('.submitLeadModelFormData').trigger('submit');
+                }
+            }
+        });
+    });
 
 </script>
 @stop

@@ -177,7 +177,7 @@ class UsersController extends Controller
             $type = 'User';
 
             //UniqueId
-            $uniqueUserId = $this->generateUniqueUserCode('I','>', 4);
+            $uniqueUserId = $this->generateUniqueUserCode('I','>', 3);
         }
         if($request->isMethod('POST')){    
             $customMessages = [
@@ -384,8 +384,9 @@ class UsersController extends Controller
                 $newClientDetails->msmem = $request->msmem;
                 $newClientDetails->referralPartner = $request->referralPartner;
                 $newClientDetails->source_type_id = $request->sourcetypenamelist;
-                $newClientDetails->partner_id = implode(',',$request->partnerNamelist);
-
+                if(!empty($request->partnerNamelist)){
+                    $newClientDetails->partner_id = implode(',',$request->partnerNamelist);
+                }
                 $newClientDetails->currentAddress = $request->currentAddress;
                 $newClientDetails->curr_city = $request->curr_city;
                 $newClientDetails->curr_state = $request->curr_state;

@@ -92,6 +92,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::POST('/setassign','setAssignToUser')->name('leads.assign');
 
         Route::post('/checkduplicate','checkDuplicate')->name('lead.checkDuplicate');
+        Route::post('/checkduplicateemail','checkEmailDuplicate')->name('lead.checkDuplicateEmail');
+
         
     });
     //Tasks Routes
@@ -112,9 +114,11 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('hold-task','holdtask')->name('task.hold');
 
         
-        //For patent.........
+        // For patent.........
         // For payment verification........
+        Route::get('/patent/send-quotation/{id?}','patentSendQuotation')->name('task.patentSendQuotation');
         Route::get('/patent/payment-verification/{id?}','patentPaymentVerification')->name('task.patentPaymentVerification');
+        Route::get('/patent/prior-art/{id?}','patentPriorArt')->name('task.patentPriorArt');
         
     });
     //Services Routes

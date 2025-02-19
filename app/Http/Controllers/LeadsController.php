@@ -91,12 +91,14 @@ class LeadsController extends Controller
             $leadOldData = Lead::where('id',$id)->first();
             $leadAttachment = LeadAttachment::where('lead_id',$id)->get();
             $LeadTask = LeadTask::with('leadTaskDetails')->where('lead_id',$id)->get();
+            $email = "required|email";
             $successMsg = 'Lead updated!';
         }else{
             $leadData = new Lead();
             $leadOldData =new Lead();
             $leadAttachment = [];            
             $LeadTask = [];
+            $email = "required|email|unique:leads,email";
             $successMsg = 'Lead added!';
         }       
         $sourceList = CategoryOption::where('type',3)->where('status',1)->get();
@@ -105,6 +107,10 @@ class LeadsController extends Controller
         $userList = User::where('role','>=',5)->where('status',1)->get();
 
         if($request->isMethod('POST')){
+            $credentials = $request->validate([
+                'email' => $email,
+            ]);
+            dd($credentials);
             if($request->sourcetypenamelist > 0){
                 $sourceId = $request->sourcetypenamelist;              
             }else{
@@ -260,8 +266,20 @@ class LeadsController extends Controller
            ]);
     }
 
-    public function edit(Request $request){       
+    public function checkEmailDuplicate(Request $request){
+        if ($request->isMethod('POST')) {
+            if ($request->id > 0) {
+                $checkUserData = Lead::where('id', '!=', $request->id)->where('email', $request->email)->exists();
+            } else {
+                $checkUserData = Lead::where('email', $request->email)->exists();
+            }
+            return response()->json(['exists' => $checkUserData]);
+        }
+        return response()->json(['error' => 'Invalid request'], 400);
+    }
+    public function edit(Request $request){  
         $leadData = Lead::find($request->lead_id);
+       
         if ($leadData) {
             $leadData->update([
                 'client_name' => $request->modalclientname,

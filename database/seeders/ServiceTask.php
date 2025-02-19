@@ -123,26 +123,38 @@ class ServiceTask extends Seeder
             //patnet
             [
                 'service_id' => '2',
-                'title' => 'Payment confirmation',
-                'description' => 'N/A',
+                'title' => 'Send quotation',
+                'description' => 'Send Quotation to the client for the requested services.',
+                'stage' => '0',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Payment verification',
+                'description' => 'Payment verification for the sent quotation.',
                 'stage' => '0',
             ],
             [
                 'service_id' => '2',
                 'title' => 'Prior Art',
-                'description' => 'N/A',
+                'description' => 'Update the prior art status.',
                 'stage' => '0',
             ],
             [
                 'service_id' => '2',
-                'title' => 'Document verification and client approval',
-                'description' => 'N/A',
+                'title' => 'Document verification',
+                'description' => 'Verify documents internally which will be used to file the application.',
+                'stage' => '0',
+            ], 
+            [
+                'service_id' => '2',
+                'title' => 'Client approval on documentation',
+                'description' => 'Client confirmation on the documents which is used to file the application',
                 'stage' => '0',
             ],
             [
                 'service_id' => '2',
-                'title' => 'Drafting application',
-                'description' => 'N/A',
+                'title' => 'Draft application',
+                'description' => 'Draft application on the portal',
                 'stage' => '0',
             ]
         ]);

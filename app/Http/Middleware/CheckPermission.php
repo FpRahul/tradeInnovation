@@ -33,7 +33,10 @@ class CheckPermission
                 6 => 'lead.getsourcetypename', //default permission to get source name
                 7 => 'users.deleterepeater', //default permission to delete user experience
                 8 => 'lead.deleterepeater', //default permission to delete service from lead add page
-                9 => 'lead.deleteattachmentrepeater' //default permission to delete attachmanet on lead add page
+                9 => 'lead.deleteattachmentrepeater', //default permission to delete attachmanet on lead add page
+                10 => 'leads.fetch', // default permission to fetch lead data on popup
+                11 => 'leads.edit', // default permission to lead edit on popup
+                12 => 'lead.checkDuplicateEmail' // default permission to check duplicate email
             ]
         ];
         if($user->role==1){
@@ -133,7 +136,10 @@ class CheckPermission
             '2' => 'task.documentVerifiedChildSatge',
             '3' => 'task.sendQuotation',
             '4' => 'task.checkPayment',
-            '5' => 'task.paymentStatus'
+            '5' => 'task.paymentStatus',
+            '6' => 'task.patentSendQuotation',
+            '7' => 'task.patentPaymentVerification',
+            '8' => 'task.patentPriorArt'
         ];
     }
 }

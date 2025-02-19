@@ -124,7 +124,7 @@ class CheckPermission
         }
 
         return $next($request);
-    }
+    } 
 
     public function getAllFormRoutes(){
         return [
@@ -133,7 +133,10 @@ class CheckPermission
             '2' => 'task.documentVerifiedChildSatge',
             '3' => 'task.sendQuotation',
             '4' => 'task.checkPayment',
-            '5' => 'task.paymentStatus'
+            '5' => 'task.paymentStatus',
+            '9' => 'task.documentation',
+            '10' => 'task.documenStatus',
+            '11' => 'task.clientApproval',
         ];
     }
 }

@@ -112,6 +112,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('documentation/{id}','documentation')->name('task.documentation');
         Route::Post('documentation-status/{id}','documenStatus')->name('task.documenStatus');
         Route::Post('hold-task','holdtask')->name('task.hold');
+        Route::get('client-approval/{id}','clientApproval')->name('task.clientApproval');
+
 
         
         // For patent.........

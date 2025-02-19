@@ -447,6 +447,7 @@ class TasksController extends Controller
     public function checkPayment($id)
     {
         if ($id) {
+
             $notifyData = LeadNotification::where('task_id', $id)->update(['status' => 1]);
         }
         $header_title_name = "payment Status";
@@ -531,31 +532,6 @@ class TasksController extends Controller
                 }
                 if ($existedLeaedTaskDetails->save() && $newLeadTaskDeatails->save()) {
                     $userAssign =  $request->assignUser ?? $existedLeaedTask->user_id;
-                    $existedNotification = LeadNotification::where('task_id',$id)->first();                   
-
-                    if($existedNotification->save()){
-                        $notification = new LeadNotification();
-                        $notification->user_id = $userAssign;
-                        $notification->lead_id = $existedLeaedTask->lead_id;
-                        $notification->task_id = $newLeadtask->id;
-                        $notification->title = "Task Assigned";
-                        $notification->description =  $userName . ' assigned you ' . $assignedStageName->title . ' task';
-                        $notification->status = 0;
-                        if ($notification->save()) {
-                            $LeadLog = new LeadLog();
-                            $LeadLog->user_id =  $existedLeaedTask->user_id;
-                            $LeadLog->lead_id =  $existedLeaedTask->lead_id;
-                            $LeadLog->task_id =  $existedLeaedTask->id;
-                            $LeadLog->assign_by = Auth::id();
-                            if ($request->payment == 1) {
-                                $LeadLog->description = " Payment status marked as Paid ";
-                            } else if ($request->payment == 3) {
-                                $LeadLog->description = " Payment status marked as on Credit ";
-                            }
-                            $LeadLog->save();                        
-                        }
-                        $id = $newLeadtask->id;
-                        return redirect()->route('task.index')->with('success', 'payment status is Updated');                        
 
                     $notification = new LeadNotification();
                     $notification->user_id = $userAssign;
@@ -826,43 +802,12 @@ class TasksController extends Controller
         }
         // For Patent...............
         else if ($taskDetails && $serviceId == 2 && $stageId == 19) {
-            return redirect()->route('task.patentSendQuotation', ['id' => $id]);
-        }
-        else if ($taskDetails && $serviceId == 2 && $stageId == 20) {
             return redirect()->route('task.patentPaymentVerification', ['id' => $id]);
         }
-        else if ($taskDetails && $serviceId == 2 && $stageId == 21) {
-            return redirect()->route('task.patentPriorArt', ['id' => $id]);
-        }
     }
-    // For patent.....
-    public function patentSendQuotation(Request $request ,$id){
-        $taskId = $id;
-        if ($id > 0) {
-            $notifyData = LeadNotification::where('task_id', $id)->update(['status' => 1]);
-        }
-        $taskDetails = LeadTask::with(['user', 'lead', 'leadTaskDetails', 'services', 'subService', 'serviceSatge'])
-            ->where('id', $id)
-            ->get();
-        foreach ($taskDetails as $task) {
-            $taskDetailsId = $task->id;
-            $serviceName = $task->services->serviceName;
-            $serviceID = $task->services->id;
-            $clientName = $task->lead->client_name;
-        }
-        $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
-        foreach ($taskDetails as $value) {
-            $stage_id = $value->service_stage_id;
-        }
-        $getStage = ServiceStages::where('service_id', $serviceID)->where('id', '>', $stage_id)->first();
-        $leadTaskdetials = LeadTaskDetail::find($taskDetailsId);
-        $header_title_name = "Send Quotation";
-        return view('tasks/patent/send-quotation', compact('id', 'header_title_name','taskId', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'serviceName', 'clientName'));
-    }
-    public function patentPaymentVerification(Request $request, $id){
-        if ($id > 0) {
-            $notifyData = LeadNotification::where('task_id', $id)->update(['status' => 1]);
-        }
+
+    public function patentPaymentVerification(Request $request, $id = null)
+    {
         $taskId = $id;
         $taskList = LeadTask::find($taskId);
         $serviceStage = ServiceStages::where('id', '>', $taskList->service_stage_id)->where('service_id', 2)->first();
@@ -872,18 +817,7 @@ class TasksController extends Controller
         return view('tasks/patent/payment-verification', compact('header_title_name', 'taskId', 'taskList', 'serviceStage', 'userList', 'currentUser'));
     }
 
-    public function patentPriorArt(Request $request, $id){
-        if ($id > 0) {
-            $notifyData = LeadNotification::where('task_id', $id)->update(['status' => 1]);
-        }
-        $taskId = $id;
-        $taskList = LeadTask::find($taskId);
-        $serviceStage = ServiceStages::where('id', '>', $taskList->service_stage_id)->where('service_id', 2)->first();
-        $userList = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
-        $currentUser = User::find($taskList->user_id);
-        $header_title_name = "Prior Art";
-        return view('tasks/patent/prior-art', compact('header_title_name', 'taskId', 'taskList', 'serviceStage', 'userList','currentUser'));
-    }
+
 
     public function holdtask(Request $request)
     {
@@ -980,6 +914,7 @@ class TasksController extends Controller
                         //     $newClient->email = null;
                         // }else{
                         //     $newClient->email = $existedLeaedTask->lead->email;
+
                         // }
                         // $newClient->mobile = $existedLeaedTask->lead->mobile_number;
                         // $newClient->companyName = $existedLeaedTask->lead->company_name;

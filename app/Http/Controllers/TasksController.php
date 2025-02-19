@@ -531,9 +531,8 @@ class TasksController extends Controller
                 }
                 if ($existedLeaedTaskDetails->save() && $newLeadTaskDeatails->save()) {
                     $userAssign =  $request->assignUser ?? $existedLeaedTask->user_id;
-<<<<<<< HEAD
                     $existedNotification = LeadNotification::where('task_id',$id)->first();                   
-                    
+
                     if($existedNotification->save()){
                         $notification = new LeadNotification();
                         $notification->user_id = $userAssign;
@@ -557,7 +556,6 @@ class TasksController extends Controller
                         }
                         $id = $newLeadtask->id;
                         return redirect()->route('task.index')->with('success', 'payment status is Updated');                        
-=======
 
                     $notification = new LeadNotification();
                     $notification->user_id = $userAssign;
@@ -619,7 +617,6 @@ class TasksController extends Controller
                         // }
                     } else {
                         return redirect()->back()->with('error', " there is something wrong during update notification ");
->>>>>>> b9b347632a1825bdbbf4981c909617b4fcad3553
                     }
                 } else {
                     return redirect()->back()->error('message', " there is something wrong ");

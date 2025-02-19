@@ -319,7 +319,7 @@ class LeadsController extends Controller
         $requestParams = $request->all();
         $leadLogs = LeadLog::with('leadTask','leadTask.leadTaskDetails','leadTask.serviceSatge')->get();
         if($request->lead_id > 0){
-            $leadLogs = LeadLog::with('leadAttch','leadTask','leadTask.leadTaskDetails', 'leadTask.serviceSatge')->where('lead_id', $request->lead_id) ->orderBy('created_at', 'desc')->get();
+            $leadLogs = LeadLog::with('leadAttch','leadTask','leadTask.leadTaskDetails', 'leadTask.serviceSatge')->where('lead_id', $request->lead_id) ->orderBy('id', 'desc')->get();
          
         }
        

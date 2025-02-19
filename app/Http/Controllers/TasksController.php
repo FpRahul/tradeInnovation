@@ -531,32 +531,6 @@ class TasksController extends Controller
                 }
                 if ($existedLeaedTaskDetails->save() && $newLeadTaskDeatails->save()) {
                     $userAssign =  $request->assignUser ?? $existedLeaedTask->user_id;
-                    $existedNotification = LeadNotification::where('task_id',$id)->first();                   
-
-                    if($existedNotification->save()){
-                        $notification = new LeadNotification();
-                        $notification->user_id = $userAssign;
-                        $notification->lead_id = $existedLeaedTask->lead_id;
-                        $notification->task_id = $newLeadtask->id;
-                        $notification->title = "Task Assigned";
-                        $notification->description =  $userName . ' assigned you ' . $assignedStageName->title . ' task';
-                        $notification->status = 0;
-                        if ($notification->save()) {
-                            $LeadLog = new LeadLog();
-                            $LeadLog->user_id =  $existedLeaedTask->user_id;
-                            $LeadLog->lead_id =  $existedLeaedTask->lead_id;
-                            $LeadLog->task_id =  $existedLeaedTask->id;
-                            $LeadLog->assign_by = Auth::id();
-                            if ($request->payment == 1) {
-                                $LeadLog->description = " Payment status marked as Paid ";
-                            } else if ($request->payment == 3) {
-                                $LeadLog->description = " Payment status marked as on Credit ";
-                            }
-                            $LeadLog->save();                        
-                        }
-                        $id = $newLeadtask->id;
-                        return redirect()->route('task.index')->with('success', 'payment status is Updated');                        
-
                     $notification = new LeadNotification();
                     $notification->user_id = $userAssign;
                     $notification->lead_id = $existedLeaedTask->lead_id;

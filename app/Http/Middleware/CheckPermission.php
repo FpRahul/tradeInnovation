@@ -127,7 +127,7 @@ class CheckPermission
         }
 
         return $next($request);
-    }
+    } 
 
     public function getAllFormRoutes(){
         return [
@@ -139,7 +139,11 @@ class CheckPermission
             '5' => 'task.paymentStatus',
             '6' => 'task.patentSendQuotation',
             '7' => 'task.patentPaymentVerification',
-            '8' => 'task.patentPriorArt'
+            '8' => 'task.patentPriorArt',
+            '5' => 'task.paymentStatus',
+            '9' => 'task.documentation',
+            '10' => 'task.documenStatus',
+            '11' => 'task.clientApproval',
         ];
     }
 }

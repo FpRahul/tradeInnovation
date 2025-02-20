@@ -13,8 +13,6 @@ return new class extends Migration
     {
         Schema::table('user_details', function (Blueprint $table) {
             $table->string('registered')->nullable(true)->change();
-
-            //
         });
     }
 

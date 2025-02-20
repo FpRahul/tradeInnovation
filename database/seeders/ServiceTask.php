@@ -8,267 +8,155 @@ use Illuminate\Support\Facades\DB;
 
 class ServiceTask extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+    
     public function run(): void
     {
         DB::table('service_stages')->insert([
             [
                 'service_id' => '1',
                 'title' => 'Search trademark',
-                'description' => 'Search trademark on online portal to ensure the uniqueness',
+                'description' => 'Search for the trademark on the online portal.',
                 'stage' => '0',
             ],
             [
                 'service_id' => '1',
-                'title' => 'Documentation & Drafting',
-                'description' => 'Search trademark on online portal to ensure the uniqueness',
+                'title' => 'Send quotation',
+                'description' => 'Send Quotation to the client for the requested services.',
                 'stage' => '0',
             ],
             [
                 'service_id' => '1',
-                'title' => 'Client Approval & Send quotation',
-                'description' => 'N/A',
+                'title' => 'Payment verification',
+                'description' => 'Payment verification for the sent quotation.',
+                'stage' => '0',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Document verification',
+                'description' => 'Verify documents internally which will be used to file the application.',
+                'stage' => '0',
+            ], 
+            [
+                'service_id' => '1',
+                'title' => 'Client approval on documentation',
+                'description' => 'Client confirmation on the documents which is used to file the application',
+                'stage' => '0',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Draft application',
+                'description' => 'Draft application on the portal',
+                'stage' => '0',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Formality Check',
+                'description' => 'Update the formality check status.',
+                'stage' => '0',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Initial Examination',
+                'description' => 'Update the initial examination status.',
+                'stage' => '0',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Objection',
+                'description' => 'Add reply on the objection within 30 days.',
+                'stage' => '8',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Awaited for hearing (Objection)',
+                'description' => 'Add the hearing date provided by the court for the raised objection',
+                'stage' => '8',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Show cause hearing (Objection)',
+                'description' => 'Update the show cause hearing status / or next hearing date',
+                'stage' => '8',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Publish application',
+                'description' => 'Add the details of the published application in the system.',
                 'stage' => '0',
             ],
             [
                 'service_id' => '1',
                 'title' => 'Opposition',
-                'description' => 'N/A',
+                'description' => 'Update the opposition status.',
                 'stage' => '0',
             ],
             [
                 'service_id' => '1',
-                'title' => 'Counter statment (Opposition)',
-                'description' => 'N/A',
-                'stage' => '0',
+                'title' => 'Inform client and payment confirmation',
+                'description' => 'Inform client about the opposition and mark the payment status.',
+                'stage' => '13',
             ],
             [
                 'service_id' => '1',
-                'title' => 'Evidence Submission (Opposition)',
-                'description' => 'N/A',
-                'stage' => '0',
+                'title' => 'Counter Statment',
+                'description' => 'Add the counter statment on the received oppostion.',
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Submit Evidence',
+                'description' => 'Submitt the evidence on the received opposition.',
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Awaited for hearing (Opposition)',
+                'description' => 'Add the hearing date provided by the court for the raised opposition',
+                'stage' => '13',
             ],
             [
                 'service_id' => '1',
                 'title' => 'Show cause hearing (Opposition)',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '1',
-                'title' => 'Formality check',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '1',
-                'title' => 'Filing',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '1',
-                'title' => 'Examination',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '1',
-                'title' => 'Objection',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '1',
-                'title' => 'Counter statment (Objection)',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '1',
-                'title' => 'Evidence submission (Objection)',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '1',
-                'title' => 'Show cause hearing (Objection)',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '1',
-                'title' => 'Registration',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '1',
-                'title' => 'Renewal',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '1',
-                'title' => 'Rectification',
-                'description' => 'N/A',
-                'stage' => '0',
+                'description' => 'Update the show cause hearing status / or next hearing date',
+                'stage' => '13',
             ],
             //patnet
             [
                 'service_id' => '2',
+                'title' => 'Send quotation',
+                'description' => 'Send Quotation to the client for the requested services.',
+                'stage' => '0',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Payment verification',
+                'description' => 'Payment verification for the sent quotation.',
+                'stage' => '0',
+            ],
+            [
+                'service_id' => '2',
                 'title' => 'Prior Art',
-                'description' => 'N/A',
+                'description' => 'Update the prior art status.',
                 'stage' => '0',
             ],
             [
                 'service_id' => '2',
-                'title' => 'Documentation',
-                'description' => 'N/A',
+                'title' => 'Document verification',
+                'description' => 'Verify documents internally which will be used to file the application.',
+                'stage' => '0',
+            ], 
+            [
+                'service_id' => '2',
+                'title' => 'Client approval on documentation',
+                'description' => 'Client confirmation on the documents which is used to file the application',
                 'stage' => '0',
             ],
             [
                 'service_id' => '2',
-                'title' => 'Drafting of Patent application',
-                'description' => 'N/A',
+                'title' => 'Draft application',
+                'description' => 'Draft application on the portal',
                 'stage' => '0',
-            ],
-            [
-                'service_id' => '2',
-                'title' => 'Client Approval & Send quotation',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '2',
-                'title' => 'Provisional Specification application filing',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '2',
-                'title' => 'Complete Specification application filing',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '2',
-                'title' => 'Request for early publication',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '2',
-                'title' => 'Examination',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '2',
-                'title' => 'Issuance of FER',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '2',
-                'title' => 'Response to FER',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '2',
-                'title' => 'Show cause Hearing',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '2',
-                'title' => 'Pre grant opposition',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '2',
-                'title' => 'Registration',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '2',
-                'title' => 'Post grant opposition',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '2',
-                'title' => 'Renewal',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '2',
-                'title' => 'Rectification',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            //Design
-            [
-                'service_id' => '3',
-                'title' => 'Documentation',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '3',
-                'title' => 'Documentation',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '3',
-                'title' => 'Client Approval & Send quotation',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '3',
-                'title' => 'Filing',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '3',
-                'title' => 'Examination',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '3',
-                'title' => 'Objection',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '3',
-                'title' => 'Show cause Hearing',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '3',
-                'title' => 'Registration',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            [
-                'service_id' => '3',
-                'title' => 'Renewal',
-                'description' => 'N/A',
-                'stage' => '0',
-            ],
-            //copyright
+            ]
         ]);
     }
 }

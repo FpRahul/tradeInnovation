@@ -34,7 +34,7 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.repeater/1.2.1/jquery.repeater.min.js"></script>
-
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 </head>
@@ -132,6 +132,7 @@
                 isFirstItemUndeletable: true
             })
         });
+
         $(document).ready(function() {
             $('.subservicerepeater').repeater({
                 initEmpty: false,
@@ -174,30 +175,41 @@
             $('.leadServiceRepeater').repeater({
                 initEmpty: false,
                 show: function() {
+                    $(this).find('.daterangepicker-taskdeadline').daterangepicker({
+                        singleDatePicker: true, 
+                        opens: 'right',
+                        locale: {
+                            format: 'DD MMM YYYY' 
+                        }
+                    }).on('apply.daterangepicker', function(ev, picker) {
+                        console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+                    });
+
                     $(this).slideDown();
+                   
                 },
                 hide: function(deleteElement) {
-                    if (confirm('Are you sure you want to delete this element?')) {
+                    if (confirm('Are you sure you want to delete this element??')) {
                         var deleteId = $(this).find('.deleteLeadRepeaterRow').data('id');
                         if(deleteId > 0){
-                            $.ajax({
-                                method: 'POST',
-                                url: "{{ route('lead.deleterepeater') }}",
-                                headers: {
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                },
-                                data: {
-                                    id: deleteId
-                                },
-                                success: function(res) {
-                                    if (res == 1) {
-                                        $(this).slideUp(deleteElement);
-                                    }
-                                },
-                                error: function(err) {
-                                    alert(err);
-                                }
-                            })
+                            // $.ajax({
+                            //     method: 'POST',
+                            //     url: "{{ route('lead.deleterepeater') }}",
+                            //     headers: {
+                            //         'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            //     },
+                            //     data: {
+                            //         id: deleteId
+                            //     },
+                            //     success: function(res) {
+                            //         if (res == 1) {
+                            //             $(this).slideUp(deleteElement);
+                            //         }
+                            //     },
+                            //     error: function(err) {
+                            //         alert(err);
+                            //     }
+                            // })
                         }else{
                             $(this).slideUp(deleteElement);
                         }
@@ -213,7 +225,8 @@
                 defaultValues: {
                     'image': ''
                 },
-                show: function() {
+                show: function() {                    
+                    $(this).find('img').attr('src','/assets/images/noimage.png');
                     $(this).slideDown();
                 },
                 hide: function(deleteElement) {
@@ -344,7 +357,79 @@
         @if(session('error'))
         toastr.error("{{ session('error') }}");
         @endif
+
+
+        // Lead Tabbing
+
+        const tabs = document.querySelectorAll(".tabs");
+        const tab = document.querySelectorAll(".tab");
+        const panel = document.querySelectorAll(".tab-content");
+
+        function onTabClick(event) {
+
+        // deactivate existing active tabs and panel
+
+        for (let i = 0; i < tab.length; i++) {
+        tab[i].classList.remove("active");
+        }
+
+        for (let i = 0; i < panel.length; i++) {
+        panel[i].classList.remove("active");
+        }
+
+
+        // activate new tabs and panel
+        event.target.classList.add('active');
+        let classString = event.target.getAttribute('data-target');
+        console.log(classString);
+        document.getElementById('panels').getElementsByClassName(classString)[0].classList.add("active");
+        }
+
+        for (let i = 0; i < tab.length; i++) {
+        tab[i].addEventListener('click', onTabClick, false);
+        }
+
+
+        $(document).ready(function(){
+            const fileInput = $('#attachment');
+        const fileList = $('#file-list');
+        fileInput.on('change', function(event) {
+            fileList.empty();
+            $.each(event.target.files, function(index, file) {
+                const fileItem = $('<div>', {
+                    class: 'file-item flex items-center justify-between bg-gray-100 p-2 mb-2 rounded-lg'
+                });
+                const fileName = $('<span>').text(file.name);
+                const removeIcon = $('<span>', {
+                    html: '&times;',
+                    class: 'text-red-500 cursor-pointer ml-2',
+                    click: function() {
+                        removeFile(file, fileItem);
+                    }
+                });
+                fileItem.append(fileName).append(removeIcon);
+                fileList.append(fileItem);
+            });
+        });
+        function removeFile(file, fileItem) {
+            const dt = new DataTransfer();
+            const files = fileInput[0].files;
+            $.each(files, function(index, f) {
+                if (f !== file) {
+                    dt.items.add(f);
+                }
+            });
+            fileInput[0].files = dt.files;
+            fileItem.remove();
+        }
+        })
+
+
+
     </script>
+
+    @stack('footer')
+      
 </body>
 
 </html>

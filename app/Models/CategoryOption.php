@@ -12,4 +12,8 @@ class CategoryOption extends Model
         'name',
         'status'       
     ];
+
+    public function Lead(){
+        return $this->belongsTo(Lead::class,'source');
+    }
 }

@@ -12,7 +12,10 @@ class LeadTask extends Model
         'lead_id',
         'assign_by',
         'task_title',
-        'task_description'
+        'task_description',
+        'service_id',
+        'subservice_id', 
+        'quoted_price'
     ]; 
 
     public function user()
@@ -23,19 +26,21 @@ class LeadTask extends Model
     public function lead(){
         return $this->belongsTo(Lead::class,'lead_id');
     }
-
-    public function leadAssign()
-    {
-        return $this->belongsTo(LeadAssign::class, 'lead_id');  
-    }
-
-    public function leadServices()
-    {
-        return $this->hasMany(LeadService::class, 'lead_id', 'lead_id'); 
-    }
-       
+    
     public function leadTaskDetails()
     {
         return $this->hasOne(LeadTaskDetail::class, 'task_id', 'id');
+    }
+    public function serviceSatge()
+    {
+        return $this->belongsTo(ServiceStages::class, 'service_stage_id');
+    }
+    public function services()
+    {
+        return $this->belongsTo(Service::class, 'service_id');
+    }
+    public function subService()
+    {
+        return $this->belongsTo(SubService::class, 'subservice_id');
     }
 }

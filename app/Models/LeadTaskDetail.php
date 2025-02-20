@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\LeadNotification;
 
 class LeadTaskDetail extends Model
 {
@@ -17,4 +18,6 @@ class LeadTaskDetail extends Model
     {
         return $this->belongsTo(LeadTask::class, 'task_id', 'id');
     }
+
+    
 }

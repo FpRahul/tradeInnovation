@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_details', function (Blueprint $table) {
             $table->id();
-            $table->integer('userId');
+            $table->foreignId('userId')->nullable()->constrained('users')->onDelete('cascade');
             $table->integer('incorporationType')->default(0);
             $table->string('registered')->nullable(true);
             $table->integer('referralPartner')->default(0);

@@ -19,22 +19,24 @@ class CheckPermission
         if (!$user) {
             abort(403, 'Unauthorized action.');
         }
-
         $routeName = $request->route()->getName();
         $permissionDetails = [
             'status' => false,
             'menuId' => [1],
             'accessableRoutes' => [
-                0 => 'user.logout',
-                1 => 'user.myprofile',
-                2 => 'chart.data',
-                3 => 'dashboard',
-                4 => 'serviceStages',
-                5 => 'lead.subservice',
-                6 => 'lead.getsourcetypename',
-                7 => 'users.deleterepeater',
-                8 => 'lead.deleterepeater',
-                9 => 'lead.deleteattachmentrepeater'
+                0 => 'user.logout', //default logout permission
+                1 => 'user.myprofile', //default profile permission
+                2 => 'chart.data', //default chat preview permission
+                3 => 'dashboard', //default dashboard permission
+                4 => 'serviceStages', //default permission to get stages according to selected service on load add form
+                5 => 'lead.subservice',  //default permission to get sub service on lead add form
+                6 => 'lead.getsourcetypename', //default permission to get source name
+                7 => 'users.deleterepeater', //default permission to delete user experience
+                8 => 'lead.deleterepeater', //default permission to delete service from lead add page
+                9 => 'lead.deleteattachmentrepeater', //default permission to delete attachmanet on lead add page
+                10 => 'leads.fetch', // default permission to fetch lead data on popup
+                11 => 'leads.edit', // default permission to lead edit on popup
+                12 => 'lead.checkDuplicateEmail' // default permission to check duplicate email
             ]
         ];
         if($user->role==1){
@@ -64,6 +66,12 @@ class CheckPermission
             }
             $permissionDetails['status'] = in_array($routeName,$permissionDetails['accessableRoutes']);
 
+            //special condition for all forms step
+            $affFormRoutes = $this->getAllFormRoutes();
+            if(in_array('task.followup',$permissionDetails['accessableRoutes']) && in_array($routeName,$affFormRoutes)){
+                $permissionDetails['status'] = true;
+            }
+            //End
             if (!$permissionDetails['status']) {
                 abort(403, 'You do not have permission to access this page.');
             }
@@ -72,6 +80,7 @@ class CheckPermission
         
         $serializeMenus = [];
         $menuSubMenuRoutes = [];
+        $subMenuActions = [];
         if($systemMenus->isNotEmpty()){
             foreach($systemMenus as $k =>$v){
                 if($v->parentId==0){
@@ -79,6 +88,7 @@ class CheckPermission
                     $serializeMenus[$v->id]['menu']['url'] = $v->url;
                     $serializeMenus[$v->id]['menu']['icon'] = $v->icon;
                     $serializeMenus[$v->id]['menu']['groupedRoutes'] = $v->actionRoutes;
+                    $serializeMenus[$v->id]['menu']['sequence'] = $v->sequence;
                 }
                 if($v->parentId>0){
                     //Check if it is sub menu or sub sub menu
@@ -98,6 +108,7 @@ class CheckPermission
                 //Grouping routes per menu for active class
                 if($v->parentId>0){
                     $groupedRoutes = explode(',',$v->actionRoutes);
+                    $subMenuActions[$v->id] = $groupedRoutes;
                     if(!empty($groupedRoutes)){
                         foreach($groupedRoutes as $groupedRoute){
                             $menuSubMenuRoutes[$v->parentId][] = $groupedRoute;
@@ -109,10 +120,34 @@ class CheckPermission
                 }
                 //End
             }
-            
-            view()->share(compact('serializeMenus','menuSubMenuRoutes','permissionDetails'));
+            uasort($serializeMenus, function ($a, $b) {
+                return $a['menu']['sequence'] <=> $b['menu']['sequence'];
+            });
+            view()->share(compact('serializeMenus','menuSubMenuRoutes','permissionDetails','subMenuActions'));
         }
 
         return $next($request);
+    } 
+
+    public function getAllFormRoutes(){
+        return [
+            '0' => 'task.chekDuplication',
+            '1' => 'task.documentVerified',
+            '2' => 'task.documentVerifiedChildSatge',
+            '3' => 'task.sendQuotation',
+            '4' => 'task.checkPayment',
+            '5' => 'task.paymentStatus',
+            '6' => 'task.patentSendQuotation',
+            '7' => 'task.patentPaymentVerification',
+            '8' => 'task.patentPriorArt',
+            '5' => 'task.paymentStatus',
+            '9' => 'task.documentation',
+            '10' => 'task.documenStatus',
+            '11' => 'task.clientApproval',
+            '12' => 'task.clientApprovalStatus', 
+            '13' => 'task.draftApplication', 
+            '14' => 'task.draftApplicationStatus', 
+            '15' => 'leads.getLogs', 
+        ];
     }
 }

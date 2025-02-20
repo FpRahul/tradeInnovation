@@ -20,7 +20,7 @@
                         <label class="flex text-[15px] text-[#000] mb-[5px]">Date Range</label>
                         <div class="w-[100%] relative">
                             <input type="text" placeholder="Start Date" name="dateRange" class="daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" value="">
-                            <i class="ri-calendar-line absolute right-[8px] top-[9px]"></i>
+                            {{-- <i class="ri-calendar-line absolute right-[8px] top-[9px]"></i> --}}
                         </div>
                     </div>
 
@@ -158,8 +158,14 @@
 </div>
 <script>
     $(document).ready(function() {
+    // Calculate the default date range (last 7 days to today)
+        var startDate = moment().subtract(7, 'days');
+        var endDate = moment();
+
         $('.daterangepicker-item').daterangepicker({
             opens: 'right',
+            startDate: startDate,
+            endDate: endDate,
             locale: {
                 format: 'DD MMM YYYY'
             }
@@ -167,12 +173,13 @@
             console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
         });
 
-        $("#resetButton").on('click', function() {
+        $("#resetButton").on('click', function(event) {
             event.preventDefault();
             window.history.replaceState({}, document.title, window.location.pathname);
             window.location.reload();
             $("#filterForm")[0].reset();
         });
-    })
+    });
+
 </script>
 @stop

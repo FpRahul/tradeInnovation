@@ -16,14 +16,22 @@ class UserDetail extends Model
         'keyPerformanceIndicator',
         'emergencyContactDetails',
         'currentAddress',
+        'curr_city',
+        'curr_state',
+        'curr_zip',
         'permanentAddress',
+        'perma_city',
+        'perma_state',
+        'perma_zip',
         'uploadPhotograph',
         'uploadPan',
         'uploadAadhar',
         'uploadDrivingLicence',
         'incorporationType',
         'registered	',
-        'referralPartner',        
+        'referralPartner', 
+        'partner_id',
+        'business_scope'     
     ];
 
     public function user(){

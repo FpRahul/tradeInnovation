@@ -12,7 +12,7 @@
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Name <strong class="text-[#f83434]">*</strong></label>
-                    <input type="text" name="name" id="name" value="{{$newAssociate->name}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Name" required>
+                    <input type="text" name="name" id="name" value="{{old('name') ? old('name') : $newAssociate->name}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Name" required>
                     @error('name')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -34,57 +34,163 @@
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="firmName" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Firm Name <strong class="text-[#f83434]">*</strong></label>
-                    <input type="text" name="firmName" id="firmName" value="{{$newAssociate->companyName}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <input type="text" name="firmName" id="firmName" value="{{ old('firmName') ? old('firmName') : $newAssociate->companyName}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                     @error('firmName')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
-                </div>
-                <div class="w-full md:w-1/2">
-                    <label for="address" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Address <strong class="text-[#f83434]">*</strong></label>
-                    <input type="text" name="address" id="address" value="{{$newAssociate->address}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
-                    @error('address')
-                    <div class="alert alert-danger">{{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
-            <div class="flex flex-col md:flex-row gap-[20px]">
+                </div> 
                 <div class="w-full md:w-1/2">
                     <label for="number" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mobile Number <strong class="text-[#f83434]">*</strong></label>
-                    <input type="text" name="number" id="number" value="{{$newAssociate->mobile}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Number" required>
+                    <input type="text" name="number" id="number" value="{{ old('number') ? old('number') : $newAssociate->mobile}}" class="checkDuplicateMobile w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Number" required>
+                    <span class="mobile_exist_error text-[#df2727] text-[12px] hidden">Please try with another mobile number!</span>
                     @error('number')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
-                </div>
+                </div>               
+            </div>
+            <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="alternatePhone" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Alternate Mobile Number</label>
-                    <input type="text" name="alternatePhone" value="{{$newAssociate->altNumber}}" id="alternatePhone" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Email">
+                    <input type="text" name="alternatePhone" value="{{ old('alternatePhone') ? old('alternatePhone') : $newAssociate->altNumber}}" id="alternatePhone" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Email">
                     @error('alternatePhone')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
-            </div>
-            <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Email-Id <strong class="text-[#f83434]">*</strong></label>
-                    <input type="text" name="email" id="email" value="{{$newAssociate->email}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Email" required>
+                    <input type="text" name="email" id="email" value="{{ old('email') ? old('email') : $newAssociate->email}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Email" required>
                     @error('email')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
+                
+            </div>
+            <div class="flex flex-col md:flex-row gap-[20px]">                
                 <div class="w-full md:w-1/2">
                     <label for="alternateEmail" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Alternate Email-Id</label>
-                    <input type="text" name="alternateEmail" value="{{$newAssociate->altEmail}}" id="alternateEmail" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Email">
+                    <input type="text" name="alternateEmail" value="{{  old('alternateEmail') ? old('alternateEmail') : $newAssociate->altEmail}}" id="alternateEmail" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Email">
                      @error('alternateEmail')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
             </div>
-
+            <div class="flex flex-col lg:flex-row gap-[20px]">
+                <div class="w-full lg:w-1/2">
+                    <div class="shadow-lg p-[25px] rounded-[8px] border-[1px] border-[#ccc] currentAddressDiv">                        
+                        <div class="mb-[10px]">
+                            <label for="currentAddress" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Current Address <strong class="text-[#f83434]">*</strong></label>
+                            <textarea type="text" name="currentAddress" id="currentAddress" class="w-full h-[120px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Current Address" required>{{ old('currentAddress') ? old('currentAddress') : (!empty($newClientDetails->currentAddress) ? $newClientDetails->currentAddress:'') }}</textarea>
+                            @error('currentAddress')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mb-[10px]">
+                            <label for="curr_city" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">City</label>
+                            <input type="text" name="curr_city" id="curr_city" value="{{ old('curr_city') ? old('curr_city') : (!empty($newClientDetails) ? $newClientDetails->curr_city : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                        </div>
+                        <div class="mb-[10px]">
+                            <label for="curr_state" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">State</label>
+                            <input type="text" name="curr_state" id="curr_state" value="{{ old('curr_state') ? old('curr_state') : (!empty($newClientDetails) ? $newClientDetails->curr_state : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                        </div>
+                        <div class="mb-[10px]">
+                            <label for="curr_zip" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Zip Code</label>
+                            <input type="text" name="curr_zip" id="curr_zip" value="{{ old('curr_zip') ? old('curr_zip') : (!empty($newClientDetails) ? $newClientDetails->curr_zip : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                        </div>                        
+                    </div>
+                </div>
+                <div class="w-full lg:w-1/2">
+                    <div class="shadow-lg p-[25px] rounded-[8px] border-[1px] border-[#ccc]">
+                       
+                        <div class="mb-[10px]">
+                            <label for="permanentAddress" class="flex flex-col md:flex-row md:justify-between md:items-center text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+                            <div class="mb-[10px] md:mb-0">
+                                Permanent Address <strong class="text-[#f83434]">*</strong>
+                            </div>
+                            <div>                            
+                                <input type="checkbox" name="sameascurrentaddress" class="sameAsCurrentAddress"/>  
+                                <label>Same as current address</label>                          
+                            </div> </label>
+                            <textarea R type="text" name="permanentAddress" id="permanentAddress" class="w-full h-[120px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Permanent Address" required>{{ old('permanentAddress') ? old('permanentAddress') : (!empty($newClientDetails->permanentAddress) ? $newClientDetails->permanentAddress :'') }}</textarea>
+                            @error('permanentAddress')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mb-[10px]">
+                            <label for="perma_city" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">City</label>
+                            <input type="text" name="perma_city" id="perma_city" value="{{ old('perma_city') ? old('perma_city') : (!empty($newClientDetails) ? $newClientDetails->perma_city : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                        </div>
+                        <div class="mb-[10px]">
+                            <label for="perma_state" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">State</label>
+                            <input type="text" name="perma_state" id="perma_state" value="{{ old('perma_state') ? old('perma_state') : (!empty($newClientDetails) ? $newClientDetails->perma_state : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                        </div>
+                        <div class="mb-[10px]">
+                            <label for="perma_zip" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Zip Code</label>
+                            <input type="text" name="perma_zip" id="perma_zip" value="{{ old('perma_zip') ? old('perma_zip') : (!empty($newClientDetails) ? $newClientDetails->perma_zip : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                        </div> 
+                                         
+                    </div>
+                </div>
+            </div>
             <div class="">
                 <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
             </div>
         </form>
     </div>
 </div>
-
+<script>
+     $(document).on('keyup','.checkDuplicateMobile',function(){
+        if($(this).val().length >=10){
+            let id = $(this).data('id');
+            let val = $(this).val();
+            let e = $(this);
+            $.ajax({
+                method:'POST',
+                url:"{{ route('user.checkDuplicate')}}",
+                headers:{
+                    'X-CSRF-TOKEN':'{{csrf_token()}}'
+                },
+                data:{
+                    id:id,
+                    val:val
+                },
+                success:function(res){
+                    if(res.exists){
+                        e.val('');
+                        $('.mobile_exist_error').removeClass('hidden');
+                    }else{
+                        $('.mobile_exist_error').addClass('hidden');
+                    }
+                }
+            });
+        }
+        
+    });
+    $(document).on('click','.sameAsCurrentAddress',function(){
+        let address = $('.currentAddressDiv').find('#currentAddress').val();
+        let city = $('.currentAddressDiv').find('#curr_city').val();
+        let state = $('.currentAddressDiv').find('#curr_state').val();
+        let zipCode = $('.currentAddressDiv').find('#curr_zip').val();
+        
+        let peraddress = $(this).parent().parent().parent().find("#permanentAddress");
+        let perCity = $(this).parent().parent().parent().parent().find("#perma_city");
+        let perState = $(this).parent().parent().parent().parent().parent().find("#perma_state");
+        let perZipCode = $(this).parent().parent().parent().parent().parent().find("#perma_zip");
+        if($(this).is(':checked')){
+            if(address == '' || city == '' || state == '' || zipCode == ''){
+                alert("Please fill the current address details");
+                $(this).prop("checked", false);
+            }else{
+                peraddress.val(address);
+                perCity.val(city);
+                perState.val(state);
+                perZipCode.val(zipCode);
+            }            
+        }else{
+            peraddress.val('');
+            perCity.val('');
+            perState.val('');
+            perZipCode.val('');
+        }        
+    });
+</script>
 @stop

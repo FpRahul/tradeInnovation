@@ -51,7 +51,7 @@
                     <ul class="accordian_body pl-[15px] mt-[15px] {{$activeSubMenuAction}}">
                         @foreach ($menuValue['subMenu'] as $subKey => $subMenu)
                             @if(!isset($menuValue['subSubMenu'][$subKey]))
-                                <li class="group {{ $subMenu['url'] == Route::currentRouteName() ? 'active group-[.active]:bg-[#13103a0d] rounded-[8px]':'' }} ">
+                                <li class="group {{ in_array(Route::currentRouteName(),$subMenuActions[$subKey]) ? 'active group-[.active]:bg-[#13103a0d] rounded-[8px]':'' }} ">
                                     <a href="{{ route($subMenu['url']) }}" class="p-[10px] text-[#13103A] font-[Inter] text-[14px] font-[400] leading-[16px] flex items-center gap-[10px] group-[.activeSubMenu]:bg-[#13103A] group-[.activeSubMenu]:text-[#ffffff] group-[.activeSubMenu]:shadow-[0px_0px_6px_2px_#00000036] rounded-[10px] ">{{ $subMenu['name'] }}</a>
                                 </li>
                             @else

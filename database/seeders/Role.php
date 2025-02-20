@@ -24,11 +24,11 @@ class Role extends Seeder
                 'name' => 'Associate',
             ],
             [
-                'name' => 'Employee',
+                'name' => 'Project Manager',
             ],
             [
-                'name' => 'Project Manager',
-            ]
+                'name' => 'Employee',
+            ],
         ]);
     }
 }

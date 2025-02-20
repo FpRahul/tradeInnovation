@@ -66,7 +66,7 @@
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
         </div>
-        <div class="flex flex-col md:flex-row gap-[20px]">
+        <div class="  flex flex-col md:flex-row gap-[20px]">
             <div class="flex justify-start flex-wrap w-[100%] md:w-[49%]">
                 <label class="block w-full text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload</label>
                 <label for="attachment" class="flex items-center gap-[10px] w-full text-[13px] font-[500] leading-[15px] text-[#666666] tracking-[0.01em] bg-[#fff] border-dashed border-[1px] border-[#ccc] rounded-[6px] py-[6px] px-[10px] cursor-pointer">
@@ -76,30 +76,30 @@
                     Upload File
                 </label>
                 <input type="file" id="attachment" name="attachment[]" multiple style="display: none;" />
-                <div id="file-list" class = "mt-2"></div>
+                <div id="file-list" class="mt-2"></div>
             </div>
             @error('attachment[]')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
-            <div class="w-full md:w-1/2">
-                    <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
-                    @if($getStage->count() > 0)
-                    <input type="text" name="stage_id" id="stage_id" value="{{$getStage->title}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
-                    <input type="hidden" name="stage_id" value="{{$getStage->id}}">
-                    @endif
-                    <!-- <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+            <div class="  hideOnChange w-full md:w-1/2">
+                <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
+                @if($getStage->count() > 0)
+                <input type="text" name="stage_id" id="stage_id" value="{{$getStage->title}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
+                <input type="hidden" name="stage_id" value="{{$getStage->id}}">
+                @endif
+                <!-- <p style="color: skyblue; font-size: 14px; font-weight: 500;">
                         Next stage will be: {{$getStage->title}}
                     </p> -->
-                </div>
             </div>
-        <div class="flex flex-col md:flex-row gap-[20px]">
-        @if($taskDetails->count() > 0)
-                @foreach ($taskDetails as $user )
-                @php
+        </div>
+        <div class=" hideOnChange flex flex-col md:flex-row gap-[20px]">
+            @if($taskDetails->count() > 0)
+            @foreach ($taskDetails as $user )
+            @php
             $selectedId = $task->user->id;
-        @endphp
-                @endforeach
-         @endif
+            @endphp
+            @endforeach
+            @endif
             <div class="w-full md:w-1/2">
                 <label for="assignUser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign User</label>
                 <select name="assignUser" id="assignUser" class="filterData assignUserData allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]">
@@ -148,11 +148,13 @@
                     </div>
                 </div>
                 <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-                    Set a dead line for client approval.
+                    Set a dead line for Sent quotation.
                 </p>
-            </div>
         </div>
-        <div class="">
+        </div>
+        
+
+        <div class="hideOnChange">
             <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
             @if($taskDetails->count() > 0)
             @foreach ( $taskDetails as $task )
@@ -200,8 +202,15 @@
             }
         });
 
-  
-     
+      $("#ifRegister").on('change', function(){
+        var changedValue = $(this).val();
+        if(changedValue == "Abandoned"){
+            $('.hideOnChange').addClass('hidden')
+        }else{
+            $('.hideOnChange').removeClass('hidden')
+        }
+      })
+
     });
 </script>
 @stop

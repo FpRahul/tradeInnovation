@@ -24,7 +24,7 @@
                                     <option value="">Select Lead ID</option>
                                     @if(!$DistinctleadId->isEmpty())
                                     @foreach ($DistinctleadId as $leadID)
-                                    <option value="{{ $leadID->lead->lead_id }}">{{ $leadID->lead->lead_id }}</option>
+                                    <option value="{{ $leadID->lead->lead_id }}" @if($leadID->lead->lead_id == $leadParam) selected @endif>{{ $leadID->lead->lead_id }}</option>
                                     @endforeach
                                     @endif
                                 </select>
@@ -35,12 +35,13 @@
                                 <label for="status" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
                                 <select name="status" id="status" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
                                     <option value="">Select Status</option>
-                                    <option value="0">Pending</option>
-                                    <option value="1">Completed</option>
-                                    <option value="2">On Hold</option>
-                                    <option value="3">Follow Up</option>
+                                    <option value="0" @if($statusParam==0) selected @endif>Pending</option>
+                                    <option value="1" @if($statusParam==1) selected @endif>Completed</option>
+                                    <option value="2" @if($statusParam==2) selected @endif>On Hold</option>
+                                    <option value="3" @if($statusParam==3) selected @endif>Follow Up</option>
                                 </select>
                             </div>
+
 
                             <!-- User Select (visible only for roles 1 or 4, increased width to 5/12) -->
                             @if (Auth::user()->role == 1 || Auth::user()->role == 4)
@@ -48,13 +49,17 @@
                                 <label for="user" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">User</label>
                                 <select name="user" id="user" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
                                     @if(!$users->isEmpty())
-                                    <option value="">Select user</option>
+                                    <option value="">Select User</option>
                                     @foreach($users as $user)
-                                    <option value="{{$user->id}}">{{$user->name}}</option>
+                                    <option value="{{ $user->id }}"
+                                        @if($user->id == $userParam) selected @endif>
+                                        {{ $user->name }}
+                                    </option>
                                     @endforeach
                                     @endif
                                 </select>
                             </div>
+
                             @endif
 
                             <!-- Filter Button -->

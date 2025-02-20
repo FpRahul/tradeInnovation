@@ -17,8 +17,8 @@
             <label for="document" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
             <select name="document" id="document" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                <option value="" disabled selected>Select status</option>
-               <option value="1"> Drafted</option>
-               <option value="2"> Not Drafted </option>
+               <option value="1"> Verified</option>
+               <option value="2"> Not Verified </option>
             </select>
             <div class="showWarning" style="color: red;font-size: 14px; font-weight: 500;"></div>
             @error('document')
@@ -27,7 +27,7 @@
          </div>
          <div class="w-full md:w-1/2" id="verifiedDate">
             <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-               verified On
+               Verified On
             </label>
             <div class="w-[100%] relative">
                <input
@@ -182,16 +182,14 @@
          console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
       });
 
-      $("#status").on("change", function() {
-         var changedValue = $(this).val();
-         if (changedValue == 1) {
-            $('label[for="verified"]').text('Sent On'); // Change label text
-            $("#verifiedDate").removeClass('Hidden'); // Ensure the input field is visible
-         } else {
-            $('label[for="verified"]').text('Verified On'); // Revert label text
-            $("#verifiedDate").addClass('Hidden'); // Hide the input field
-         }
-      });
+      // $("#document").on("change", function() {
+      //    var changedValue = $(this).val();
+      //    if (changedValue == 2) {
+      //       $('label[for="verified"]').text('Hold On'); // Change label text
+      //    } else {
+      //       $('label[for="verified"]').text('Verified On'); // Revert label text
+      //    }
+      // });
 
       $("#document").on('change', function(){
          var documentStatus = $(this).val();
@@ -199,11 +197,13 @@
             $(".onHoldHide").addClass('hidden');
             $(".showWarning").text('You are going to hold the Document verification')
             $(".reminderDate").removeClass('hidden')
+            $('label[for="verified"]').text('Hold On');
 
          }else if(documentStatus == 1){
             $(".onHoldHide").removeClass('hidden');
             $(".showWarning").text('')
             $(".reminderDate").addClass('hidden')
+            $('label[for="verified"]').text('Verified On');
 
 
 

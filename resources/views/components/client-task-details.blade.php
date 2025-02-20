@@ -54,7 +54,7 @@
             <li>
                 <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Inbound Date</span>
                 <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize">
-                {{ \Carbon\Carbon::parse($taskDetails->leadTaskDetails->dead_line)->format('d M Y') ?? 'N/A' }}
+                {{ \Carbon\Carbon::parse($taskDetails->lead->created_at)->format('d M Y') ?? 'N/A' }}
                 </strong>
             </li>
           

@@ -144,6 +144,10 @@ class CheckPermission
             '9' => 'task.documentation',
             '10' => 'task.documenStatus',
             '11' => 'task.clientApproval',
+            '12' => 'task.clientApprovalStatus', 
+            '13' => 'task.draftApplication', 
+            '14' => 'task.draftApplicationStatus', 
+            '15' => 'leads.getLogs', 
         ];
     }
 }

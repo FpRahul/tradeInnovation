@@ -131,6 +131,7 @@
                         </th>
                     </tr>
                 </thead>
+                @if(false)
                 <tbody id="get_dynamic_data">
                     @if ($systemLogs && $systemLogs->isNotEmpty())
                     @foreach ($systemLogs as $logs)
@@ -188,6 +189,7 @@
                     </tr>
                     @endif
                 </tbody>
+                @endif
             </table>
         </div>
         <div class="text-center p-[20px] border-t-[1px] border-[#0000001A]">

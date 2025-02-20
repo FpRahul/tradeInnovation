@@ -110,7 +110,6 @@ class LeadsController extends Controller
             $credentials = $request->validate([
                 'email' => $email,
             ]);
-            dd($credentials);
             if($request->sourcetypenamelist > 0){
                 $sourceId = $request->sourcetypenamelist;              
             }else{

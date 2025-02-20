@@ -9,21 +9,15 @@
    <x-client-task-details :taskID="$id" />
 </div>
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
-   <form action="{{route('task.documenStatus',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
+   <form action="{{route('task.clientApprovalStatus',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
       <div class="flex flex-col md:flex-row gap-[20px]">
-         <input type="hidden" name="checkValid" id="checkValid" value="">
-         <div class="w-full md:w-1/2">
-            <label for="client_approval" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
-            <select name="client_approval" id="client_approval" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
-               <option value="" disabled selected>Select status</option>
-               <option value="1"> Verified</option>
-               <option value="2"> Not verified </option>
-            </select>
-            <div class="showWarning" style="color: red;font-size: 14px; font-weight: 500;"></div>
-            @error('document')
-            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
-            @enderror
+      <div class="w-full md:w-1/2 flex items-center">
+            <input type="checkbox" name="client_approval" id="client_approval" value="1" class="w-[20px] h-[20px] border-[1px] border-[#0000001A] text-[#000000] rounded-[4px] cursor-pointer mr-[10px]">
+            <label for="drafted" class="block text-[14px] font-[400] leading-[16px] text-[#000000]">Is Approved</label>
+               @error('client_approval')
+               <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+               @enderror
          </div>
          <div class="w-full md:w-1/2" id="verifiedDate">
             <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
@@ -31,13 +25,13 @@
             </label>
             <div class="w-[100%] relative">
                <input
-                  type="text"
-                  placeholder="Dead Line"
-                  name="verified"
-                  class="daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
-                  value=""
-                  id="verified"
-                  autocomplete="off">
+               type="text"
+               placeholder="Dead Line"
+               name="verified"
+               class="daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
+               value=""
+               id="verified"
+               autocomplete="off">
                <div class="absolute right-[10px] top-[10px]">
                   <i class="ri-calendar-line"></i>
                </div>
@@ -66,17 +60,14 @@
             <input type="hidden" name="stage_id" value="{{$getStage->id}}">
             @endif
             <!-- <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-                        Next stage will be: {{$getStage->title}}
-                    </p> -->
+               Next stage will be: {{$getStage->title}}
+            </p> -->
          </div>
-
       </div>
       @if($taskDetails->count() > 0)
-
       @php
       $selectedId = $taskDetails->user->id;
       @endphp
-
       @endif
       <div class="  flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2">
@@ -98,7 +89,6 @@
             <p style="color: skyblue; font-size: 14px; font-weight: 500;">
                Current user assigned: {{$taskDetails->user->name}}.
             </p>
-
             @endif
          </div>
          <div class="w-full md:w-1/2" id="verifiedDate">
@@ -107,14 +97,14 @@
             </label>
             <div class="w-[100%] relative">
                <input
-                  type="text"
-                  placeholder="Dead Line"
-                  name="deadline"
-                  id="deadline"
-                  class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
-                  value=""
-
-                  autocomplete="off">
+               type="text"
+               placeholder="Dead Line"
+               name="deadline"
+               id="deadline"
+               class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
+               value=""
+               
+               autocomplete="off">
                <div class="absolute right-[10px] top-[10px]">
                   <i class="ri-calendar-line"></i>
                </div>

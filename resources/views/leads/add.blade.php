@@ -20,10 +20,13 @@
                         <option value="">Source Type</option>
                         @if ($sourceList && $sourceList->isNotEmpty())
                             @foreach ($sourceList as $sourceListData)
-                                <option value="{{ $sourceListData->id}}" {{$leadData->source == $sourceListData->id ? 'selected' :''}}>{{ $sourceListData->name}}</option>
-                            @endforeach                            
+                                <option value="{{ $sourceListData->id }}" 
+                                    {{ old('source', $leadData->source) == $sourceListData->id ? 'selected' : '' }}>
+                                    {{ $sourceListData->name }}
+                                </option>
+                            @endforeach
                         @endif
-                    </select>
+                    </select>                    
                 </div>
                 @php
                     $sourceTypeData = [];
@@ -43,13 +46,16 @@
                 <div class="sourceTypeNameDiv relative w-full md:w-1/2 {{$displayClass}}" id="source_type">
                     <label for="sourceTypeNameList" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Source Type Name</label>
                     <select name="sourcetypenamelist" id="sourceTypeNameList" class="allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none is_required">
-
                         @if ($sourceTypeData && $sourceTypeData->isNotEmpty())
-                            @foreach ($sourceTypeData as $key =>$value)
-                                <option value="{{$value->id}}" {{$leadData->source_id == $value->id ? 'selected':''}}>{{$value->name}}</option>
+                            @foreach ($sourceTypeData as $key => $value)
+                                <option value="{{ $value->id }}" 
+                                    {{ old('sourcetypenamelist', $leadData->source_id) == $value->id ? 'selected' : '' }}>
+                                    {{ $value->name }}
+                                </option>
                             @endforeach                            
                         @endif
                     </select>
+                    
                     <div class="loader sourceNameLoader flex items-center justify-center bg-[#ffffffa8] h-[45px] absolute top-[20px] left-[0] right-[0] m-auto hidden">
                         <span class="loader-1"> </span>   
                     </div>
@@ -57,13 +63,16 @@
 
                 <div class="w-full md:w-1/2">
                     <label for="clientname" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Client Name</label>
-                    <input type="text" name="clientname" id="clientname" value="{{ !empty($leadData) ? $leadData->client_name : ''}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <input type="text" name="clientname" id="clientname" 
+                        value="{{ old('clientname', !empty($leadData) ? $leadData->client_name : '') }}" 
+                        class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                    required>
                 </div>
             </div>
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="companyname" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Company Name</label>
-                    <input type="text" name="companyname" id="companyname" value="{{!empty($leadData) ? $leadData->company_name : ''}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <input type="text" name="companyname" id="companyname" value="{{ old('companyname') ? old('companyname') : (!empty($leadData) ? $leadData->company_name : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="scopeofbusiness" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Scope Of Business <strong class="text-[#f83434]">*</strong></label>
@@ -74,24 +83,25 @@
                         @if (!empty($scopeOfBussinessList) && $scopeOfBussinessList->isNotEmpty())
                             @foreach ($scopeOfBussinessList as $scopeOfBussinessListDetails)  
                                 <option value="{{ $scopeOfBussinessListDetails->id }}" 
-                                    @selected(in_array($scopeOfBussinessListDetails->id, old('scopeofbusiness', explode(',', $leadData->business_scope ?? ''))))>
+                                    @selected(in_array($scopeOfBussinessListDetails->id, old('scopeofbusiness', $leadData->business_scope ? explode(',', $leadData->business_scope) : [])))>
                                     {{ $scopeOfBussinessListDetails->name }}
                                 </option>                      
                             @endforeach                                                            
                         @endif
                     </select>
+
                 </div>
                 
             </div>
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="mobilenumber" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mobile number</label>
-                    <input type="text" data-id="{{$leadData->id}}" name="mobilenumber" id="mobilenumber" value="{{!empty($leadData) ? $leadData->mobile_number : ''}}" class="checkDuplicateMobile w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
-                    <span class="mobile_exist_error text-[#df2727] text-[12px] hidden">Please try with another mobile number!</span>
+                    <input type="text" data-id="{{$leadData->id}}" name="mobilenumber" id="mobilenumber" value="{{ old('mobilenumber') ? old('mobilenumber') : (!empty($leadData) ? $leadData->mobile_number : '')}}" class="checkDuplicateMobile w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <span class="mobile_exist_error text-[#df2727] text-[12px] hidden">This mobile number is already exists on user!</span>
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Email-Id</label>
-                    <input type="text" name="email" id="email" value="{{!empty($leadData) ? $leadData->email : ''}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <input type="text" name="email" id="email" value="{{ old('email') ? old('email') : (!empty($leadData) ? $leadData->email : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                     @error('email')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -110,57 +120,68 @@
                                             <input type="hidden" name="lead_task_id" value="{{$serviceVal->id}}">
                                             <div class="flex flex-col md:flex-row gap-[20px]">
                                                 <div class="w-full md:w-1/2">
-                                                    <select name="assign" id="assign" class=" w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                    <select name="assign" id="assign" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                         <option value="">Assign To Users</option>
-                                                            @foreach ($userList as $userListData)
+                                                        @foreach ($userList as $userListData)
                                                             <option 
-                                                            value="{{ $userListData->id }}" 
-                                                            @selected($userListData->id == $serviceVal->user_id)>
-                                                            {{ $userListData->name }}
-                                                        </option>
-                                                        
-                                                            @endforeach                            
+                                                                value="{{ $userListData->id }}" 
+                                                                @selected(old('assign', $serviceVal->user_id) == $userListData->id)>
+                                                                {{ $userListData->name }}
+                                                            </option>
+                                                        @endforeach                            
                                                     </select>
+                                                    
                                                 </div>
                                                 <div class="w-full md:w-1/2">
-                                                    <select name="serviceid" class="lead_service_id  setSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                    <select name="serviceid" class="lead_service_id setSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                         <option value="">Service Name</option>
                                                         @if (count($serviceList) > 0)
                                                             @foreach ($serviceList as $serviceListData)
-                                                                <option value="{{ $serviceListData->id}}" @selected($serviceListData->id == $serviceVal->service_id)>{{ $serviceListData->serviceName}}</option>
+                                                                <option value="{{ $serviceListData->id }}" 
+                                                                    @selected(old('serviceid', $serviceVal->service_id) == $serviceListData->id)>
+                                                                    {{ $serviceListData->serviceName }}
+                                                                </option>
                                                             @endforeach  
                                                         @endif
-                                                        
                                                     </select>
+                                                    
                                                 </div>
                                                 <div class="relative w-full md:w-1/2">
-                                                    <select name="subserviceid" class=" getSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                    <select name="subserviceid" class="getSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                         <option value="">Service Type</option>  
                                                         @if ($serviceVal->subservice_id)                                                           
                                                             @php 
                                                                 $subServiceData = getSubService($serviceVal->service_id);
                                                             @endphp                                                      
                                                             @foreach ($subServiceData as $subServiceDataKey => $subServiceDataVal)                                                                
-                                                                <option value="{{$subServiceDataVal->id}}" @selected($subServiceDataVal->id == $serviceVal->subservice_id)>{{$subServiceDataVal->subServiceName}}</option>                                                                
+                                                                <option value="{{ $subServiceDataVal->id }}" 
+                                                                    @selected(old('subserviceid', $serviceVal->subservice_id) == $subServiceDataVal->id)>
+                                                                    {{ $subServiceDataVal->subServiceName }}
+                                                                </option>                                                                
                                                             @endforeach    
                                                         @endif                                              
                                                     </select>
+                                                    
                                                     <div class="loader serviceNameLoader flex items-center justify-center bg-[#ffffffa8] h-[45px] absolute top-[20px] left-[0] right-[0] m-auto hidden">
                                                         <span class="loader-1"> </span>   
                                                     </div>
                                                 </div>
                                                 <div class="w-full md:w-1/2 stageoftheservice">
-                                                    <select name="stage_id" class=" w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none serviceStagesOption" required>
+                                                    <select name="stage_id" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none serviceStagesOption" required>
                                                         <option value="">Select Stage</option>
                                                         @php
-                                                            $allStagesData = ServiceStages::where('service_id',$serviceVal->service_id)->get();
+                                                            $allStagesData = ServiceStages::where('service_id', $serviceVal->service_id)->get();
                                                         @endphp
                                                         @if ($allStagesData && $allStagesData->isNotEmpty())
                                                             @foreach ($allStagesData as $stageVal)
-                                                            <option value="{{$stageVal['id']}}" @selected($stageVal['id'] == $serviceVal->service_stage_id)>{{$stageVal['title']}}</option>
+                                                                <option value="{{ $stageVal['id'] }}" 
+                                                                    @selected(old('stage_id', $serviceVal->service_stage_id) == $stageVal['id'])>
+                                                                    {{ $stageVal['title'] }}
+                                                                </option>
                                                             @endforeach
                                                         @endif
                                                     </select>
+                                                    
                                                 </div>
                                                 <div class="w-full md:w-1/2">
                                                                            
@@ -170,9 +191,9 @@
                                                             placeholder="Dead Line" 
                                                             name="taskdeadline" 
                                                             class="daterangepicker-taskdeadline daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
-                                                            value="{{!empty($serviceVal->leadTaskDetails) ? date('d M Y',strtotime($serviceVal->leadTaskDetails->dead_line)) : ''}}" 
+                                                            value="{{ old('taskdeadline', !empty($serviceVal->leadTaskDetails) ? date('d M Y', strtotime($serviceVal->leadTaskDetails->dead_line)) : '') }}" 
                                                             autocomplete="off"
-                                                        >                                                        
+                                                        />                                                        
                                                     </div>     
                                                 </div>
                                             </div>
@@ -194,27 +215,28 @@
                                         <input type="hidden" name="lead_task_id" value="0">
                                         <div class="flex flex-col md:flex-row gap-[20px]">
                                             <div class="w-full md:w-1/2">
-                                                <select name="assign" id="assign" class=" w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                <select name="assign" id="assign" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                     <option value="">Assign To Users</option>
-                                                        @foreach ($userList as $userListData)
-                                                        <option 
-                                                        value="{{ $userListData->id }}">
-                                                        {{ $userListData->name }}
-                                                    </option>
-                                                    
-                                                        @endforeach                            
-                                                </select>
+                                                    @foreach ($userList as $userListData)
+                                                        <option value="{{ $userListData->id }}" 
+                                                            @selected(old('assign') == $userListData->id)>
+                                                            {{ $userListData->name }}
+                                                        </option>
+                                                    @endforeach                            
+                                                </select>                                                
                                             </div>
                                             <div class="w-full md:w-1/2">
-                                                <select name="serviceid" class="lead_service_id  setSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                <select name="serviceid" class="lead_service_id setSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                     <option value="">Service Name</option>
                                                     @if (count($serviceList) > 0)
                                                         @foreach ($serviceList as $serviceListData)
-                                                            <option value="{{ $serviceListData->id}}">{{ $serviceListData->serviceName}}</option>
+                                                            <option value="{{ $serviceListData->id }}" 
+                                                                @selected(old('serviceid') == $serviceListData->id)>
+                                                                {{ $serviceListData->serviceName }}
+                                                            </option>
                                                         @endforeach  
                                                     @endif
-                                                    
-                                                </select>
+                                                </select>                                                
                                             </div>
                                             <div class="relative w-full md:w-1/2">
                                                 <select name="subserviceid" class=" getSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
@@ -236,7 +258,7 @@
                                                         placeholder="Dead Line" 
                                                         name="taskdeadline" 
                                                         class="daterangepicker-taskdeadline daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
-                                                        value="" 
+                                                        value="{{ old('taskdeadline')}}" 
                                                         autocomplete="off"
                                                     >
                                                     
@@ -343,20 +365,24 @@
 
             <div class="">
                 <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
-                <textarea type="text" name="description" id="description" class="w-full h-[155px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">{{!empty($leadData) ? $leadData->description : ''}}</textarea>
+                <textarea name="description" id="description" class="w-full h-[155px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">{{ old('description', !empty($leadData) ? $leadData->description : '') }}</textarea>
+
             </div>
             <div class="">
                 <label for="msmem" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">MSMEM</label>
                 <div class="flex flex-wrap gap-[20px]">
                     <div>
-                        <input type="radio" name="msmem" id="msmem" value='1' {{$leadData->msmem == 1 ?'checked':''}} >
+                        <input type="radio" name="msmem" id="msmem" value="1" 
+                            @checked(old('msmem', $leadData->msmem) == 1)>
                         <label for="msmem" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Yes</label>
                     </div>
                     <div>
-                        <input type="radio" name="msmem" id="msmem2" value='0' {{$leadData->msmem == 0 ?'checked':''}} >
+                        <input type="radio" name="msmem" id="msmem2" value="0" 
+                            @checked(old('msmem', $leadData->msmem) == 0)>
                         <label for="msmem2" class="text-[12px] font-[400] leading-[14px] text-[#000000]">No</label>
                     </div>
                 </div>
+                
             </div>
             <div class="">
                 <button type="button" name="save" class="lead_submit_btn text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>

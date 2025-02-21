@@ -116,6 +116,10 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::post('client-approval/status/{id}','clientApprovalStatus')->name('task.clientApprovalStatus');
         Route::get('draft-application/{id}','draftApplication')->name('task.draftApplication');
         Route::post('draft-application/status/{id}','draftApplicationStatus')->name('task.draftApplicationStatus');
+        Route::get('formality_check/{id}','formalityCheck')->name('task.formalityCheck');
+        Route::post('formality_check/status/{id}','formalityCheckStatus')->name('task.formalityCheckStatus');
+
+
 
 
 

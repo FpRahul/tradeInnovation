@@ -131,32 +131,32 @@
                         </th>
                     </tr>
                 </thead>
-                @if(false)
+                
                 <tbody id="get_dynamic_data">
                     @if ($systemLogs && $systemLogs->isNotEmpty())
                     @foreach ($systemLogs as $logs)
                     <tr>
                         <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start whitespace-nowrap text-[12px] md:text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
-                            {{$logs->user->name}}
+                            {{$logs->user->name ?? "N/A"}}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start whitespace-nowrap text-[12px] md:text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
-                            {{$logs->title}}
+                            {{$logs->title ?? "N/A"}}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start whitespace-nowrap text-[12px] md:text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
-                            {{$logs->description}}
+                            {{$logs->description ?? "N/A"}}
                         </td>
                         @if($logs->ip_address)
                         <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start whitespace-nowrap text-[12px] md:text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
-                        {{$logs->ip_address}}
+                        {{$logs->ip_address ?? "N/A" }}
                         </td>
                         @else
                         <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start whitespace-nowrap text-[12px] md:text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                         Not Available
                        </td>
                         @endif
-                        @if($logs->operating_system)
+                        @if($logs->operating_system ?? "N/A" )
                         <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start whitespace-nowrap text-[12px] md:text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
-                        {{$logs->operating_system}}
+                        {{$logs->operating_system ?? "N/A" }}
                         </td>
                         @else
                         <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start whitespace-nowrap text-[12px] md:text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
@@ -164,7 +164,7 @@
                         </td>
                         @endif
                         <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start whitespace-nowrap text-[12px] md:text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
-                            {{ date('d M Y',strtotime($logs->created_at))}}
+                            {{ date('d M Y',strtotime($logs->created_at)) ?? "N/A" }}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-center  text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                             <a href="{{ route('getActionLog.log', ['auto'=> $logs->id]) }}" class="inline-flex w-[27px] h-[27px] items-center justify-center bg-[#F1F3F4] rounded-[100%]">
@@ -189,7 +189,7 @@
                     </tr>
                     @endif
                 </tbody>
-                @endif
+                
             </table>
         </div>
         <div class="text-center p-[20px] border-t-[1px] border-[#0000001A]">

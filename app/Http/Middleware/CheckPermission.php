@@ -148,6 +148,9 @@ class CheckPermission
             '13' => 'task.draftApplication', 
             '14' => 'task.draftApplicationStatus', 
             '15' => 'leads.getLogs', 
+            '16' => 'task.formalityCheck',
+            '17' => 'task.formalityCheckStatus',
+
         ];
     }
 }

@@ -9,9 +9,10 @@
    <x-client-task-details :taskID="$id" />
 </div>
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
-   <strong>Task Update</strong>
+
    <form action="{{route('task.sendQuotation',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
+      <strong class="mt-4 block"> Update Current Task</strong>
       <div class="flex flex-col md:flex-row gap-[20px]">
          <input type="hidden" name="checkValid" id="checkValid" value="">
          <div class="w-full md:w-1/2" id="verifiedDate">
@@ -52,15 +53,34 @@
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
       </div>
-      @if($taskDetails->count() > 0)
-      @foreach ($taskDetails as $user )
-      @php
-      $selectedId = $user->user->id;
-      @endphp
+      <div class="">
+         <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
+         <textarea type="text" name="description" id="description" class="w-full h-[60px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
 
-      @endforeach
-      @endif
+      </div>
+
+      
+      <strong class="mt-5 block">Update Upcoming Actions</strong>
       <div class="flex flex-col md:flex-row gap-[20px]">
+         <div class="w-full md:w-1/2">
+            <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Satge</label>
+            @if($getStage->count() > 0)
+            <input type="text" name="stage_id" id="stage_id" value="{{$getStage->title}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
+            <input type="hidden" name="stage_id" value="{{$getStage->id}}">
+            @endif
+            <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+               Next stage will be: {{$getStage->title}}
+            </p>
+         </div>
+         
+         @if($taskDetails->count() > 0)
+         @foreach ($taskDetails as $user )
+         @php
+         $selectedId = $user->user->id;
+         @endphp
+   
+         @endforeach
+         @endif
          <div class="w-full md:w-1/2">
 
             <label for="assignUser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign User</label>
@@ -85,9 +105,10 @@
             @endforeach
             @endif
          </div>
-         <div class="w-full md:w-1/2" id="verifiedDate">
+      </div>
+      <div class="w-full md:w-1/2" id="verifiedDate">
             <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-               Payment Dead line
+                Dead line
             </label>
             <div class="w-[100%] relative">
                <input
@@ -106,25 +127,6 @@
                Set a dead line for payment.
             </p>
          </div>
-      </div>
-      <div class="w-full md:w-1/2">
-         <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Satge</label>
-         @if($getStage->count() > 0)
-         <input type="text" name="stage_id" id="stage_id" value="{{$getStage->title}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
-         <input type="hidden" name="stage_id" value="{{$getStage->id}}">
-         @endif
-         <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-            Next stage will be: {{$getStage->title}}
-         </p>
-      </div>
-
-
-      <div class="">
-         <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
-         <textarea type="text" name="description" id="description" class="w-full h-[60px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
-
-      </div>
-
       <strong class="mt-4 block">Quotation Template</strong>
       <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2">
@@ -227,14 +229,14 @@
 
 <script>
    $(document).ready(function() {
-
       $('.daterangepicker-verified').daterangepicker({
          singleDatePicker: true,
          opens: 'right',
          locale: {
             format: 'DD MMM YYYY'
          },
-         minDate: moment().startOf('day'),
+         minDate: null,
+         maxDate: moment().endOf('day'),
       }).on('apply.daterangepicker', function(ev, picker) {
          console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
       });
@@ -281,7 +283,7 @@
          if ($(this).prop('checked')) {
             $('#mailGst').text("18%");
          } else {
-            $('#mailGst').text("Not apply"); 
+            $('#mailGst').text("Not apply");
          }
       });
 

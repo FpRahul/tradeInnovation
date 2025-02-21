@@ -8,6 +8,7 @@
     <form action="{{ route('task.documentVerified' , ['id' =>$taskID]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
         @csrf
         <!-- <input type="hidden" name="role" id="role" value="2"> -->
+        <strong class="mt-4 block"> Update Current Task</strong>
         <div class="flex flex-col md:flex-row gap-[20px]">
             @if($taskDetails->count() > 0)
             @foreach ( $taskDetails as $task )
@@ -81,6 +82,21 @@
             @error('attachment[]')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
+        </div>
+        <div class="">
+            <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
+            @if($taskDetails->count() > 0)
+            @foreach ( $taskDetails as $task )
+            <textarea type="text" name="description" id="description" class="w-full h-[80px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">{{$task->task_description}}</textarea>
+            @endforeach
+            @endif
+            @error('description')
+            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+            @enderror
+        </div>
+
+        <strong class=" hideOnChange mt-5 block">Update Upcoming Actions</strong>
+        <div class=" hideOnChange flex flex-col md:flex-row gap-[20px]">
             <div class="  hideOnChange w-full md:w-1/2">
                 <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
                 @if($getStage->count() > 0)
@@ -91,8 +107,6 @@
                         Next stage will be: {{$getStage->title}}
                     </p> -->
             </div>
-        </div>
-        <div class=" hideOnChange flex flex-col md:flex-row gap-[20px]">
             @if($taskDetails->count() > 0)
             @foreach ($taskDetails as $user )
             @php
@@ -130,41 +144,29 @@
             <input type="hidden" value="{{$user->user->id}}" name="alreadyAssign">
             @endforeach
             @endif
-            <div class="w-full md:w-1/2">
-                <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-                    Task DeadLine
-                </label>
-                <div class="w-[100%] relative">
-                    <input
-                        type="text"
-                        placeholder="Dead Line"
-                        name="deadline"
-                        id="deadline"
-                        class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
-                        value=""
-                        autocomplete=off>
-                    <div class="absolute right-[10px] top-[10px]">
-                        <i class="ri-calendar-line"></i>
-                    </div>
+        </div>
+        <div class=" hideOnChange w-full md:w-1/2">
+            <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+                 DeadLine
+            </label>
+            <div class="w-[100%] relative">
+                <input
+                    type="text"
+                    placeholder="Dead Line"
+                    name="deadline"
+                    id="deadline"
+                    class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
+                    value=""
+                    autocomplete=off>
+                <div class="absolute right-[10px] top-[10px]">
+                    <i class="ri-calendar-line"></i>
                 </div>
-                <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-                    Set a dead line for Sent quotation.
-                </p>
+            </div>
+            <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+                Set a dead line for Sent quotation.
+            </p>
         </div>
-        </div>
-        
 
-        <div class="hideOnChange">
-            <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
-            @if($taskDetails->count() > 0)
-            @foreach ( $taskDetails as $task )
-            <textarea type="text" name="description" id="description" class="w-full h-[155px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">{{$task->task_description}}</textarea>
-            @endforeach
-            @endif
-            @error('description')
-            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
-            @enderror
-        </div>
         <div class="flex justify-end gap-[15px]">
             <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
         </div>
@@ -178,11 +180,11 @@
             locale: {
                 format: 'DD MMM YYYY'
             },
-            minDate: moment().startOf('day'),
+            minDate: null,
+            maxDate: moment().endOf('day'),
         }).on('apply.daterangepicker', function(ev, picker) {
             console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
         });
-
         $('.daterangepicker-taskdeadline').daterangepicker({
             singleDatePicker: true,
             opens: 'right',
@@ -196,20 +198,23 @@
         $("#status").on('change', function() {
             var statusValue = $(this).val();
             if (statusValue == 1) {
+                $('.hideOnChange').removeClass('hidden')
+                $(".ifRegister select").val('');
                 $(".ifRegister").hide();
+
             } else {
                 $(".ifRegister").show();
             }
         });
 
-      $("#ifRegister").on('change', function(){
-        var changedValue = $(this).val();
-        if(changedValue == "Abandoned"){
-            $('.hideOnChange').addClass('hidden')
-        }else{
-            $('.hideOnChange').removeClass('hidden')
-        }
-      })
+        $("#ifRegister").on('change', function() {
+            var changedValue = $(this).val();
+            if (changedValue == "Abandoned") {
+                $('.hideOnChange').addClass('hidden')
+            } else if (changedValue != "Abandoned") {
+                $('.hideOnChange').removeClass('hidden')
+            }
+        })
 
     });
 </script>

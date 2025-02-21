@@ -42,8 +42,12 @@
                     <div class="w-[100%] md:w-[40%]">
                         <label>Service</label>
                         <select name="service" class="serviceData allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[98px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
-                            <option value="">Select Service</option>   
+                            <option value="">Select Service</option>                           
+                            @php
+                                $serviceList = collect($serviceList)->unique();
+                            @endphp
                             @if (!empty($serviceList))
+                            
                                 @foreach ($serviceList as $serviceK => $serviceV)
                                     @if($serviceV > 0)
                                         @php
@@ -326,12 +330,13 @@
                 let attachments = res.data.lead_attachments;
                 attachments.forEach((ele, index) => {
                     let row = `
-                        <tr>
-                            <td>${ele.document}</td>
-                            <td>
-                                <button class="modalAttachmentDelete delete-btn" data-id="${ele.id}">Delete</button>
-                            </td>
-                        </tr>
+
+                        <ul class="modalAtch">
+                            <li>${ele.document}</li>
+                            <li>
+                                <span class="modalAttachmentDelete delete-btn" data-id="${ele.id}"><i class="ri-delete-bin-line"></i></span>
+                            </li>
+                        </ul>
                     `;
                     attachData.append(row);
                 });
@@ -340,22 +345,37 @@
             }
         })
     });
-
+    
     $(document).on('click','.modalAttachmentDelete',function(){
+        let leadId = $(this).parent().parent().parent().parent().parent().parent().find("#modal_lead_id").val();
         let id = $(this).data('id');
         if (confirm('Are you sure you want to delete this element?')) {
             $.ajax({
             method: 'POST',
-            url: "{{ route('lead.deleterepeater') }}",
+            url: "{{ route('lead.deleteattachmentrepeater') }}",
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
+            dataType:'json',
             data: {
-                id: id
+                id: id,
+                leadId:leadId
             },
             success: function(res) {
-                if (res == 1) {
-                }
+                let attachData = $('#existedAttachment'); // Ensure tbody is targeted if using a table
+                let attachments = res.data;
+                attachData.html('');
+                attachments.forEach((ele, index) => {
+                    let row = `
+                        <tr>
+                            <td>${ele.document}</td>
+                            <td>
+                                <span class="modalAttachmentDelete delete-btn" data-id="${ele.id}">Delete</span>
+                            </td>
+                        </tr>
+                    `;
+                    attachData.append(row);
+                });
             },
             error: function(err) {
                 alert(err);

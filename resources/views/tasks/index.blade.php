@@ -2,6 +2,7 @@
 @section('content')
 
 <div>
+
     <div class="flex items-center justify-between mb-[20px]">
         <div>
             <h3 class="text-[18px] md:text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">Manage Task</h3>
@@ -90,6 +91,9 @@
                                 Task Detail
                             </th>
                             <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                                Assigned User
+                            </th>
+                            <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                                 Services
                             </th>
                             <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
@@ -135,6 +139,13 @@
                                 @endif
                             </td>
                             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
+                                @if( $task->user)
+                                {{ $task->user->name }}
+                                @else
+                                Not Available
+                                @endif
+                             </td>
+                            <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                                 @if( $task->services)
                                 {{ $task->services->serviceName }}
                                 @php
@@ -145,6 +156,7 @@
                                 @endif
 
                             </td>
+                           
                             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
 
                                 @if( $task->subService)

@@ -690,8 +690,7 @@ class TasksController extends Controller
         $followUpDate = LeadTaskDetail::with('leadTask')->where('status', 3)
         ->orderBy('id', 'desc')
         ->get();
-        foreach ($followUpDate as $followDate) {
-            
+        foreach ($followUpDate as $followDate) {            
             $currentDate = Carbon::now(); 
             $deadlineDate = Carbon::parse($followDate->reminderDate); 
             if ($currentDate->diffInDays($deadlineDate) <= 2) {
@@ -707,10 +706,10 @@ class TasksController extends Controller
 
                 dd('New notification created for task_id ' . $followDate->task_id);
             }
-        // foreach ($followDate->leadNotifications as $deadLineDate) {
-        //     
-        // }
-    }
+            // foreach ($followDate->leadNotifications as $deadLineDate) {
+            //     
+            // }
+        }
     }
 }
 

@@ -83,7 +83,7 @@
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="altMobile" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Alternate Mobile Number</label>
-                    <input type="number" name="altMobile" id="altMobile" value="{{ old('altMobile') ? old('altMobile') : $newUser->altNumber }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Alternate Mobile Number" >
+                    <input type='text' name="altMobile" id="altMobile" value="{{ old('altMobile') ? old('altMobile') : $newUser->altNumber }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Alternate Mobile Number" >
                     @error('altMobile')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror

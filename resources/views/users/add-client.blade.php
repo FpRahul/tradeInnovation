@@ -61,7 +61,7 @@
                     $displaypartnerClass = 'hidden';
                 @endphp
                 @if (!empty($partnerDataList))
-                    @if ($newClientDetails->incorporationType == 7)
+                    @if ($newClientDetails->incorporationType == 7 || $newClientDetails->incorporationType == null)
                         @php               
                             $displaypartnerClass = '';
                         @endphp

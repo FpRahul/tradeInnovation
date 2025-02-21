@@ -11,8 +11,9 @@
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
    <form action="{{route('task.paymentStatus',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
+      <strong class="mt-4 block"> Update Current Task</strong>
       @foreach ($taskDetails as $task )
-      <input type="hidden"  name="checkStatus" id="checkStatus" value="{{$task->leadTaskDetails->status}}">
+      <input type="hidden" name="checkStatus" id="checkStatus" value="{{$task->leadTaskDetails->status}}">
       @endforeach
       <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2">
@@ -81,6 +82,28 @@
          @error('attachment.*')
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
+      </div>
+      @if($taskDetails->count() > 0)
+      @foreach ($taskDetails as $task )
+      @php
+      $selectedId = $task->user->id;
+      @endphp
+      @endforeach
+      @endif
+      <div class="">
+         <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
+         @if($taskDetails->count() > 0)
+         @foreach ( $taskDetails as $task )
+         <textarea type="text" name="description" id="description" class="w-full h-[80px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">{{$task->task_description}}</textarea>
+         @endforeach
+         @endif
+         @error('description')
+         <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+         @enderror
+      </div>
+
+      <strong class=" hideOnChange mt-5 block">Update Upcoming Actions</strong>
+      <div class=" hideOncredit flex flex-col md:flex-row gap-[20px]">
          <div class=" hideOncredit w-full md:w-1/2">
             <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Satge</label>
             @if($getStage->count() > 0)
@@ -91,18 +114,6 @@
                         Next stage will be: {{$getStage->title}}
                     </p> -->
          </div>
-
-
-      </div>
-      @if($taskDetails->count() > 0)
-      @foreach ($taskDetails as $task )
-      @php
-      $selectedId = $task->user->id;
-      @endphp
-
-      @endforeach
-      @endif
-      <div class=" hideOncredit flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2">
             <label for="assignUser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign User</label>
             <select name="assignUser" id="assignUser" class="filterData assignUserData allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]">
@@ -126,34 +137,32 @@
             @endforeach
             @endif
          </div>
-         <div class="w-full md:w-1/2" id="deadLineDate">
-            <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-               Documentation Dead line
-            </label>
-            <div class="w-[100%] relative">
-               <input
-                  type="text"
-                  placeholder="Dead Line"
-                  name="deadline"
-                  id="deadline"
-                  class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
-                  value=""
 
-                  autocomplete="off">
-               <div class="absolute right-[10px] top-[10px]">
-                  <i class="ri-calendar-line"></i>
-               </div>
+
+      </div>
+      <div class="w-full md:w-1/2" id="deadLineDate">
+         <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+            Documentation Dead line
+         </label>
+         <div class="w-[100%] relative">
+            <input
+               type="text"
+               placeholder="Dead Line"
+               name="deadline"
+               id="deadline"
+               class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
+               value=""
+
+               autocomplete="off">
+            <div class="absolute right-[10px] top-[10px]">
+               <i class="ri-calendar-line"></i>
             </div>
-            <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-               Set a dead line for Documentation.
-            </p>
          </div>
+         <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+            Set a dead line for Documentation.
+         </p>
+      </div>
 
-      </div>
-      <div class="">
-         <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
-         <textarea type="text" name="description" id="description" class="w-full h-[155px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
-      </div>
       <div class="flex justify-end gap-[15px]">
          <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
       </div>
@@ -201,7 +210,7 @@
 
       var status = $("#checkStatus").val();
       if (status == 3) {
-        $(".hideOncredit").addClass('hidden');
+         $(".hideOncredit").addClass('hidden');
       }
    });
 </script>

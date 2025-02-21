@@ -98,7 +98,7 @@ class LeadsController extends Controller
             $leadOldData =new Lead();
             $leadAttachment = [];            
             $LeadTask = [];
-            $email = "required|email|unique:leads,email";
+            $email = "required|email|unique:users,email";
             $successMsg = 'Lead added!';
         }       
         $sourceList = CategoryOption::where('type',3)->where('status',1)->get();
@@ -110,7 +110,6 @@ class LeadsController extends Controller
             $credentials = $request->validate([
                 'email' => $email,
             ]);
-            dd($credentials);
             if($request->sourcetypenamelist > 0){
                 $sourceId = $request->sourcetypenamelist;              
             }else{
@@ -277,10 +276,9 @@ class LeadsController extends Controller
         }
         return response()->json(['error' => 'Invalid request'], 400);
     }
-    public function edit(Request $request){  
+    public function edit(Request $request){
         $leadData = Lead::find($request->lead_id);
-       
-        if ($leadData) {
+        if($request->isMethod('POST')){
             $leadData->update([
                 'client_name' => $request->modalclientname,
                 'company_name' => $request->modalcompanyname,
@@ -288,28 +286,27 @@ class LeadsController extends Controller
                 'email' => $request->modalemail,
                 'description' => $request->modaldescription
             ]);
-            // if ($request->hasFile('modalfileattachment')) {
-            //     $image_name = $request->modalfileattachment;
-            //     $imageName = rand(100000, 999999) . '.' . $image_name->getClientOriginalExtension();
-            //     $image_name->move(public_path('uploads/leads/'.$newUser->id), $imageName);
-            //     $newUserDetails->uploadPhotograph = $imageName;
-            // }
-        }
-        
-        if($leadData->save()){
-            // if(isset($request->modalfileattachment) && $request->modalfileattachment != null){
-                // foreach($request->modalfileattachment as $key => $val){
-                //     if (isset($val['attachmentFile']) && $val['attachmentFile'] instanceof \Illuminate\Http\UploadedFile) {
-                //         $leadAttachment = new LeadAttachment();
-                //         $leadAttachment->lead->id = $leadData->id;
-                //         $leadAttachment->document = $val
-                //     }
-                // }
-            // }
-            // LeadAttachment
-            return redirect()->back()->with('success','Lead updated!');
-        }else{
-            return redirect()->back()->with('error','Some error is occur!');
+            if($leadData->save()){
+                if ($request->has('modalfileattachment')) {
+                    foreach ($request->modalfileattachment as $key => $val) {
+                        if ($val instanceof \Illuminate\Http\UploadedFile) {
+                            $leadAttachment = new LeadAttachment();
+                            $imageName = rand(100000, 999999) . '.' . $val->getClientOriginalExtension();
+                            $uploadPath = public_path('uploads/leads/' . $leadData->id);
+                            if (!file_exists($uploadPath)) {
+                                mkdir($uploadPath, 0777, true);
+                            }
+                            $val->move($uploadPath, $imageName);
+                            $leadAttachment->lead_id = $leadData->id;
+                            $leadAttachment->document = $imageName;
+                            $leadAttachment->save();
+                        }
+                    }
+                    return redirect()->back()->with('success','Lead updated!');
+                }
+            }else{
+                return redirect()->back()->with('error','Some error is occur!');
+            }
         }
     }
 
@@ -408,14 +405,19 @@ class LeadsController extends Controller
         }
     }
 
-    public function deleteAttachmentRepeaterLead(Request $request){
-        $leadServiceDel = LeadAttachment::where('id',$request->id);
-        if($leadServiceDel->delete()){
-            echo "1";
-        }else{
-            echo "0";
+    public function deleteAttachmentRepeaterLead(Request $request)
+    {
+        $leadServiceDel = LeadAttachment::where('id', $request->id)->first(); 
+
+        if ($leadServiceDel && $leadServiceDel->delete()) {
+            $remainData = LeadAttachment::where('lead_id', $request->leadId)->get();
+        } else {
+            $remainData = [];
         }
+
+        return response()->json(['data' => $remainData]);
     }
+
 
     public function archiveLead(Request $request, $id = null){
         $lead = Lead::where('id', $id)->first();    
@@ -433,12 +435,8 @@ class LeadsController extends Controller
     }  
 
     public function checkDuplicate(Request $request){
-        if ($request->isMethod('POST')) {
-            if ($request->id > 0) {
-                $checkUserData = Lead::where('id', '!=', $request->id)->where('mobile_number', $request->val)->exists();
-            } else {
-                $checkUserData = Lead::where('mobile_number', $request->val)->exists();
-            }
+        if ($request->isMethod('POST')) {           
+            $checkUserData = User::where('mobile', $request->val)->exists();            
             return response()->json(['exists' => $checkUserData]);
         }
         return response()->json(['error' => 'Invalid request'], 400);

@@ -114,7 +114,7 @@
             <input type="hidden" name="stage_id" value="{{$getStage->id}}">
             @endif
             <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-                Next stage will be: {{$getStage->title}}
+                {{-- Next stage will be: {{$getStage->title}} --}}
             </p>
         </div>
         <div class="">

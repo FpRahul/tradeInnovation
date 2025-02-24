@@ -1266,9 +1266,39 @@ class TasksController extends Controller
         }
         // For Patent...............
         else if ($taskDetails && $serviceId == 2 && $stageId == 19) {
+            return redirect()->route('task.patentSendQuotation', ['id' => $id]);
+        }
+        else if ($taskDetails && $serviceId == 2 && $stageId == 20) {
             return redirect()->route('task.patentPaymentVerification', ['id' => $id]);
         }
+        else if ($taskDetails && $serviceId == 2 && $stageId == 21) {
+            return redirect()->route('task.patentPriorArt', ['id' => $id]);
+        }
     }
+
+    public function patentSendQuotation(Request $request,$id){
+        $taskId = $id;
+        if ($id) {
+            $notifyData = LeadNotification::where('task_id', $id)->update(['status' => 1]);
+        }
+        $header_title_name = "Send Quotation";
+        $taskDetails = LeadTask::with(['user', 'lead', 'leadTaskDetails', 'services', 'subService', 'serviceSatge'])
+            ->where('id', $id)
+            ->get();
+        foreach ($taskDetails as $task) {
+            $taskDetailsId = $task->id;
+            $serviceName = $task->services->serviceName;
+            $serviceID = $task->services->id;
+            $clientName = $task->lead->client_name;
+        }
+        $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
+        foreach ($taskDetails as $value) {
+            $stage_id = $value->service_stage_id;
+        }
+        $getStage = ServiceStages::where('service_id', $serviceID)->where('id', '>', $stage_id)->first();
+        $leadTaskdetials = LeadTaskDetail::find($taskDetailsId);
+        return view('tasks/patent/send-quotation', compact('taskId', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'serviceName', 'clientName'));
+        }
 
     public function patentPaymentVerification(Request $request, $id = null)
     {
@@ -1280,6 +1310,83 @@ class TasksController extends Controller
         $header_title_name = "Payment Verification";
         return view('tasks/patent/payment-verification', compact('header_title_name', 'taskId', 'taskList', 'serviceStage', 'userList', 'currentUser'));
     }
+
+    public function patentPriorArt(Request $request ,$id){
+        $taskId = $id;
+        $taskDetails = LeadTask::with(['user', 'lead', 'leadTaskDetails', 'services', 'subService', 'serviceSatge'])
+            ->where('id', $id)
+            ->get();
+        foreach ($taskDetails as $task) {
+            $taskDetailsId = $task->id;
+            $serviceName = $task->services->serviceName;
+            $serviceID = $task->services->id;
+            $clientName = $task->lead->client_name;
+        }
+        $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
+        foreach ($taskDetails as $value) {
+            $stage_id = $value->service_stage_id;
+        }
+        $getStage = ServiceStages::where('service_id', $serviceID)->where('id', '>', $stage_id)->first();
+        $header_title_name = "Prior Art";
+        return view('tasks/patent/prior-art',compact('header_title_name','taskId','users','taskDetails','getStage'));
+    }
+
+    public function patentSubmitPriorArt(Request $request,$id){
+        if($request->isMethod('post')){
+            dd($request);
+            $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
+            $dead_line = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
+
+            $existedLeaedTask = LeadTask::with(['lead', 'services', 'subService', 'serviceSatge'])->where('id', $id)->first();
+            $newLeadtask = new LeadTask();
+            $newLeadTaskDeatails  = new LeadTaskDetail();
+            $existedLeaedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
+            $stageId = (int) $request->stage_id;
+            $serviceId = $existedLeaedTask->services->id;
+            $subServiceId = $existedLeaedTask->subService->id;
+            $assignedStageName = ServiceStages::where('id', $stageId)->first();
+           
+            if($request->relevantpriorart == 1){
+                $existedLeaedTaskDetails->update(['status' => 1,'status_date' => $verifiedDate]);
+                    $newLeadtask->user_id = $request->assignUser;
+                    $newLeadtask->lead_id = $existedLeaedTask->lead_id;
+                    $newLeadtask->service_id = $serviceId;
+                    $newLeadtask->subservice_id = $subServiceId;
+                    $newLeadtask->service_stage_id = $stageId;
+                    $newLeadtask->assign_by = Auth::id();
+                    $newLeadtask->task_title = $assignedStageName->description;
+                    $newLeadtask->task_description = $request->description;
+                if($newLeadtask->save()){
+                    $newLeadTaskDeatails->task_id = $newLeadtask->id;
+                    $newLeadTaskDeatails->status = 0;
+                    $newLeadTaskDeatails->dead_line = $dead_line;
+                    $newLeadTaskDeatails->save();                    
+                }else{
+                    return redirect()->route('task.index')->with('error','Some error is occure while updating lead task.');
+                }
+            }else{
+                $existedLeaedTaskDetails->update(['status' => 1,'status_date' => $verifiedDate]);
+            }            
+            if ($request->hasFile('attachment')) {               
+                $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
+                if (!file_exists($folderPath)) {
+                    mkdir($folderPath, 0755, true);
+                }
+                $filePaths = [];
+                foreach ($request->file('attachment') as $file) {
+                    if ($file->isValid()) {
+                        $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
+                        $file->move($folderPath, $fileName);
+                        $filePaths[] = $fileName;
+                    }
+                }       
+                $imgData = json_encode($filePaths);    
+                $existedLeaedTaskDetails->update(['attachment'=> $imgData]);
+            }
+            return redirect()->route('task.index')->with('success', 'Task is completed!');
+        }
+    }
+
     public function holdtask(Request $request)
     {
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');

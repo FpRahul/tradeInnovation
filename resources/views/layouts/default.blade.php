@@ -278,11 +278,30 @@
             });
         })
 
-        jQuery(document).on('click', '.dropdown .button', function() {
-            jQuery(this).parent().find('.dropdown_menu').toggleClass('hidden');
+        jQuery(document).on('click', '.dropdown .button', function(event) {
+            event.stopPropagation(); // Prevent event from bubbling up
+            jQuery('.dropdown_menu').addClass('hidden');
+            let dropdownMenu = jQuery(this).parent().find('.dropdown_menu');
+            if (dropdownMenu.hasClass('hidden')) {
+                dropdownMenu.removeClass('hidden');
+            }else{
+                dropdownMenu.addClass('hidden');
+            }
         });
 
+        // $(document).ready(function () {
+        //     $(".button").click(function (event) {
+        //         event.stopPropagation();
+        //         $(".dropdown_menu").not($(this).parent().find(".dropdown_menu")).addClass("hidden");
+        //         $(this).parent().find(".dropdown_menu").toggleClass("hidden");
+        //     });
+        //     $(document).click(function () {
+        //         $(".dropdown_menu").addClass("hidden");
+        //     });
+        // });
+
         jQuery(document).on('click', 'table .dropdown .button', function() {
+           
             const $menu = jQuery(this).parent().find('.dropdown_menus');
             let dataId = jQuery(this).attr('data-id');
             if (!dataId) {
@@ -315,7 +334,7 @@
             if (container.has(e.target).length === 0) {
                 jQuery('.dropdown_menus').each(function() {
                     const dataId = jQuery(this).attr('data-id');
-                    let ele = jQuery(`table .dropdown .button[data-id="${dataId}"]`);
+                    let ele = jQuery(`table .dropdown .button[data-id="${dataId}"]`);                    
                     jQuery(this).addClass('hidden');
                     jQuery(ele).parent().append(jQuery(this));
                 });
@@ -327,7 +346,7 @@
             var container = jQuery(".dropdown");
 
             //check if the clicked area is dropDown or not
-            if (container.has(e.target).length === 0) {
+            if (container.has(e.target).length === 0) {               
                 jQuery('.dropdown_menu').addClass('hidden');
             }
         });
@@ -397,12 +416,12 @@
             fileList.empty();
             $.each(event.target.files, function(index, file) {
                 const fileItem = $('<div>', {
-                    class: 'file-item flex items-center justify-between bg-gray-100 p-2 mb-2 rounded-lg'
+                    class: 'file-item flex items-center justify-between bg-gray-100 p-[5px] rounded-[4px]'
                 });
-                const fileName = $('<span>').text(file.name);
+                const fileName = $('<span class="text-[11px]">').text(file.name);
                 const removeIcon = $('<span>', {
                     html: '&times;',
-                    class: 'text-red-500 cursor-pointer ml-2',
+                    class: 'text-red-500 cursor-pointer ml-2 leading-[8px]',
                     click: function() {
                         removeFile(file, fileItem);
                     }

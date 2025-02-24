@@ -68,6 +68,12 @@ class ServiceTask extends Seeder
             ],
             [
                 'service_id' => '1',
+                'title' => 'Objection reply status',
+                'description' => 'Add reply status from the only portal',
+                'stage' => '8',
+            ],
+            [
+                'service_id' => '1',
                 'title' => 'Awaited for hearing (Objection)',
                 'description' => 'Add the hearing date provided by the court for the raised objection',
                 'stage' => '8',

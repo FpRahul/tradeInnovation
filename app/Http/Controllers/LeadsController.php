@@ -30,11 +30,12 @@ class LeadsController extends Controller
             $leadList = Lead::with('leadTasks')->where('id',$baseId);
         }else{
             if(auth()->user()->role != 1 && auth()->user()->role != 4){
-                $leadList = Lead::with('leadTasks')->where('archive',$request->tab);
+                $leadList = Lead::with('leadTask')->where('archive',$request->tab);
             }else{
-                $leadList = Lead::with('leadTasks')->where('archive',$request->tab);
+                $leadList = Lead::with('leadTask')->where('archive',$request->tab);
             }           
         }
+        // dd($leadList->get());
         $sourceKey = $request->input('source') ?? '';
         $serviceKey = $request->input('service') ?? '';
         $statusKey = $request->input('status') ?? '';

@@ -119,18 +119,13 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('formality_check/{id}','formalityCheck')->name('task.formalityCheck');
         Route::post('formality_check/status/{id}','formalityCheckStatus')->name('task.formalityCheckStatus');
 
-
-
-
-
-
-
         
         // For patent.........
         // For payment verification........
         Route::get('/patent/send-quotation/{id?}','patentSendQuotation')->name('task.patentSendQuotation');
         Route::get('/patent/payment-verification/{id?}','patentPaymentVerification')->name('task.patentPaymentVerification');
         Route::get('/patent/prior-art/{id?}','patentPriorArt')->name('task.patentPriorArt');
+        Route::post('/patent/submit-prior-art/{id?}','patentSubmitPriorArt')->name('task.patentSubmitPriorArt');
         
     });
     //Services Routes

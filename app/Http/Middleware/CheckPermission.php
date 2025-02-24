@@ -140,7 +140,6 @@ class CheckPermission
             '6' => 'task.patentSendQuotation',
             '7' => 'task.patentPaymentVerification',
             '8' => 'task.patentPriorArt',
-            '5' => 'task.paymentStatus',
             '9' => 'task.documentation',
             '10' => 'task.documenStatus',
             '11' => 'task.clientApproval',
@@ -150,6 +149,7 @@ class CheckPermission
             '15' => 'leads.getLogs', 
             '16' => 'task.formalityCheck',
             '17' => 'task.formalityCheckStatus',
+            '18' => 'task.patentSubmitPriorArt',
 
         ];
     }

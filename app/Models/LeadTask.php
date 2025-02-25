@@ -15,7 +15,8 @@ class LeadTask extends Model
         'task_description',
         'service_id',
         'subservice_id', 
-        'quoted_price'
+        'quoted_price',
+        'project_manager_id'
     ]; 
 
     public function user()

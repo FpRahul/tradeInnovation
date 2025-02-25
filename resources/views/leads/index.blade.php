@@ -123,7 +123,7 @@
                 <tbody>
                     
                     @if ($leadList && $leadList->isNotEmpty())
-                       @foreach ($leadList as $leadKey => $leadData)                                        
+                       @foreach ($leadList as $leadKey => $leadData)
                        <tr>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px] pl-[25px]">
                             #{{$leadData->lead_id}}
@@ -164,11 +164,10 @@
                                 {{ $status }}
                             </span>                                
                         </td>
-                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">  -             
-                            {{-- @if ($leadData->leadTasks && $leadData->leadTasks->isNotEmpty())
-                            @dd($leadData->leadTasks);
-                                {{ getStageData($leadData->leadTasks); }}
-                            @endif                            --}}
+                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">     
+                            @if ($leadData->leadTask && !empty($leadData->leadTask))
+                            {{getStageData($leadData->leadTask)}}
+                            @endif                           
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                             {{ date('d M Y H:i:A', strtotime($leadData->created_at) ) }}

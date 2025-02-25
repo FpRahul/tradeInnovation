@@ -92,14 +92,13 @@ if(!function_exists('getUserNameBySource')){
     }
 }
 
-// if(!function_exists('getStageData')){
-//     function getStageData($taskLeadData){
-//         dd($taskLeadData);
-
-//         $stageData = ServiceStages::where('id',$taskLeadData->service_stage_id)->first();
-//         $serviceData = Service::where('id',$taskLeadData->service_id)->first();
-//     }
-// }
+if(!function_exists('getStageData')){
+    function getStageData($taskLeadData){        
+        $stageData = ServiceStages::where('id',$taskLeadData->service_stage_id)->first()->title;        
+        $serviceData = Service::where('id',$taskLeadData->service_id)->first()->serviceName;
+        return $serviceData.'-'.$stageData;
+    }
+}
 
 if(!function_exists('getTotalClientCount')){
     function getTotalClientCount($assocId){

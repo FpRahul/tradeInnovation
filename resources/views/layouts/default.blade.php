@@ -192,24 +192,24 @@
                     if (confirm('Are you sure you want to delete this element??')) {
                         var deleteId = $(this).find('.deleteLeadRepeaterRow').data('id');
                         if(deleteId > 0){
-                            // $.ajax({
-                            //     method: 'POST',
-                            //     url: "{{ route('lead.deleterepeater') }}",
-                            //     headers: {
-                            //         'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            //     },
-                            //     data: {
-                            //         id: deleteId
-                            //     },
-                            //     success: function(res) {
-                            //         if (res == 1) {
-                            //             $(this).slideUp(deleteElement);
-                            //         }
-                            //     },
-                            //     error: function(err) {
-                            //         alert(err);
-                            //     }
-                            // })
+                            $.ajax({
+                                method: 'POST',
+                                url: "{{ route('lead.deleterepeater') }}",
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                data: {
+                                    id: deleteId
+                                },
+                                success: function(res) {
+                                    if (res == 1) {
+                                        $(this).slideUp(deleteElement);
+                                    }
+                                },
+                                error: function(err) {
+                                    alert(err);
+                                }
+                            })
                         }else{
                             $(this).slideUp(deleteElement);
                         }
@@ -411,7 +411,7 @@
 
         $(document).ready(function(){
             const fileInput = $('#attachment');
-        const fileList = $('#file-list');
+            const fileList = $('#file-list');
         fileInput.on('change', function(event) {
             fileList.empty();
             $.each(event.target.files, function(index, file) {

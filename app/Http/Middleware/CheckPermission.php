@@ -36,7 +36,8 @@ class CheckPermission
                 9 => 'lead.deleteattachmentrepeater', //default permission to delete attachmanet on lead add page
                 10 => 'leads.fetch', // default permission to fetch lead data on popup
                 11 => 'leads.edit', // default permission to lead edit on popup
-                12 => 'lead.checkDuplicateEmail' // default permission to check duplicate email
+                12 => 'lead.checkDuplicateEmail', // default permission to check duplicate email
+                13 => 'user.checkDuplicate', //default permission to check mobile duplicate
             ]
         ];
         if($user->role==1){

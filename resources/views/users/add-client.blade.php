@@ -29,7 +29,7 @@
                 <div class="w-full md:w-1/2">
                     <label for="scopeofbusiness" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Scope Of Business <strong class="text-[#f83434]">*</strong></label>
                     <select name="scopeofbusiness[]" id="scopeofbusiness" 
-                        class="selectedValue allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                        class="scopeOfBusinessSelect selectedValue allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
                         required multiple>
                         <option value="">Select Scope Of Business</option>                    
                         @if (!empty($scopeOfBussinessList) && $scopeOfBussinessList->isNotEmpty())
@@ -40,7 +40,12 @@
                                 </option>                      
                             @endforeach                                                            
                         @endif
+                        <option value="other">Other</option>
                     </select>
+                </div>
+                <div class="otherScopeOfBusinessMain w-full md:w-1/2 hidden">
+                    <label for="otherscopeofbusiness" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Other Scope</label>
+                    <input type="text" class="otherscopeofbusiness w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" name="otherscopeofbusiness" value="">
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="incorporationtype" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Incorporation Type <strong class="text-[#f83434]">*</strong></label>
@@ -82,8 +87,7 @@
                                 </option>
                             @endforeach                            
                         @endif
-                    </select>
-                                  
+                    </select>                                  
                 </div>
                 
             </div>
@@ -243,7 +247,7 @@
                 </div>
             </div>
             <div class="">
-                <label for="msmem" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">MSMEM</label>
+                <label for="msmem" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">MSME Registered Unit</label>
                 <div class="flex flex-wrap gap-[20px]">
                     <div>
                         <input type="radio" name="msmem" id="msmem" value='1' {{$newClientDetails->msmem == 1 ?'checked':''}} >
@@ -348,5 +352,16 @@
             perZipCode.val('');
         }        
     });
+
+    $(document).on('change', '.scopeOfBusinessSelect', function () {
+       let hiddenDiv = $(this).parent().parent().find('.otherScopeOfBusinessMain');
+        let selectedValues = $(this).val(); 
+        if (selectedValues && selectedValues.includes('other')) {
+            hiddenDiv.removeClass('hidden');
+        } else {
+            hiddenDiv.addClass('hidden');
+        }
+    });
+
 </script>
 @stop

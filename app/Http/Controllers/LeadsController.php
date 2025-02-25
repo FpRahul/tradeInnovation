@@ -35,7 +35,7 @@ class LeadsController extends Controller
                 $leadList = Lead::with('leadTask')->where('archive',$request->tab);
             }           
         }
-        // dd($leadList->get());
+        
         $sourceKey = $request->input('source') ?? '';
         $serviceKey = $request->input('service') ?? '';
         $statusKey = $request->input('status') ?? '';
@@ -58,7 +58,6 @@ class LeadsController extends Controller
                 $q->where('client_name', 'LIKE', '%' . $request->key . '%');
             }); 
         }
-
         $leadList = $leadList->latest()->paginate(env("PAGINATION_COUNT"));      
         if(empty($requestType)){
             $sourceList = Lead::where('user_id', auth()->user()->id)
@@ -67,7 +66,7 @@ class LeadsController extends Controller
             ->with('categoryOptions',function($q){
                 $q->where('type',3)->where('status',1);
             })->get();            
-            
+            // dd($sourceList);
             $serviceList = Lead::with('leadTasks')->whereHas('leadTasks')->where('user_id', auth()->user()->id)->get()->pluck('leadTasks')->flatten()->pluck('service_id');
             
             $userList = User::where('role','>=',5)->get();
@@ -89,6 +88,9 @@ class LeadsController extends Controller
     public function add(Request $request, $id = null){
         if($id > 0){
             $leadData = Lead::where('id',$id)->first();
+            if($leadData->status == 1){
+                return redirect()->back()->with('error','Authorized error!');
+            }
             $leadOldData = Lead::where('id',$id)->first();
             $leadAttachment = LeadAttachment::where('lead_id',$id)->get();
             $LeadTask = LeadTask::with('leadTaskDetails')->where('lead_id',$id)->get();
@@ -106,6 +108,7 @@ class LeadsController extends Controller
         $scopeOfBussinessList = CategoryOption::where('status', 1)->where('type', 4)->get();
         $serviceList = Service::where('status',1)->get();
         $userList = User::where('role','>=',5)->where('status',1)->get();
+        $projectManagerList = User::where('role',4)->where('status',1)->get();
 
         if($request->isMethod('POST')){
             $credentials = $request->validate([
@@ -171,7 +174,8 @@ class LeadsController extends Controller
                             $LeadTaskDetail = new LeadTaskDetail();
                         }     
                           
-                        $leadTaskData->lead_id = $leadData->id;                            
+                        $leadTaskData->lead_id = $leadData->id; 
+                        $leadTaskData->project_manager_id = $serviceVal['projectmanager'];
                         $leadTaskData->service_id = $serviceVal['serviceid'];
                         $serviceidArray[] = $serviceVal['serviceid'];
                         $leadTaskData->subservice_id = $serviceVal['subserviceid']; 
@@ -237,7 +241,7 @@ class LeadsController extends Controller
             }
         }
         $header_title_name = 'Lead';
-        return view('leads/add',compact('header_title_name','sourceList','serviceList','userList','leadData','leadAttachment','LeadTask','scopeOfBussinessList'));
+        return view('leads/add',compact('header_title_name','sourceList','serviceList','projectManagerList','userList','leadData','leadAttachment','LeadTask','scopeOfBussinessList'));
     }
     // lead fetch...........
     public function leadFetch(Request $request){
@@ -398,11 +402,16 @@ class LeadsController extends Controller
     }
 
     public function deleteRepeaterLead(Request $request){
-        $leadServiceDel = LeadService::where('id',$request->id);
-        if($leadServiceDel->delete()){
-            echo "1";
+        $leadTask = LeadTask::find($request->id);
+        if($leadTask->delete()){
+            $leadTaskDetails = LeadTaskDetail::where('task_id',$request->id);
+            if($leadTaskDetails->delete()){
+                echo "1";
+            }else{
+                return redirect()->back()->withError('Some error is occur while deleting lead service!');
+            }
         }else{
-            echo "0";
+            return redirect()->back()->withError('Some error is occur while deleting lead service!');
         }
     }
 

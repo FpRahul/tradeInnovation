@@ -96,7 +96,7 @@
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="mobilenumber" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mobile number</label>
-                    <input type="text" data-id="{{$leadData->id}}" name="mobilenumber" id="mobilenumber" value="{{ old('mobilenumber') ? old('mobilenumber') : (!empty($leadData) ? $leadData->mobile_number : '')}}" class="checkDuplicateMobile w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <input type="number" data-id="{{$leadData->id}}" name="mobilenumber" id="mobilenumber" value="{{ old('mobilenumber') ? old('mobilenumber') : (!empty($leadData) ? $leadData->mobile_number : '')}}" class="checkDuplicateMobile w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                     <span class="mobile_exist_error text-[#df2727] text-[12px] hidden">This mobile number is already exists on user!</span>
                 </div>
                 <div class="w-full md:w-1/2">
@@ -113,26 +113,26 @@
                 <div class="leadServiceRepeater md:border-[1px] border-[#0000001A] rounded-[10px] md:p-[20px] employee_repeater_wrapper">
                     <div class="repeater-default">
                         <div data-repeater-list="leadRepeater" class="flex flex-col gap-[20px]">  
-                            @if ($LeadTask && $LeadTask->isNotEmpty())                          
+                            @if ($LeadTask && $LeadTask->isNotEmpty())
                                 @foreach ($LeadTask as $serviceKey => $serviceVal)
                                     <div data-repeater-item class="flex flex-wrap items-end gap-[20px]">
                                         <div class="w-[calc(100%-75px)] ">
                                             <input type="hidden" name="lead_task_id" value="{{$serviceVal->id}}">
-                                            <div class="flex flex-col md:flex-row gap-[20px]">
-                                                <div class="w-full md:w-1/2">
-                                                    <select name="assign" id="assign" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
-                                                        <option value="">Assign To Users</option>
-                                                        @foreach ($userList as $userListData)
-                                                            <option 
-                                                                value="{{ $userListData->id }}" 
-                                                                @selected(old('assign', $serviceVal->user_id) == $userListData->id)>
-                                                                {{ $userListData->name }}
+                                            <div class="w-full outline-[1px] outline-dashed outline-[#ccc] p-[10px] rounded-[5px] flex flex-wrap 2xl:flex-nowrap gap-[5px] lg:gap-[10px] xl:gap-[15px]">
+                                                <div class="w-full  md:w-[32%] lg:w-[18%]">
+                                                    <label class="block mb-[5px] text-[14px] font-[400]">Project Manager</label>
+                                                    <select name="projectmanager" id="projectmanager" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                        <option value="">Project Manager</option>
+                                                        @foreach ($projectManagerList as $projectManagerListData)
+                                                            <option value="{{ $projectManagerListData->id }}" 
+                                                                @selected(old('projectmanager',$serviceVal->project_manager_id) == $projectManagerListData->id)>
+                                                                {{ $projectManagerListData->name }}
                                                             </option>
                                                         @endforeach                            
-                                                    </select>
-                                                    
+                                                    </select>                                                
                                                 </div>
-                                                <div class="w-full md:w-1/2">
+                                                <div class="w-full  md:w-[32%] lg:w-[18%]">
+                                                    <label class="block mb-[5px] text-[14px] font-[400]">Service Name</label>
                                                     <select name="serviceid" class="lead_service_id setSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                         <option value="">Service Name</option>
                                                         @if (count($serviceList) > 0)
@@ -143,10 +143,10 @@
                                                                 </option>
                                                             @endforeach  
                                                         @endif
-                                                    </select>
-                                                    
+                                                    </select>                                                    
                                                 </div>
-                                                <div class="relative w-full md:w-1/2">
+                                                <div class="relative w-full  md:w-[32%] lg:w-[18%]">
+                                                    <label class="block mb-[5px] text-[14px] font-[400]">Service Type</label>
                                                     <select name="subserviceid" class="getSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                         <option value="">Service Type</option>  
                                                         @if ($serviceVal->subservice_id)                                                           
@@ -166,7 +166,21 @@
                                                         <span class="loader-1"> </span>   
                                                     </div>
                                                 </div>
-                                                <div class="w-full md:w-1/2 stageoftheservice">
+                                                <div class="w-full  md:w-[32%] lg:w-[18%]">
+                                                    <label class="block mb-[5px] text-[14px] font-[400]">Assign To Users</label>
+                                                    <select name="assign" id="assign" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                        <option value="">Assign To Users</option>
+                                                        @foreach ($userList as $userListData)
+                                                            <option 
+                                                                value="{{ $userListData->id }}" 
+                                                                @selected(old('assign', $serviceVal->user_id) == $userListData->id)>
+                                                                {{ $userListData->name }}
+                                                            </option>
+                                                        @endforeach                            
+                                                    </select>                                                    
+                                                </div>
+                                                <div class="w-full  md:w-[32%] lg:w-[18%] stageoftheservice">
+                                                    <label class="block mb-[5px] text-[14px] font-[400]">Service Stage</label>
                                                     <select name="stage_id" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none serviceStagesOption" required>
                                                         <option value="">Select Stage</option>
                                                         @php
@@ -183,11 +197,11 @@
                                                     </select>
                                                     
                                                 </div>
-                                                <div class="w-full md:w-1/2">
-                                                                           
+                                                <div class="w-full  md:w-[32%] lg:w-[18%]">
+                                                    <label class="block mb-[5px] text-[14px] font-[400]">Dead Line</label>
                                                     <div class="w-[100%] relative">
                                                         <input 
-                                                            type="text" 
+                                                            type="text"
                                                             placeholder="Dead Line" 
                                                             name="taskdeadline" 
                                                             class="daterangepicker-taskdeadline daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
@@ -213,19 +227,21 @@
                                 <div data-repeater-item class="flex flex-wrap items-end gap-[20px]">
                                     <div class="w-[calc(100%-75px)] ">
                                         <input type="hidden" name="lead_task_id" value="0">
-                                        <div class="flex flex-col md:flex-row gap-[20px]">
-                                            <div class="w-full md:w-1/2">
-                                                <select name="assign" id="assign" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
-                                                    <option value="">Assign To Users</option>
-                                                    @foreach ($userList as $userListData)
-                                                        <option value="{{ $userListData->id }}" 
-                                                            @selected(old('assign') == $userListData->id)>
-                                                            {{ $userListData->name }}
+                                        <div class="w-full outline-[1px] outline-dashed outline-[#ccc] p-[10px] rounded-[5px] flex flex-wrap 2xl:flex-nowrap gap-[5px] lg:gap-[10px] xl:gap-[15px]">
+                                            <div class="w-full md:w-[32%] lg:w-[18%]">
+                                                <label class="block mb-[5px] text-[14px] font-[400]">Project Manager</label>
+                                                <select name="projectmanager" id="projectmanager" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                    <option value="">Project Manager</option>
+                                                    @foreach ($projectManagerList as $projectManagerListData)
+                                                        <option value="{{ $projectManagerListData->id }}" 
+                                                            @selected(old('projectmanager') == $projectManagerListData->id)>
+                                                            {{ $projectManagerListData->name }}
                                                         </option>
                                                     @endforeach                            
                                                 </select>                                                
                                             </div>
-                                            <div class="w-full md:w-1/2">
+                                            <div class="w-full md:w-[32%] lg:w-[18%]">
+                                                <label class="block mb-[5px] text-[14px] font-[400]">Service Name</label>
                                                 <select name="serviceid" class="lead_service_id setSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                     <option value="">Service Name</option>
                                                     @if (count($serviceList) > 0)
@@ -238,7 +254,8 @@
                                                     @endif
                                                 </select>                                                
                                             </div>
-                                            <div class="relative w-full md:w-1/2">
+                                            <div class="relative w-full  md:w-[32%] lg:w-[18%]">
+                                                <label class="block mb-[5px] text-[14px] font-[400]">Service Type</label>
                                                 <select name="subserviceid" class=" getSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                     <option value="">Service Type</option>                                                
                                                 </select>
@@ -246,13 +263,28 @@
                                                     <span class="loader-1"> </span>   
                                                 </div>
                                             </div>
-                                            <div class="w-full md:w-1/2 stageoftheservice">
+                                            <div class="w-full  md:w-[32%] lg:w-[18%]">
+                                                <label class="block mb-[5px] text-[14px] font-[400]">Assign To Users</label>
+                                                <select name="assign" id="assign" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                    <option value="">Assign To Users</option>
+                                                    @foreach ($userList as $userListData)
+                                                        <option value="{{ $userListData->id }}" 
+                                                            @selected(old('assign') == $userListData->id)>
+                                                            {{ $userListData->name }}
+                                                        </option>
+                                                    @endforeach                            
+                                                </select>                                                
+                                            </div>
+                                            <div class="w-full  md:w-[32%] lg:w-[18%] stageoftheservice">
+                                                <label class="block mb-[5px] text-[14px] font-[400]">Service Stage</label>
                                                 <select name="stage_id" class=" w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none serviceStagesOption" required>
                                                     <option value="">Select Stage</option>                                                   
                                                 </select>
                                             </div>
-                                            <div class="w-full md:w-1/2">                                                                        
+                                            <div class="w-full  md:w-[32%] lg:w-[18%]">  
+                                                <label class="block mb-[5px] text-[14px] font-[400]">Dead Line</label>                                                                      
                                                 <div class="w-[100%] relative">
+                                                    
                                                     <input 
                                                         type="text" 
                                                         placeholder="Dead Line" 
@@ -369,7 +401,7 @@
 
             </div>
             <div class="">
-                <label for="msmem" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">MSMEM</label>
+                <label for="msmem" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">MSME Registered Unit</label>
                 <div class="flex flex-wrap gap-[20px]">
                     <div>
                         <input type="radio" name="msmem" id="msmem" value="1" 
@@ -572,7 +604,7 @@
             let e = $(this);
             $.ajax({
                 method:'POST',
-                url:"{{ route('lead.checkDuplicate')}}",
+                url:"{{ route('user.checkDuplicate')}}",
                 headers:{
                     'X-CSRF-TOKEN':'{{csrf_token()}}'
                 },

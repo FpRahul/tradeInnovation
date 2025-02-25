@@ -129,23 +129,6 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('show-case-hearing/{id}','showCaseHearing')->name('task.showCaseHearing');
         Route::Post('show-case-hearing/status/{id}','showCaseHearingStatus')->name('task.showCaseHearingStatus');
 
-<<<<<<< HEAD
-=======
-       
-
-        
-        
-        
-
-        
-
-
-
-
-
-
->>>>>>> b10c48f1176631d6ece5de3c906d6df3d9cdbc52
-        
         // For patent.........
         // For payment verification........
         Route::get('/patent/send-quotation/{id?}','patentSendQuotation')->name('task.patentSendQuotation');

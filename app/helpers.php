@@ -92,16 +92,14 @@ if(!function_exists('getUserNameBySource')){
     }
 }
 
-if(!function_exists('getStageData')){
-    function getStageData($taskLeadData){
-        $stageArray = [];
-        foreach ($taskLeadData as $stageKey => $stageValue){
-            $stageData = ServiceStages::where('id',$stageValue->service_stage_id)->first();
-            $stageArray[] = $stageData->title ?? 'N/A';
-        }
-        return implode(',',$stageArray);
-    }
-}
+// if(!function_exists('getStageData')){
+//     function getStageData($taskLeadData){
+//         dd($taskLeadData);
+
+//         $stageData = ServiceStages::where('id',$taskLeadData->service_stage_id)->first();
+//         $serviceData = Service::where('id',$taskLeadData->service_id)->first();
+//     }
+// }
 
 if(!function_exists('getTotalClientCount')){
     function getTotalClientCount($assocId){

@@ -42,8 +42,12 @@
                     <div class="w-[100%] md:w-[40%]">
                         <label>Service</label>
                         <select name="service" class="serviceData allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[98px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
-                            <option value="">Select Service</option>   
+                            <option value="">Select Service</option>                           
+                            @php
+                                $serviceList = collect($serviceList)->unique();
+                            @endphp
                             @if (!empty($serviceList))
+                            
                                 @foreach ($serviceList as $serviceK => $serviceV)
                                     @if($serviceV > 0)
                                         @php
@@ -106,13 +110,10 @@
                             status
                         </th>
                         <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
-                            stages
+                            Services-Stages
                         </th>
                         <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                             Created
-                        </th>
-                        <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
-                            Services
                         </th>
                         <th class="text-center bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                             Action
@@ -122,8 +123,7 @@
                 <tbody>
                     
                     @if ($leadList && $leadList->isNotEmpty())
-                       @foreach ($leadList as $leadKey => $leadData)   
-                                        
+                       @foreach ($leadList as $leadKey => $leadData)                                        
                        <tr>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px] pl-[25px]">
                             #{{$leadData->lead_id}}
@@ -164,19 +164,15 @@
                                 {{ $status }}
                             </span>                                
                         </td>
-                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">               
-                            @if ($leadData->leadTasks && $leadData->leadTasks->isNotEmpty())
+                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">  -             
+                            {{-- @if ($leadData->leadTasks && $leadData->leadTasks->isNotEmpty())
+                            @dd($leadData->leadTasks);
                                 {{ getStageData($leadData->leadTasks); }}
-                            @endif                           
+                            @endif                            --}}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                             {{ date('d M Y H:i:A', strtotime($leadData->created_at) ) }}
-                        </td>
-                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            @if ($leadData->leadTasks && $leadData->leadTasks->isNotEmpty())
-                                {{ getServiceData($leadData->leadTasks); }}
-                            @endif                             
-                        </td>
+                        </td>                        
                         <td class="text-center border-b-[1px] border-[#0000001A] py-[12px] px-[15px]">
                             @if((in_array('leads.add',$permissionDetails['accessableRoutes']) || in_array('leads.logs',$permissionDetails['accessableRoutes']) || in_array('leads.archive',$permissionDetails['accessableRoutes'])) || auth()->user()->role==1)
                             <div class="dropdown inline-block relative ml-[auto] mr-[20px] ">
@@ -326,12 +322,13 @@
                 let attachments = res.data.lead_attachments;
                 attachments.forEach((ele, index) => {
                     let row = `
-                        <tr>
-                            <td>${ele.document}</td>
-                            <td>
-                                <button class="modalAttachmentDelete delete-btn" data-id="${ele.id}">Delete</button>
-                            </td>
-                        </tr>
+
+                        <ul class="modalAtch">
+                            <li>${ele.document}</li>
+                            <li>
+                                <span class="modalAttachmentDelete delete-btn" data-id="${ele.id}"><i class="ri-delete-bin-line"></i></span>
+                            </li>
+                        </ul>
                     `;
                     attachData.append(row);
                 });
@@ -340,22 +337,37 @@
             }
         })
     });
-
+    
     $(document).on('click','.modalAttachmentDelete',function(){
+        let leadId = $(this).parent().parent().parent().parent().parent().parent().find("#modal_lead_id").val();
         let id = $(this).data('id');
         if (confirm('Are you sure you want to delete this element?')) {
             $.ajax({
             method: 'POST',
-            url: "{{ route('lead.deleterepeater') }}",
+            url: "{{ route('lead.deleteattachmentrepeater') }}",
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
+            dataType:'json',
             data: {
-                id: id
+                id: id,
+                leadId:leadId
             },
             success: function(res) {
-                if (res == 1) {
-                }
+                let attachData = $('#existedAttachment'); // Ensure tbody is targeted if using a table
+                let attachments = res.data;
+                attachData.html('');
+                attachments.forEach((ele, index) => {
+                    let row = `
+                        <tr>
+                            <td>${ele.document}</td>
+                            <td>
+                                <span class="modalAttachmentDelete delete-btn" data-id="${ele.id}">Delete</span>
+                            </td>
+                        </tr>
+                    `;
+                    attachData.append(row);
+                });
             },
             error: function(err) {
                 alert(err);

@@ -53,7 +53,7 @@
                   type="text"
                   placeholder="Dead Line"
                   name="verified"
-                  class="daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
+                  class="daterangepicker-verified-paid w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                   value=""
                   id="verified"
                   autocomplete="off">
@@ -154,6 +154,18 @@
          console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
       });
 
+      $('.daterangepicker-verified-paid').daterangepicker({
+         singleDatePicker: true,
+         opens: 'right',
+         locale: {
+            format: 'DD MMM YYYY'
+         },
+         maxDate: moment().endOf('day'), // Prevent selecting future dates
+      }, function(start, end, label) {
+         console.log("A new date selection was made: " + start.format('YYYY-MM-DD'));
+      });
+
+
       $('.daterangepicker-taskdeadline').daterangepicker({
          singleDatePicker: true,
          opens: 'right',
@@ -169,15 +181,11 @@
       $("#payment").on("change", function() {
          var changedValue = $(this).val();
          if (changedValue == 3) {
-         $("#verifiedDate label").text("Verified On");
-         $("#paymentReminder").removeClass("hidden");
-
-         
+            $("#verifiedDate label").text("Verified On");
+            $("#paymentReminder").removeClass("hidden");         
          } else {
             $("#verifiedDate label").text("Paid On");
             $("#paymentReminder").addClass("hidden");
-            
-
          }
       });
    });

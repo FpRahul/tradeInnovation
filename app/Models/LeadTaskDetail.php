@@ -11,7 +11,8 @@ class LeadTaskDetail extends Model
     'task_id',
     'dead_line',
     'status',
-    'status_date'
+    'status_date',
+    'attachment',
    ];
 
    public function leadTask()

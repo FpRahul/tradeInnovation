@@ -64,6 +64,12 @@
                     {{ $taskDetails->lead->referral->name ?? 'N/A' }}
                 </strong>
             </li>
+            <li>
+                <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Assigned User</span>
+                <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize">
+                    {{ $taskDetails->user->name ?? 'N/A' }}
+                </strong>
+            </li>
         @else
             <li>No task details found</li>
         @endif

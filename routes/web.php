@@ -116,17 +116,25 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::post('client-approval/status/{id}','clientApprovalStatus')->name('task.clientApprovalStatus');
         Route::get('draft-application/{id}','draftApplication')->name('task.draftApplication');
         Route::post('draft-application/status/{id}','draftApplicationStatus')->name('task.draftApplicationStatus');
-
-
-
-
-
+        Route::get('formality-check/{id}','formalityCheck')->name('task.formalityCheck');
+        Route::post('formality-check/status/{id}','formalityCheckStatus')->name('task.formalityCheckStatus');
+        Route::get('initial-examination/{id}','initialExamination')->name('task.initialExamination');
+        Route::post('initial-examination/status/{id}','initialExaminationStatus')->name('task.initialExaminationStatus');
+        Route::get('government-portal/{id}','replyAdded')->name('task.replyAdded');
+        Route::post('government-portal/status/{id}','replyAddedStatus')->name('task.replyAddedStatus');
+        Route::get('government-portal/reply/{id}','govtPortalReply')->name('task.govtPortalReply');
+        Route::Post('government-portal/reply/status/{id}','govtPortalReplyStatus')->name('task.govtPortalReplyStatus');
+        Route::get('hearing-date/{id}','hearingDate')->name('task.hearingDate');
+        Route::Post('hearing-date/status/{id}','hearingDateStatus')->name('task.hearingDateStatus');
+        Route::get('show-case-hearing/{id}','showCaseHearing')->name('task.showCaseHearing');
+        Route::Post('show-case-hearing/status/{id}','showCaseHearingStatus')->name('task.showCaseHearingStatus');
         
         // For patent.........
         // For payment verification........
         Route::get('/patent/send-quotation/{id?}','patentSendQuotation')->name('task.patentSendQuotation');
         Route::get('/patent/payment-verification/{id?}','patentPaymentVerification')->name('task.patentPaymentVerification');
         Route::get('/patent/prior-art/{id?}','patentPriorArt')->name('task.patentPriorArt');
+        Route::post('/patent/submit-prior-art/{id?}','patentSubmitPriorArt')->name('task.patentSubmitPriorArt');
         
     });
     //Services Routes

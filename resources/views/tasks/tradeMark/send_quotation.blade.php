@@ -59,7 +59,7 @@
 
       </div>
 
-      
+
       <strong class="mt-5 block">Update Upcoming Actions</strong>
       <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2">
@@ -72,13 +72,13 @@
                Next stage will be: {{$getStage->title}}
             </p>
          </div>
-         
+
          @if($taskDetails->count() > 0)
          @foreach ($taskDetails as $user )
          @php
          $selectedId = $user->user->id;
          @endphp
-   
+
          @endforeach
          @endif
          <div class="w-full md:w-1/2">
@@ -107,26 +107,26 @@
          </div>
       </div>
       <div class="w-full md:w-1/2" id="verifiedDate">
-            <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-                Dead line
-            </label>
-            <div class="w-[100%] relative">
-               <input
-                  type="text"
-                  placeholder="Dead Line"
-                  name="deadline"
-                  id="deadline"
-                  class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
-                  value=""
-                  autocomplete="off">
-               <div class="absolute right-[10px] top-[10px]">
-                  <i class="ri-calendar-line"></i>
-               </div>
+         <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+            Dead line
+         </label>
+         <div class="w-[100%] relative">
+            <input
+               type="text"
+               placeholder="Dead Line"
+               name="deadline"
+               id="deadline"
+               class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
+               value=""
+               autocomplete="off">
+            <div class="absolute right-[10px] top-[10px]">
+               <i class="ri-calendar-line"></i>
             </div>
-            <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-               Set a dead line for payment.
-            </p>
          </div>
+         <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+            Set a dead line for payment.
+         </p>
+      </div>
       <strong class="mt-4 block">Quotation Template</strong>
       <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2">
@@ -172,7 +172,6 @@
       </div>
    </form>
 </div>
-
 <div id="assignUserModal" class="hidden fixed inset-0 z-50 bg-[rgba(0,0,0,0.6)] flex justify-center items-center">
    <!-- Modal content: Only the table -->
    <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); overflow: hidden;">
@@ -206,6 +205,10 @@
                <tr>
                   <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">GST</td>
                   <td width="50%" id="mailGst" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">Not Updated</td>
+               </tr>
+               <tr>
+                  <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">Total</td>
+                  <td width="50%" id="mailTotal" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">Not Updated</td>
                </tr>
             </table>
             <p style="font-size: 16px; text-align: center; line-height: 1.2; margin: 35px 0 0; color: #555;">
@@ -270,22 +273,45 @@
       $("#mailClientName").text(clientName)
 
       $('#service_price').on('input', function() {
-         let servicePrice = $(this).val();
+         let servicePrice = parseFloat($(this).val());
          $('#mailServicePrice').text('₹' + servicePrice);
+          
+         updateGst();
       });
-
 
       $('#govt_price').on('input', function() {
-         let govtPrice = $(this).val();
+         let govtPrice = parseFloat($(this).val());
          $('#mailGovtPrice').text("₹" + govtPrice);
+         
+
+         updateGst();
       });
+
       $('#gst').on('change', function() {
-         if ($(this).prop('checked')) {
-            $('#mailGst').text("18%");
+         updateGst();
+      });
+
+      function updateGst() {
+         let servicePrice = parseFloat($('#service_price').val());
+         let govtPrice = parseFloat($('#govt_price').val());
+
+         if (isNaN(servicePrice) || isNaN(govtPrice)) {
+            return;
+         }
+
+         let totalPrice = servicePrice + govtPrice;
+         let gstPrice = totalPrice * 0.18;
+         let overAllTotalWithGst = totalPrice +  gstPrice;
+         let overAllTotal = totalPrice;
+
+         if ($('#gst').prop('checked')) {
+            $('#mailGst').text("₹" + gstPrice.toFixed(2) + "(18%)");
+            $("#mailTotal").text("₹" + overAllTotalWithGst.toFixed(2) )
          } else {
             $('#mailGst').text("Not apply");
+            $("#mailTotal").text("₹" + overAllTotal.toFixed(2) )
          }
-      });
+      }
 
 
       $('.preview').on('click', function() {

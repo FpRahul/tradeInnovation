@@ -904,7 +904,7 @@ class UsersController extends Controller
     }
 
     public function userReferral(Request $request){
-        $categoryData = CategoryOption::where('type', 3);
+        $categoryData = CategoryOption::where('type', 3)->orderby('id', 'desc');
         $searchKey = $request->input('key') ?? '';
         $requestType = $request->input('requestType') ?? '';
         if($searchKey){

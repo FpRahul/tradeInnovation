@@ -44,11 +44,13 @@
         </div>
     </div>
     <div class="flex flex-col lg:flex-row gap-[30px] mb-[30px]">
+        @if(false)
         <div class="w-full lg:w-[75%]">
             <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[10px] md:rounded-[20px] p-0 md:p-6">
                 <canvas id="roundedLineChart" width="400" height="200"></canvas>
             </div>
         </div>
+        
         <div class="w-full lg:w-[25%]">
             <div class="shadow-[0px_0px_13px_5px_#0000000f] h-full bg-white rounded-[10px] md:rounded-[20px] p-3 md:p-6">
                 <h4 class="text-[14px] leading-[16px] text-[#000000] font-[500] tracking-[0.04em] mb-3">Status Matrix</h4>
@@ -96,6 +98,7 @@
                 </ul>
             </div>
         </div>
+        @endif
     </div>
 
     <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[10px] md:rounded-[20px] overflow-hidden">
@@ -193,7 +196,7 @@
             </table>
         </div>
         <div class="text-center p-[20px] border-t-[1px] border-[#0000001A]">
-            <a href="#" class=" inline-flex items-center gap-[10px] text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px] ">
+            <a href="{{route('logs.index')}}" class=" inline-flex items-center gap-[10px] text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px] ">
                 View More
             </a>
         </div>
@@ -212,7 +215,7 @@
             type: 'bar',
             data: {
                 labels: data.labels,
-                datasets: data.datasets // Load datasets dynamically from JSON
+                datasets: data.datasets 
             },
             options: {
                 responsive: true,

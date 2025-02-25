@@ -126,7 +126,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('hearing-date/status/{id}','hearingDateStatus')->name('task.hearingDateStatus');
         Route::get('show-case-hearing/{id}','showCaseHearing')->name('task.showCaseHearing');
         Route::Post('show-case-hearing/status/{id}','showCaseHearingStatus')->name('task.showCaseHearingStatus');
-
+         
         // For patent.........
         // For payment verification........
         Route::get('/patent/send-quotation/{id?}','patentSendQuotation')->name('task.patentSendQuotation');

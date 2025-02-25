@@ -7,6 +7,7 @@ use App\Models\LeadTask;
 use App\Models\LeadTaskDetail;
 use App\Models\LeadLog;
 use App\Models\User;
+use App\Models\Payment;
 use App\Models\LeadService;
 use App\Models\LeadNotification;
 use App\Jobs\SendClientWelcomeEmail;
@@ -343,6 +344,7 @@ class TasksController extends Controller
         $existedTask = LeadTask::with(['services', 'subService', 'lead', 'serviceSatge'])->where('id', $id)->first();
         $existedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
 
+        $newPayment = new Payment();
         $newTaskAssigned = new LeadTask();
         $newTaskDetails = new LeadTaskDetail();
         $serviceId = $existedTask->services->id;
@@ -365,17 +367,19 @@ class TasksController extends Controller
         $service = $request->service;
         $service_price = $request->service_price;
         $govt_price = $request->govt_price;
-        $gst = $request->gst ?? 'Not Apply';
+        $gst = $request->gst ?? null;
+        $total_without_gst = $service_price + $govt_price;
         if (!empty($gst)) {
-            $service_price = $service_price + ($service_price * 0.18);
+            $gst_amount = $total_without_gst * 0.18;
+            $total = $total_without_gst + $gst_amount;
         } else {
-            $service_price = $request->service_price;
+            $total = $total_without_gst;
+            $gst_amount = 0;
         }
         $quoted_price = $service_price +  $govt_price;
         $clientName = $existedTask->lead->client_name;
         $clientEmail = $existedTask->lead->email;
         $stageId = (int) $request->stage_id;
-
         $userName = Auth::user()->name;
         $assignedStageName = ServiceStages::where('id', $stageId)->first();
         if ($id) {
@@ -390,7 +394,6 @@ class TasksController extends Controller
             $newTaskAssigned->task_description = $request->description;
             $existedTask->quoted_price = $quoted_price;
             if ($newTaskAssigned->save() && $existedTask->save()) {
-
                 $newTaskDetails->task_id = $newTaskAssigned->id;
                 $newTaskDetails->status = 0;
                 $newTaskDetails->dead_line = $deadlineDate;
@@ -398,9 +401,6 @@ class TasksController extends Controller
                     $existedTaskDetails->status_date = $verifiedDate;
                     $existedTaskDetails->status = 1;
                     $existedTaskDetails->mail_subject = $request->subject;
-                    $existedTaskDetails->service_price = $request->service_price;
-                    $existedTaskDetails->govt_price = $request->govt_price;
-                    $existedTaskDetails->gst = $request->gst ?? null;
                     if ($request->hasFile('attachment')) {
                         $folderPath = public_path('uploads/leads/' . $existedTask->lead_id);
                         if (!file_exists($folderPath)) {
@@ -417,42 +417,54 @@ class TasksController extends Controller
                         $existedTaskDetails->attachment = json_encode($filePaths);
                     }
                     if ($existedTaskDetails->save()) {
-
-                        $userAssign =  $request->assignUser ?? $existedTask->user_id;
-                        $notification = new LeadNotification();
-                        $notification->user_id =  $userAssign;
-                        $notification->lead_id = $existedTask->lead_id;
-                        $notification->task_id = $newTaskAssigned->id;
-                        $notification->title = "Task Assigned";
-                        $notification->description =  $userName . ' assigned you ' . $assignedStageName->title . ' task';
-                        $notification->status = 0;
-                        if ($notification->save()) {
-                            $LeadLog = new LeadLog();
-                            $LeadLog->user_id =  $existedTask->user_id;
-                            $LeadLog->lead_id =  $existedTask->lead_id;
-                            $LeadLog->task_id =  $existedTask->id;
-                            $LeadLog->assign_by = Auth::id();
-                            $LeadLog->description = "Quotation sent to the client";
-                            if ($LeadLog->save()) {
-                                $newassignlog = new leadLog();
-                                $newassignlog->user_id = $request->assignUser ?? $existedTask->user_id;
-                                $newassignlog->lead_id = $existedTask->lead_id;
-                                $newassignlog->task_id = $newTaskAssigned->id;
-                                $newassignlog->assign_by = Auth::id();
-                                $newassignlog->description =  "Lead assigned for next task";
-                                if ($newassignlog->save()) {
-                                    // if ($mail== true) {
-                                    //     SendTaskCommanMailJob::dispatch($subject, $service, $service_price, $govt_price, $clientName, $clientEmail, $userName);
-                                    // }
+                     
+                        $newPayment->lead_id = $existedTask->lead_id;
+                        $newPayment->task_id = $newTaskDetails->task_id;
+                        $newPayment->reference_id = 0;
+                        $newPayment->service_price = $service_price;
+                        $newPayment->govt_price = $govt_price;
+                        $newPayment->gst = $gst_amount ?? 0;
+                        $newPayment->total = $total;
+                        $newPayment->pending_amount = $total;
+                        if ($newPayment->save()) {
+                            $userAssign =  $request->assignUser ?? $existedTask->user_id;
+                            $notification = new LeadNotification();
+                            $notification->user_id =  $userAssign;
+                            $notification->lead_id = $existedTask->lead_id;
+                            $notification->task_id = $newTaskAssigned->id;
+                            $notification->title = "Task Assigned";
+                            $notification->description =  $userName . ' assigned you ' . $assignedStageName->title . ' task';
+                            $notification->status = 0;
+                            if ($notification->save()) {
+                                $LeadLog = new LeadLog();
+                                $LeadLog->user_id =  $existedTask->user_id;
+                                $LeadLog->lead_id =  $existedTask->lead_id;
+                                $LeadLog->task_id =  $existedTask->id;
+                                $LeadLog->assign_by = Auth::id();
+                                $LeadLog->description = "Quotation sent to the client";
+                                if ($LeadLog->save()) {
+                                    $newassignlog = new leadLog();
+                                    $newassignlog->user_id = $request->assignUser ?? $existedTask->user_id;
+                                    $newassignlog->lead_id = $existedTask->lead_id;
+                                    $newassignlog->task_id = $newTaskAssigned->id;
+                                    $newassignlog->assign_by = Auth::id();
+                                    $newassignlog->description =  "Lead assigned for next task";
+                                    if ($newassignlog->save()) {
+                                        // if ($mail== true) {
+                                        //     SendTaskCommanMailJob::dispatch($subject, $service, $service_price, $govt_price, $clientName, $clientEmail, $userName);
+                                        // }
+                                    }
+                                    $id = $newTaskAssigned->id;
+                                    return redirect()->route('task.index')
+                                        ->with('success', 'Quotation sent successfully');
+                                } else {
+                                    return redirect()->back()->error('message', " there is something wrong during update logs ");
                                 }
-                                $id = $newTaskAssigned->id;
-                                return redirect()->route('task.index')
-                                    ->with('success', 'Quotation sent successfully');
                             } else {
-                                return redirect()->back()->error('message', " there is something wrong during update logs ");
+                                return redirect()->back()->error('message', " there is something wrong during update payment ");
                             }
                         } else {
-                            return redirect()->back()->error('message', " there is something wrong during update notification ");
+                            return redirect()->back()->error('message', " there is something wrong during update existed tasl details ");
                         }
                     } else {
                         return redirect()->back()->error('message', " there is something wrong during update existed tasl details ");
@@ -469,13 +481,14 @@ class TasksController extends Controller
     }
 
     public function checkPayment($id)
-    {
+    {  
+        
         if ($id) {
 
             $notifyData = LeadNotification::where('task_id', $id)->update(['status' => 1]);
         }
         $header_title_name = "payment Status";
-        $taskDetails = LeadTask::with(['user', 'lead', 'leadTaskDetails', 'services', 'subService', 'serviceSatge'])
+        $taskDetails = LeadTask::with(['user','payment', 'lead', 'leadTaskDetails', 'services', 'subService', 'serviceSatge'])
             ->where('id', $id)
             ->get();
         foreach ($taskDetails as $task) {
@@ -520,6 +533,37 @@ class TasksController extends Controller
         }
         if ($id) {
             if ($request->checkStatus == 3) {
+                $rule = [
+                    'payment' => 'required',
+                ];
+                $validator = Validator::make($request->all(), $rule);
+                if ($validator->fails()) {
+                    return redirect()->back()->withErrors($validator)->withInput();
+                }
+                $existedLeaedTaskDetails->status = $request->payment;
+                $existedLeaedTaskDetails->status_date = $verifiedDate;
+                if ($request->payment == 3) {
+                    $existedLeaedTaskDetails->reminderDate = $paymentDeadlineDate;
+                } else {
+                    $existedLeaedTaskDetails->reminderDate = null;
+                }
+                if ($existedLeaedTaskDetails->save()) {
+                    $newassignlog = new leadLog();
+                    $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+                    $newassignlog->lead_id = $existedLeaedTask->lead_id;
+                    $newassignlog->lead_id = $existedLeaedTask->lead_id;
+                    $newassignlog->task_id = $existedLeaedTask->id;
+                    $newassignlog->assign_by = Auth::id();
+                    $newassignlog->description =  " Payment status marked as on Credit";
+                    if ($newassignlog->save()) {
+                        return redirect()->route('task.index')->with('success', 'payment status is Updated');
+                    } else {
+                        return redirect()->route('task.index')->with('error', 'there is something wrong while updateing logs');
+                    }
+                } else {
+                    return redirect()->route('task.index')->with('error', 'there is something wrong while updateing  lead task details ');
+                }
+            }else if($request->checkStatus == 2){
                 $rule = [
                     'payment' => 'required',
                 ];
@@ -1278,84 +1322,84 @@ class TasksController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-       if($id){
-        $newLeadtask->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
-        $newLeadtask->lead_id = $existedLeaedTask->lead_id;
-        $newLeadtask->service_id = $existedLeaedTask->service_id;
-        $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
-        $newLeadtask->service_stage_id = $request->stage_id;
-        $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
-        $newLeadtask->assign_by = Auth::id();
-        $newLeadtask->task_title = $newTaskTitle->title;
-        if ($newLeadtask->save()) {
-            $existedLeaedTaskDetails->status = 1;
-            $existedLeaedTaskDetails->status_date = $verifiedDate;
-            if ($request->hasFile('attachment')) {
-                $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
-                if (!file_exists($folderPath)) {
-                    mkdir($folderPath, 0755, true);
-                }
-                $filePaths = [];
-                foreach ($request->file('attachment') as $file) {
-                    if ($file->isValid()) {
-                        $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
-                        $file->move($folderPath, $fileName);
-                        $filePaths[] = $fileName;
+        if ($id) {
+            $newLeadtask->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+            $newLeadtask->lead_id = $existedLeaedTask->lead_id;
+            $newLeadtask->service_id = $existedLeaedTask->service_id;
+            $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
+            $newLeadtask->service_stage_id = $request->stage_id;
+            $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
+            $newLeadtask->assign_by = Auth::id();
+            $newLeadtask->task_title = $newTaskTitle->title;
+            if ($newLeadtask->save()) {
+                $existedLeaedTaskDetails->status = 1;
+                $existedLeaedTaskDetails->status_date = $verifiedDate;
+                if ($request->hasFile('attachment')) {
+                    $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
+                    if (!file_exists($folderPath)) {
+                        mkdir($folderPath, 0755, true);
                     }
+                    $filePaths = [];
+                    foreach ($request->file('attachment') as $file) {
+                        if ($file->isValid()) {
+                            $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
+                            $file->move($folderPath, $fileName);
+                            $filePaths[] = $fileName;
+                        }
+                    }
+                    $existedLeaedTaskDetails->attachment = json_encode($filePaths);
                 }
-                $existedLeaedTaskDetails->attachment = json_encode($filePaths);
-            }
-            if ($existedLeaedTaskDetails->save()) {
-                $newLeadTaskDeatails->task_id = $newLeadtask->id;
-                $newLeadTaskDeatails->dead_line = $deadlineDate;
-                $newLeadTaskDeatails->status = 0;
-                if ($newLeadTaskDeatails->save()) {
-                    $newNotification->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
-                    $newNotification->lead_id = $existedLeaedTask->lead_id;
-                    $newNotification->task_id = $newLeadtask->id;
-                    $newNotification->title = 'Task Assigned';
-                    $newNotification->description =  $userName . ' assigned you ' . $newTaskTitle->title . ' task';
-                    $newNotification->status = 0;
-                    if ($newNotification->save()) {
-                        $LeadLog =  new LeadLog();
-                        $LeadLog->user_id = $existedLeaedTask->user_id;
-                        $LeadLog->lead_id = $existedLeaedTask->lead_id;
-                        $LeadLog->task_id = $existedLeaedTask->id;
-                        $LeadLog->assign_by = Auth::id();
-                        $LeadLog->description = " Examination status marked as objected ";
-                        if ($LeadLog->save()) {
-                            $newassignlog = new leadLog();
-                            $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
-                            $newassignlog->lead_id = $existedLeaedTask->lead_id;
-                            $newassignlog->task_id = $newLeadtask->id;
-                            $newassignlog->assign_by = Auth::id();
-                            $newassignlog->description =  "Lead assigned for next task";
-                            if ($newassignlog->save()) {
-                                $id = $newLeadtask->id;
-                                return redirect()->route('task.index')->with('success', 'document verification completed');
+                if ($existedLeaedTaskDetails->save()) {
+                    $newLeadTaskDeatails->task_id = $newLeadtask->id;
+                    $newLeadTaskDeatails->dead_line = $deadlineDate;
+                    $newLeadTaskDeatails->status = 0;
+                    if ($newLeadTaskDeatails->save()) {
+                        $newNotification->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+                        $newNotification->lead_id = $existedLeaedTask->lead_id;
+                        $newNotification->task_id = $newLeadtask->id;
+                        $newNotification->title = 'Task Assigned';
+                        $newNotification->description =  $userName . ' assigned you ' . $newTaskTitle->title . ' task';
+                        $newNotification->status = 0;
+                        if ($newNotification->save()) {
+                            $LeadLog =  new LeadLog();
+                            $LeadLog->user_id = $existedLeaedTask->user_id;
+                            $LeadLog->lead_id = $existedLeaedTask->lead_id;
+                            $LeadLog->task_id = $existedLeaedTask->id;
+                            $LeadLog->assign_by = Auth::id();
+                            $LeadLog->description = " Examination status marked as objected ";
+                            if ($LeadLog->save()) {
+                                $newassignlog = new leadLog();
+                                $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+                                $newassignlog->lead_id = $existedLeaedTask->lead_id;
+                                $newassignlog->task_id = $newLeadtask->id;
+                                $newassignlog->assign_by = Auth::id();
+                                $newassignlog->description =  "Lead assigned for next task";
+                                if ($newassignlog->save()) {
+                                    $id = $newLeadtask->id;
+                                    return redirect()->route('task.index')->with('success', 'document verification completed');
+                                }
+                            } else {
+                                return redirect()->back()->with('error', 'there is something wrong during upadate logs');
                             }
                         } else {
-                            return redirect()->back()->with('error', 'there is something wrong during upadate logs');
+                            return redirect()->back()->with('error', 'there is something wrong during notification logs');
                         }
                     } else {
-                        return redirect()->back()->with('error', 'there is something wrong during notification logs');
+                        return redirect()->back()->with('error', 'there is something wrong during update  new task details');
                     }
                 } else {
-                    return redirect()->back()->with('error', 'there is something wrong during update  new task details');
+                    return redirect()->back()->with('error', 'there is something wrong during update  existed task details');
                 }
             } else {
-                return redirect()->back()->with('error', 'there is something wrong during update  existed task details');
+                return redirect()->back()->with('error', 'there is something wrong during update  new task');
             }
         } else {
-            return redirect()->back()->with('error', 'there is something wrong during update  new task');
+            return redirect()->back()->with('erroe', "no task found");
         }
-        
-       }else{
-        return redirect()->back()->with('erroe', "no task found");
-       }
     }
-    
-    public function replyAdded($id){
+
+    public function replyAdded($id)
+    {
         if ($id) {
             $notifyData = LeadNotification::where('task_id', $id)->update(['status' => 1]);
         }
@@ -1373,109 +1417,110 @@ class TasksController extends Controller
         return view('tasks.tradeMark.reply_govt_portal', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'onHideSatge'));
     }
 
-    public function replyAddedStatus(Request $request , $id){
-          
-         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
-         $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
-         $existedLeaedTask = LeadTask::find($id);
-         $existedLeaedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
-         $newLeadtask = new LeadTask();
-         $newLeadTaskDeatails  = new LeadTaskDetail();
-         $newNotification = new LeadNotification();
-         $newTaskStageId = $existedLeaedTask->service_stage_id + 1;
-         $newTaskTitle = ServiceStages::find($newTaskStageId);
-         $userName = Auth::user()->name;
-         $rule = [
-             
-             'verified' => 'required',
-             'assignUser' => 'required',
-             'deadline' => 'required'
-         ];
-         $validator = Validator::make($request->all(), $rule);
-         if ($validator->fails()) {
-             return redirect()->back()->withErrors($validator)->withInput();
-         }
-         if($id){
-         
-         $newLeadtask->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
-         $newLeadtask->lead_id = $existedLeaedTask->lead_id;
-         $newLeadtask->service_id = $existedLeaedTask->service_id;
-         $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
-         $newLeadtask->service_stage_id = $request->stage_id;
-         $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
-         $newLeadtask->assign_by = Auth::id();
-         $newLeadtask->task_title = $newTaskTitle->title;
-         if ($newLeadtask->save()) {
-             $existedLeaedTaskDetails->status = 1;
-             $existedLeaedTaskDetails->status_date = $verifiedDate;
-             if ($request->hasFile('attachment')) {
-                 $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
-                 if (!file_exists($folderPath)) {
-                     mkdir($folderPath, 0755, true);
-                 }
-                 $filePaths = [];
-                 foreach ($request->file('attachment') as $file) {
-                     if ($file->isValid()) {
-                         $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
-                         $file->move($folderPath, $fileName);
-                         $filePaths[] = $fileName;
-                     }
-                 }
-                 $existedLeaedTaskDetails->attachment = json_encode($filePaths);
-             }
-             if ($existedLeaedTaskDetails->save()) {
- 
-                 $newLeadTaskDeatails->task_id = $newLeadtask->id;
-                 $newLeadTaskDeatails->dead_line = $deadlineDate;
-                 $newLeadTaskDeatails->status = 0;
- 
-                 if ($newLeadTaskDeatails->save()) {
-                     $newNotification->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
-                     $newNotification->lead_id = $existedLeaedTask->lead_id;
-                     $newNotification->task_id = $newLeadtask->id;
-                     $newNotification->title = 'Task Assigned';
-                     $newNotification->description =  $userName . ' assigned you ' . $newTaskTitle->title . ' task';
-                     $newNotification->status = 0;
-                     if ($newNotification->save()) {
-                         $LeadLog =  new LeadLog();
-                         $LeadLog->user_id = $existedLeaedTask->user_id;
-                         $LeadLog->lead_id = $existedLeaedTask->lead_id;
-                         $LeadLog->task_id = $existedLeaedTask->id;
-                         $LeadLog->assign_by = Auth::id();
-                         $LeadLog->description = " Reply added on the objection. ";
-                         if ($LeadLog->save()) {
-                             $newassignlog = new leadLog();
-                             $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
-                             $newassignlog->lead_id = $existedLeaedTask->lead_id;
-                             $newassignlog->task_id = $newLeadtask->id;
-                             $newassignlog->assign_by = Auth::id();
-                             $newassignlog->description =  "Lead assigned for next task";
-                             if ($newassignlog->save()) {
-                                 $id = $newLeadtask->id;
-                                 return redirect()->route('task.index')->with('success', 'document verification completed');
-                             }
-                         } else {
-                             return redirect()->back()->with('error', 'there is something wrong during upadate logs');
-                         }
-                     } else {
-                         return redirect()->back()->with('error', 'there is something wrong during notification logs');
-                     }
-                 } else {
-                     return redirect()->back()->with('error', 'there is something wrong during update  new task details');
-                 }
-             } else {
-                 return redirect()->back()->with('error', 'there is something wrong during update  existed task details');
-             }
-         } else {
-             return redirect()->back()->with('error', 'there is something wrong during update  new task');
-         }
-         
-        }else{
-         return redirect()->back()->with('erroe', "no task found");
+    public function replyAddedStatus(Request $request, $id)
+    {
+
+        $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
+        $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
+        $existedLeaedTask = LeadTask::find($id);
+        $existedLeaedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
+        $newLeadtask = new LeadTask();
+        $newLeadTaskDeatails  = new LeadTaskDetail();
+        $newNotification = new LeadNotification();
+        $newTaskStageId = $existedLeaedTask->service_stage_id + 1;
+        $newTaskTitle = ServiceStages::find($newTaskStageId);
+        $userName = Auth::user()->name;
+        $rule = [
+
+            'verified' => 'required',
+            'assignUser' => 'required',
+            'deadline' => 'required'
+        ];
+        $validator = Validator::make($request->all(), $rule);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        if ($id) {
+
+            $newLeadtask->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+            $newLeadtask->lead_id = $existedLeaedTask->lead_id;
+            $newLeadtask->service_id = $existedLeaedTask->service_id;
+            $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
+            $newLeadtask->service_stage_id = $request->stage_id;
+            $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
+            $newLeadtask->assign_by = Auth::id();
+            $newLeadtask->task_title = $newTaskTitle->title;
+            if ($newLeadtask->save()) {
+                $existedLeaedTaskDetails->status = 1;
+                $existedLeaedTaskDetails->status_date = $verifiedDate;
+                if ($request->hasFile('attachment')) {
+                    $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
+                    if (!file_exists($folderPath)) {
+                        mkdir($folderPath, 0755, true);
+                    }
+                    $filePaths = [];
+                    foreach ($request->file('attachment') as $file) {
+                        if ($file->isValid()) {
+                            $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
+                            $file->move($folderPath, $fileName);
+                            $filePaths[] = $fileName;
+                        }
+                    }
+                    $existedLeaedTaskDetails->attachment = json_encode($filePaths);
+                }
+                if ($existedLeaedTaskDetails->save()) {
+
+                    $newLeadTaskDeatails->task_id = $newLeadtask->id;
+                    $newLeadTaskDeatails->dead_line = $deadlineDate;
+                    $newLeadTaskDeatails->status = 0;
+
+                    if ($newLeadTaskDeatails->save()) {
+                        $newNotification->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+                        $newNotification->lead_id = $existedLeaedTask->lead_id;
+                        $newNotification->task_id = $newLeadtask->id;
+                        $newNotification->title = 'Task Assigned';
+                        $newNotification->description =  $userName . ' assigned you ' . $newTaskTitle->title . ' task';
+                        $newNotification->status = 0;
+                        if ($newNotification->save()) {
+                            $LeadLog =  new LeadLog();
+                            $LeadLog->user_id = $existedLeaedTask->user_id;
+                            $LeadLog->lead_id = $existedLeaedTask->lead_id;
+                            $LeadLog->task_id = $existedLeaedTask->id;
+                            $LeadLog->assign_by = Auth::id();
+                            $LeadLog->description = " Reply added on the objection. ";
+                            if ($LeadLog->save()) {
+                                $newassignlog = new leadLog();
+                                $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+                                $newassignlog->lead_id = $existedLeaedTask->lead_id;
+                                $newassignlog->task_id = $newLeadtask->id;
+                                $newassignlog->assign_by = Auth::id();
+                                $newassignlog->description =  "Lead assigned for next task";
+                                if ($newassignlog->save()) {
+                                    $id = $newLeadtask->id;
+                                    return redirect()->route('task.index')->with('success', 'document verification completed');
+                                }
+                            } else {
+                                return redirect()->back()->with('error', 'there is something wrong during upadate logs');
+                            }
+                        } else {
+                            return redirect()->back()->with('error', 'there is something wrong during notification logs');
+                        }
+                    } else {
+                        return redirect()->back()->with('error', 'there is something wrong during update  new task details');
+                    }
+                } else {
+                    return redirect()->back()->with('error', 'there is something wrong during update  existed task details');
+                }
+            } else {
+                return redirect()->back()->with('error', 'there is something wrong during update  new task');
+            }
+        } else {
+            return redirect()->back()->with('erroe', "no task found");
         }
     }
 
-    public function govtPortalReply($id){
+    public function govtPortalReply($id)
+    {
         if ($id) {
             $notifyData = LeadNotification::where('task_id', $id)->update(['status' => 1]);
         }
@@ -1492,8 +1537,9 @@ class TasksController extends Controller
         $header_title_name = $taskDetails->serviceSatge->title;
         return view('tasks.tradeMark.objection_reply_status', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'onHideSatge'));
     }
-    
-    public function govtPortalReplyStatus(Request $request , $id){
+
+    public function govtPortalReplyStatus(Request $request, $id)
+    {
         //  dd($request->all());
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
@@ -1515,83 +1561,83 @@ class TasksController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-       if($id){
-        $newLeadtask->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
-        $newLeadtask->lead_id = $existedLeaedTask->lead_id;
-        $newLeadtask->service_id = $existedLeaedTask->service_id;
-        $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
-        $newLeadtask->service_stage_id = $request->stage_id;
-        $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
-        $newLeadtask->assign_by = Auth::id();
-        $newLeadtask->task_title = $newTaskTitle->title;
-        if ($newLeadtask->save()) {
-            $existedLeaedTaskDetails->status = 1;
-            $existedLeaedTaskDetails->status_date = $verifiedDate;
-            if ($request->hasFile('attachment')) {
-                $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
-                if (!file_exists($folderPath)) {
-                    mkdir($folderPath, 0755, true);
-                }
-                $filePaths = [];
-                foreach ($request->file('attachment') as $file) {
-                    if ($file->isValid()) {
-                        $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
-                        $file->move($folderPath, $fileName);
-                        $filePaths[] = $fileName;
+        if ($id) {
+            $newLeadtask->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+            $newLeadtask->lead_id = $existedLeaedTask->lead_id;
+            $newLeadtask->service_id = $existedLeaedTask->service_id;
+            $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
+            $newLeadtask->service_stage_id = $request->stage_id;
+            $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
+            $newLeadtask->assign_by = Auth::id();
+            $newLeadtask->task_title = $newTaskTitle->title;
+            if ($newLeadtask->save()) {
+                $existedLeaedTaskDetails->status = 1;
+                $existedLeaedTaskDetails->status_date = $verifiedDate;
+                if ($request->hasFile('attachment')) {
+                    $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
+                    if (!file_exists($folderPath)) {
+                        mkdir($folderPath, 0755, true);
                     }
+                    $filePaths = [];
+                    foreach ($request->file('attachment') as $file) {
+                        if ($file->isValid()) {
+                            $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
+                            $file->move($folderPath, $fileName);
+                            $filePaths[] = $fileName;
+                        }
+                    }
+                    $existedLeaedTaskDetails->attachment = json_encode($filePaths);
                 }
-                $existedLeaedTaskDetails->attachment = json_encode($filePaths);
-            }
-            if ($existedLeaedTaskDetails->save()) {
-                $newLeadTaskDeatails->task_id = $newLeadtask->id;
-                $newLeadTaskDeatails->dead_line = $deadlineDate;
-                $newLeadTaskDeatails->status = 0;
-                if ($newLeadTaskDeatails->save()) {
-                    $newNotification->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
-                    $newNotification->lead_id = $existedLeaedTask->lead_id;
-                    $newNotification->task_id = $newLeadtask->id;
-                    $newNotification->title = 'Task Assigned';
-                    $newNotification->description =  $userName . ' assigned you ' . $newTaskTitle->title . ' task';
-                    $newNotification->status = 0;
-                    if ($newNotification->save()) {
-                        $LeadLog =  new LeadLog();
-                        $LeadLog->user_id = $existedLeaedTask->user_id;
-                        $LeadLog->lead_id = $existedLeaedTask->lead_id;
-                        $LeadLog->task_id = $existedLeaedTask->id;
-                        $LeadLog->assign_by = Auth::id();
-                        $LeadLog->description = " Examination status marked as objected ";
-                        if ($LeadLog->save()) {
-                            $newassignlog = new leadLog();
-                            $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
-                            $newassignlog->lead_id = $existedLeaedTask->lead_id;
-                            $newassignlog->task_id = $newLeadtask->id;
-                            $newassignlog->assign_by = Auth::id();
-                            $newassignlog->description =  "Lead assigned for next task";
-                            if ($newassignlog->save()) {
-                                $id = $newLeadtask->id;
-                                return redirect()->route('task.index')->with('success', 'document verification completed');
+                if ($existedLeaedTaskDetails->save()) {
+                    $newLeadTaskDeatails->task_id = $newLeadtask->id;
+                    $newLeadTaskDeatails->dead_line = $deadlineDate;
+                    $newLeadTaskDeatails->status = 0;
+                    if ($newLeadTaskDeatails->save()) {
+                        $newNotification->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+                        $newNotification->lead_id = $existedLeaedTask->lead_id;
+                        $newNotification->task_id = $newLeadtask->id;
+                        $newNotification->title = 'Task Assigned';
+                        $newNotification->description =  $userName . ' assigned you ' . $newTaskTitle->title . ' task';
+                        $newNotification->status = 0;
+                        if ($newNotification->save()) {
+                            $LeadLog =  new LeadLog();
+                            $LeadLog->user_id = $existedLeaedTask->user_id;
+                            $LeadLog->lead_id = $existedLeaedTask->lead_id;
+                            $LeadLog->task_id = $existedLeaedTask->id;
+                            $LeadLog->assign_by = Auth::id();
+                            $LeadLog->description = " Examination status marked as objected ";
+                            if ($LeadLog->save()) {
+                                $newassignlog = new leadLog();
+                                $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+                                $newassignlog->lead_id = $existedLeaedTask->lead_id;
+                                $newassignlog->task_id = $newLeadtask->id;
+                                $newassignlog->assign_by = Auth::id();
+                                $newassignlog->description =  "Lead assigned for next task";
+                                if ($newassignlog->save()) {
+                                    $id = $newLeadtask->id;
+                                    return redirect()->route('task.index')->with('success', 'document verification completed');
+                                }
+                            } else {
+                                return redirect()->back()->with('error', 'there is something wrong during upadate logs');
                             }
                         } else {
-                            return redirect()->back()->with('error', 'there is something wrong during upadate logs');
+                            return redirect()->back()->with('error', 'there is something wrong during notification logs');
                         }
                     } else {
-                        return redirect()->back()->with('error', 'there is something wrong during notification logs');
+                        return redirect()->back()->with('error', 'there is something wrong during update  new task details');
                     }
                 } else {
-                    return redirect()->back()->with('error', 'there is something wrong during update  new task details');
+                    return redirect()->back()->with('error', 'there is something wrong during update  existed task details');
                 }
             } else {
-                return redirect()->back()->with('error', 'there is something wrong during update  existed task details');
+                return redirect()->back()->with('error', 'there is something wrong during update  new task');
             }
         } else {
-            return redirect()->back()->with('error', 'there is something wrong during update  new task');
+            return redirect()->back()->with('erroe', "no task found");
         }
-       }else{
-        return redirect()->back()->with('erroe', "no task found");
-       }
-
     }
-    public function hearingDate($id){
+    public function hearingDate($id)
+    {
         if ($id) {
             $notifyData = LeadNotification::where('task_id', $id)->update(['status' => 1]);
         }
@@ -1606,110 +1652,110 @@ class TasksController extends Controller
         $leadTaskdetials = LeadTaskDetail::find($id);
         $header_title_name = $taskDetails->serviceSatge->title;
         return view('tasks.tradeMark.hearing_date', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage'));
-
     }
-    
-    public function hearingDateStatus(Request $request, $id){
-         $hearingDate = Carbon::createFromFormat('d M Y', $request->input('hearing_date'))->format('Y-m-d');
-         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
-         $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
-         $existedLeaedTask = LeadTask::find($id);
-         $existedLeaedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
-         $newLeadtask = new LeadTask();
-         $newLeadTaskDeatails  = new LeadTaskDetail();
-         $newNotification = new LeadNotification();
-         $newTaskStageId = $existedLeaedTask->service_stage_id + 1;
-         $newTaskTitle = ServiceStages::find($newTaskStageId);
-         $userName = Auth::user()->name;
-         $rule = [
-             'hearing_date' => 'required',
-             'verified' => 'required',
-             'assignUser' => 'required',
-             'deadline' => 'required'
-         ];
-         $validator = Validator::make($request->all(), $rule);
-         if ($validator->fails()) {
-             return redirect()->back()->withErrors($validator)->withInput();
-         }
-        if($id){
-         $newLeadtask->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
-         $newLeadtask->lead_id = $existedLeaedTask->lead_id;
-         $newLeadtask->service_id = $existedLeaedTask->service_id;
-         $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
-         $newLeadtask->service_stage_id = $request->stage_id;
-         $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
-         $newLeadtask->assign_by = Auth::id();
-         $newLeadtask->task_title = $newTaskTitle->title;
-         if ($newLeadtask->save()) {
-             $existedLeaedTaskDetails->status = 1;
-             $existedLeaedTaskDetails->status_date = $verifiedDate;
-             $existedLeaedTaskDetails->reminderDate = $hearingDate;
-             if ($request->hasFile('attachment')) {
-                 $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
-                 if (!file_exists($folderPath)) {
-                     mkdir($folderPath, 0755, true);
-                 }
-                 $filePaths = [];
-                 foreach ($request->file('attachment') as $file) {
-                     if ($file->isValid()) {
-                         $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
-                         $file->move($folderPath, $fileName);
-                         $filePaths[] = $fileName;
-                     }
-                 }
-                 $existedLeaedTaskDetails->attachment = json_encode($filePaths);
-             }
-             if ($existedLeaedTaskDetails->save()) {
-                 $newLeadTaskDeatails->task_id = $newLeadtask->id;
-                 $newLeadTaskDeatails->dead_line = $deadlineDate;
-                 $newLeadTaskDeatails->status = 0;
-                 if ($newLeadTaskDeatails->save()) {
-                     $newNotification->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
-                     $newNotification->lead_id = $existedLeaedTask->lead_id;
-                     $newNotification->task_id = $newLeadtask->id;
-                     $newNotification->title = 'Task Assigned';
-                     $newNotification->description =  $userName . ' assigned you ' . $newTaskTitle->title . ' task';
-                     $newNotification->status = 0;
-                     if ($newNotification->save()) {
-                         $LeadLog =  new LeadLog();
-                         $LeadLog->user_id = $existedLeaedTask->user_id;
-                         $LeadLog->lead_id = $existedLeaedTask->lead_id;
-                         $LeadLog->task_id = $existedLeaedTask->id;
-                         $LeadLog->assign_by = Auth::id();
-                         $LeadLog->description = "Application status moved to the hearing stage.";
-                         if ($LeadLog->save()) {
-                             $newassignlog = new leadLog();
-                             $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
-                             $newassignlog->lead_id = $existedLeaedTask->lead_id;
-                             $newassignlog->task_id = $newLeadtask->id;
-                             $newassignlog->assign_by = Auth::id();
-                             $newassignlog->description =  "Lead assigned for next task";
-                             if ($newassignlog->save()) {
-                                 $id = $newLeadtask->id;
-                                 return redirect()->route('task.index')->with('success', 'document verification completed');
-                             }
-                         } else {
-                             return redirect()->back()->with('error', 'there is something wrong during upadate logs');
-                         }
-                     } else {
-                         return redirect()->back()->with('error', 'there is something wrong during notification logs');
-                     }
-                 } else {
-                     return redirect()->back()->with('error', 'there is something wrong during update  new task details');
-                 }
-             } else {
-                 return redirect()->back()->with('error', 'there is something wrong during update  existed task details');
-             }
-         } else {
-             return redirect()->back()->with('error', 'there is something wrong during update  new task');
-         }
-         
-        }else{
-         return redirect()->back()->with('erroe', "no task found");
+
+    public function hearingDateStatus(Request $request, $id)
+    {
+        $hearingDate = Carbon::createFromFormat('d M Y', $request->input('hearing_date'))->format('Y-m-d');
+        $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
+        $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
+        $existedLeaedTask = LeadTask::find($id);
+        $existedLeaedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
+        $newLeadtask = new LeadTask();
+        $newLeadTaskDeatails  = new LeadTaskDetail();
+        $newNotification = new LeadNotification();
+        $newTaskStageId = $existedLeaedTask->service_stage_id + 1;
+        $newTaskTitle = ServiceStages::find($newTaskStageId);
+        $userName = Auth::user()->name;
+        $rule = [
+            'hearing_date' => 'required',
+            'verified' => 'required',
+            'assignUser' => 'required',
+            'deadline' => 'required'
+        ];
+        $validator = Validator::make($request->all(), $rule);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        if ($id) {
+            $newLeadtask->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+            $newLeadtask->lead_id = $existedLeaedTask->lead_id;
+            $newLeadtask->service_id = $existedLeaedTask->service_id;
+            $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
+            $newLeadtask->service_stage_id = $request->stage_id;
+            $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
+            $newLeadtask->assign_by = Auth::id();
+            $newLeadtask->task_title = $newTaskTitle->title;
+            if ($newLeadtask->save()) {
+                $existedLeaedTaskDetails->status = 1;
+                $existedLeaedTaskDetails->status_date = $verifiedDate;
+                $existedLeaedTaskDetails->reminderDate = $hearingDate;
+                if ($request->hasFile('attachment')) {
+                    $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
+                    if (!file_exists($folderPath)) {
+                        mkdir($folderPath, 0755, true);
+                    }
+                    $filePaths = [];
+                    foreach ($request->file('attachment') as $file) {
+                        if ($file->isValid()) {
+                            $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
+                            $file->move($folderPath, $fileName);
+                            $filePaths[] = $fileName;
+                        }
+                    }
+                    $existedLeaedTaskDetails->attachment = json_encode($filePaths);
+                }
+                if ($existedLeaedTaskDetails->save()) {
+                    $newLeadTaskDeatails->task_id = $newLeadtask->id;
+                    $newLeadTaskDeatails->dead_line = $deadlineDate;
+                    $newLeadTaskDeatails->status = 0;
+                    if ($newLeadTaskDeatails->save()) {
+                        $newNotification->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+                        $newNotification->lead_id = $existedLeaedTask->lead_id;
+                        $newNotification->task_id = $newLeadtask->id;
+                        $newNotification->title = 'Task Assigned';
+                        $newNotification->description =  $userName . ' assigned you ' . $newTaskTitle->title . ' task';
+                        $newNotification->status = 0;
+                        if ($newNotification->save()) {
+                            $LeadLog =  new LeadLog();
+                            $LeadLog->user_id = $existedLeaedTask->user_id;
+                            $LeadLog->lead_id = $existedLeaedTask->lead_id;
+                            $LeadLog->task_id = $existedLeaedTask->id;
+                            $LeadLog->assign_by = Auth::id();
+                            $LeadLog->description = "Application status moved to the hearing stage.";
+                            if ($LeadLog->save()) {
+                                $newassignlog = new leadLog();
+                                $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+                                $newassignlog->lead_id = $existedLeaedTask->lead_id;
+                                $newassignlog->task_id = $newLeadtask->id;
+                                $newassignlog->assign_by = Auth::id();
+                                $newassignlog->description =  "Lead assigned for next task";
+                                if ($newassignlog->save()) {
+                                    $id = $newLeadtask->id;
+                                    return redirect()->route('task.index')->with('success', 'document verification completed');
+                                }
+                            } else {
+                                return redirect()->back()->with('error', 'there is something wrong during upadate logs');
+                            }
+                        } else {
+                            return redirect()->back()->with('error', 'there is something wrong during notification logs');
+                        }
+                    } else {
+                        return redirect()->back()->with('error', 'there is something wrong during update  new task details');
+                    }
+                } else {
+                    return redirect()->back()->with('error', 'there is something wrong during update  existed task details');
+                }
+            } else {
+                return redirect()->back()->with('error', 'there is something wrong during update  new task');
+            }
+        } else {
+            return redirect()->back()->with('erroe', "no task found");
         }
     }
 
-    public function showCaseHearing($id){
+    public function showCaseHearing($id)
+    {
         if ($id) {
             $notifyData = LeadNotification::where('task_id', $id)->update(['status' => 1]);
         }
@@ -1726,160 +1772,161 @@ class TasksController extends Controller
         return view('tasks.tradeMark.show_case_hearing', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage'));
     }
 
-    public function showCaseHearingStatus(Request $request , $id){
-          //  dd($request->all());
-          $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
-          $reminder_date = Carbon::createFromFormat('d M Y', $request->input('reminder_date'))->format('Y-m-d');
-          $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
-          $existedLeaedTask = LeadTask::find($id);
-          $existedLeaedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
-          $newLeadtask = new LeadTask();
-          $newLeadTaskDeatails  = new LeadTaskDetail();
-          $newNotification = new LeadNotification();
-          $newTaskStageId = $existedLeaedTask->service_stage_id + 1;
-          $newTaskTitle = ServiceStages::find($newTaskStageId);
-          $userName = Auth::user()->name;
-          $rule = [
-              'show_case_hearing' => 'required',
-              'verified' => 'required',
-              'assignUser' => 'required',
-              'deadline' => 'required'
-          ];
-          $validator = Validator::make($request->all(), $rule);
-          if ($validator->fails()) {
-              return redirect()->back()->withErrors($validator)->withInput();
-          }
-          if ($id) {
-              if ($request->show_case_hearing == 2 || $request->show_case_hearing == 4  ) {
-                  $rule = [
-                      'show_case_hearing' => 'required',
-                      'verified' => 'required',
-                      'reminder_date' => 'required',
-  
-                  ];
-                  $validator = Validator::make($request->all(), $rule);
-                  if ($validator->fails()) {
-                      return redirect()->back()->withErrors($validator)->withInput();
-                  }
-                  $existedLeaedTaskDetails->status = $request->show_case_hearing;
-                  $existedLeaedTaskDetails->status_date = $verifiedDate;
-                  $existedLeaedTaskDetails->reminderDate = $reminder_date;
-                  $existedLeaedTaskDetails->comment = $request->description;
-                  if ($request->hasFile('attachment')) {
-                      $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
-                      if (!file_exists($folderPath)) {
-                          mkdir($folderPath, 0755, true);
-                      }
-                      $filePaths = [];
-                      foreach ($request->file('attachment') as $file) {
-                          if ($file->isValid()) {
-                              $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
-                              $file->move($folderPath, $fileName);
-                              $filePaths[] = $fileName;
-                          }
-                      }
-                      $existedLeaedTaskDetails->attachment = json_encode($filePaths);
-                  }
-                  if ($existedLeaedTaskDetails->save()) {
-                      $newNotification->user_id = $existedLeaedTask->user_id;
-                      $newNotification->lead_id = $existedLeaedTask->lead_id;
-                      $newNotification->task_id = $existedLeaedTask->id;
-                      $newNotification->title = 'task On Hold ';
-                      $newNotification->description = 'Formality check is on hold';
-                      if ($newNotification->save()) {
-                          $newLog =  new LeadLog();
-                          $newLog->user_id = $existedLeaedTask->user_id;
-                          $newLog->lead_id = $existedLeaedTask->lead_id;
-                          $newLog->task_id = $existedLeaedTask->id;
-                          $newLog->assign_by = Auth::id();
-                          $newLog->description = "Formality check marked as incomplete ";
-  
-                          if ($newLog->save()) {
-                              return redirect()->route('task.index')->with('success', 'Formality check status is Updated');
-                          } else {
-                              return redirect()->back()->error('message', " there is something wrong during log generate ");
-                          }
-                      }
-                  } else {
-                      return redirect()->back()->error('message', " there is something wrong during hold the task ");
-                  }
-              } else if ($request->show_case_hearing == 1) {
-                  $newLeadtask->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
-                  $newLeadtask->lead_id = $existedLeaedTask->lead_id;
-                  $newLeadtask->service_id = $existedLeaedTask->service_id;
-                  $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
-                  $newLeadtask->service_stage_id = $request->stage_id;
-                  $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
-                  $newLeadtask->assign_by = Auth::id();
-                  $newLeadtask->task_title = $newTaskTitle->title;
-                  if ($newLeadtask->save()) {
-                      $existedLeaedTaskDetails->status = $request->show_case_hearing;
-                      $existedLeaedTaskDetails->status_date = $verifiedDate;
-                      if ($request->hasFile('attachment')) {
-                          $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
-                          if (!file_exists($folderPath)) {
-                              mkdir($folderPath, 0755, true);
-                          }
-                          $filePaths = [];
-                          foreach ($request->file('attachment') as $file) {
-                              if ($file->isValid()) {
-                                  $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
-                                  $file->move($folderPath, $fileName);
-                                  $filePaths[] = $fileName;
-                              }
-                          }
-                          $existedLeaedTaskDetails->attachment = json_encode($filePaths);
-                      }
-                      if ($existedLeaedTaskDetails->save()) {
-  
-                          $newLeadTaskDeatails->task_id = $newLeadtask->id;
-                          $newLeadTaskDeatails->dead_line = $deadlineDate;
-                          $newLeadTaskDeatails->status = 0;
-  
-                          if ($newLeadTaskDeatails->save()) {
-                              $newNotification->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
-                              $newNotification->lead_id = $existedLeaedTask->lead_id;
-                              $newNotification->task_id = $newLeadtask->id;
-                              $newNotification->title = 'Task Assigned';
-                              $newNotification->description =  $userName . ' assigned you ' . $newTaskTitle->title . ' task';
-                              $newNotification->status = 0;
-                              if ($newNotification->save()) {
-                                  $LeadLog =  new LeadLog();
-                                  $LeadLog->user_id = $existedLeaedTask->user_id;
-                                  $LeadLog->lead_id = $existedLeaedTask->lead_id;
-                                  $LeadLog->task_id = $existedLeaedTask->id;
-                                  $LeadLog->assign_by = Auth::id();
-                                  $LeadLog->description = "   marked as complete ";
-                                  if ($LeadLog->save()) {
-                                      $newassignlog = new leadLog();
-                                      $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
-                                      $newassignlog->lead_id = $existedLeaedTask->lead_id;
-                                      $newassignlog->task_id = $newLeadtask->id;
-                                      $newassignlog->assign_by = Auth::id();
-                                      $newassignlog->description =  "Lead assigned for next task";
-                                      if ($newassignlog->save()) {
-                                          $id = $newLeadtask->id;
-                                          return redirect()->route('task.index')->with('success', 'document verification completed');
-                                      }
-                                  } else {
-                                      return redirect()->back()->with('error', 'there is something wrong during upadate logs');
-                                  }
-                              } else {
-                                  return redirect()->back()->with('error', 'there is something wrong during notification logs');
-                              }
-                          } else {
-                              return redirect()->back()->with('error', 'there is something wrong during update  new task details');
-                          }
-                      } else {
-                          return redirect()->back()->with('error', 'there is something wrong during update  existed task details');
-                      }
-                  }
-              } else {
-                  return redirect()->back()->with('error', 'there is something wrong during update  new task');
-              }
-          } else {
-              return redirect()->back()->with('error', 'no task found');
-          }
+    public function showCaseHearingStatus(Request $request, $id)
+    {
+        //  dd($request->all());
+        $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
+        $reminder_date = Carbon::createFromFormat('d M Y', $request->input('reminder_date'))->format('Y-m-d');
+        $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
+        $existedLeaedTask = LeadTask::find($id);
+        $existedLeaedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
+        $newLeadtask = new LeadTask();
+        $newLeadTaskDeatails  = new LeadTaskDetail();
+        $newNotification = new LeadNotification();
+        $newTaskStageId = $existedLeaedTask->service_stage_id + 1;
+        $newTaskTitle = ServiceStages::find($newTaskStageId);
+        $userName = Auth::user()->name;
+        $rule = [
+            'show_case_hearing' => 'required',
+            'verified' => 'required',
+            'assignUser' => 'required',
+            'deadline' => 'required'
+        ];
+        $validator = Validator::make($request->all(), $rule);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        if ($id) {
+            if ($request->show_case_hearing == 2 || $request->show_case_hearing == 4) {
+                $rule = [
+                    'show_case_hearing' => 'required',
+                    'verified' => 'required',
+                    'reminder_date' => 'required',
+
+                ];
+                $validator = Validator::make($request->all(), $rule);
+                if ($validator->fails()) {
+                    return redirect()->back()->withErrors($validator)->withInput();
+                }
+                $existedLeaedTaskDetails->status = $request->show_case_hearing;
+                $existedLeaedTaskDetails->status_date = $verifiedDate;
+                $existedLeaedTaskDetails->reminderDate = $reminder_date;
+                $existedLeaedTaskDetails->comment = $request->description;
+                if ($request->hasFile('attachment')) {
+                    $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
+                    if (!file_exists($folderPath)) {
+                        mkdir($folderPath, 0755, true);
+                    }
+                    $filePaths = [];
+                    foreach ($request->file('attachment') as $file) {
+                        if ($file->isValid()) {
+                            $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
+                            $file->move($folderPath, $fileName);
+                            $filePaths[] = $fileName;
+                        }
+                    }
+                    $existedLeaedTaskDetails->attachment = json_encode($filePaths);
+                }
+                if ($existedLeaedTaskDetails->save()) {
+                    $newNotification->user_id = $existedLeaedTask->user_id;
+                    $newNotification->lead_id = $existedLeaedTask->lead_id;
+                    $newNotification->task_id = $existedLeaedTask->id;
+                    $newNotification->title = 'task On Hold ';
+                    $newNotification->description = 'Formality check is on hold';
+                    if ($newNotification->save()) {
+                        $newLog =  new LeadLog();
+                        $newLog->user_id = $existedLeaedTask->user_id;
+                        $newLog->lead_id = $existedLeaedTask->lead_id;
+                        $newLog->task_id = $existedLeaedTask->id;
+                        $newLog->assign_by = Auth::id();
+                        $newLog->description = "Formality check marked as incomplete ";
+
+                        if ($newLog->save()) {
+                            return redirect()->route('task.index')->with('success', 'Formality check status is Updated');
+                        } else {
+                            return redirect()->back()->error('message', " there is something wrong during log generate ");
+                        }
+                    }
+                } else {
+                    return redirect()->back()->error('message', " there is something wrong during hold the task ");
+                }
+            } else if ($request->show_case_hearing == 1) {
+                $newLeadtask->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+                $newLeadtask->lead_id = $existedLeaedTask->lead_id;
+                $newLeadtask->service_id = $existedLeaedTask->service_id;
+                $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
+                $newLeadtask->service_stage_id = $request->stage_id;
+                $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
+                $newLeadtask->assign_by = Auth::id();
+                $newLeadtask->task_title = $newTaskTitle->title;
+                if ($newLeadtask->save()) {
+                    $existedLeaedTaskDetails->status = $request->show_case_hearing;
+                    $existedLeaedTaskDetails->status_date = $verifiedDate;
+                    if ($request->hasFile('attachment')) {
+                        $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
+                        if (!file_exists($folderPath)) {
+                            mkdir($folderPath, 0755, true);
+                        }
+                        $filePaths = [];
+                        foreach ($request->file('attachment') as $file) {
+                            if ($file->isValid()) {
+                                $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
+                                $file->move($folderPath, $fileName);
+                                $filePaths[] = $fileName;
+                            }
+                        }
+                        $existedLeaedTaskDetails->attachment = json_encode($filePaths);
+                    }
+                    if ($existedLeaedTaskDetails->save()) {
+
+                        $newLeadTaskDeatails->task_id = $newLeadtask->id;
+                        $newLeadTaskDeatails->dead_line = $deadlineDate;
+                        $newLeadTaskDeatails->status = 0;
+
+                        if ($newLeadTaskDeatails->save()) {
+                            $newNotification->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+                            $newNotification->lead_id = $existedLeaedTask->lead_id;
+                            $newNotification->task_id = $newLeadtask->id;
+                            $newNotification->title = 'Task Assigned';
+                            $newNotification->description =  $userName . ' assigned you ' . $newTaskTitle->title . ' task';
+                            $newNotification->status = 0;
+                            if ($newNotification->save()) {
+                                $LeadLog =  new LeadLog();
+                                $LeadLog->user_id = $existedLeaedTask->user_id;
+                                $LeadLog->lead_id = $existedLeaedTask->lead_id;
+                                $LeadLog->task_id = $existedLeaedTask->id;
+                                $LeadLog->assign_by = Auth::id();
+                                $LeadLog->description = "   marked as complete ";
+                                if ($LeadLog->save()) {
+                                    $newassignlog = new leadLog();
+                                    $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+                                    $newassignlog->lead_id = $existedLeaedTask->lead_id;
+                                    $newassignlog->task_id = $newLeadtask->id;
+                                    $newassignlog->assign_by = Auth::id();
+                                    $newassignlog->description =  "Lead assigned for next task";
+                                    if ($newassignlog->save()) {
+                                        $id = $newLeadtask->id;
+                                        return redirect()->route('task.index')->with('success', 'document verification completed');
+                                    }
+                                } else {
+                                    return redirect()->back()->with('error', 'there is something wrong during upadate logs');
+                                }
+                            } else {
+                                return redirect()->back()->with('error', 'there is something wrong during notification logs');
+                            }
+                        } else {
+                            return redirect()->back()->with('error', 'there is something wrong during update  new task details');
+                        }
+                    } else {
+                        return redirect()->back()->with('error', 'there is something wrong during update  existed task details');
+                    }
+                }
+            } else {
+                return redirect()->back()->with('error', 'there is something wrong during update  new task');
+            }
+        } else {
+            return redirect()->back()->with('error', 'no task found');
+        }
     }
     public function assignTask(Request $request)
     {
@@ -1907,29 +1954,27 @@ class TasksController extends Controller
             return redirect()->route('task.formalityCheck', ['id' => $id]);
         } else if ($id == $taskDetails->id && $serviceId == 1 && $stageId == 8) {
             return redirect()->route('task.initialExamination', ['id' => $id]);
-        }
-        else if ($id == $taskDetails->id && $serviceId == 1 && $stageId == 9) {
+        } else if ($id == $taskDetails->id && $serviceId == 1 && $stageId == 9) {
             return redirect()->route('task.replyAdded', ['id' => $id]);
-        }else if ($id == $taskDetails->id && $serviceId == 1 && $stageId == 10) {
+        } else if ($id == $taskDetails->id && $serviceId == 1 && $stageId == 10) {
             return redirect()->route('task.govtPortalReply', ['id' => $id]);
-        }else if ($id == $taskDetails->id && $serviceId == 1 && $stageId == 11) {
+        } else if ($id == $taskDetails->id && $serviceId == 1 && $stageId == 11) {
             return redirect()->route('task.hearingDate', ['id' => $id]);
-        }else if ($id == $taskDetails->id && $serviceId == 1 && $stageId == 12) {
+        } else if ($id == $taskDetails->id && $serviceId == 1 && $stageId == 12) {
             return redirect()->route('task.showCaseHearing', ['id' => $id]);
         }
         // For Patent...............
         else if ($taskDetails && $serviceId == 2 && $stageId == 19) {
             return redirect()->route('task.patentSendQuotation', ['id' => $id]);
-        }
-        else if ($taskDetails && $serviceId == 2 && $stageId == 20) {
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 20) {
             return redirect()->route('task.patentPaymentVerification', ['id' => $id]);
-        }
-        else if ($taskDetails && $serviceId == 2 && $stageId == 21) {
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 21) {
             return redirect()->route('task.patentPriorArt', ['id' => $id]);
         }
     }
 
-    public function patentSendQuotation(Request $request,$id){
+    public function patentSendQuotation(Request $request, $id)
+    {
         $taskId = $id;
         if ($id) {
             $notifyData = LeadNotification::where('task_id', $id)->update(['status' => 1]);
@@ -1951,7 +1996,7 @@ class TasksController extends Controller
         $getStage = ServiceStages::where('service_id', $serviceID)->where('id', '>', $stage_id)->first();
         $leadTaskdetials = LeadTaskDetail::find($taskDetailsId);
         return view('tasks/patent/send-quotation', compact('taskId', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'serviceName', 'clientName'));
-        }
+    }
 
     public function patentPaymentVerification(Request $request, $id = null)
     {
@@ -1964,7 +2009,8 @@ class TasksController extends Controller
         return view('tasks/patent/payment-verification', compact('header_title_name', 'taskId', 'taskList', 'serviceStage', 'userList', 'currentUser'));
     }
 
-    public function patentPriorArt(Request $request ,$id){
+    public function patentPriorArt(Request $request, $id)
+    {
         $taskId = $id;
         $taskDetails = LeadTask::with(['user', 'lead', 'leadTaskDetails', 'services', 'subService', 'serviceSatge'])
             ->where('id', $id)
@@ -1981,11 +2027,12 @@ class TasksController extends Controller
         }
         $getStage = ServiceStages::where('service_id', $serviceID)->where('id', '>', $stage_id)->first();
         $header_title_name = "Prior Art";
-        return view('tasks/patent/prior-art',compact('header_title_name','taskId','users','taskDetails','getStage'));
+        return view('tasks/patent/prior-art', compact('header_title_name', 'taskId', 'users', 'taskDetails', 'getStage'));
     }
 
-    public function patentSubmitPriorArt(Request $request,$id){
-        if($request->isMethod('post')){
+    public function patentSubmitPriorArt(Request $request, $id)
+    {
+        if ($request->isMethod('post')) {
             dd($request);
             $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
             $dead_line = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
@@ -1998,29 +2045,29 @@ class TasksController extends Controller
             $serviceId = $existedLeaedTask->services->id;
             $subServiceId = $existedLeaedTask->subService->id;
             $assignedStageName = ServiceStages::where('id', $stageId)->first();
-           
-            if($request->relevantpriorart == 1){
-                $existedLeaedTaskDetails->update(['status' => 1,'status_date' => $verifiedDate]);
-                    $newLeadtask->user_id = $request->assignUser;
-                    $newLeadtask->lead_id = $existedLeaedTask->lead_id;
-                    $newLeadtask->service_id = $serviceId;
-                    $newLeadtask->subservice_id = $subServiceId;
-                    $newLeadtask->service_stage_id = $stageId;
-                    $newLeadtask->assign_by = Auth::id();
-                    $newLeadtask->task_title = $assignedStageName->description;
-                    $newLeadtask->task_description = $request->description;
-                if($newLeadtask->save()){
+
+            if ($request->relevantpriorart == 1) {
+                $existedLeaedTaskDetails->update(['status' => 1, 'status_date' => $verifiedDate]);
+                $newLeadtask->user_id = $request->assignUser;
+                $newLeadtask->lead_id = $existedLeaedTask->lead_id;
+                $newLeadtask->service_id = $serviceId;
+                $newLeadtask->subservice_id = $subServiceId;
+                $newLeadtask->service_stage_id = $stageId;
+                $newLeadtask->assign_by = Auth::id();
+                $newLeadtask->task_title = $assignedStageName->description;
+                $newLeadtask->task_description = $request->description;
+                if ($newLeadtask->save()) {
                     $newLeadTaskDeatails->task_id = $newLeadtask->id;
                     $newLeadTaskDeatails->status = 0;
                     $newLeadTaskDeatails->dead_line = $dead_line;
-                    $newLeadTaskDeatails->save();                    
-                }else{
-                    return redirect()->route('task.index')->with('error','Some error is occure while updating lead task.');
+                    $newLeadTaskDeatails->save();
+                } else {
+                    return redirect()->route('task.index')->with('error', 'Some error is occure while updating lead task.');
                 }
-            }else{
-                $existedLeaedTaskDetails->update(['status' => 1,'status_date' => $verifiedDate]);
-            }            
-            if ($request->hasFile('attachment')) {               
+            } else {
+                $existedLeaedTaskDetails->update(['status' => 1, 'status_date' => $verifiedDate]);
+            }
+            if ($request->hasFile('attachment')) {
                 $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
                 if (!file_exists($folderPath)) {
                     mkdir($folderPath, 0755, true);
@@ -2032,9 +2079,9 @@ class TasksController extends Controller
                         $file->move($folderPath, $fileName);
                         $filePaths[] = $fileName;
                     }
-                }       
-                $imgData = json_encode($filePaths);    
-                $existedLeaedTaskDetails->update(['attachment'=> $imgData]);
+                }
+                $imgData = json_encode($filePaths);
+                $existedLeaedTaskDetails->update(['attachment' => $imgData]);
             }
             return redirect()->route('task.index')->with('success', 'Task is completed!');
         }

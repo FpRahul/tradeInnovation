@@ -21,11 +21,22 @@
             <select name="payment" id="payment" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                <option value="" disabled selected>Select status</option>
                <option value="1">Paid</option>
+               <option value="2">partial payment</option>
                <option value="3">On Credit</option>
             </select>
             @error('payment')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
+         </div>
+         <div class=" hideOncredit w-full md:w-1/2">
+            <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Satge</label>
+            @if($getStage->count() > 0)
+            <input type="text" name="total_price" id="total_price" value="{{$getStage->title}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
+            <input type="hidden" name="stage_id" value="{{$getStage->id}}">
+            @endif
+            <!-- <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+                        Next stage will be: {{$getStage->title}}
+                    </p> -->
          </div>
          <!--  -->
          <div class="w-full md:w-1/2 hidden" id="paymentReminder">

@@ -30,12 +30,22 @@
                             <label class="flex text-[15px] text-[#000] mb-[5px]">User</label>
                             <select name="user_id" class="allform-filter-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[98px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
                                 <option value="">Select User</option>
+                                @if($activityUsers->isNotEmpty())
                                 @foreach($activityUsers as $user)
+                                @php
+                                // Try to find the user, if not found set $userName to 'N/A'
+                                $userModel = User::find($user);
+                                $userName = $userModel ? $userModel->name : 'N/A'; // Default value if user is not found
+                                @endphp
                                 <option value="{{ $user }}" {{ $filterOptions['user_id'] == $user ? 'selected' : '' }}>
-                                    @php $userName = User::find($user)->name; @endphp
                                     {{ $userName }}
                                 </option>
                                 @endforeach
+                                @else
+                                <option>No users available</option>
+                                @endif
+
+
                             </select>
                         </div>
 
@@ -158,7 +168,7 @@
 </div>
 <script>
     $(document).ready(function() {
-    // Calculate the default date range (last 7 days to today)
+        // Calculate the default date range (last 7 days to today)
         var startDate = moment().subtract(7, 'days');
         var endDate = moment();
 
@@ -180,6 +190,5 @@
             $("#filterForm")[0].reset();
         });
     });
-
 </script>
 @stop

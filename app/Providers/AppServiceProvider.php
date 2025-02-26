@@ -1,18 +1,16 @@
 <?php
 
 namespace App\Providers;
-
+use App\Models\AssignLead;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
-use App\Models\Menu;
+
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
+   
     public function register(): void
     {
-        //
+        
     }
 
     /**
@@ -20,8 +18,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $systemMenus = Menu::get();
-        
-        View::share('systemMenus', $systemMenus);
     }
+
+       
+    
+    // lead assign notification
+
 }

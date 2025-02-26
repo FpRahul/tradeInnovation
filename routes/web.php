@@ -90,7 +90,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::post('/deleteattchmentrepeater', 'deleteAttachmentRepeaterLead')->name('lead.deleteattachmentrepeater');
         Route::match(['POST','GET'],'/archive/{id?}', 'archiveLead')->name('leads.archive');
         Route::POST('/setassign','setAssignToUser')->name('leads.assign');
-        Route::post('/checkduplicateemail','checkEmailDuplicate')->name('lead.checkDuplicateEmail');
+        Route::post('/checkduplicateemail','checkEmailDuplicate')->name('lead.checkDuplicateEmail'); 
 
         
     });

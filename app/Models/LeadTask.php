@@ -44,4 +44,8 @@ class LeadTask extends Model
     {
         return $this->belongsTo(SubService::class, 'subservice_id');
     }
+    public function payment()
+    {
+        return $this->hasMany(Payment::class, 'task_id');
+    }
 }

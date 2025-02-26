@@ -417,7 +417,7 @@ class TasksController extends Controller
                         $existedTaskDetails->attachment = json_encode($filePaths);
                     }
                     if ($existedTaskDetails->save()) {
-                     
+
                         $newPayment->lead_id = $existedTask->lead_id;
                         $newPayment->task_id = $newTaskDetails->task_id;
                         $newPayment->reference_id = 0;
@@ -481,16 +481,25 @@ class TasksController extends Controller
     }
 
     public function checkPayment($id)
-    {  
-        
+    {
+
         if ($id) {
 
             $notifyData = LeadNotification::where('task_id', $id)->update(['status' => 1]);
         }
         $header_title_name = "payment Status";
-        $taskDetails = LeadTask::with(['user','payment', 'lead', 'leadTaskDetails', 'services', 'subService', 'serviceSatge'])
+        $taskDetails = LeadTask::with(['user', 'payment', 'lead', 'leadTaskDetails', 'services', 'subService', 'serviceSatge'])
             ->where('id', $id)
             ->get();
+        foreach ($taskDetails as $task) {
+            $lastPayment = $task->payment->last(); 
+
+            if ($lastPayment) {
+                $paymentId = $lastPayment->id;
+                $payamentDetails = Payment::where('id', $paymentId )->first();
+                
+            }
+        }
         foreach ($taskDetails as $task) {
             $taskDetailsId = $task->id;
         }
@@ -500,12 +509,12 @@ class TasksController extends Controller
         }
         $getStage = ServiceStages::where('service_id', 1)->where('id', '>', $stageId)->first();
         $leadTaskdetials = LeadTaskDetail::find($taskDetailsId);
-        return view('tasks.tradeMark.payment_status', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage'));
+        return view('tasks.tradeMark.payment_status', compact('id','payamentDetails','paymentId', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage'));
     }
 
     public function paymentStatus(Request $request, $id)
     {
-        // dd($request->all());
+        dd($request->total_price);
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         $paymentDeadlineDate = Carbon::createFromFormat('d M Y', $request->input('paymentDeadline'))->format('Y-m-d');
 
@@ -563,7 +572,7 @@ class TasksController extends Controller
                 } else {
                     return redirect()->route('task.index')->with('error', 'there is something wrong while updateing  lead task details ');
                 }
-            }else if($request->checkStatus == 2){
+            } else if ($request->checkStatus == 2) {
                 $rule = [
                     'payment' => 'required',
                 ];

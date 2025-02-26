@@ -59,7 +59,6 @@
 
       </div>
 
-
       <strong class="mt-5 block">Update Upcoming Actions</strong>
       <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2">
@@ -72,13 +71,11 @@
                Next stage will be: {{$getStage->title}}
             </p>
          </div>
-
          @if($taskDetails->count() > 0)
          @foreach ($taskDetails as $user )
          @php
          $selectedId = $user->user->id;
          @endphp
-
          @endforeach
          @endif
          <div class="w-full md:w-1/2">
@@ -172,6 +169,10 @@
       </div>
    </form>
 </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 41b8d706a51b96cd4879c42dcadc5c9fbab8613b
 <div id="assignUserModal" class="hidden fixed inset-0 z-50 bg-[rgba(0,0,0,0.6)] flex justify-center items-center">
    <!-- Modal content: Only the table -->
    <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); overflow: hidden;">

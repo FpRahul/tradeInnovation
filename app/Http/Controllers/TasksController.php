@@ -492,12 +492,11 @@ class TasksController extends Controller
             ->where('id', $id)
             ->get();
         foreach ($taskDetails as $task) {
-            $lastPayment = $task->payment->last(); 
+            $lastPayment = $task->payment->last();
 
             if ($lastPayment) {
                 $paymentId = $lastPayment->id;
-                $payamentDetails = Payment::where('id', $paymentId )->first();
-                
+                $payamentDetails = Payment::where('id', $paymentId)->first();
             }
         }
         foreach ($taskDetails as $task) {
@@ -509,12 +508,11 @@ class TasksController extends Controller
         }
         $getStage = ServiceStages::where('service_id', 1)->where('id', '>', $stageId)->first();
         $leadTaskdetials = LeadTaskDetail::find($taskDetailsId);
-        return view('tasks.tradeMark.payment_status', compact('id','payamentDetails','paymentId', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage'));
+        return view('tasks.tradeMark.payment_status', compact('id', 'payamentDetails', 'paymentId', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage'));
     }
 
     public function paymentStatus(Request $request, $id)
     {
-        dd($request->total_price);
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         $paymentDeadlineDate = Carbon::createFromFormat('d M Y', $request->input('paymentDeadline'))->format('Y-m-d');
 
@@ -523,6 +521,7 @@ class TasksController extends Controller
         $mail = false;
         $existedLeaedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
         $newLeadtask = new LeadTask();
+        $existedPayment = Payment::where('task_id', $id)->where('lead_id', $existedLeaedTask->lead_id)->where('id', $request->paymentId)->first();
         $newLeadTaskDeatails  = new LeadTaskDetail();
         $serviceId = $existedLeaedTask->services->id;
         $subServiceId = $existedLeaedTask->subService->id;
@@ -532,6 +531,7 @@ class TasksController extends Controller
         $rule = [
             'payment' => 'required',
             'deadline' => 'required',
+            'verified' => 'required',
             'stage_id' => 'required',
             'attachment' => 'array',
             'attachment.*' => 'nullable',
@@ -541,22 +541,27 @@ class TasksController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
         if ($id) {
-            if ($request->checkStatus == 3) {
+            if ($request->payment == 3) {
                 $rule = [
                     'payment' => 'required',
+                    'paymentDeadline' => 'required',
                 ];
                 $validator = Validator::make($request->all(), $rule);
                 if ($validator->fails()) {
                     return redirect()->back()->withErrors($validator)->withInput();
                 }
-                $existedLeaedTaskDetails->status = $request->payment;
-                $existedLeaedTaskDetails->status_date = $verifiedDate;
-                if ($request->payment == 3) {
-                    $existedLeaedTaskDetails->reminderDate = $paymentDeadlineDate;
-                } else {
-                    $existedLeaedTaskDetails->reminderDate = null;
-                }
-                if ($existedLeaedTaskDetails->save()) {
+                $newPayment = new Payment();
+                $newPayment->lead_id =  $existedPayment->lead_id;
+                $newPayment->task_id =  $existedPayment->task_id;
+                $newPayment->reference_id =  $existedPayment->id;
+                $newPayment->service_price =  $existedPayment->service_price;
+                $newPayment->govt_price =  $existedPayment->govt_price;
+                $newPayment->gst =  $existedPayment->gst;
+                $newPayment->total =  $existedPayment->total;
+                $newPayment->pending_amount =  $existedPayment->pending_amount;
+                $newPayment->submitted_amount =  $existedPayment->submitted_amount;
+
+                if ($newPayment->save()) {
                     $newassignlog = new leadLog();
                     $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
                     $newassignlog->lead_id = $existedLeaedTask->lead_id;
@@ -570,24 +575,30 @@ class TasksController extends Controller
                         return redirect()->route('task.index')->with('error', 'there is something wrong while updateing logs');
                     }
                 } else {
-                    return redirect()->route('task.index')->with('error', 'there is something wrong while updateing  lead task details ');
+                    return redirect()->back()->with('error', 'there is something wrong while updateing payment');
                 }
-            } else if ($request->checkStatus == 2) {
+            } else if ($request->payment == 2) {
                 $rule = [
                     'payment' => 'required',
+                    'paymentDeadline' => 'required',
                 ];
                 $validator = Validator::make($request->all(), $rule);
                 if ($validator->fails()) {
                     return redirect()->back()->withErrors($validator)->withInput();
                 }
-                $existedLeaedTaskDetails->status = $request->payment;
-                $existedLeaedTaskDetails->status_date = $verifiedDate;
-                if ($request->payment == 3) {
-                    $existedLeaedTaskDetails->reminderDate = $paymentDeadlineDate;
-                } else {
-                    $existedLeaedTaskDetails->reminderDate = null;
-                }
-                if ($existedLeaedTaskDetails->save()) {
+                
+                $pending_amount  = $existedPayment->pending_amount - $request->partial_payment;
+                $newPayment = new Payment();
+                $newPayment->lead_id =  $existedPayment->lead_id;
+                $newPayment->task_id =  $existedPayment->task_id;
+                $newPayment->reference_id =  $existedPayment->id;
+                $newPayment->service_price =  $existedPayment->service_price;
+                $newPayment->govt_price =  $existedPayment->govt_price;
+                $newPayment->gst =  $existedPayment->gst;
+                $newPayment->total =  $existedPayment->total;
+                $newPayment->pending_amount =  $pending_amount;
+                $newPayment->submitted_amount =  $request->partial_payment;
+                if ($newPayment->save()) {
                     $newassignlog = new leadLog();
                     $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
                     $newassignlog->lead_id = $existedLeaedTask->lead_id;
@@ -600,8 +611,6 @@ class TasksController extends Controller
                     } else {
                         return redirect()->route('task.index')->with('error', 'there is something wrong while updateing logs');
                     }
-                } else {
-                    return redirect()->route('task.index')->with('error', 'there is something wrong while updateing  lead task details ');
                 }
             }
             $newLeadtask->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
@@ -613,9 +622,13 @@ class TasksController extends Controller
             $newLeadtask->task_title = $assignedStageName->description;
             $newLeadtask->task_description = $request->description ?? null;
             if ($newLeadtask->save()) {
-                $existedLeaedTaskDetails->status = $request->payment;
+                if ($request->payment == 3 ||  $request->payment == 2 || $existedPayment->pending != 0 ) {
+                $existedLeaedTaskDetails->status = 3;
+                }else{
+                    $existedLeaedTaskDetails->status = $request->payment;
+                }
                 $existedLeaedTaskDetails->status_date = $verifiedDate;
-                if ($request->payment == 3) {
+                if ($request->payment == 3 ||  $request->payment == 2) {
                     $existedLeaedTaskDetails->reminderDate = $paymentDeadlineDate;
                 } else {
                     $existedLeaedTaskDetails->reminderDate = null;

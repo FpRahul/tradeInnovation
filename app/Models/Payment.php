@@ -20,6 +20,7 @@ class Payment extends Model
         'gst',
         'total',
         'pending_amount',
-        'reference_id'
+        'reference_id',
+        'submitted_amount'
     ];
 }

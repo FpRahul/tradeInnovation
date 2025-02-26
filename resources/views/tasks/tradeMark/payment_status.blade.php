@@ -76,14 +76,17 @@
             <input type="text" name="total_price" id="total_price" value="{{$payamentDetails->total}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
             <input type="hidden" name="total_price" value="{{$payamentDetails->total}}">
             @endif
-            <!-- <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-                        Next stage will be: {{$getStage->title}}
-                    </p> -->
+            <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+                        Total: {{$payamentDetails->total}}
+                    </p>
          </div>
          <div class="  w-full md:w-1/2 hidden partialPayment">
             <label for="amount" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Partial Amount</label>
-            <input type="text" name="partial_payment" id="partial_payment" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
-            
+            <input type="text" name="partial_payment" id="partial_payment" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            <p class="paymentInfo" style="color: skyblue; font-size: 14px; font-weight: 500;">
+               Pending Amount: {{$payamentDetails->total}}
+            </p>
+
          </div>
          <div class="flex justify-start flex-wrap w-[100%] md:w-[49%]">
             <label class="block w-full text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload</label>
@@ -213,22 +216,44 @@
 
       $("#payment").on("change", function() {
          var changedValue = $(this).val();
-         if (changedValue == 3 ) {
-            
+         var yes = $("#paymentInfo").val("");
+         if (changedValue == 3) {
+
             $("#verifiedDate label").text("Verified On");
             $("#paymentReminder").removeClass("hidden");
             $(".partialPayment").removeClass("hidden");
+            $("#partial_payment").prop('disabled', true);
+            $(".paymentInfo").text("Pending amount : {{$payamentDetails->pending_amount  }}");
+
             
-         } else if(changedValue == 2) {
+
+         } else if (changedValue == 2) {
+            yes = $("#partial_payment").val("0.00");
             $("#verifiedDate label").text("Verified On");
             $("#paymentReminder").removeClass("hidden");
             $(".partialPayment").removeClass("hidden");
+            $("#partial_payment").prop('disabled', false);
+            $(".paymentInfo").text("Pending amount : {{$payamentDetails->pending_amount  }}");
+         } else if(changedValue == 1){
+            yes = $("#partial_payment").val("{{$payamentDetails->total  }}");
+            $("#partial_payment").prop('disabled', true);
+            $(".partialPayment").removeClass("hidden");
+            $("#paymentReminder").addClass("hidden");
+            $(".paymentInfo").text("All amount are clear");
+            $("#verifiedDate label").text("Paid On");
+
+
+            
+            
+
          }
       });
 
       var status = $("#checkStatus").val();
       if (status == 3) {
          $(".hideOncredit").addClass('hidden');
+
+
       }
    });
 </script>

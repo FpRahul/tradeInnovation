@@ -378,7 +378,7 @@ class LeadsController extends Controller
 
         }
     }
-Z
+
     public function getSourceTypeName(Request $request){
         if($request->value == 18){
             $value = 3;

@@ -35,6 +35,7 @@
         
         <div>
             <ul>
+                @if ($leadLogs->isNotEmpty())
                 @foreach($leadLogs as $log)
                 <li class="py-[6px] pt-0 flex items-start flex-wrap gap-[16px] relative">
                     <div class="static min-w-[34px] w-[34px] h-[34px] bg-[#13103A] rounded-[100%] flex items-center justify-center">
@@ -147,6 +148,10 @@
                     </div>
                 </li>
                 @endforeach
+                @else
+                <li><a class="text-[#cf1616]">No Record Found!</a></li>
+                @endif
+               
             </ul>
         </div>
     </div>

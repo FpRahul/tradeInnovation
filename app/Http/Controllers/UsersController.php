@@ -364,6 +364,18 @@ class UsersController extends Controller
             $uniqueUserId = $this->generateUniqueUserCode('C','=', 2);
         }
         if ($request->isMethod('POST')) {
+            $scopeOfBusinessArray = $request->scopeofbusiness;            
+            if(in_array('other', $request->scopeofbusiness)){
+                $scopeOfBusinessArray = array_diff($scopeOfBusinessArray, ['other']);
+                $categoryData = new CategoryOption();
+                $categoryData->authId = Auth::id();
+                $categoryData->type = 4;
+                $categoryData->name = $request->otherscopeofbusiness;
+                $categoryData->status = 1;
+                if($categoryData->save()){
+                    $scopeOfBusinessArray[] = $categoryData->id;
+                }
+            }
             $credentials = $request->validate([
                 'email' => $email,
             ]);
@@ -396,7 +408,7 @@ class UsersController extends Controller
                 $newClientDetails->perma_city = $request->perma_city;
                 $newClientDetails->perma_state = $request->perma_state;
                 $newClientDetails->perma_zip = $request->perma_zip;
-                $newClientDetails->business_scope = implode(',',$request->scopeofbusiness);
+                $newClientDetails->business_scope = implode(',',$scopeOfBusinessArray);
                 
 
                 if ($newClientDetails->save()) {
@@ -904,7 +916,7 @@ class UsersController extends Controller
     }
 
     public function userReferral(Request $request){
-        $categoryData = CategoryOption::where('type', 3)->orderby('id', 'desc');
+        $categoryData = CategoryOption::where('type', 3);
         $searchKey = $request->input('key') ?? '';
         $requestType = $request->input('requestType') ?? '';
         if($searchKey){
@@ -912,7 +924,7 @@ class UsersController extends Controller
                 $q->where('name', 'LIKE', "%{$searchKey}%");
             });
         }
-        $categoryData = $categoryData->paginate(env("PAGINATION_COUNT"));
+        $categoryData = $categoryData->latest()->paginate(env("PAGINATION_COUNT"));
         if(empty($requestType)){
             $header_title_name = 'User';
             return view('users.referral', compact('header_title_name', 'categoryData','searchKey'));

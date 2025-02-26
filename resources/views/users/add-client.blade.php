@@ -95,7 +95,7 @@
                 {{-- //hhhhhhhhh --}}
                 <div class="w-full md:w-1/2">
                     <label for="number" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mobile Number <strong class="text-[#f83434]">*</strong></label>
-                    <input type="text" name="number" id="number" data-id="{{$newClient->id > 0 ? $newClient->id : 0}}" value="{{ old('number') ? old('number') : $newClient->mobile}}" class="checkDuplicateMobile w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Number" required>
+                    <input type="number" name="number" id="number" data-id="{{$newClient->id > 0 ? $newClient->id : 0}}" value="{{ old('number') ? old('number') : $newClient->mobile}}" class="checkDuplicateMobile w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Number" required>
                     <span class="mobile_exist_error text-[#df2727] text-[12px] hidden">Please try with another mobile number!</span>
                     @error('number')
                     <div class="alert alert-danger">{{ $message }}</div>
@@ -103,7 +103,7 @@
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="alternatePhone" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Alternate Mobile Number</label>
-                    <input type="text" name="alternatePhone" id="alternatePhone" value="{{ old('alternatePhone') ? old('alternatePhone') : $newClient->altNumber}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Alternate mobile number">
+                    <input type="number" name="alternatePhone" id="alternatePhone" value="{{ old('alternatePhone') ? old('alternatePhone') : $newClient->altNumber}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Alternate mobile number">
                     @error('alternatePhone')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -354,11 +354,11 @@
     });
 
     $(document).on('change', '.scopeOfBusinessSelect', function () {
-       let hiddenDiv = $(this).parent().parent().find('.otherScopeOfBusinessMain');
-        let selectedValues = $(this).val(); 
-        if (selectedValues && selectedValues.includes('other')) {
+        let hiddenDiv = $(this).parent().parent().find('.otherScopeOfBusinessMain'); 
+        let selectedValues = $(this).val();
+        if (Array.isArray(selectedValues) && selectedValues.includes('other')) {
             hiddenDiv.removeClass('hidden');
-        } else {
+        }else {
             hiddenDiv.addClass('hidden');
         }
     });

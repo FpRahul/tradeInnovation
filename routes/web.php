@@ -92,6 +92,9 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::POST('/setassign','setAssignToUser')->name('leads.assign');
         Route::post('/checkduplicateemail','checkEmailDuplicate')->name('lead.checkDuplicateEmail'); 
 
+        Route::match(['POST', 'GET'], '/firm', 'leadFirm')->name('firm.index');
+        Route::match(['POST', 'GET'], '/add-firm/{id?}', 'addLeadFirm')->name('firm.add');
+        Route::get('/firm-status/{id}','firmStatus')->name('firm.status');
         
     });
     //Tasks Routes

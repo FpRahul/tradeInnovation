@@ -62,14 +62,30 @@
                 </div>
 
                 <div class="w-full md:w-1/2">
+                    <label for="firm" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Firm</label>
+                    <select name="firm" id="firm" class="allform-select2 showfirmListName w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required onchange="displayRequired(this)">
+                        <option value="">firm Type</option>
+                        @if ($firmList && $firmList->isNotEmpty())
+                            @foreach ($firmList as $firmListData)
+                                <option value="{{ $firmListData->id }}" 
+                                    {{ old('firm', $leadData->firm) == $firmListData->id ? 'selected' : '' }}>
+                                    {{ $firmListData->name }}
+                                </option>
+                            @endforeach
+                        @endif
+                    </select>                    
+                </div>
+
+                
+            </div>
+            <div class="flex flex-col md:flex-row gap-[20px]">
+                <div class="w-full md:w-1/2">
                     <label for="clientname" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Client Name</label>
                     <input type="text" name="clientname" id="clientname" 
                         value="{{ old('clientname', !empty($leadData) ? $leadData->client_name : '') }}" 
                         class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
                     required>
                 </div>
-            </div>
-            <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="companyname" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Company Name</label>
                     <input type="text" name="companyname" id="companyname" value="{{ old('companyname') ? old('companyname') : (!empty($leadData) ? $leadData->company_name : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
@@ -77,7 +93,7 @@
                 <div class="w-full md:w-1/2">
                     <label for="scopeofbusiness" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Scope Of Business <strong class="text-[#f83434]">*</strong></label>
                     <select name="scopeofbusiness[]" id="scopeofbusiness" 
-                        class="selectedValue allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                        class="scopeOfBusinessSelect selectedValue allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
                         required multiple>
                         <option value="">Select Scope Of Business</option>                    
                         @if (!empty($scopeOfBussinessList) && $scopeOfBussinessList->isNotEmpty())
@@ -88,10 +104,13 @@
                                 </option>                      
                             @endforeach                                                            
                         @endif
+                        <option value="other">Other</option>
                     </select>
-
                 </div>
-                
+                <div class="otherScopeOfBusinessMain w-full md:w-1/2 hidden">
+                    <label for="otherscopeofbusiness" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Other Scope</label>
+                    <input type="text" class="otherscopeofbusiness w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" name="otherscopeofbusiness" value="">
+                </div>
             </div>
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
@@ -394,7 +413,7 @@
                     </div>
                 </div>
             </div>
-
+           
             <div class="">
                 <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
                 <textarea name="description" id="description" class="w-full h-[155px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">{{ old('description', !empty($leadData) ? $leadData->description : '') }}</textarea>
@@ -597,6 +616,7 @@
         }
         
     }
+
     $(document).on('keyup','.checkDuplicateMobile',function(){
         if($(this).val().length >=10){
             let id = $(this).data('id');
@@ -623,6 +643,16 @@
             });
         }
         
+    });
+
+    $(document).on('change', '.scopeOfBusinessSelect', function () {
+        let hiddenDiv = $(this).parent().parent().find('.otherScopeOfBusinessMain'); 
+        let selectedValues = $(this).val();
+        if (Array.isArray(selectedValues) && selectedValues.includes('other')) {
+            hiddenDiv.removeClass('hidden');
+        }else {
+            hiddenDiv.addClass('hidden');
+        }
     });
     
 </script>

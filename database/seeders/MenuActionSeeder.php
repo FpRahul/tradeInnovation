@@ -47,6 +47,8 @@ class MenuActionSeeder extends Seeder
             array('id' => '32','menuId' => '17','actionName' => 'Hold Task','route' => 'task.hold','created_at' => NULL,'updated_at' => NULL),
             array('id' => '33','menuId' => '18','actionName' => 'Add / Edit','route' => 'partner.add','created_at' => NULL,'updated_at' => NULL),
             array('id' => '34','menuId' => '18','actionName' => 'Update Status','route' => 'partner.status','created_at' => NULL,'updated_at' => NULL),
+            array('id' => '35','menuId' => '19','actionName' => 'Add / Edit','route' => 'firm.add','created_at' => NULL,'updated_at' => NULL),
+            array('id' => '36','menuId' => '19','actionName' => 'Update Status','route' => 'firm.status','created_at' => NULL,'updated_at' => NULL),
           ));
     }
 }

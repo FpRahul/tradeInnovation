@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use App\Models\CategoryOption;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Service; 
 use App\Models\SubService;
 use App\Models\User;
@@ -12,7 +13,7 @@ use App\Models\LeadLog;
 use App\Models\FollowUp;
 use App\Models\LeadNotification;
 use App\Models\LeadTask;
-
+use App\Models\Firm;
 use App\Models\LeadTaskDetail;
 use App\Models\ServiceStages;
 use Illuminate\Support\Facades\Validator;
@@ -109,8 +110,21 @@ class LeadsController extends Controller
         $serviceList = Service::where('status',1)->get();
         $userList = User::where('role','>=',5)->where('status',1)->get();
         $projectManagerList = User::where('role',4)->where('status',1)->get();
+        $firmList = Firm::where('status',1)->get();
 
         if($request->isMethod('POST')){
+            $scopeOfBusinessArray = $request->scopeofbusiness;            
+            if(in_array('other', $request->scopeofbusiness)){
+                $scopeOfBusinessArray = array_diff($scopeOfBusinessArray, ['other']);
+                $categoryData = new CategoryOption();
+                $categoryData->authId = Auth::id();
+                $categoryData->type = 4;
+                $categoryData->name = $request->otherscopeofbusiness;
+                $categoryData->status = 1;
+                if($categoryData->save()){
+                    $scopeOfBusinessArray[] = $categoryData->id;
+                }
+            }
             $credentials = $request->validate([
                 'email' => $email,
             ]);
@@ -138,8 +152,9 @@ class LeadsController extends Controller
             $leadData->email = $request->email;
             $leadData->description = $request->description;
             $leadData->msmem = $request->msmem;
-            $leadData->business_scope = implode(',',$request->scopeofbusiness);
+            $leadData->business_scope = implode(',',$scopeOfBusinessArray);
             $leadData->status = $request->savetype;
+            $leadData->firm = $request->firm;
             if($leadData->save()){
                 $serviceidArray = [];
                 // lead attachment repeater...         
@@ -241,7 +256,7 @@ class LeadsController extends Controller
             }
         }
         $header_title_name = 'Lead';
-        return view('leads/add',compact('header_title_name','sourceList','serviceList','projectManagerList','userList','leadData','leadAttachment','LeadTask','scopeOfBussinessList'));
+        return view('leads/add',compact('header_title_name','firmList','sourceList','serviceList','projectManagerList','userList','leadData','leadAttachment','LeadTask','scopeOfBussinessList'));
     }
     // lead fetch...........
     public function leadFetch(Request $request){
@@ -451,7 +466,46 @@ class LeadsController extends Controller
         return response()->json(['error' => 'Invalid request'], 400);
     }
     
-    
+    public function leadFirm(){
+        $header_title_name = 'Manage Firm';
+        $firmData = firm::latest()->get();
+        return view('leads/firm', compact('header_title_name','firmData'));
+    }
+
+    public function addLeadFirm(Request $request,$id=null){        
+        if($request->firm_id > 0){
+            $firmData = Firm::find($request->firm_id);
+        }else{
+            $firmData = new Firm();
+        }
+        if($request->isMethod('post')){
+           $firmData->name = $request->firmname;
+           $firmData->city = $request->firmcity;
+           $firmData->state = $request->firmstate;
+           $firmData->zipcode = $request->firmzipcode;
+            if($firmData->save()){
+                if($request->firm_id > 0){
+                    return redirect()->back()->with('success','Succusfully Updated!');
+                }else{
+                    return redirect()->back()->with('success','Succusfully Inserted!');
+                }
+            }else{
+                return redirect()->back()->with('error','Some error is occured!');
+            }
+        }
+    }
+
+    public function firmStatus($id){
+        $firmData = Firm::find($id);
+        if($firmData){
+            $firmData->status = $firmData->status == 0 ? 1 : 0;
+            if($firmData->save()){
+                return redirect()->back()->with('success','Status is updated!');
+            }else{
+                return redirect()->back()->with('error','Some error is occur while updating status!');
+            }
+        }
+    }
 
    
 }

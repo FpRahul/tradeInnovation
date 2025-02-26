@@ -23,7 +23,8 @@ class Lead extends Model
         'quotation_sent',
         'quotation_sent_date',
         'msmem',
-        'business_scope'
+        'business_scope',
+        'firm'
     ];
     public function leadService(){
         return $this->hasMany(LeadService::class,'lead_id','id');

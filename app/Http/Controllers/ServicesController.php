@@ -10,7 +10,7 @@ use App\View\Components\LogActivity;
 class ServicesController extends Controller
 {
     public function index(Request $request){
-        $serviceData = Service::paginate(env("PAGINATION_COUNT"));
+        $serviceData = Service::latest()->paginate(env("PAGINATION_COUNT"));
         $searchKey = $request->input('key') ?? '';       
         if($request->isMethod('POST')){
             if($request->requestType == 'ajax'){        
@@ -29,13 +29,9 @@ class ServicesController extends Controller
     }
 
     public function addService(Request $request){
-
-        $clientIP = \Request::ip();
-        
-        $userAgent = \Request::header('User-Agent');
-     
-
-    $operatingSystem = getOperatingSystem($userAgent);
+        $clientIP = \Request::ip();        
+        $userAgent = \Request::header('User-Agent'); 
+        $operatingSystem = getOperatingSystem($userAgent);
         if($request->service_id > 0){
             $logAct = 'updated';
             $serviceData = Service::find($request->service_id);
@@ -67,8 +63,7 @@ class ServicesController extends Controller
 
     public function addSubService(Request $request,$id=null)
     {
-        $clientIP = \Request::ip();
-        
+        $clientIP = \Request::ip();        
         $userAgent = \Request::header('User-Agent');
         $operatingSystem = getOperatingSystem($userAgent);
         if($id > 0){
@@ -136,7 +131,7 @@ class ServicesController extends Controller
     }
    
     public function deleteRepeaterSubserv(Request $request){
-        $subServiceDel = SubService::where('id',$request->id);
+        $subServiceDel = SubService::where('id',$request->id)->first();
         $clientIP = \Request::ip();
         
         $userAgent = \Request::header('User-Agent');
@@ -152,6 +147,7 @@ class ServicesController extends Controller
             ];
             $logActivity = new LogActivity($logActivity);
             $logActivity->log();
+            echo "1";
         }else{
             echo "0";
         }

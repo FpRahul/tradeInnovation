@@ -12,6 +12,7 @@
    <form action="{{route('task.paymentStatus',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
       <strong class="mt-4 block"> Update Current Task</strong>
+      <input type="hidden" name="paymentId" value="{{ $paymentId }}">
       @foreach ($taskDetails as $task )
       <input type="hidden" name="checkStatus" id="checkStatus" value="{{$task->leadTaskDetails->status}}">
       @endforeach
@@ -22,22 +23,13 @@
                <option value="" disabled selected>Select status</option>
                <option value="1">Paid</option>
                <option value="2">partial payment</option>
-               <option value="3">On Credit</option>
+               <option value="3">On Credit </option>
             </select>
             @error('payment')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
          </div>
-         <div class=" hideOncredit w-full md:w-1/2">
-            <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Satge</label>
-            @if($getStage->count() > 0)
-            <input type="text" name="total_price" id="total_price" value="{{$getStage->title}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
-            <input type="hidden" name="stage_id" value="{{$getStage->id}}">
-            @endif
-            <!-- <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-                        Next stage will be: {{$getStage->title}}
-                    </p> -->
-         </div>
+
          <!--  -->
          <div class="w-full md:w-1/2 hidden" id="paymentReminder">
             <label for="paymentDeadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
@@ -78,6 +70,21 @@
          </div>
       </div>
       <div class="flex flex-col md:flex-row gap-[20px]">
+         <div class="  w-full md:w-1/2">
+            <label for="amount" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Total Amount</label>
+            @if($payamentDetails->count() > 0)
+            <input type="text" name="total_price" id="total_price" value="{{$payamentDetails->total}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
+            <input type="hidden" name="total_price" value="{{$payamentDetails->total}}">
+            @endif
+            <!-- <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+                        Next stage will be: {{$getStage->title}}
+                    </p> -->
+         </div>
+         <div class="  w-full md:w-1/2 hidden partialPayment">
+            <label for="amount" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Partial Amount</label>
+            <input type="text" name="partial_payment" id="partial_payment" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
+            
+         </div>
          <div class="flex justify-start flex-wrap w-[100%] md:w-[49%]">
             <label class="block w-full text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload</label>
 
@@ -206,16 +213,16 @@
 
       $("#payment").on("change", function() {
          var changedValue = $(this).val();
-         if (changedValue == 3) {
+         if (changedValue == 3 ) {
+            
             $("#verifiedDate label").text("Verified On");
             $("#paymentReminder").removeClass("hidden");
-
-
-         } else {
-            $("#verifiedDate label").text("Paid On");
-            $("#paymentReminder").addClass("hidden");
-
-
+            $(".partialPayment").removeClass("hidden");
+            
+         } else if(changedValue == 2) {
+            $("#verifiedDate label").text("Verified On");
+            $("#paymentReminder").removeClass("hidden");
+            $(".partialPayment").removeClass("hidden");
          }
       });
 

@@ -22,7 +22,7 @@
             <select name="payment" id="payment" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                <option value="" disabled selected>Select status</option>
                <option value="1">Paid</option>
-               <option value="2">partial payment</option>
+               <option value="2">Partial Payment</option>
                <option value="3">On Credit </option>
             </select>
             @error('payment')
@@ -70,8 +70,8 @@
          </div>
       </div>
       <div class="flex flex-col md:flex-row gap-[20px]">
-         <div class="  w-full md:w-1/2">
-            <label for="amount" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Total Amount</label>
+         <div class="  w-full md:w-1/2 hidden total_amount ">
+            <label for="amount" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Total Amount (inc GST & Govt. fees)</label>
             @if($payamentDetails->count() > 0)
             <input type="text" name="total_price" id="total_price" value="{{$payamentDetails->total}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
             <input type="hidden" name="total_price" value="{{$payamentDetails->total}}">
@@ -81,7 +81,7 @@
                     </p>
          </div>
          <div class="  w-full md:w-1/2 hidden partialPayment">
-            <label for="amount" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Partial Amount</label>
+            <label for="amount" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">PaidPartial Amount</label>
             <input type="text" name="partial_payment" id="partial_payment" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
             <p class="paymentInfo" style="color: skyblue; font-size: 14px; font-weight: 500;">
                Pending Amount: {{$payamentDetails->total}}
@@ -123,7 +123,7 @@
          @enderror
       </div>
 
-      <strong class=" hideOnChange mt-5 block">Update Upcoming Actions</strong>
+      <strong class=" hideOncredit mt-5 block">Update Upcoming Actions</strong>
       <div class=" hideOncredit flex flex-col md:flex-row gap-[20px]">
          <div class=" hideOncredit w-full md:w-1/2">
             <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Satge</label>
@@ -161,7 +161,7 @@
 
 
       </div>
-      <div class="w-full md:w-1/2" id="deadLineDate">
+      <div class="w-full md:w-1/2 hideOncredit" id="deadLineDate">
          <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
             Documentation Dead line
          </label>
@@ -223,6 +223,8 @@
             $("#paymentReminder").removeClass("hidden");
             $(".partialPayment").removeClass("hidden");
             $("#partial_payment").prop('disabled', true);
+            $(".partialPayment").addClass("hidden");
+            $(".total_amount").addClass("hidden");
             $(".paymentInfo").text("Pending amount : {{$payamentDetails->pending_amount  }}");
 
             
@@ -232,13 +234,16 @@
             $("#verifiedDate label").text("Verified On");
             $("#paymentReminder").removeClass("hidden");
             $(".partialPayment").removeClass("hidden");
+            $(".total_amount").removeClass("hidden");
             $("#partial_payment").prop('disabled', false);
             $(".paymentInfo").text("Pending amount : {{$payamentDetails->pending_amount  }}");
          } else if(changedValue == 1){
             yes = $("#partial_payment").val("{{$payamentDetails->total  }}");
             $("#partial_payment").prop('disabled', true);
-            $(".partialPayment").removeClass("hidden");
+            $(".partialPayment").addClass("hidden");
             $("#paymentReminder").addClass("hidden");
+            $(".total_amount").addClass("hidden");
+
             $(".paymentInfo").text("All amount are clear");
             $("#verifiedDate label").text("Paid On");
 

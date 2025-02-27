@@ -46,7 +46,9 @@ class TasksController extends Controller
 
         $header_title_name = "Tasks";
         $assignUser = auth()->user();
-        $taskDetails = LeadTask::with(['user', 'lead', 'leadTaskDetails', 'services', 'subService', 'serviceSatge'])->orderBy('created_at', 'desc');
+        $taskDetails = LeadTask::with(['user', 'lead', 'leadTaskDetails', 'services', 'subService', 'serviceSatge'])->whereHas('lead',function($q){
+            $q->where('status',1);
+        })->orderBy('created_at', 'desc');
         if ($assignUser->role != 1) {
             $taskDetails = $taskDetails->where('user_id', $assignUser->id);
         }
@@ -93,7 +95,6 @@ class TasksController extends Controller
                 $q->where('user_id', $request->user);
             });
         } else {
-
             $taskDetails = $taskDetails->whereHas('leadTaskDetails', function ($query) {
                 $query->where('status', '!=', 1);
             });

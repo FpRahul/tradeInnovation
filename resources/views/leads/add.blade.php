@@ -8,12 +8,31 @@
 <div>   
     <div class="flex items-center justify-between mb-[20px]">
         <h3 class="text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">Add Leads</h3>
+        <div class="w-full md:w-1/4">
+            <select name="clientexist" id="clientexist" class="clientExistOrNot w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                <option value="">Client Exist</option>
+                <option value="0">Yes</option>
+                <option value="1">No</option>                        
+            </select>                    
+        </div>
     </div>
     <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[10px] lg:rounded-[20px] mb-[30px]">
         <form method="POST" id="submitLeadForm" action="{{ route('leads.add',['id'=>$leadData->id])}}" enctype="multipart/form-data" class="py-[15px] px-[15px] lg:py-[25px] lg:px-[30px] space-y-[20px]">
             @csrf    
             <input type="hidden" name="savetype" id="savetype" value='0'/>  
             <div class="flex flex-col md:flex-row gap-[20px]">
+                
+                <div class="clientNameList w-full md:w-1/2 hidden">
+                    <label for="clientName" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Client Name</label>
+                    <select name="clientName" id="clientName" class="selectedClientName w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                        <option value="">Select Client</option>
+                        @if ($clientList && $clientList->isNotEmpty())
+                            @foreach ($clientList as $clVal)
+                                <option value="{{$clVal->id}}">{{$clVal->name}} ( {{$clVal->email}} )</option>
+                            @endforeach
+                        @endif                
+                    </select>                    
+                </div>
                 <div class="w-full md:w-1/2">
                     <label for="source" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Source</label>
                     <select name="source" id="source" class="allform-select2 showSourceListName w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required onchange="displayRequired(this)">
@@ -181,7 +200,7 @@
                                                         @endif                                              
                                                     </select>
                                                     
-                                                    <div class="loader serviceNameLoader flex items-center justify-center bg-[#ffffffa8] h-[45px] absolute top-[20px] left-[0] right-[0] m-auto hidden">
+                                                    <div class="loader serviceNameLoader flex items-center justify-center bg-[#ffffffa8] h-[45px] absolute top-[26px] left-[0] right-[0] m-auto hidden">
                                                         <span class="loader-1"> </span>   
                                                     </div>
                                                 </div>
@@ -278,7 +297,7 @@
                                                 <select name="subserviceid" class=" getSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                     <option value="">Service Type</option>                                                
                                                 </select>
-                                                <div class="loader serviceNameLoader flex items-center justify-center bg-[#ffffffa8] h-[45px] absolute top-[0px] left-[0] right-[0] m-auto hidden">
+                                                <div class="loader serviceNameLoader flex items-center justify-center bg-[#ffffffa8] h-[45px] absolute top-[26px] left-[0] right-[0] m-auto hidden">
                                                     <span class="loader-1"> </span>   
                                                 </div>
                                             </div>
@@ -655,5 +674,12 @@
         }
     });
     
+    // $(document).on('change','.clientExistOrNot',function(){
+    //     if($(this).val() == 0){  // For existance
+
+    //     }else{
+
+    //     }
+    // });
 </script>
 @stop

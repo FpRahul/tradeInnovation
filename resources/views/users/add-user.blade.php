@@ -43,7 +43,7 @@
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="fatherHusbandName" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Father/Husband Name <strong class="text-[#f83434]">*</strong></label>
-                    <input type="text" name="fatherHusbandName" id="fatherHusbandName" value="{{ old('fatherHusbandName') ? old('fatherHusbandName') : (!empty($newUserDetails->fatherHusbandName) ? $newUserDetails->fatherHusbandName : '') }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Company Name" required>
+                    <input type="text" name="fatherHusbandName" id="fatherHusbandName" value="{{ old('fatherHusbandName') ? old('fatherHusbandName') : (!empty($newUserDetails->fatherHusbandName) ? $newUserDetails->fatherHusbandName : '') }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Father/Husband Name" required>
                     @error('fatherHusbandName')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -93,7 +93,7 @@
 
                 <div class="w-full md:w-1/2">
                     <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Email-Id <strong class="text-[#f83434]">*</strong></label>
-                    <input type="text" name="email" id="email" value="{{ old('email') ? old('email') : $newUser->email }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Email" required>
+                    <input type="text" name="email" id="email" value="{{ old('email') ? old('email') : $newUser->email }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Email" required>
                     @error('email')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror

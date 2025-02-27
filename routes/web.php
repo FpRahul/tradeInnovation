@@ -95,6 +95,11 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::match(['POST', 'GET'], '/firm', 'leadFirm')->name('firm.index');
         Route::match(['POST', 'GET'], '/add-firm/{id?}', 'addLeadFirm')->name('firm.add');
         Route::get('/firm-status/{id}','firmStatus')->name('firm.status');
+
+        Route::get('/invoice/{id?}','leadInvoice')->name('lead.invoice');
+
+        // check existed client
+        Route::post('/client','existedClientDetail')->name('lead.existedClientDetail');
         
     });
     //Tasks Routes

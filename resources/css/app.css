@@ -312,6 +312,17 @@ ul.modalAtch i.ri-delete-bin-line {
 .createRoll .active ul > li a { color: #13103a;}
 .bxshadow { box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1); }
 
+button.swal-button {
+    background: #13103a;
+    border: none;
+    color: #fff;
+    border-radius: 9px;
+}
+
+button.swal-button:hover,button.swal-button:focus {
+    background: #13103a!important;
+}
+
 /* responsive */
 @media (max-width: 767px){
 .employee_repeater_wrapper .repeater-default > div > div:first-child { flex-direction: column; } 

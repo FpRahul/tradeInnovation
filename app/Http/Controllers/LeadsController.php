@@ -66,10 +66,12 @@ class LeadsController extends Controller
             ->groupBy('source')
             ->with('categoryOptions',function($q){
                 $q->where('type',3)->where('status',1);
-            })->get();            
-            // dd($sourceList);
-            $serviceList = Lead::with('leadTasks')->whereHas('leadTasks')->where('user_id', auth()->user()->id)->get()->pluck('leadTasks')->flatten()->pluck('service_id');
-            
+            })->get();
+            $serviceList = LeadTask::when(auth()->user()->id !== 1, function ($query) {
+                return $query->where('user_id', auth()->user()->id);
+            })
+            ->get()
+            ->pluck('service_id');
             $userList = User::where('role','>=',5)->get();
             $header_title_name = 'Leads';
             return view('leads/index',compact('allRequestData','header_title_name','leadList','sourceList','serviceList','userList','sourceKey','serviceKey','statusKey','searchKey'));
@@ -86,7 +88,7 @@ class LeadsController extends Controller
         
     }
 
-    public function add(Request $request, $id = null){
+    public function add(Request $request, $id = null){        
         if($id > 0){
             $leadData = Lead::where('id',$id)->first();
             if($leadData->status == 1){
@@ -109,6 +111,7 @@ class LeadsController extends Controller
         $scopeOfBussinessList = CategoryOption::where('status', 1)->where('type', 4)->get();
         $serviceList = Service::where('status',1)->get();
         $userList = User::where('role','>=',5)->where('status',1)->get();
+        $clientList = User::where('role',2)->where('status',1)->get();
         $projectManagerList = User::where('role',4)->where('status',1)->get();
         $firmList = Firm::where('status',1)->get();
 
@@ -256,7 +259,7 @@ class LeadsController extends Controller
             }
         }
         $header_title_name = 'Lead';
-        return view('leads/add',compact('header_title_name','firmList','sourceList','serviceList','projectManagerList','userList','leadData','leadAttachment','LeadTask','scopeOfBussinessList'));
+        return view('leads/add',compact('header_title_name','firmList','sourceList','serviceList','projectManagerList','userList','clientList','leadData','leadAttachment','LeadTask','scopeOfBussinessList'));
     }
     // lead fetch...........
     public function leadFetch(Request $request){
@@ -466,11 +469,28 @@ class LeadsController extends Controller
         return response()->json(['error' => 'Invalid request'], 400);
     }
     
-    public function leadFirm(){
+    public function leadFirm(Request $request){
+        $firmData = Firm::where('id', '>', 0); // Query Builder instance
+        $searchKey = $request->input('key') ?? '';
+        $requestType = $request->input('requestType') ?? '';
+    
+        if ($searchKey != '') {
+            $firmData->where('name', 'LIKE', '%' . $searchKey . '%');
+        }
+    
+        // Store paginated result back into $firmData
+        $firmData = $firmData->latest()->paginate(env("PAGINATION_COUNT"));
+    
         $header_title_name = 'Manage Firm';
-        $firmData = firm::latest()->get();
-        return view('leads/firm', compact('header_title_name','firmData'));
+    
+        if (empty($requestType)) {
+            return view('leads.firm', compact('header_title_name', 'firmData', 'searchKey'));
+        } else {
+            $trData = view('leads.firm-page-filter-data', compact('firmData', 'searchKey'))->render();
+            return response()->json(['trData' => $trData]);
+        }
     }
+    
 
     public function addLeadFirm(Request $request,$id=null){        
         if($request->firm_id > 0){
@@ -507,5 +527,13 @@ class LeadsController extends Controller
         }
     }
 
+    public function leadInvoice(Request $request,$id=null){
+        $header_title_name = 'Manage Invoice';
+        return view('leads.invoice', compact('header_title_name'));
+    }
+
+    public function existedClientDetail(Request $request){
+        dd($request);
+    }
    
 }

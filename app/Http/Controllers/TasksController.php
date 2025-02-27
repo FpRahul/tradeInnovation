@@ -514,9 +514,9 @@ class TasksController extends Controller
 
     public function paymentStatus(Request $request, $id)
     {
+
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         $paymentDeadlineDate = Carbon::createFromFormat('d M Y', $request->input('paymentDeadline'))->format('Y-m-d');
-
         $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
         $existedLeaedTask = LeadTask::with(['lead', 'services', 'subService', 'serviceSatge'])->where('id', $id)->first();
         $mail = false;
@@ -541,187 +541,314 @@ class TasksController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
+
         if ($id) {
-            if ($request->payment == 3) {
-                $rule = [
-                    'payment' => 'required',
-                    'paymentDeadline' => 'required',
-                ];
-                $validator = Validator::make($request->all(), $rule);
-                if ($validator->fails()) {
-                    return redirect()->back()->withErrors($validator)->withInput();
-                }
-                $newPayment = new Payment();
-                $newPayment->lead_id =  $existedPayment->lead_id;
-                $newPayment->task_id =  $existedPayment->task_id;
-                $newPayment->reference_id =  $existedPayment->id;
-                $newPayment->service_price =  $existedPayment->service_price;
-                $newPayment->govt_price =  $existedPayment->govt_price;
-                $newPayment->gst =  $existedPayment->gst;
-                $newPayment->total =  $existedPayment->total;
-                $newPayment->pending_amount =  $existedPayment->pending_amount;
-                $newPayment->submitted_amount =  $existedPayment->submitted_amount;
+            if ($request->checkStatus == 0) {
+                $newLeadtask->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+                $newLeadtask->lead_id = $existedLeaedTask->lead_id;
+                $newLeadtask->service_id = $serviceId;
+                $newLeadtask->subservice_id = $subServiceId;
+                $newLeadtask->service_stage_id = $stageId;
+                $newLeadtask->assign_by = Auth::id();
+                $newLeadtask->task_title = $assignedStageName;
+                $newLeadtask->task_description = $request->description;
+                if ($newLeadtask->save()) {
+                    if ($request->payment == 1 || $existedPayment->pending_amount == 0) {
+                        $existedLeaedTaskDetails->status = 1;
+                    } else if ($request->payment == 2) {
+                        $existedLeaedTaskDetails->status = 3;
+                    } else if ($request->payment == 3) {
+                        $existedLeaedTaskDetails->status = 3;
+                    }
 
-                if ($newPayment->save()) {
-                    $newassignlog = new leadLog();
-                    $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
-                    $newassignlog->lead_id = $existedLeaedTask->lead_id;
-                    $newassignlog->lead_id = $existedLeaedTask->lead_id;
-                    $newassignlog->task_id = $existedLeaedTask->id;
-                    $newassignlog->assign_by = Auth::id();
-                    $newassignlog->description =  " Payment status marked as on Credit";
-                    if ($newassignlog->save()) {
-                        return redirect()->route('task.index')->with('success', 'payment status is Updated');
+                    $existedLeaedTaskDetails->status_date = $verifiedDate;
+                    if ($request->payment == 2 || $request->payment == 3) {
+                        $existedLeaedTaskDetails->reminderDate = $paymentDeadlineDate;
                     } else {
-                        return redirect()->route('task.index')->with('error', 'there is something wrong while updateing logs');
+                        $existedLeaedTaskDetails->reminderDate = null;
                     }
-                } else {
-                    return redirect()->back()->with('error', 'there is something wrong while updateing payment');
-                }
-            } else if ($request->payment == 2) {
-                $rule = [
-                    'payment' => 'required',
-                    'paymentDeadline' => 'required',
-                ];
-                $validator = Validator::make($request->all(), $rule);
-                if ($validator->fails()) {
-                    return redirect()->back()->withErrors($validator)->withInput();
-                }
-                
-                $pending_amount  = $existedPayment->pending_amount - $request->partial_payment;
-                $newPayment = new Payment();
-                $newPayment->lead_id =  $existedPayment->lead_id;
-                $newPayment->task_id =  $existedPayment->task_id;
-                $newPayment->reference_id =  $existedPayment->id;
-                $newPayment->service_price =  $existedPayment->service_price;
-                $newPayment->govt_price =  $existedPayment->govt_price;
-                $newPayment->gst =  $existedPayment->gst;
-                $newPayment->total =  $existedPayment->total;
-                $newPayment->pending_amount =  $pending_amount;
-                $newPayment->submitted_amount =  $request->partial_payment;
-                if ($newPayment->save()) {
-                    $newassignlog = new leadLog();
-                    $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
-                    $newassignlog->lead_id = $existedLeaedTask->lead_id;
-                    $newassignlog->lead_id = $existedLeaedTask->lead_id;
-                    $newassignlog->task_id = $existedLeaedTask->id;
-                    $newassignlog->assign_by = Auth::id();
-                    $newassignlog->description =  " Payment status marked as on Credit";
-                    if ($newassignlog->save()) {
-                        return redirect()->route('task.index')->with('success', 'payment status is Updated');
-                    } else {
-                        return redirect()->route('task.index')->with('error', 'there is something wrong while updateing logs');
-                    }
-                }
-            }
-            $newLeadtask->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
-            $newLeadtask->lead_id = $existedLeaedTask->lead_id;
-            $newLeadtask->service_id = $serviceId;
-            $newLeadtask->subservice_id = $subServiceId;
-            $newLeadtask->service_stage_id = $stageId;
-            $newLeadtask->assign_by = Auth::id();
-            $newLeadtask->task_title = $assignedStageName->description;
-            $newLeadtask->task_description = $request->description ?? null;
-            if ($newLeadtask->save()) {
-                if ($request->payment == 3 ||  $request->payment == 2 || $existedPayment->pending != 0 ) {
-                $existedLeaedTaskDetails->status = 3;
-                }else{
-                    $existedLeaedTaskDetails->status = $request->payment;
-                }
-                $existedLeaedTaskDetails->status_date = $verifiedDate;
-                if ($request->payment == 3 ||  $request->payment == 2) {
-                    $existedLeaedTaskDetails->reminderDate = $paymentDeadlineDate;
-                } else {
-                    $existedLeaedTaskDetails->reminderDate = null;
-                }
-                $newLeadTaskDeatails->task_id = $newLeadtask->id;
-                $newLeadTaskDeatails->dead_line = $deadlineDate;
-                $newLeadTaskDeatails->status = 0;
-                if ($request->hasFile('attachment')) {
-                    $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
-                    if (!file_exists($folderPath)) {
-                        mkdir($folderPath, 0755, true);
-                    }
-                    $filePaths = [];
-                    foreach ($request->file('attachment') as $file) {
-                        if ($file->isValid()) {
-                            $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
-                            $file->move($folderPath, $fileName);
-                            $filePaths[] = $fileName;
+
+                    if ($request->hasFile('attachment')) {
+                        $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
+                        if (!file_exists($folderPath)) {
+                            mkdir($folderPath, 0755, true);
                         }
+                        $filePaths = [];
+                        foreach ($request->file('attachment') as $file) {
+                            if ($file->isValid()) {
+                                $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
+                                $file->move($folderPath, $fileName);
+                                $filePaths[] = $fileName;
+                            }
+                        }
+                        $existedLeaedTaskDetails->attachment = json_encode($filePaths);
                     }
-                    $existedLeaedTaskDetails->attachment = json_encode($filePaths);
-                }
-                if ($existedLeaedTaskDetails->save() && $newLeadTaskDeatails->save()) {
-                    $userAssign =  $request->assignUser ?? $existedLeaedTask->user_id;
+                    if ($existedLeaedTaskDetails->save()) {
+                        $newPayment =  new Payment();
+                        $newPayment->lead_id = $existedLeaedTask->lead_id;
+                        $newPayment->task_id = $existedLeaedTask->id;
+                        $newPayment->reference_id = $existedPayment->id;
+                        $newPayment->service_price = $existedPayment->service_price;
+                        $newPayment->govt_price = $existedPayment->govt_price;
+                        $newPayment->gst = $existedPayment->gst;
+                        $newPayment->total = $existedPayment->total;
+                        if ($request->payment == 1) {
+                            $newPayment->pending_amount = 0;
+                            $newPayment->submitted_amount = $existedPayment->total;
+                        } else if ($request->payment == 2) {
+                            $pending_amount = $existedPayment->pending_amount - $request->partial_payment;
+                            $newPayment->pending_amount = $pending_amount;
+                            $newPayment->submitted_amount = $request->partial_payment;
+                        } else if ($request->payment == 3) {
+                            $newPayment->pending_amount = $existedPayment->pending_amount;
+                            $newPayment->submitted_amount = null;
+                        }
+                        if ($newPayment->save()) {
+                            $newLeadTaskDeatails->task_id = $newLeadtask->id;
+                            $newLeadTaskDeatails->dead_line = $deadlineDate;
+                            $newLeadTaskDeatails->status = 0;
+                            if ($newLeadTaskDeatails->save()) {
+                                $userAssign =  $request->assignUser ?? $existedLeaedTask->user_id;
+                                $notification = new LeadNotification();
+                                $notification->user_id =  $userAssign;
+                                $notification->lead_id = $existedLeaedTask->lead_id;
+                                $notification->task_id = $newLeadtask->id;
+                                $notification->title = "Task Assigned";
+                                $notification->description =  $userName . ' assigned you ' . $assignedStageName->title . ' task';
+                                $notification->status = 0;
+                                if ($notification->save()) {
+                                    $LeadLog = new LeadLog();
+                                    $LeadLog->user_id =  $existedLeaedTask->user_id;
+                                    $LeadLog->lead_id =  $existedLeaedTask->lead_id;
+                                    $LeadLog->task_id =  $existedLeaedTask->id;
+                                    $LeadLog->assign_by = Auth::id();
+                                    $LeadLog->description = "payment status updated successfully";
+                                    if ($LeadLog->save()) {
+                                        $newassignlog = new leadLog();
+                                        $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+                                        $newassignlog->lead_id = $existedLeaedTask->lead_id;
+                                        $newassignlog->task_id = $newLeadtask->id;
+                                        $newassignlog->assign_by = Auth::id();
+                                        $newassignlog->description =  "Lead assigned for next task";
+                                        if ($newassignlog->save()) {
+                                            $type = 'Client';
+                                            $mail = true;
+                                            $randomNumber = substr(str_shuffle('9abcdefghijklmnopq045678rstuvwxyzABCDEFG123HIJKLMNOPQRSTUVWXYZ'), 0, 8);
+                                            $hashedPassword = Hash::make($randomNumber);
+                                            $newClient = new User();
+                                            $newClient->uni_user_id =  $this->generateUniqueUserCode('C', '=', 2);
+                                            $newClient->name = $existedLeaedTask->lead->client_name;
+                                            $newClient->role = 2;
+                                            $newClient->email = $existedLeaedTask->lead->email;
+                                            $newClient->mobile = $existedLeaedTask->lead->mobile_number;
+                                            $newClient->companyName = $existedLeaedTask->lead->company_name;
+                                            $newClient->password = $hashedPassword;
+                                            if ($newClient->save()) {
+                                                if ($mail == true) {
+                                                    SendClientWelcomeEmail::dispatch($newClient, $randomNumber, $filePath = null, $type);
+                                                }
+                                                return redirect()->route('task.index')
+                                               ->with('success', 'payment status updated successfully');
+                                            }else{
+                                            return redirect()->back()->with('error', 'there is something wrong while new client');
+                                                
+                                            }
+                                        }else{
+                                            return redirect()->back()->with('error', 'there is something wrong while updating log');
+        
+                                            }
+                                    }else{
+                                    return redirect()->back()->with('error', 'there is something wrong while updating log');
 
-                    $notification = new LeadNotification();
-                    $notification->user_id = $userAssign;
-                    $notification->lead_id = $existedLeaedTask->lead_id;
-                    $notification->task_id = $newLeadtask->id;
-                    $notification->title = "Task Assigned";
-                    $notification->description =  $userName . ' assigned you ' . $assignedStageName->title . ' task';
-                    $notification->status = 0;
-                    if ($notification->save()) {
-                        $type = 'Client';
-                        $mail = true;
-                        $randomNumber = substr(str_shuffle('9abcdefghijklmnopq045678rstuvwxyzABCDEFG123HIJKLMNOPQRSTUVWXYZ'), 0, 8);
-                        $hashedPassword = Hash::make($randomNumber);
-                        $newClient = new User();
-                        $newClient->uni_user_id =  $this->generateUniqueUserCode('C', '=', 2);
-                        $newClient->name = $existedLeaedTask->lead->client_name;
-                        $newClient->role = 2;
-                        $newClient->email = $existedLeaedTask->lead->email;
-                        $newClient->mobile = $existedLeaedTask->lead->mobile_number;
-                        $newClient->companyName = $existedLeaedTask->lead->company_name;
-                        $newClient->password = $hashedPassword;
-                        if ($newClient->save()) {
-                            if ($mail == true) {
-                                SendClientWelcomeEmail::dispatch($newClient, $randomNumber, $filePath = null, $type);
-                            }
-                            $LeadLog = new LeadLog();
-                            $LeadLog->user_id =  $existedLeaedTask->user_id;
-                            $LeadLog->lead_id =  $existedLeaedTask->lead_id;
-                            $LeadLog->task_id =  $existedLeaedTask->id;
-                            $LeadLog->assign_by = Auth::id();
-                            if ($request->payment == 1) {
-                                $LeadLog->description = " Payment status marked as Paid ";
-                            } else if ($request->payment == 0) {
-                                $LeadLog->description = " Payment status marked as on Credit ";
-                            }
-                            if ($LeadLog->save()) {
-                                $newassignlog = new leadLog();
-                                $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
-                                $newassignlog->lead_id = $existedLeaedTask->lead_id;
-                                $newassignlog->lead_id = $existedLeaedTask->lead_id;
-                                $newassignlog->task_id = $newLeadtask->id;
-                                $newassignlog->assign_by = Auth::id();
-                                $newassignlog->description =  "Lead assigned for next task";
-                                if ($newassignlog->save()) {
+                                    }
+                                }else{
+                                 return redirect()->back()->with('error', 'there is something wrong while updating notification');
 
-                                    $id = $newLeadtask->id;
-                                    return redirect()->route('task.index')->with('success', 'payment status is Updated');
-                                } else {
-                                    return redirect()->back()->with('error', " there is something wrong during update logs ");
                                 }
                             } else {
-                                return redirect()->back()->with('error', " there is something wrong during update logs ");
+                                return redirect()->back()->with('error', 'there is something wrong while creating new lead task');
                             }
-                            // }
                         } else {
-                            return redirect()->back()->with('error', " there is something wrong during update notification ");
+                            return redirect()->back()->with('error', 'there is something wrong while new payment status');
                         }
                     } else {
-                        return redirect()->back()->error('message', " there is something wrong ");
+                        return redirect()->back()->with('error', 'there is something wrong while updating existed lead task');
                     }
                 } else {
-                    return redirect()->back()->error('message', " there is something wrong ");
+                    return redirect()->back()->with('error', 'there is something wromg while creating new  task');
                 }
-            } else {
-                return redirect()->back()->error('message', " No task found ");
+            } else if ($request->checkStatus == 3 && $request->payment == 2) {
+                $newPayment = new Payment();
+                $newPayment->lead_id = $existedPayment->lead_id;
+                $newPayment->task_id = $existedPayment->task_id;
+                $newPayment->reference_id = $existedPayment->id;
+                $newPayment->service_price = $existedPayment->service_price;
+                $newPayment->govt_price = $existedPayment->govt_price;
+                $newPayment->gst = $existedPayment->gst;
+                $newPayment->total = $existedPayment->total;
+
+                $pending_amount = $existedPayment->pending_amount - $request->partial_payment;
+                $newPayment->pending_amount = $pending_amount;
+                $newPayment->submitted_amount = $request->partial_payment;
+                if ($newPayment->save()) {
+                    if ($newPayment->pending_amount == 0) {
+                        $existedLeaedTaskDetails->status = 1;
+                    } else {
+                        $existedLeaedTaskDetails->status = 3;
+                    }
+                    $existedLeaedTaskDetails->status_date = $verifiedDate;
+                    $existedLeaedTaskDetails->reminderDate = $paymentDeadlineDate;
+                    if ($request->hasFile('attachment')) {
+                        $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
+                        if (!file_exists($folderPath)) {
+                            mkdir($folderPath, 0755, true);
+                        }
+                        $filePaths = [];
+                        $existingAttachments = json_decode($existedLeaedTaskDetails->attachment, true) ?? [];
+                        foreach ($request->file('attachment') as $file) {
+                            if ($file->isValid()) {
+                                $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
+                                $file->move($folderPath, $fileName);
+                                $filePaths[] = $fileName;
+                            }
+                        }
+                        $updatedAttachments = array_merge($existingAttachments, $filePaths);
+                        $existedLeaedTaskDetails->attachment = json_encode($updatedAttachments);
+                    }
+                    $existedLeaedTask->task_description = $existedLeaedTask->task_description . ' ' . $request->description;
+                    if ($existedLeaedTask->save() && $existedLeaedTaskDetails->save()) {
+                        $LeadLog = new LeadLog();
+                        $LeadLog->user_id =  $existedLeaedTask->user_id;
+                        $LeadLog->lead_id =  $existedLeaedTask->lead_id;
+                        $LeadLog->task_id =  $existedLeaedTask->id;
+                        $LeadLog->assign_by = Auth::id();
+                        $LeadLog->description = "payment status updated successfully";
+                    }else{
+                        return redirect()->back()->with('error', 'there is something wrong while existed lead task details');
+                    }
+                    if ($LeadLog->save()) {
+                        return redirect()->route('task.index')
+                                        ->with('success', 'payment status updated successfully');
+                    }
+                }else{
+                    return redirect()->back()->with('error', 'there is something wrong while updating payment');
+                }
+            } else if ($request->checkStatus == 3 && $request->payment == 3) {
+                $newPayment = new Payment();
+                $newPayment->lead_id = $existedPayment->lead_id;
+                $newPayment->task_id = $existedPayment->task_id;
+                $newPayment->reference_id = $existedPayment->id;
+                $newPayment->service_price = $existedPayment->service_price;
+                $newPayment->govt_price = $existedPayment->govt_price;
+                $newPayment->gst = $existedPayment->gst;
+                $pending_amount = $existedPayment->pending_amount;
+                $newPayment->pending_amount = $pending_amount;
+                $newPayment->submitted_amount = null;
+                if ($newPayment->save()) {
+                    if ($newPayment->pending_amount == 0) {
+
+                        $existedLeaedTaskDetails->status = 1;
+                    } else {
+                        $existedLeaedTaskDetails->status = 3;
+                    }
+                    $existedLeaedTaskDetails->status_date = $verifiedDate;
+                    $existedLeaedTaskDetails->reminderDate = $paymentDeadlineDate;
+                    if ($request->hasFile('attachment')) {
+                        $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
+                        if (!file_exists($folderPath)) {
+                            mkdir($folderPath, 0755, true);
+                        }
+                        $filePaths = [];
+                        $existingAttachments = json_decode($existedLeaedTaskDetails->attachment, true) ?? [];
+                        foreach ($request->file('attachment') as $file) {
+                            if ($file->isValid()) {
+                                $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
+                                $file->move($folderPath, $fileName);
+                                $filePaths[] = $fileName;
+                            }
+                        }
+                        $updatedAttachments = array_merge($existingAttachments, $filePaths);
+                        $existedLeaedTaskDetails->attachment = json_encode($updatedAttachments);
+                    }
+                    $existedLeaedTask->task_description = $existedLeaedTask->task_description . ' ' . $request->description;
+                    if ($existedLeaedTask->save() && $existedLeaedTaskDetails->save()) {
+                        $LeadLog = new LeadLog();
+                        $LeadLog->user_id =  $existedLeaedTask->user_id;
+                        $LeadLog->lead_id =  $existedLeaedTask->lead_id;
+                        $LeadLog->task_id =  $existedLeaedTask->id;
+                        $LeadLog->assign_by = Auth::id();
+                        $LeadLog->description = "payment status updated successfully";
+                    }else{
+                        return redirect()->back()->with('error', 'there is something wrong while existed lead task details');
+                    }
+                    if ($LeadLog->save()) {
+                        return redirect()->route('task.index')
+                                        ->with('success', 'payment status updated successfully');
+                    }
+                }else{
+                    return redirect()->back()->with('error', 'there is something wrong while updating payment');
+                }
+            } else if ($request->checkStatus == 3 && $request->payment == 1) {
+                $newPayment = new Payment();
+                $newPayment->lead_id = $existedPayment->lead_id;
+                $newPayment->task_id = $existedPayment->task_id;
+                $newPayment->reference_id = $existedPayment->id;
+                $newPayment->service_price = $existedPayment->service_price;
+                $newPayment->govt_price = $existedPayment->govt_price;
+                $newPayment->gst = $existedPayment->gst;
+                $pending_amount = $existedPayment->pending_amount;
+                $newPayment->pending_amount = 0;
+                $newPayment->submitted_amount = $existedPayment->total;
+                if ($newPayment->save()) {
+                    if ($newPayment->pending_amount == 0) {
+                        $existedLeaedTaskDetails->status = 1;
+                    } else {
+                        $existedLeaedTaskDetails->status = 3;
+                    }
+                    $existedLeaedTaskDetails->status_date = $verifiedDate;
+                    $existedLeaedTaskDetails->reminderDate = $paymentDeadlineDate;
+                    if ($request->hasFile('attachment')) {
+                        $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
+                        if (!file_exists($folderPath)) {
+                            mkdir($folderPath, 0755, true);
+                        }
+                        $filePaths = [];
+                        $existingAttachments = json_decode($existedLeaedTaskDetails->attachment, true) ?? [];
+                        foreach ($request->file('attachment') as $file) {
+                            if ($file->isValid()) {
+                                $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
+                                $file->move($folderPath, $fileName);
+                                $filePaths[] = $fileName;
+                            }
+                        }
+                        $updatedAttachments = array_merge($existingAttachments, $filePaths);
+                        $existedLeaedTaskDetails->attachment = json_encode($updatedAttachments);
+                    }
+                    $existedLeaedTask->task_description = $existedLeaedTask->task_description . ' ' . $request->description;
+                    if ($existedLeaedTask->save() && $existedLeaedTaskDetails->save()) {
+                        $LeadLog = new LeadLog();
+                        $LeadLog->user_id =  $existedLeaedTask->user_id;
+                        $LeadLog->lead_id =  $existedLeaedTask->lead_id;
+                        $LeadLog->task_id =  $existedLeaedTask->id;
+                        $LeadLog->assign_by = Auth::id();
+                        $LeadLog->description = "payment status updated successfully";
+                    }else{
+                        return redirect()->back()->with('error', 'there is something wrong while existed lead task details');
+                    }
+                    if ($LeadLog->save()) {
+                        return redirect()->route('task.index')
+                                        ->with('success', 'payment status updated successfully');
+                    }
+                }
+            }else{
+                return redirect()->back()->with('error', 'there is something wrong while updating payment');
             }
+        } else {
+            return redirect()->back()->with('error', 'no task found');
         }
     }
+
+
 
 
     public function documentation($id)

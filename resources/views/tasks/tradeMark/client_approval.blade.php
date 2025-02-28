@@ -141,7 +141,8 @@
          locale: {
             format: 'DD MMM YYYY'
          },
-         minDate: moment().startOf('day'),
+         minDate: null,
+         maxDate: moment().endOf('day'),
       }).on('apply.daterangepicker', function(ev, picker) {
          console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
       });

@@ -15,7 +15,7 @@
     <div>
         <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] overflow-hidden ">
             <div class="py-[15px] md:py-[25px] px-[15px] md:px-[20px] gap-[10px] flex flex-col md:flex-row items-end justify-between">
-                <form action="" class="w-full flex flex-col md:flex-row gap-[30px]">
+                <form action="" id="filterForm" class="w-full flex flex-col md:flex-row gap-[30px]">
                     <div class="w-full md:w-9/12 flex items-center gap-[30px]">
                         <div class="w-full flex items-end gap-[20px]">
                             <!-- Lead ID Select (Increased width to 5/12) -->
@@ -40,6 +40,8 @@
                                     <option value="1" @if($statusParam==1) selected @endif>Completed</option>
                                     <option value="2" @if($statusParam==2) selected @endif>On Hold</option>
                                     <option value="3" @if($statusParam==3) selected @endif>Follow Up</option>
+                                    <option value="4" @if($statusParam==4) selected @endif>Rejected</option>
+
                                 </select>
                             </div>
 
@@ -149,7 +151,7 @@
                                 @else
                                 Not Available
                                 @endif
-                             </td>
+                            </td>
                             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                                 @if( $task->services)
                                 {{ $task->services->serviceName }}
@@ -161,7 +163,7 @@
                                 @endif
 
                             </td>
-                           
+
                             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
 
                                 @if( $task->subService)
@@ -197,6 +199,8 @@
                                 case 3:
                                 $status = 'Follow-up';
                                 break;
+                                case 4:
+                                $status = 'Rejected';
                                 }
                                 @endphp
                                 <span class="text-[#13103A] bg-[#ADD8E6] inline-block text-center min-w-[100px] py-[5px] px-[10px] rounded-[5px]">
@@ -216,11 +220,17 @@
                                     </a>
                                     <div class="dropdown_menus absolute right-0 z-10 mt-2 w-[100px] origin-top-right rounded-md bg-white shadow-md ring-1 ring-black/5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                                         <div class="text-start" role="none">
-                                            @if(in_array('task.followup',$permissionDetails['accessableRoutes']) || auth()->user()->role == 1)
+                                            @if(in_array('task.followup', $permissionDetails['accessableRoutes']) || auth()->user()->role == 1)
                                             @if(!empty($serviceID) && !empty($stageId))
-                                            <a href="{{ route('task.followup', ['id' => $task->id,'serviceId' => $serviceID , 'stageId' => $stageId ])}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Follow Up</a>
+                                           
+                                            @if($task->leadTaskDetails->status != 1 && $task->leadTaskDetails->status != 4)
+                                            <a href="{{ route('task.followup', ['id' => $task->id, 'serviceId' => $serviceID, 'stageId' => $stageId]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">
+                                                Follow Up
+                                            </a>
                                             @endif
                                             @endif
+                                            @endif
+
                                             @if(!empty($task->lead->id))
                                             @php
                                             $leadId = $task->lead->id;
@@ -318,29 +328,35 @@
 
     $(document).on('keyup', '.search', function() {
         var key = $(this).val();
+        var formData = $("#filterForm").serialize()
+        formData += '&key=' + encodeURIComponent(key);
+
         $.ajax({
-            url: "{{ route('task.index')}}",
+            url: "{{ route('task.index', ['request_type' => 'ajax'] )}}",
             method: 'GET',
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
-            data: {
-                key: key,
-                requestType: 'ajax',
-            },
+            data: formData,
             dataType: 'json',
             success: function(res) {
-                console.log(res);
                 $('#search_table_data').html(res.trData);
             }
         })
 
-        $("#resetButton").on('click', function() {
+        $("#resetButton").on('click', function(event) {
+
             event.preventDefault();
-            window.history.replaceState({}, document.title, window.location.pathname);
-            window.location.reload();
             $("#filterForm")[0].reset();
+            const url = new URL(window.location.href);
+            url.search = '';
+            window.history.replaceState({}, document.title, url.toString());
         });
+
+
+
+
+
 
 
     });

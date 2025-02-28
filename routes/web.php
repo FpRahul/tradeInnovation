@@ -104,7 +104,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     });
     //Tasks Routes
     Route::prefix('tasks')->controller(TasksController::class)->group(function () {
-        Route::get('/', 'index')->name('task.index');
+        Route::get('/{request_type?}', 'index')->name('task.index');
         Route::get('/logs', 'logs')->name('task.log');
         Route::get('/details/{id}', 'detail')->name('task.detail');
         Route::get('/follow-up/view', 'assignTask')->name('task.assignTask');
@@ -134,6 +134,9 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('hearing-date/status/{id}','hearingDateStatus')->name('task.hearingDateStatus');
         Route::get('show-case-hearing/{id}','showCaseHearing')->name('task.showCaseHearing');
         Route::Post('show-case-hearing/status/{id}','showCaseHearingStatus')->name('task.showCaseHearingStatus');
+        Route::get('mark-publish/{id}','markAsPublish')->name('task.markAsPublish');
+        Route::post('mark-publish/status/{id}','markAsPublishStatus')->name('task.markAsPublishStatus');
+
          
         // For patent.........
         // For payment verification........

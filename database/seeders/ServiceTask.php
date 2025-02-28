@@ -44,8 +44,8 @@ class ServiceTask extends Seeder
             ],
             [
                 'service_id' => '1',
-                'title' => 'Draft application',
-                'description' => 'Draft application on the portal',
+                'title' => 'Submit application',
+                'description' => 'Submit application on the portal',
                 'stage' => '0',
             ],
             [

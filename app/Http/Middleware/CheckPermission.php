@@ -38,6 +38,7 @@ class CheckPermission
                 11 => 'leads.edit', // default permission to lead edit on popup
                 12 => 'lead.checkDuplicateEmail', // default permission to check duplicate email
                 13 => 'user.checkDuplicate', //default permission to check mobile duplicate
+                14 => 'lead.existedClientDetail', //default permission for client listing on lead module
             ]
         ];
         if($user->role==1){

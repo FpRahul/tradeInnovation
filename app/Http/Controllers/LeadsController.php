@@ -88,12 +88,16 @@ class LeadsController extends Controller
         
     }
 
-    public function add(Request $request, $id = null){        
+    public function add(Request $request, $id = null){
         if($id > 0){
             $leadData = Lead::where('id',$id)->first();
-            if($leadData->status == 1){
-                return redirect()->back()->with('error','Authorized error!');
-            }
+            if($leadData){
+                if($leadData->status == 1){
+                    return redirect()->back()->with('error','Authorized error!');
+                }
+            }else{
+                return redirect()->route('leads.index')->with('error','Authorized error!');
+            }          
             $leadOldData = Lead::where('id',$id)->first();
             $leadAttachment = LeadAttachment::where('lead_id',$id)->get();
             $LeadTask = LeadTask::with('leadTaskDetails')->where('lead_id',$id)->get();
@@ -137,7 +141,7 @@ class LeadsController extends Controller
                 $sourceId = 0;
             }
             $leadData->user_id = auth()->user()->id;
-            $clientName = strtoupper(substr($request->input('clientname'), 0, 3));
+            $clientName = strtoupper(substr($request->input('clientname'), 0, 3));           
             $randomNumber = rand(10, 99);
             $lastLead = Lead::latest('id')->first();
             $lastLeadId = $lastLead ? $lastLead->id + 1 : 1; 
@@ -261,7 +265,7 @@ class LeadsController extends Controller
         $header_title_name = 'Lead';
         return view('leads/add',compact('header_title_name','firmList','sourceList','serviceList','projectManagerList','userList','clientList','leadData','leadAttachment','LeadTask','scopeOfBussinessList'));
     }
-    // lead fetch...........
+    
     public function leadFetch(Request $request){
         $leadData = Lead::with(['leadTasks','leadAttachments'])->find($request->id);
         $serviceDataArray = [];
@@ -280,8 +284,7 @@ class LeadsController extends Controller
                 <td class='border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px] pl-[25px]'>{$user}</td>
             </tr>
             ";
-        }
-        
+        }        
         return response()->json([
             'serviceData'=>$serviceData,
             'data' =>$leadData
@@ -299,6 +302,7 @@ class LeadsController extends Controller
         }
         return response()->json(['error' => 'Invalid request'], 400);
     }
+
     public function edit(Request $request){
         $leadData = Lead::find($request->lead_id);
         if($request->isMethod('POST')){
@@ -357,11 +361,8 @@ class LeadsController extends Controller
         $requestParams = $request->all();
         $leadLogs = LeadLog::with('leadTask','leadTask.leadTaskDetails','leadTask.serviceSatge')->get();
         if($request->lead_id > 0){
-            $leadLogs = LeadLog::with('leadAttch','leadTask','leadTask.leadTaskDetails', 'leadTask.serviceSatge')->where('lead_id', $request->lead_id) ->orderBy('id', 'desc')->get();
-         
+            $leadLogs = LeadLog::with('leadAttch','leadTask','leadTask.leadTaskDetails', 'leadTask.serviceSatge')->where('lead_id', $request->lead_id) ->orderBy('id', 'desc')->get();  
         }
-       
-        
         return view('leads.logs', compact('leadData','leadLogs', 'header_title_name','requestParams'));
     }
 
@@ -396,6 +397,7 @@ class LeadsController extends Controller
 
         }
     }
+
     public function getSourceTypeName(Request $request){
         if($request->value == 18){
             $value = 3;
@@ -432,8 +434,7 @@ class LeadsController extends Controller
         }
     }
 
-    public function deleteAttachmentRepeaterLead(Request $request)
-    {
+    public function deleteAttachmentRepeaterLead(Request $request){
         $leadServiceDel = LeadAttachment::where('id', $request->id)->first(); 
 
         if ($leadServiceDel && $leadServiceDel->delete()) {
@@ -444,7 +445,6 @@ class LeadsController extends Controller
 
         return response()->json(['data' => $remainData]);
     }
-
 
     public function archiveLead(Request $request, $id = null){
         $lead = Lead::where('id', $id)->first();    
@@ -457,8 +457,7 @@ class LeadsController extends Controller
         return back()->with('error', 'Lead not found.');
     }    
 
-    public function setAssignToUser(Request $request){
-       
+    public function setAssignToUser(Request $request){       
     }  
 
     public function checkDuplicate(Request $request){
@@ -472,27 +471,21 @@ class LeadsController extends Controller
     public function leadFirm(Request $request){
         $firmData = Firm::where('id', '>', 0); // Query Builder instance
         $searchKey = $request->input('key') ?? '';
-        $requestType = $request->input('requestType') ?? '';
-    
+        $requestType = $request->input('requestType') ?? '';    
         if ($searchKey != '') {
             $firmData->where('name', 'LIKE', '%' . $searchKey . '%');
-        }
-    
-        // Store paginated result back into $firmData
-        $firmData = $firmData->latest()->paginate(env("PAGINATION_COUNT"));
-    
-        $header_title_name = 'Manage Firm';
-    
+        }    
+        $firmData = $firmData->latest()->paginate(env("PAGINATION_COUNT"));    
+        $header_title_name = 'Manage Firm';    
         if (empty($requestType)) {
             return view('leads.firm', compact('header_title_name', 'firmData', 'searchKey'));
         } else {
             $trData = view('leads.firm-page-filter-data', compact('firmData', 'searchKey'))->render();
             return response()->json(['trData' => $trData]);
         }
-    }
-    
+    }    
 
-    public function addLeadFirm(Request $request,$id=null){        
+    public function addLeadFirm(Request $request,$id=null){
         if($request->firm_id > 0){
             $firmData = Firm::find($request->firm_id);
         }else{
@@ -533,7 +526,37 @@ class LeadsController extends Controller
     }
 
     public function existedClientDetail(Request $request){
-        dd($request);
+        if($request->isMethod('POST')){
+            $existedClientDetails = User::with('userdetail')->where('id',$request->clientId)->first();
+            if($existedClientDetails){
+                $leadData = new Lead();
+                $leadData->user_id = Auth::id();
+                $clientName = strtoupper(substr($existedClientDetails->name, 0, 3));
+                $randomNumber = rand(10, 99);
+                $lastLead = Lead::latest('id')->first();
+                $lastLeadId = $lastLead ? $lastLead->id + 1 : 1; 
+                $lead_id = $clientName . $randomNumber . $lastLeadId;
+                $existingLead = Lead::where('lead_id', $lead_id)->first();
+                if ($existingLead) {
+                    $lead_id = $clientName . $randomNumber . ($lastLeadId + 1);
+                }
+                $leadData->lead_id = $lead_id;
+                $leadData->client_id = $request->clientId;
+                $leadData->source = $existedClientDetails->userdetail->referralPartner ?? 0;
+                $leadData->source_id = $existedClientDetails->userdetail->source_type_id ?? 0;
+                $leadData->client_name = $existedClientDetails->name;
+                $leadData->company_name = $existedClientDetails->companyName;
+                $leadData->mobile_number = $existedClientDetails->mobile;
+                $leadData->email = $existedClientDetails->email;
+                $leadData->business_scope = $existedClientDetails->userdetail->business_scope ?? 0;
+                $leadData->msmem = $existedClientDetails->userdetail->msmem ?? 0;
+                if($leadData->save()){
+                    return redirect()->route('leads.add', ['id' => $leadData->id])->with(compact('existedClientDetails'));
+                }
+            }else{
+                return redirect()->back()->withError('Some errro is occur when getting the client details');
+            }
+        }
     }
    
 }

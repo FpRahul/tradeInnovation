@@ -512,9 +512,7 @@ class TasksController extends Controller
         return view('tasks.tradeMark.payment_status', compact('id', 'payamentDetails', 'paymentId', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage'));
     }
 
-    public function paymentStatus(Request $request, $id)
-    {
-
+    public function paymentStatus(Request $request, $id){
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         $paymentDeadlineDate = Carbon::createFromFormat('d M Y', $request->input('paymentDeadline'))->format('Y-m-d');
         $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
@@ -541,7 +539,6 @@ class TasksController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-
         if ($id) {
             if ($request->checkStatus == 0) {
                 $newLeadtask->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
@@ -550,7 +547,7 @@ class TasksController extends Controller
                 $newLeadtask->subservice_id = $subServiceId;
                 $newLeadtask->service_stage_id = $stageId;
                 $newLeadtask->assign_by = Auth::id();
-                $newLeadtask->task_title = $assignedStageName->title;
+                $newLeadtask->task_title = $assignedStageName;
                 $newLeadtask->task_description = $request->description;
                 if ($newLeadtask->save()) {
                     if ($request->payment == 1 || $existedPayment->pending_amount == 0) {
@@ -648,18 +645,22 @@ class TasksController extends Controller
                                                     SendClientWelcomeEmail::dispatch($newClient, $randomNumber, $filePath = null, $type);
                                                 }
                                                 return redirect()->route('task.index')
-                                                    ->with('success', 'payment status updated successfully');
-                                            } else {
-                                                return redirect()->back()->with('error', 'there is something wrong while new client');
+                                               ->with('success', 'payment status updated successfully');
+                                            }else{
+                                            return redirect()->back()->with('error', 'there is something wrong while new client');
+                                                
                                             }
-                                        } else {
+                                        }else{
                                             return redirect()->back()->with('error', 'there is something wrong while updating log');
-                                        }
-                                    } else {
+        
+                                            }
+                                    }else{
                                         return redirect()->back()->with('error', 'there is something wrong while updating log');
+
                                     }
-                                } else {
+                                }else{
                                     return redirect()->back()->with('error', 'there is something wrong while updating notification');
+
                                 }
                             } else {
                                 return redirect()->back()->with('error', 'there is something wrong while creating new lead task');
@@ -719,14 +720,14 @@ class TasksController extends Controller
                         $LeadLog->task_id =  $existedLeaedTask->id;
                         $LeadLog->assign_by = Auth::id();
                         $LeadLog->description = "payment status updated successfully";
-                    } else {
+                    }else{
                         return redirect()->back()->with('error', 'there is something wrong while existed lead task details');
                     }
                     if ($LeadLog->save()) {
                         return redirect()->route('task.index')
-                            ->with('success', 'payment status updated successfully');
+                                        ->with('success', 'payment status updated successfully');
                     }
-                } else {
+                }else{
                     return redirect()->back()->with('error', 'there is something wrong while updating payment');
                 }
             } else if ($request->checkStatus == 3 && $request->payment == 3) {
@@ -737,7 +738,6 @@ class TasksController extends Controller
                 $newPayment->service_price = $existedPayment->service_price;
                 $newPayment->govt_price = $existedPayment->govt_price;
                 $newPayment->gst = $existedPayment->gst;
-                $newPayment->total = $existedPayment->total;
                 $pending_amount = $existedPayment->pending_amount;
                 $newPayment->pending_amount = $pending_amount;
                 $newPayment->submitted_amount = null;
@@ -775,14 +775,14 @@ class TasksController extends Controller
                         $LeadLog->task_id =  $existedLeaedTask->id;
                         $LeadLog->assign_by = Auth::id();
                         $LeadLog->description = "payment status updated successfully";
-                    } else {
+                    }else{
                         return redirect()->back()->with('error', 'there is something wrong while existed lead task details');
                     }
                     if ($LeadLog->save()) {
                         return redirect()->route('task.index')
-                            ->with('success', 'payment status updated successfully');
+                                        ->with('success', 'payment status updated successfully');
                     }
-                } else {
+                }else{
                     return redirect()->back()->with('error', 'there is something wrong while updating payment');
                 }
             } else if ($request->checkStatus == 3 && $request->payment == 1) {
@@ -793,10 +793,9 @@ class TasksController extends Controller
                 $newPayment->service_price = $existedPayment->service_price;
                 $newPayment->govt_price = $existedPayment->govt_price;
                 $newPayment->gst = $existedPayment->gst;
-                $newPayment->total = $existedPayment->total;
                 $pending_amount = $existedPayment->pending_amount;
                 $newPayment->pending_amount = 0;
-                $newPayment->submitted_amount = $pending_amount;
+                $newPayment->submitted_amount = $existedPayment->total;
                 if ($newPayment->save()) {
                     if ($newPayment->pending_amount == 0) {
                         $existedLeaedTaskDetails->status = 1;
@@ -830,21 +829,22 @@ class TasksController extends Controller
                         $LeadLog->task_id =  $existedLeaedTask->id;
                         $LeadLog->assign_by = Auth::id();
                         $LeadLog->description = "payment status updated successfully";
-                    } else {
+                    }else{
                         return redirect()->back()->with('error', 'there is something wrong while existed lead task details');
                     }
                     if ($LeadLog->save()) {
                         return redirect()->route('task.index')
-                            ->with('success', 'payment status updated successfully');
+                                        ->with('success', 'payment status updated successfully');
                     }
                 }
-            } else {
+            }else{
                 return redirect()->back()->with('error', 'there is something wrong while updating payment');
             }
         } else {
             return redirect()->back()->with('error', 'no task found');
         }
     }
+
 
 
 
@@ -2146,14 +2146,12 @@ class TasksController extends Controller
 
     public function patentPaymentVerification(Request $request, $id = null){
         $taskId = $id;
-        $taskList = LeadTask::with('payment')->find($taskId); 
-        $lastPayment = $taskList->payment->last();
-           
+        $taskList = LeadTask::find($taskId);
         $serviceStage = ServiceStages::where('id', '>', $taskList->service_stage_id)->where('service_id', 2)->first();
         $userList = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
         $currentUser = User::find($taskList->user_id);
         $header_title_name = "Payment Verification";
-        return view('tasks/patent/payment-verification', compact('header_title_name','lastPayment','taskId', 'taskList', 'serviceStage', 'userList', 'currentUser'));
+        return view('tasks/patent/payment-verification', compact('header_title_name', 'taskId', 'taskList', 'serviceStage', 'userList', 'currentUser'));
     }
 
     public function patentPriorArt(Request $request, $id){

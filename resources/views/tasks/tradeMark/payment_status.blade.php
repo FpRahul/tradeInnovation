@@ -16,6 +16,10 @@
       @foreach ($taskDetails as $task )
       <input type="hidden" name="checkStatus" id="checkStatus" value="{{$task->leadTaskDetails->status}}">
       @endforeach
+      
+      @if ($firstPaymentId)
+      <input type="hidden" name="firstPaymentId" id="firstPaymentId" value="{{$firstPaymentId->id}}">
+      @endif
       <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2">
             <label for="payment" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Payment status</label>
@@ -81,14 +85,15 @@
                     </p>
          </div>
          <div class="  w-full md:w-1/2 hidden partialPayment">
-            <label for="amount" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">PaidPartial Amount</label>
+            <label for="amount" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Paid Partial Amount</label>
             <input type="text" name="partial_payment" id="partial_payment" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
-            <p class="paymentInfo" style="color: skyblue; font-size: 14px; font-weight: 500;">
+            <p class="paymentInfo " id="hidePaymentInfo" style="color: skyblue; font-size: 14px; font-weight: 500;">
                Pending Amount: {{$payamentDetails->total}}
             </p>
+            <div class=" hidden PartialPaymentError " style="color: red;font-size: 14px; font-weight: 500;"></div>
 
          </div>
-         <div class="flex justify-start flex-wrap w-[100%] md:w-[49%]">
+         <div class="flex flex-col justify-start flex-wrap w-[100%] md:w-[49%]">
             <label class="block w-full text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload</label>
 
             <label for="attachment" class="flex items-center gap-[10px] w-full text-[13px] font-[500] leading-[15px] text-[#666666] tracking-[0.01em] bg-[#fff] border-dashed border-[1px] border-[#ccc] rounded-[6px] py-[6px] px-[10px] cursor-pointer">
@@ -99,6 +104,7 @@
             </label>
             <input type="file" id="attachment" name="attachment[]" multiple style="display: none;" />
             <div id="file-list" class="mt-2"></div>
+            
          </div>
          @error('attachment.*')
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
@@ -131,9 +137,9 @@
             <input type="text" name="stage_id" id="stage_id" value="{{$getStage->title}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
             <input type="hidden" name="stage_id" value="{{$getStage->id}}">
             @endif
-            <!-- <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+            <p style="color: skyblue; font-size: 14px; font-weight: 500;">
                         Next stage will be: {{$getStage->title}}
-                    </p> -->
+                    </p> 
          </div>
          <div class="w-full md:w-1/2">
             <label for="assignUser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign User</label>
@@ -185,7 +191,7 @@
       </div>
 
       <div class="flex justify-end gap-[15px]">
-         <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
+         <button type="submit"  id="submitDisabled"class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
       </div>
    </form>
 </div>
@@ -218,7 +224,6 @@
          var changedValue = $(this).val();
          var yes = $("#paymentInfo").val("");
          if (changedValue == 3) {
-
             $("#verifiedDate label").text("Verified On");
             $("#paymentReminder").removeClass("hidden");
             $(".partialPayment").removeClass("hidden");
@@ -226,11 +231,8 @@
             $(".partialPayment").addClass("hidden");
             $(".total_amount").addClass("hidden");
             $(".paymentInfo").text("Pending amount : {{$payamentDetails->pending_amount  }}");
-
-            
-
          } else if (changedValue == 2) {
-            yes = $("#partial_payment").val("0.00");
+            yes = $("#partial_payment").val();
             $("#verifiedDate label").text("Verified On");
             $("#paymentReminder").removeClass("hidden");
             $(".partialPayment").removeClass("hidden");
@@ -243,23 +245,34 @@
             $(".partialPayment").addClass("hidden");
             $("#paymentReminder").addClass("hidden");
             $(".total_amount").addClass("hidden");
-
+            
             $(".paymentInfo").text("All amount are clear");
             $("#verifiedDate label").text("Paid On");
-
-
-            
-            
-
          }
       });
 
       var status = $("#checkStatus").val();
       if (status == 3) {
          $(".hideOncredit").addClass('hidden');
-
-
       }
+    $("#partial_payment").on("input", function () {
+            var total_price = parseFloat({{ $payamentDetails->pending_amount ?? 0 }}) || 0;
+            var partial_payment = parseFloat($(this).val()) || 0;
+
+            if (partial_payment > total_price) {
+                  $(".PartialPaymentError").removeClass("hidden").text("The partial payment cannot be more than the total due.");
+                  $("#hidePaymentInfo").addClass("hidden");
+                  $("#submitDisabled").prop("disabled", true);
+            } else {
+                  $(".PartialPaymentError").addClass("hidden").text("");
+                  $("#hidePaymentInfo").removeClass("hidden");
+                  $("#submitDisabled").prop('disabled', false)
+
+            }
+         
+      });
+
+
    });
 </script>
 @stop

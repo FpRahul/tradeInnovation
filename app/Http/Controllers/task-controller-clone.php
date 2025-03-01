@@ -2111,11 +2111,11 @@ class TasksController extends Controller
             return redirect()->route('task.showCaseHearing', ['id' => $id]);
         }
         // For Patent...............
-        else if ($taskDetails && $serviceId == 2 && $stageId == 19) {
+        else if ($taskDetails && $serviceId == 2 && $stageId == 20) {
             return redirect()->route('task.patentSendQuotation', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 20) {
-            return redirect()->route('task.patentPaymentVerification', ['id' => $id]);
         } else if ($taskDetails && $serviceId == 2 && $stageId == 21) {
+            return redirect()->route('task.patentPaymentVerification', ['id' => $id]);
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 22) {
             return redirect()->route('task.patentPriorArt', ['id' => $id]);
         }
     }
@@ -2143,14 +2143,15 @@ class TasksController extends Controller
         $leadTaskdetials = LeadTaskDetail::find($taskDetailsId);
         return view('tasks/patent/send-quotation', compact('taskId', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'serviceName', 'clientName'));
     }
-
+     
     public function patentPaymentVerification(Request $request, $id = null){
         $taskId = $id;
-        $taskList = LeadTask::find($taskId);
+        $taskList = LeadTask::with('payment', 'serviceSatge')->where('id' , $taskId)->first();
         $serviceStage = ServiceStages::where('id', '>', $taskList->service_stage_id)->where('service_id', 2)->first();
         $userList = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
         $currentUser = User::find($taskList->user_id);
-        $header_title_name = "Payment Verification";
+        $header_title_name = $taskList->serviceSatge->title;
+        dd($header_title_name);
         return view('tasks/patent/payment-verification', compact('header_title_name', 'taskId', 'taskList', 'serviceStage', 'userList', 'currentUser'));
     }
 

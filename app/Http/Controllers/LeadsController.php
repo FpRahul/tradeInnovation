@@ -141,7 +141,10 @@ class LeadsController extends Controller
                 $sourceId = 0;
             }
             $leadData->user_id = auth()->user()->id;
-            $clientName = strtoupper(substr($request->input('clientname'), 0, 3));           
+            $clientName = strtoupper(substr($request->input('clientname'), 0, 3));       
+            if(empty($clientName)){
+                $clientName = 'LEA';
+            }    
             $randomNumber = rand(10, 99);
             $lastLead = Lead::latest('id')->first();
             $lastLeadId = $lastLead ? $lastLead->id + 1 : 1; 

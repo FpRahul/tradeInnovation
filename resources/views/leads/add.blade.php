@@ -14,7 +14,7 @@
         <form method="POST" id="submitLeadForm" action="{{ route('leads.add',['id'=>$leadData->id])}}" enctype="multipart/form-data" class="py-[15px] px-[15px] lg:py-[25px] lg:px-[30px] space-y-[20px]">
             @csrf    
             <input type="hidden" name="savetype" id="savetype" value='0'/>  
-            <input type="hidden" name="clientname" id="clientname" value="{{$leadData->client_name}}"/>
+            
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="source" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Source</label>
@@ -81,7 +81,10 @@
                 
             </div>
             <div class="flex flex-col md:flex-row gap-[20px]">
-                
+                <div class="w-full md:w-1/2">
+                    <label for="clientname" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Client Name</label>
+                    <input type="text" name="clientname" id="clientname" value="{{ old('clientname') ? old('clientname') : (!empty($leadData) ? $leadData->client_name : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                </div>
                 <div class="w-full md:w-1/2">
                     <label for="companyname" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Company Name</label>
                     <input type="text" name="companyname" id="companyname" value="{{ old('companyname') ? old('companyname') : (!empty($leadData) ? $leadData->company_name : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>

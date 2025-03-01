@@ -120,6 +120,7 @@ class LeadsController extends Controller
         $firmList = Firm::where('status',1)->get();
 
         if($request->isMethod('POST')){
+            // dd($request);
             $scopeOfBusinessArray = $request->scopeofbusiness;            
             if(in_array('other', $request->scopeofbusiness)){
                 $scopeOfBusinessArray = array_diff($scopeOfBusinessArray, ['other']);
@@ -141,7 +142,10 @@ class LeadsController extends Controller
                 $sourceId = 0;
             }
             $leadData->user_id = auth()->user()->id;
-            $clientName = strtoupper(substr($request->input('clientname'), 0, 3));           
+            $clientName = strtoupper(substr($request->input('clientname'), 0, 3));  
+            if(empty($clientName)){
+                $clientName = 'LEA';
+            }         
             $randomNumber = rand(10, 99);
             $lastLead = Lead::latest('id')->first();
             $lastLeadId = $lastLead ? $lastLead->id + 1 : 1; 
@@ -306,6 +310,7 @@ class LeadsController extends Controller
     public function edit(Request $request){
         $leadData = Lead::find($request->lead_id);
         if($request->isMethod('POST')){
+            
             $leadData->update([
                 'client_name' => $request->modalclientname,
                 'company_name' => $request->modalcompanyname,
@@ -313,6 +318,7 @@ class LeadsController extends Controller
                 'email' => $request->modalemail,
                 'description' => $request->modaldescription
             ]);
+           
             if($leadData->save()){
                 if ($request->has('modalfileattachment')) {
                     foreach ($request->modalfileattachment as $key => $val) {
@@ -330,6 +336,8 @@ class LeadsController extends Controller
                         }
                     }
                     return redirect()->back()->with('success','Lead updated!');
+                }else{
+                    return redirect()->back()->with('success','Lead updated successfully!');
                 }
             }else{
                 return redirect()->back()->with('error','Some error is occur!');

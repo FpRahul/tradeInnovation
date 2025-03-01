@@ -2304,11 +2304,11 @@ class TasksController extends Controller
             return redirect()->route('task.markAsPublish', ['id' => $id]);
         }
         // For Patent...............
-        else if ($taskDetails && $serviceId == 2 && $stageId == 19) {
+        else if ($taskDetails && $serviceId == 2 && $stageId == 20) {
             return redirect()->route('task.patentSendQuotation', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 20) {
-            return redirect()->route('task.patentPaymentVerification', ['id' => $id]);
         } else if ($taskDetails && $serviceId == 2 && $stageId == 21) {
+            return redirect()->route('task.patentPaymentVerification', ['id' => $id]);
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 22) {
             return redirect()->route('task.patentPriorArt', ['id' => $id]);
         }
     }
@@ -2339,14 +2339,17 @@ class TasksController extends Controller
 
     public function patentPaymentVerification(Request $request, $id = null){
         $taskId = $id;
-        $taskList = LeadTask::with('payment')->find($taskId); 
-        $lastPayment = $taskList->payment->last();
-           
+        $taskList = LeadTask::with(['user','leadTaskDetails','payment' => function($q) {
+            $q->limit(1)->latest();
+        }])->where('id',$taskId)->first();
+        $firstPaymentId = Payment::where('task_id', $taskId)->OrderBy('id', 'ASC')->first();
+        
         $serviceStage = ServiceStages::where('id', '>', $taskList->service_stage_id)->where('service_id', 2)->first();
         $userList = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
+        $getStage = ServiceStages::where('service_id', 2)->where('id', '>', $taskList->service_stage_id)->first();
         $currentUser = User::find($taskList->user_id);
         $header_title_name = "Payment Verification";
-        return view('tasks/patent/payment-verification', compact('header_title_name','lastPayment','taskId', 'taskList', 'serviceStage', 'userList', 'currentUser'));
+        return view('tasks/patent/payment-verification', compact('header_title_name','firstPaymentId','taskId','getStage','taskList', 'serviceStage', 'userList', 'currentUser'));
     }
 
     public function patentPriorArt(Request $request, $id){
@@ -2371,7 +2374,6 @@ class TasksController extends Controller
 
     public function patentSubmitPriorArt(Request $request, $id){
         if ($request->isMethod('post')) {
-            dd($request);
             $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
             $dead_line = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
             $existedLeaedTask = LeadTask::with(['lead', 'services', 'subService', 'serviceSatge'])->where('id', $id)->first();
@@ -2382,6 +2384,7 @@ class TasksController extends Controller
             $serviceId = $existedLeaedTask->services->id;
             $subServiceId = $existedLeaedTask->subService->id;
             $assignedStageName = ServiceStages::where('id', $stageId)->first();
+            $userName = Auth::user()->name;
 
             if ($request->relevantpriorart == 1) {
                 $existedLeaedTaskDetails->update(['status' => 1, 'status_date' => $verifiedDate]);
@@ -2412,7 +2415,7 @@ class TasksController extends Controller
                             $LeadLog->lead_id =  $existedLeaedTask->lead_id;
                             $LeadLog->task_id =  $existedLeaedTask->id;
                             $LeadLog->assign_by = Auth::id();
-                            $LeadLog->description = "payment status updated successfully";
+                            $LeadLog->description = "prior art marked as completed";
                             if ($LeadLog->save()) {
                                 $newassignlog = new leadLog();
                                 $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;

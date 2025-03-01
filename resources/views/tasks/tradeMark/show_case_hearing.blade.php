@@ -30,7 +30,7 @@
             @enderror
          </div>
          <div class="w-full md:w-1/2 reasonHide  hidden">
-            <label for="rejected_reason" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
+            <label for="rejected_reason" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Reason</label>
             <select name="rejected_reason" id="rejected_reason" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                <option value="" disabled selected>Reason</option>
                <option value="1">Refused</option>

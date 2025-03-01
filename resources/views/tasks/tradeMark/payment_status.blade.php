@@ -29,7 +29,7 @@
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
          </div>
-
+         
          <!--  -->
          <div class="w-full md:w-1/2 hidden" id="paymentReminder">
             <label for="paymentDeadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">

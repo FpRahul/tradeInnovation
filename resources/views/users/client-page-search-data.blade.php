@@ -1,19 +1,22 @@
 <table width="100%" cellpadding="0" cellspacing="0" class="min-w-[700px]">
     <thead>
         <tr>
-            <th width="23%" class="text-start w-[200px] bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
+            <th width="20%" class="text-start w-[200px] bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
                 ID
             </th>
-            <th width="23%" class="text-start w-[200px] bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
+            <th width="20%" class="text-start w-[200px] bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
                 name
             </th>
-            <th width="23%" class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+            <th width="20%" class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                 mobile number
             </th>
-            <th width="23%" class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+            <th width="20%" class="text-start bg-[#D9D9D933] text-[12px] md:text-[14px] whitespace-nowrap font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                Scope of business
+            </th>
+            <th width="20%" class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                 status
             </th>
-            <th width="23%" class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+            <th width="20%" class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                 Action
             </th>
         </tr>
@@ -30,6 +33,9 @@
                     </td>
                     <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                         {{$clientDetails->mobile}}
+                    </td>
+                    <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                        {{getScopeOfBusinessData($clientDetails->userdetail->business_scope)}}
                     </td>
                     <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                         @if ($clientDetails->status == 1)

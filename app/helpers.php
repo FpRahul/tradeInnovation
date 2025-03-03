@@ -106,6 +106,20 @@ if(!function_exists('getTotalClientCount')){
         return $clientCount;
     }
 }
+
+if(!function_exists('getScopeOfBusinessData')){
+    function getScopeOfBusinessData($scopeId){
+        $scopeNames = []; // Array to store names
+        $scopeData = CategoryOption::whereIn('id', explode(',', $scopeId))
+                    ->where('type', 4)
+                    ->get();    
+        foreach ($scopeData as $val) {
+            $scopeNames[] = $val['name']; 
+        }    
+        return implode(', ', $scopeNames); 
+    }
+    
+}
 // function getSubStage($serviceID , $stageId){
    
 //     $data =  ServiceStages::select('stage_id')->where('service_id', $serviceID)->where('sub_stage_id', $stageId)->first();

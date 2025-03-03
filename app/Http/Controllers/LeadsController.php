@@ -7,6 +7,8 @@ use App\Models\SubService;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Lead;
+use App\Models\Payment;
+
 use App\Models\LeadService;
 use App\Models\LeadAttachment;
 use App\Models\LeadLog;
@@ -565,6 +567,15 @@ class LeadsController extends Controller
                 return redirect()->back()->withError('Some errro is occur when getting the client details');
             }
         }
+    }
+    public function paymentStatus(){
+        $header_title_name = 'Payment Status';
+        $payment_details = Payment::with('lead', 'leadTask.services')->get();
+       
+             
+        
+        return view('leads.payment-details', compact('header_title_name', 'payment_details'));
+
     }
    
 }

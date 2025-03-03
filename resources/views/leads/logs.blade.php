@@ -7,10 +7,14 @@
     }
 </style>
 <div>
-    <div class="flex items-center justify-between mb-[20px]">
-        <h3 class="text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">Lead logs </h3>
+    <div>
+        <h3 class="text-[18px] md:text-[20px] font-[400] leading-[24px] text-[#13103A] tracking-[0.02em]">Manage Logs</h3>
+        <ul class="flex items-center text-[14px] font-[400] leading-[16px] text-[#000000] gap-[5px]">
+            <li>lead /</li> 
+            <li class="text-gray">Manage logs</li>
+        </ul>
     </div>
-    <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] mb-[20px] p-[23px]">
+    <div class="mt-5 shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] mb-[20px] p-[23px]">
         <form id="filterForm" action="" class="w-full" method="GET">
             <div class="flex items-end gap-[10px] w-full">
                 <div class="w-[50%]">
@@ -99,8 +103,6 @@
                                     @else
                                     NA
                                     @endif
-
-
                                 </div>
                                 <div class="relative flex flex-col items-center group">
                                     <a href="#" data-rowId="{{$log->id}}" class=" viewLogDeatails flex items-center gap-[8px] text-[15px] font-[600]  text-[#000]">

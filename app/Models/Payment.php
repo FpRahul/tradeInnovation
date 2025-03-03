@@ -23,4 +23,12 @@ class Payment extends Model
         'reference_id',
         'submitted_amount'
     ];
+
+    public function lead(){
+        return $this->belongsTo(Lead::class,'lead_id');
+    }
+
+    public function leadTask(){
+        return $this->belongsTo(LeadTask::class, 'task_id');
+    }
 }

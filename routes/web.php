@@ -9,6 +9,31 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TasksController;
 use App\Http\Middleware\CheckPermission;
 use App\Http\Controllers\StagesController;
+use Illuminate\Support\Facades\Artisan;
+
+Route::get('clean', function(){
+    Artisan::call('cache:clear');
+    Artisan::call('route:clear');
+    Artisan::call('view:clear');
+    Artisan::call('config:clear');
+
+    return 'cleaned';
+});
+
+Route::get('migrate', function(){
+    Artisan::call('migrate');
+    return response()->json([
+        'migrated'
+    ]);
+});
+
+
+Route::get('seed/{seeder}', function($seeder){
+    Artisan::call("db:seed --class=$seeder");
+    return response()->json([
+        'seed completed'
+    ]);
+});
 
 
 //Users Routes

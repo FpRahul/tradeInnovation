@@ -251,7 +251,7 @@ class TasksController extends Controller
             $newExistedTaskDetails->subservice_id = $subServiceId;
             $newExistedTaskDetails->assign_by = Auth::id();
             $newExistedTaskDetails->task_title = $assignedStageName->description;
-            
+
             $newExistedTaskDetails->service_stage_id = $request->stage_id;
             if ($newExistedTaskDetails->save()) {
                 $existedLeadTaskDetails->status = 1;
@@ -412,9 +412,8 @@ class TasksController extends Controller
             $newTaskAssigned->service_stage_id = $stageId;
             $newTaskAssigned->assign_by = Auth::id();
             $newTaskAssigned->task_title = $assignedStageName->description;
-            $newTaskAssigned->task_description = $request->description;
             $existedTask->description = $request->description;
-            if ($newTaskAssigned->save() && $existedTask->save()) {
+            if ($newTaskAssigned->save() || $existedTask->save()) {
                 $newTaskDetails->task_id = $newTaskAssigned->id;
                 $newTaskDetails->status = 0;
                 $newTaskDetails->dead_line = $deadlineDate;
@@ -523,19 +522,18 @@ class TasksController extends Controller
             $taskDetailsId = $task->id;
         }
         $firstPaymentId = Payment::where('task_id', $taskDetailsId)->OrderBy('id', 'ASC')->first();
-     
+
         $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
         foreach ($taskDetails as $value) {
             $stageId = $value->service_stage_id;
         }
         $getStage = ServiceStages::where('service_id', 1)->where('id', '>', $stageId)->first();
         $leadTaskdetials = LeadTaskDetail::find($taskDetailsId);
-        return view('tasks.tradeMark.payment_status', compact('id','firstPaymentId', 'payamentDetails', 'paymentId', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage'));
+        return view('tasks.tradeMark.payment_status', compact('id', 'firstPaymentId', 'payamentDetails', 'paymentId', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage'));
     }
 
     public function paymentStatus(Request $request, $id)
     {
-       
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         $paymentDeadlineDate = Carbon::createFromFormat('d M Y', $request->input('paymentDeadline'))->format('Y-m-d');
         $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
@@ -565,7 +563,6 @@ class TasksController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-
         if ($id) {
             if ($request->checkStatus == 0) {
                 $newLeadtask->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
@@ -576,7 +573,7 @@ class TasksController extends Controller
                 $newLeadtask->assign_by = Auth::id();
                 $newLeadtask->task_title = $assignedStageName->title;
                 $existedLeaedTask->task_description = $request->description;
-                if ($newLeadtask->save() && $existedLeaedTask->save()) {
+                if ($newLeadtask->save() || $existedLeaedTask->save()) {
                     if ($request->payment == 1 || $existedPayment->pending_amount == 0) {
                         $existedLeaedTaskDetails->status = 1;
                     } else if ($request->payment == 2) {
@@ -720,7 +717,7 @@ class TasksController extends Controller
                 $newPayment->pending_amount = $pending_amount;
                 $newPayment->submitted_amount = $request->partial_payment;
                 if ($newPayment->save()) {
-                    if ($newPayment->pending_amount == 0) {
+                    if ($newPayment->pending_amount == 0 ||  $newPayment->pending_amount == null || $newPayment->pending_amount == 0.00) {
                         $existedLeaedTaskDetails->status = 1;
                     } else {
                         $existedLeaedTaskDetails->status = 3;
@@ -745,7 +742,7 @@ class TasksController extends Controller
                         $existedLeaedTaskDetails->attachment = json_encode($updatedAttachments);
                     }
                     $existedLeaedTask->task_description = $existedLeaedTask->task_description . ' ' . $request->description;
-                    if ($existedLeaedTask->save() && $existedLeaedTaskDetails->save()) {
+                    if ($existedLeaedTask->save() || $existedLeaedTaskDetails->save()) {
                         $LeadLog = new LeadLog();
                         $LeadLog->user_id =  $existedLeaedTask->user_id;
                         $LeadLog->lead_id =  $existedLeaedTask->lead_id;
@@ -801,7 +798,7 @@ class TasksController extends Controller
                         $existedLeaedTaskDetails->attachment = json_encode($updatedAttachments);
                     }
                     $existedLeaedTask->task_description = $existedLeaedTask->task_description . ' ' . $request->description;
-                    if ($existedLeaedTask->save() && $existedLeaedTaskDetails->save()) {
+                    if ($existedLeaedTask->save() || $existedLeaedTaskDetails->save()) {
                         $LeadLog = new LeadLog();
                         $LeadLog->user_id =  $existedLeaedTask->user_id;
                         $LeadLog->lead_id =  $existedLeaedTask->lead_id;
@@ -831,11 +828,9 @@ class TasksController extends Controller
                 $newPayment->pending_amount = 0;
                 $newPayment->submitted_amount = $pending_amount;
                 if ($newPayment->save()) {
-                    if ($newPayment->pending_amount == 0) {
-                        $existedLeaedTaskDetails->status = 1;
-                    } else {
-                        $existedLeaedTaskDetails->status = 3;
-                    }
+
+                    $existedLeaedTaskDetails->status = 1;
+
                     $existedLeaedTaskDetails->status_date = $verifiedDate;
                     $existedLeaedTaskDetails->reminderDate = $paymentDeadlineDate;
                     if ($request->hasFile('attachment')) {
@@ -856,7 +851,7 @@ class TasksController extends Controller
                         $existedLeaedTaskDetails->attachment = json_encode($updatedAttachments);
                     }
                     $existedLeaedTask->task_description = $existedLeaedTask->task_description . ' ' . $request->description;
-                    if ($existedLeaedTask->save() && $existedLeaedTaskDetails->save()) {
+                    if ($existedLeaedTask->save() || $existedLeaedTaskDetails->save()) {
                         $LeadLog = new LeadLog();
                         $LeadLog->user_id =  $existedLeaedTask->user_id;
                         $LeadLog->lead_id =  $existedLeaedTask->lead_id;
@@ -953,7 +948,7 @@ class TasksController extends Controller
                     $existedLeaedTaskDetails->attachment = json_encode($filePaths);
                     $existedLeaedTask->task_description = $request->description;
                 }
-                if ($existedLeaedTaskDetails->save() && $existedLeaedTask->save()) {
+                if ($existedLeaedTaskDetails->save() || $existedLeaedTask->save()) {
                     $newNotification->user_id = $existedLeaedTask->user_id;
                     $newNotification->lead_id = $existedLeaedTask->lead_id;
                     $newNotification->task_id = $existedLeaedTask->id;
@@ -1003,7 +998,7 @@ class TasksController extends Controller
                         $existedLeaedTaskDetails->attachment = json_encode($filePaths);
                         $existedLeaedTask->task_description = $request->description;
                     }
-                    if ($existedLeaedTaskDetails->save() && $existedLeaedTask->save()) {
+                    if ($existedLeaedTaskDetails->save() || $existedLeaedTask->save()) {
                         $newLeadTaskDeatails->task_id = $newLeadtask->id;
                         $newLeadTaskDeatails->dead_line = $deadlineDate;
                         $newLeadTaskDeatails->status = 0;
@@ -1117,7 +1112,7 @@ class TasksController extends Controller
                     $existedLeaedTaskDetails->attachment = json_encode($filePaths);
                     $existedLeaedTask->task_description = $request->description;
                 }
-                if ($existedLeaedTaskDetails->save() && $existedLeaedTask->save() ) {
+                if ($existedLeaedTaskDetails->save() || $existedLeaedTask->save()) {
                     $newLeadTaskDeatails->task_id = $newLeadtask->id;
                     $newLeadTaskDeatails->dead_line = $deadlineDate;
                     $newLeadTaskDeatails->status = 0;
@@ -1234,7 +1229,7 @@ class TasksController extends Controller
                     $existedLeaedTaskDetails->attachment = json_encode($filePaths);
                     $existedLeaedTask->task_description = $request->description;
                 }
-                if ($existedLeaedTaskDetails->save() && $existedLeaedTask->save()) {
+                if ($existedLeaedTaskDetails->save() || $existedLeaedTask->save()) {
                     $newLeadTaskDeatails->task_id = $newLeadtask->id;
                     $newLeadTaskDeatails->dead_line = $deadlineDate;
                     $newLeadTaskDeatails->status = 0;
@@ -1341,7 +1336,7 @@ class TasksController extends Controller
                 $existedLeaedTaskDetails->status = $request->formality_check;
                 $existedLeaedTaskDetails->status_date = $verifiedDate;
                 $existedLeaedTaskDetails->reminderDate = $reminder_date;
-                
+
                 if ($request->hasFile('attachment')) {
                     $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
                     if (!file_exists($folderPath)) {
@@ -1359,7 +1354,7 @@ class TasksController extends Controller
                     $existedLeaedTask->task_description = $request->description;
                 }
                 $existedLeaedTask->task_description = $request->description;
-                if ($existedLeaedTaskDetails->save() && $existedLeaedTask->save ()) {
+                if ($existedLeaedTaskDetails->save() || $existedLeaedTask->save()) {
                     $newNotification->user_id = $existedLeaedTask->user_id;
                     $newNotification->lead_id = $existedLeaedTask->lead_id;
                     $newNotification->task_id = $existedLeaedTask->id;
@@ -1410,7 +1405,7 @@ class TasksController extends Controller
                         $existedLeaedTaskDetails->attachment = json_encode($filePaths);
                     }
                     $existedLeaedTask->task_description = $request->description;
-                    if ($existedLeaedTaskDetails->save() && $existedLeaedTask->save()) {
+                    if ($existedLeaedTaskDetails->save() || $existedLeaedTask->save()) {
 
                         $newLeadTaskDeatails->task_id = $newLeadtask->id;
                         $newLeadTaskDeatails->dead_line = $deadlineDate;
@@ -1533,7 +1528,7 @@ class TasksController extends Controller
                     $existedLeaedTaskDetails->attachment = json_encode($filePaths);
                 }
                 $existedLeaedTask->task_description = $request->description;
-                if ($existedLeaedTaskDetails->save() && $existedLeaedTask->save()) {
+                if ($existedLeaedTaskDetails->save() || $existedLeaedTask->save()) {
                     $newLeadTaskDeatails->task_id = $newLeadtask->id;
                     $newLeadTaskDeatails->dead_line = $deadlineDate;
                     $newLeadTaskDeatails->status = 0;
@@ -2014,7 +2009,7 @@ class TasksController extends Controller
                     $existedLeaedTaskDetails->attachment = json_encode($updatedAttachments);
                 }
                 $existedLeaedTask->task_description = $existedLeaedTask->task_description . ' ' . $request->description;
-                if ($existedLeaedTaskDetails->save() && $existedLeaedTask->save()) {
+                if ($existedLeaedTaskDetails->save() || $existedLeaedTask->save()) {
                     $newNotification->user_id = $existedLeaedTask->user_id;
                     $newNotification->lead_id = $existedLeaedTask->lead_id;
                     $newNotification->task_id = $existedLeaedTask->id;
@@ -2078,7 +2073,7 @@ class TasksController extends Controller
                     $existedLeaedTaskDetails->attachment = json_encode($updatedAttachments);
                 }
                 $existedLeaedTask->task_description = $existedLeaedTask->task_description . ' ' . $request->description;
-                if ($existedLeaedTaskDetails->save() && $existedLeaedTask->save()) {
+                if ($existedLeaedTaskDetails->save() || $existedLeaedTask->save()) {
                     $newNotification->user_id = $existedLeaedTask->user_id;
                     $newNotification->lead_id = $existedLeaedTask->lead_id;
                     $newNotification->task_id = $existedLeaedTask->id;
@@ -2132,7 +2127,7 @@ class TasksController extends Controller
                         $existedLeaedTaskDetails->attachment = json_encode($updatedAttachments);
                     }
                     $existedLeaedTask->task_description = $existedLeaedTask->task_description . ' ' . $request->description;
-                    if ($existedLeaedTaskDetails->save() && $existedLeaedTask->save()) {
+                    if ($existedLeaedTaskDetails->save() || $existedLeaedTask->save()) {
                         $newLeadTaskDeatails->task_id = $newLeadtask->id;
                         $newLeadTaskDeatails->dead_line = $deadlineDate;
                         $newLeadTaskDeatails->status = 0;
@@ -2250,7 +2245,7 @@ class TasksController extends Controller
                     $existedLeaedTaskDetails->attachment = json_encode($filePaths);
                 }
                 $existedLeaedTask->task_description = $request->description;
-                if ($existedLeaedTaskDetails->save() && $existedLeaedTask->save()) {
+                if ($existedLeaedTaskDetails->save() || $existedLeaedTask->save()) {
                     $newLeadTaskDeatails->task_id = $newLeadtask->id;
                     $newLeadTaskDeatails->dead_line = $deadlineDate;
                     $newLeadTaskDeatails->status = 0;
@@ -2361,17 +2356,17 @@ class TasksController extends Controller
     public function patentPaymentVerification(Request $request, $id = null)
     {
         $taskId = $id;
-        $taskList = LeadTask::with(['user','leadTaskDetails','payment' => function($q) {
+        $taskList = LeadTask::with(['user', 'leadTaskDetails', 'payment' => function ($q) {
             $q->limit(1)->latest();
-        }])->where('id',$taskId)->first();
+        }])->where('id', $taskId)->first();
         $firstPaymentId = Payment::where('task_id', $taskId)->OrderBy('id', 'ASC')->first();
-        
+
         $serviceStage = ServiceStages::where('id', '>', $taskList->service_stage_id)->where('service_id', 2)->first();
         $userList = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
         $getStage = ServiceStages::where('service_id', 2)->where('id', '>', $taskList->service_stage_id)->first();
         $currentUser = User::find($taskList->user_id);
         $header_title_name = "Payment Verification";
-        return view('tasks/patent/payment-verification', compact('header_title_name','firstPaymentId','taskId','getStage','taskList', 'serviceStage', 'userList', 'currentUser'));
+        return view('tasks/patent/payment-verification', compact('header_title_name', 'firstPaymentId', 'taskId', 'getStage', 'taskList', 'serviceStage', 'userList', 'currentUser'));
     }
 
     public function patentPriorArt(Request $request, $id)

@@ -313,20 +313,29 @@ class UsersController extends Controller
 
     public function clients(Request $request){
         $clientData = User::with('userdetail')->where('role', 2)->where('archive', 1);
+        $scopeKey = $request->input('scope') ?? '';
+        $scopeOfBussinessList = CategoryOption::where('status', 1)->where('type', 4)->get();
         $searchKey = $request->input('key') ?? '';
         $requestType = $request->input('requestType') ?? '';
-        if ($searchKey) {
+        if ($searchKey != '' || $scopeKey != 0) {
             $clientData->where(function ($query) use ($searchKey) {
-                $query->where('name', 'LIKE', $searchKey . '%')->orWhere('mobile', 'LIKE','%'. $searchKey . '%')->orWhere('uni_user_id', 'LIKE','%'. $searchKey . '%');
+                $query->where('name', 'LIKE', '%' . $searchKey . '%')
+                      ->orWhere('mobile', 'LIKE', '%' . $searchKey . '%')
+                      ->orWhere('uni_user_id', 'LIKE', '%' . $searchKey . '%');
+            })->whereHas('userdetail', function ($q) use ($scopeKey) {
+                $q->where('business_scope', 'LIKE', '%' . $scopeKey . '%'); // AND condition remains
             });
+            
         }
+        
+        
         $clientData = $clientData->latest()->paginate(env("PAGINATION_COUNT"));
 
         if (empty($requestType)) {
             $header_title_name = 'User';
-            return view('users/client-listing', compact('clientData', 'header_title_name', 'searchKey'));
+            return view('users/client-listing', compact('clientData', 'header_title_name', 'searchKey','scopeOfBussinessList','scopeKey'));
         } else {
-            $trData = view('users/client-page-search-data', compact('clientData', 'searchKey'))->render();
+            $trData = view('users/client-page-search-data', compact('clientData', 'searchKey','scopeKey'))->render();
             $dataArray = [
                 'trData' => $trData,
             ];

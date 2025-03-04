@@ -362,7 +362,7 @@ use App\Models\MenuAction;
             </div>
             <div class="py-[30px] px-[20px] flex items-center justify-end ">
                 <button class=" inline-flex items-center gap-[10px] text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px] ">
-                    Create
+                    {{$submitButton}}
                 </button>
             </div>
         </form>

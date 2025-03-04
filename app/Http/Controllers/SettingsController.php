@@ -34,6 +34,7 @@ class SettingsController extends Controller
         $header_title_name="Setting";
         $menuAddedAction = [];
         if($id>0){
+            $submitButton = "Update";
             $roleData = Role::with('roleMenus')->find($id);
             foreach($roleData->roleMenus as $menu){
                 $vaerifSubs = Menu::find($menu->menuId);
@@ -43,6 +44,7 @@ class SettingsController extends Controller
                 $menuAddedAction[$menu->menuId] = explode(',',$menu->permission);
             }
         }else{
+            $submitButton = "Create";
             $roleData = new Role();
         }
         if($request->isMethod('post')){
@@ -180,7 +182,7 @@ class SettingsController extends Controller
             }
             return redirect()->back()->withSuccess('Permission updated successfully.');
         }
-        return view('settings/add-role',compact('header_title_name','roleData','menuAddedAction'));
+        return view('settings/add-role',compact('header_title_name','submitButton','roleData','menuAddedAction'));
     }
 
     public function viewMenu(){

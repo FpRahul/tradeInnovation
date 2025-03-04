@@ -19,7 +19,7 @@ class MenuSeeder extends Seeder
             array('id' => '3','parentId' => '2','menuName' => 'Internal Users','icon' => NULL,'url' => 'users.listing','actionRoutes' => 'users.listing,users.adduser','sequence' => NULL,'created_at' => NULL,'updated_at' => NULL),
             array('id' => '4','parentId' => '2','menuName' => 'Clients','icon' => NULL,'url' => 'client.listing','actionRoutes' => 'client.listing,users.addclient','sequence' => NULL,'created_at' => NULL,'updated_at' => NULL),
             array('id' => '5','parentId' => '2','menuName' => 'Associates','icon' => NULL,'url' => 'associate.listing','actionRoutes' => 'associate.listing,users.addassociate','sequence' => NULL,'created_at' => NULL,'updated_at' => NULL),
-            array('id' => '6','parentId' => '0','menuName' => 'Leads','icon' => 'leads-icon','url' => 'javascript:void(0);','actionRoutes' => 'leads.index,leads.add,leads.assign,leads.archive,leads.quote,leads.logs,leads.delete,lead.invoice','sequence' => '3','created_at' => NULL,'updated_at' => NULL),
+            array('id' => '6','parentId' => '0','menuName' => 'Leads','icon' => 'leads-icon','url' => 'javascript:void(0);','actionRoutes' => 'leads.index,leads.add,leads.assign,leads.archive,leads.quote,leads.logs,leads.delete,lead.invoice,lead.paymentStatus','sequence' => '3','created_at' => NULL,'updated_at' => NULL),
             array('id' => '7','parentId' => '0','menuName' => 'Services','icon' => 'setting-icon','url' => 'services.index','actionRoutes' => 'services.index,service.add,service.status,services.subService.add','sequence' => '5','created_at' => NULL,'updated_at' => NULL),
             array('id' => '8','parentId' => '0','menuName' => 'Panel Settings','icon' => 'setting-icon','url' => 'javascript:void(0);','actionRoutes' => 'settings.roles,settings.addrole','sequence' => '6','created_at' => NULL,'updated_at' => NULL),
             array('id' => '9','parentId' => '8','menuName' => 'Roles','icon' => NULL,'url' => 'settings.roles','actionRoutes' => 'settings.roles,settings.addrole','sequence' => NULL,'created_at' => NULL,'updated_at' => NULL),
@@ -33,6 +33,7 @@ class MenuSeeder extends Seeder
             array('id' => '17','parentId' => '0','menuName' => 'Tasks','icon' => 'leads-icon','url' => 'task.index','actionRoutes' => 'task.index,task.log,task.detail,task.followup','sequence' => '4','created_at' => NULL,'updated_at' => NULL),
             array('id' => '18','parentId' => '10','menuName' => 'Partner','icon' => NULL,'url' => 'partner.index','actionRoutes' => 'partner.index,partner.add,partner.status','sequence' => NULL,'created_at' => NULL,'updated_at' => NULL),
             array('id' => '19','parentId' => '6','menuName' => 'Firm','icon' => NULL,'url' => 'firm.index','actionRoutes' => 'firm.index,firm.add,firm.status','sequence' => NULL,'created_at' => NULL,'updated_at' => NULL),
+            array('id' => '20','parentId' => '6','menuName' => 'Payment','icon' => NULL,'url' => 'lead.paymentStatus','actionRoutes' => 'lead.paymentStatus','sequence' => NULL,'created_at' => NULL,'updated_at' => NULL),
         ));
     }
 }

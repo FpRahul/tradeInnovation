@@ -62,12 +62,9 @@
                         </div>
                     </div>
                     <button class=" text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[15px] px-[30px]">Filter</button>
-                    <button id="resetButton" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[15px] px-[30px]">
+                    <a href="{{ route('logs.index')}}" id="resetButton" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[15px] px-[30px]">
                         Reset
-                    </button>
-
-
-
+                    </a>
                 </div>
             </form>
             @endif
@@ -183,16 +180,6 @@
             console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
         });
 
-        $("#resetButton").on('click', function(event) {
-            event.preventDefault();
-            window.history.replaceState({}, document.title, window.location.pathname);
-            window.location.reload();
-            $("#filterForm")[0].reset();
-        });
     });
-<<<<<<< HEAD
-=======
-
->>>>>>> 41b8d706a51b96cd4879c42dcadc5c9fbab8613b
 </script>
 @stop

@@ -4,7 +4,7 @@
     <x-client-task-details :taskID="$taskID" />
 </div>
 
-<div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
+<div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px]  rounded-[20px] mt-[20px] overflow-hidden ">
     <form action="{{ route('task.documentVerified' , ['id' =>$taskID]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
         @csrf
         <!-- <input type="hidden" name="role" id="role" value="2"> -->

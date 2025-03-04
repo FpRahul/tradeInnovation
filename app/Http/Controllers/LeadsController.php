@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Lead;
 use App\Models\Payment;
-
+use Carbon\Carbon;
 use App\Models\LeadService;
 use App\Models\LeadAttachment;
 use App\Models\LeadLog;
@@ -568,14 +568,48 @@ class LeadsController extends Controller
             }
         }
     }
-    public function paymentStatus(){
-        $header_title_name = 'Payment Status';
-        $payment_details = Payment::with('lead', 'leadTask.services')->get();
-       
-             
-        
-        return view('leads.payment-details', compact('header_title_name', 'payment_details'));
+    public function paymentStatus(Request $request){
 
+
+        $header_title_name = 'Payment Status';
+        
+        $lead = Lead::all();       
+        $payment_details = Payment::with('lead', 'leadTask.services','leadTask.serviceSatge')->where('reference_id', 0);
+        if ($request->leadId || $request->dateRange) {
+            // Apply the lead_id filter
+            if ($request->leadId) {
+                $payment_details = $payment_details->where('lead_id' , $request->leadId);
+            }
+            if (!empty($request->input('dateRange'))) {
+   
+                $dateRange = $request->dateRange;
+
+                if (strpos($dateRange, ' - ') !== false) {
+                    $dateParts = explode(" - ", $dateRange);
+
+                    if (count($dateParts) == 2) {
+                        $startDate = date('Y-m-d', strtotime($dateParts[0]));
+                        $endDate = date('Y-m-d', strtotime($dateParts[1]));
+
+                        $payment_details = $payment_details->whereDate('created_at', '>=', $startDate)
+                                                        ->whereDate('created_at', '<=', $endDate);
+                    } 
+                }
+            }
+        }
+        $selectedLead = $request->leadId;
+        $selectedDate = $request->dateRange;
+        $payment_details = $payment_details->paginate(env("PAGINATION_COUNT"));
+        return view('leads.payment-details', compact('header_title_name', 'payment_details', 'lead','selectedLead' , 'selectedDate'));
+    }
+
+    public function paymentDetails(Request $request){
+          if($request->payment_id){
+            $data = Payment::with('lead')->where('reference_id', $request->payment_id)->orWhere('id', $request->payment_id)->orderBy('id', 'ASC')->get();
+            return response()->json(['data' => $data  , 'status' => 200], 200);
+          }else{
+            return response()->json(['data' => null , 'status' => 404], 404);
+          }
     }
    
 }

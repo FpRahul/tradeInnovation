@@ -1,26 +1,20 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
 <head>
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/x-icon" href="{{asset('assets/images/favicon.ico')}}">
-
     <title>Trade Innovation</title>
-
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" />
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
-
     <!-- Datepicker css -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-    <link
-    href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
-    rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"rel="stylesheet"/>
     <!-- Datepicker css End-->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <!-- Datepicker Js -->
@@ -36,9 +30,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.repeater/1.2.1/jquery.repeater.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
 </head>
-
 <body class="bg-[#F1F2F4] ">
     <div class="flex flex-wrap h-[100vh]">
         <div id="sidebar" class="hidden xl:block bg-white shadow-lg xl:shadow-none w-[270px]  transform transition-transform duration-500 ease-in-out -translate-x-full xl:translate-x-0 fixed xl:relative top-0 left-0 z-[99] md:z-[2] border-r-[1px] border-[#0000001A] ">

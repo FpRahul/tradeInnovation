@@ -123,6 +123,10 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         // check existed client
         Route::post('/client','existedClientDetail')->name('lead.existedClientDetail');
         Route::get('/payment', 'paymentStatus')->name('lead.paymentStatus');
+        Route::Post('/payment-details', 'paymentDetails')->name('lead.paymentDetails');
+        
+
+
     });
     //Tasks Routes
     Route::prefix('tasks')->controller(TasksController::class)->group(function () {

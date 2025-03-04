@@ -130,7 +130,7 @@
                             Action Date
                         </th>
                         <th class="text-start whitespace-nowrap text-[12px] bg-[#D9D9D933] md:text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
-                            Action Date
+                            View
                         </th>
                     </tr>
                 </thead>

@@ -506,6 +506,15 @@ class LeadsController extends Controller
            $firmData->city = $request->firmcity;
            $firmData->state = $request->firmstate;
            $firmData->zipcode = $request->firmzipcode;
+
+           $firmData->acc_holder_name = $request->account_holder_name;
+           $firmData->bank_name = $request->bank_name;
+           $firmData->branch_name = $request->branch_name;
+           $firmData->account_number = $request->account_number;
+           $firmData->ifsc_code = $request->ifsc_code;
+           $firmData->swift_code = $request->swift_code;
+           $firmData->upi_id = $request->upi_id;
+
             if($firmData->save()){
                 if($request->firm_id > 0){
                     return redirect()->back()->with('success','Succusfully Updated!');

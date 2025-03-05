@@ -11,6 +11,13 @@ class Firm extends Model
     'city',
     'state',
     'zipcode',
-    'status'
+    'status',
+    'acc_holder_name',
+    'bank_name',
+    'branch_name',
+    'account_number',
+    'ifsc_code',
+    'swift_code',
+    'upi_id',
   ];
 }

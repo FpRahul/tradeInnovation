@@ -9,7 +9,7 @@
    <x-client-task-details :taskID="$taskId" />
 </div>
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
-   <strong>Task Update</strong>
+   <strong>Update Current Task</strong>
     <form action="{{route('task.sendQuotation',['id'=>$taskId]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
         @csrf
         <div class="flex flex-col md:flex-row gap-[20px]">
@@ -107,8 +107,9 @@
                 </p>
             </div>
         </div>
+        <strong>Update Upcoming Action</strong>
         <div class="w-full md:w-1/2">
-            <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Satge</label>
+            <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
             @if($getStage->count() > 0)
             <input type="text" name="stage_id" id="stage_id" value="{{$getStage->title}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
             <input type="hidden" name="stage_id" value="{{$getStage->id}}">
@@ -171,7 +172,7 @@
    <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); overflow: hidden;">
       <tr>
          <td style="background: url('assets/images/login-bg.jpg') center/cover no-repeat; padding: 60px 30px; text-align: center;">
-            <img src="https://futureprofilez.com/wp-content/themes/fptheme/assets2/img/logo.png?dshf" alt="Your Logo" style="max-width: 200px; margin-bottom: 10px;">
+            <img src="{{asset('assets/images/logo.png')}}" alt="Your Logo" style="max-width: 200px; margin-bottom: 10px;">
             <h1 style="color: #ffffff; font-size: 26px; margin: 0; font-weight: bold;">Welcome to Our Platform!</h1>
          </td>
       </tr>
@@ -200,6 +201,10 @@
                   <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">GST</td>
                   <td width="50%" id="mailGst" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">Not Updated</td>
                </tr>
+               <tr>
+                  <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">Total</td>
+                  <td width="50%" id="mailTotal" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">Not Updated</td>
+               </tr>
             </table>
             <p style="font-size: 16px; text-align: center; line-height: 1.2; margin: 35px 0 0; color: #555;">
                Thank you for choosing us! <br>
@@ -219,7 +224,6 @@
       </tr>
    </table>
 </div>
-
 <script>
    $(document).ready(function() {
 
@@ -263,32 +267,49 @@
       $("#mailClientName").text(clientName)
 
       $('#service_price').on('input', function() {
-         let servicePrice = $(this).val();
-         $('#mailServicePrice').text('₹' + servicePrice);
+         let servicePrice = parseFloat($(this).val());
+         $('#mailServicePrice').text('₹' + servicePrice);         
+         updateGst();
       });
-
 
       $('#govt_price').on('input', function() {
-         let govtPrice = $(this).val();
+         let govtPrice = parseFloat($(this).val());
          $('#mailGovtPrice').text("₹" + govtPrice);
-      });
-      $('#gst').on('change', function() {
-         if ($(this).prop('checked')) {
-            $('#mailGst').text("18%");
-         } else {
-            $('#mailGst').text("Not apply"); 
-         }
+         updateGst();
       });
 
+      $('#gst').on('change', function() {
+         updateGst();
+      });
+
+      function updateGst() {
+         let servicePrice = parseFloat($('#service_price').val());
+         let govtPrice = parseFloat($('#govt_price').val());
+
+         if (isNaN(servicePrice) || isNaN(govtPrice)) {
+            return;
+         }
+
+         let totalPrice = servicePrice + govtPrice;
+         let gstPrice = totalPrice * 0.18;
+         let overAllTotalWithGst = totalPrice +  gstPrice;
+         let overAllTotal = totalPrice;
+
+         if ($('#gst').prop('checked')) {
+            $('#mailGst').text("₹" + gstPrice.toFixed(2) + "(18%)");
+            $("#mailTotal").text("₹" + overAllTotalWithGst.toFixed(2) )
+         } else {
+            $('#mailGst').text("Not apply");
+            $("#mailTotal").text("₹" + overAllTotal.toFixed(2) )
+         }
+      }
 
       $('.preview').on('click', function() {
          $('#assignUserModal').removeClass('hidden');
       });
 
-
       $('#assignUserModal').on('click', function(e) {
          if ($(e.target).is('#assignUserModal')) {
-
             $('#assignUserModal').addClass('hidden');
          }
       });

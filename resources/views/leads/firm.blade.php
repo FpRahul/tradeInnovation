@@ -138,23 +138,70 @@
                 <form method="POST" action={{ route('firm.add')}} class="space-y-[20px]">
                     @csrf
                     <input type="hidden" name="firm_id" id="firm_id" value="">
-                    <div class="flex flex-col md:flex-row gap-[20px]">                        
-                        <div class="w-full">
-                            <label for="firmname" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Firm Name</label>
-                            <input type="text" name="firmname" id="firmname" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <div class="flex flex-wrap gap-[20px]">      
+                        <div class="flex w-full flex-wrap md:flex-nowrap gap-[10px]">
+                            <div class="w-full">
+                                <label for="firmname" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Firm Name</label>
+                                <input type="text" name="firmname" id="firmname" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                            </div>
+                            <div class="w-full">
+                                <label for="firmcity" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Firm City</label>
+                                <input type="text" name="firmcity" id="firmcity" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                            </div>
+                        </div>                  
+                        
+                        <div class="flex w-full flex-wrap md:flex-nowrap gap-[10px]">
+                            <div class="w-full">
+                                <label for="firmstate" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Firm State</label>
+                                <input type="text" name="firmstate" id="firmstate" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                            </div>
+                            <div class="w-full">
+                                <label for="firmzipcode" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Firm Zip Code</label>
+                                <input type="text" name="firmzipcode" id="firmzipcode" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                            </div>
                         </div>
-                        <div class="w-full">
-                            <label for="firmcity" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Firm City</label>
-                            <input type="text" name="firmcity" id="firmcity" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                        
+                        <div class="flex w-full flex-wrap md:flex-nowrap gap-[10px]">
+                            <div class="w-full">
+                                <label for="account_holder_name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Account Holder Name</label>
+                                <input type="text" name="account_holder_name" id="account_holder_name" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                            </div>
+                            
+                            <div class="w-full">
+                                <label for="bank_name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Bank Name</label>
+                                <input type="text" name="bank_name" id="bank_name" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                            </div>
                         </div>
-                        <div class="w-full">
-                            <label for="firmstate" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Firm State</label>
-                            <input type="text" name="firmstate" id="firmstate" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                        
+                        <div class="flex w-full flex-wrap md:flex-nowrap gap-[10px]">
+                            <div class="w-full">
+                                <label for="branch_name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Branch Name</label>
+                                <input type="text" name="branch_name" id="branch_name" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                            </div>
+                            
+                            <div class="w-full">
+                                <label for="account_number" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Account Number</label>
+                                <input type="text" name="account_number" id="account_number" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                            </div>
                         </div>
+                        
+                        <div class="flex w-full flex-wrap md:flex-nowrap gap-[10px]">
+                            <div class="w-full">
+                                <label for="ifsc_code" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">IFSC Code</label>
+                                <input type="text" name="ifsc_code" id="ifsc_code" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                            </div>
+                            
+                            <div class="w-full">
+                                <label for="swift_code" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">SWIFT Code (for international payments)</label>
+                                <input type="text" name="swift_code" id="swift_code" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                            </div>
+                        </div>                        
+                        
                         <div class="w-full">
-                            <label for="firmzipcode" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Firm Zip Code</label>
-                            <input type="text" name="firmzipcode" id="firmzipcode" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                            <label for="upi_id" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">UPI ID (for UPI payments)</label>
+                            <input type="text" name="upi_id" id="upi_id" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                         </div>
+                        
                     </div>                   
                     <div class="flex justify-end gap-[15px]">                        
                         <button type="submit" data-id="" data-type="" data-name="" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>

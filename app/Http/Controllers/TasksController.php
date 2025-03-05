@@ -412,8 +412,9 @@ class TasksController extends Controller
             $newTaskAssigned->service_stage_id = $stageId;
             $newTaskAssigned->assign_by = Auth::id();
             $newTaskAssigned->task_title = $assignedStageName->description;
-            $existedTask->description = $request->description;
-            if ($newTaskAssigned->save() || $existedTask->save()) {
+            $existedTask->task_description = $request->description;
+            $existedTask->save();
+            if ($newTaskAssigned->save()) {
                 $newTaskDetails->task_id = $newTaskAssigned->id;
                 $newTaskDetails->status = 0;
                 $newTaskDetails->dead_line = $deadlineDate;
@@ -681,7 +682,7 @@ class TasksController extends Controller
                                                     return redirect()->back()->with('error', 'there is something wrong while  creating new client');
                                                 }
                                             } else {
-                                                return redirect()->back()->with('error', 'client already exist');
+                                                return redirect()->route('task.index')->with('success', 'payment status updated successfully');
                                             }
                                         } else {
                                             return redirect()->back()->with('error', 'there is something wrong while updating log');
@@ -2414,7 +2415,8 @@ class TasksController extends Controller
                 $newLeadtask->service_stage_id = $stageId;
                 $newLeadtask->assign_by = Auth::id();
                 $newLeadtask->task_title = $assignedStageName->description;
-                $newLeadtask->task_description = $request->description;
+                $existedLeaedTask->update(['task_description' => $request->description]);
+               
                 if ($newLeadtask->save()) {
                     $newLeadTaskDeatails->task_id = $newLeadtask->id;
                     $newLeadTaskDeatails->status = 0;
@@ -2442,7 +2444,10 @@ class TasksController extends Controller
                                 $newassignlog->task_id = $newLeadtask->id;
                                 $newassignlog->assign_by = Auth::id();
                                 $newassignlog->description =  "Lead assigned for next task";
-                                $newassignlog->save();
+                                if($newassignlog->save()){
+                                    return redirect()->route('task.index')->with('success','Prior art marked as completed!');
+                                }
+
                             } else {
                                 return redirect()->back()->with('error', 'there is something wrong while updating log');
                             }

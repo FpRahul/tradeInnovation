@@ -113,6 +113,9 @@
                             Services-Stages
                         </th>
                         <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                            Scope Of Business
+                        </th>
+                        <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                             Created
                         </th>
                         <th class="text-center bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
@@ -168,6 +171,9 @@
                             @if ($leadData->leadTask && !empty($leadData->leadTask))
                             {{getStageData($leadData->leadTask)}}
                             @endif                           
+                        </td>
+                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
+                            {{getScopeOfBusinessData($leadData->business_scope)}}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                             {{ date('d M Y H:i:A', strtotime($leadData->created_at) ) }}

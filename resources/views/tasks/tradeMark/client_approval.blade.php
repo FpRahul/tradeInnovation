@@ -22,7 +22,7 @@
       </div> --}}
       <div class="w-full md:w-1/2" id="verifiedDate">
          <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-            verified On
+            Client Approved On
          </label>
          <div class="w-[100%] relative">
             <input
@@ -70,9 +70,9 @@
       <input type="text" name="stage_id" id="stage_id" value="{{$getStage->title}}" class="  w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
       <input type="hidden" name="stage_id" value="{{$getStage->id}}">
       @endif
-      <!-- <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+      <p style="color: skyblue; font-size: 14px; font-weight: 500;">
                Next stage will be: {{$getStage->title}}
-            </p> -->
+            </p> 
    </div>
    @if($taskDetails->count() > 0)
    @php
@@ -123,7 +123,9 @@
          </div>
       </div>
       <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-         Set a dead line for draft application.
+         @if($getStage->count() > 0)
+         Set a dead line for: {{$getStage->title}}
+         @endif
       </p>
    </div>
 </div>

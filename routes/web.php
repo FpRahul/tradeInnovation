@@ -170,6 +170,10 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/patent/payment-verification/{id?}','patentPaymentVerification')->name('task.patentPaymentVerification');
         Route::get('/patent/prior-art/{id?}','patentPriorArt')->name('task.patentPriorArt');
         Route::post('/patent/submit-prior-art/{id?}','patentSubmitPriorArt')->name('task.patentSubmitPriorArt');
+        Route::get('/patent/documentation/{id?}','patentDocumentation')->name('task.patentDocumentation');
+        Route::get('/patent/draft/{id?}','patentDraft')->name('task.patentDraft');
+        Route::post('/patent/submit-draft/{id?}','patentSubmitDraft')->name('task.patentSubmitDraft');
+
         
     });
     //Services Routes

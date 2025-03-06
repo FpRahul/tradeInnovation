@@ -25,9 +25,9 @@
             <label for="payment" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Payment status</label>
             <select name="payment" id="payment" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                <option value="" disabled selected>Select status</option>
-               <option value="1">Paid</option>
-               <option value="2">Partial Payment</option>
-               <option value="3">On Credit </option>
+               <option value="1" {{ old('payment') == '1' ? 'selected' : '' }}>Paid</option>
+               <option value="2" {{ old('payment') == '2' ? 'selected' : '' }}>Partial Payment</option>
+               <option value="3" {{ old('payment') == '3' ? 'selected' : '' }}>On Credit</option>
             </select>
             @error('payment')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
@@ -44,7 +44,7 @@
                   type="text"
                   placeholder="Dead Line"
                   name="paymentDeadline"
-                  class="daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
+                  class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                   value=""
                   id="paymentDeadline"
                   autocomplete="off">
@@ -80,17 +80,21 @@
             <input type="text" name="total_price" id="total_price" value="{{$payamentDetails->total}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
             <input type="hidden" name="total_price" value="{{$payamentDetails->total}}">
             @endif
-            <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+            <p style="color: skyblue; font-taskdeadlinesize: 14px; font-weight: 500;">
                         Total: {{$payamentDetails->total}}
                     </p>
          </div>
          <div class="  w-full md:w-1/2 hidden partialPayment">
             <label for="amount" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Paid Partial Amount</label>
-            <input type="text" name="partial_payment" id="partial_payment" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
-            <p class="paymentInfo " id="hidePaymentInfo" style="color: skyblue; font-size: 14px; font-weight: 500;">
+            <input type="text" name="partial_payment" id="partial_payment" value="" required class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            <p class="paymentInfo " id="hidePaymentInfo" style="color: skyblue; font-size: 14px; font-weight: 500;" >
                Pending Amount: {{$payamentDetails->total}}
             </p>
+
             <div class=" hidden PartialPaymentError " style="color: red;font-size: 14px; font-weight: 500;"></div>
+            @error('partial_payment')
+            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+            @enderror
 
          </div>
          <div class="flex flex-col justify-start flex-wrap w-[100%] md:w-[49%]">
@@ -203,7 +207,8 @@
          locale: {
             format: 'DD MMM YYYY'
          },
-         minDate: moment().startOf('day'),
+         minDate: null,
+         maxDate: moment().endOf('day'),
       }).on('apply.daterangepicker', function(ev, picker) {
          console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
       });
@@ -232,7 +237,7 @@
             $(".total_amount").addClass("hidden");
             $(".paymentInfo").text("Pending amount : {{$payamentDetails->pending_amount  }}");
          } else if (changedValue == 2) {
-            yes = $("#partial_payment").val();
+           
             $("#verifiedDate label").text("Verified On");
             $("#paymentReminder").removeClass("hidden");
             $(".partialPayment").removeClass("hidden");
@@ -240,7 +245,7 @@
             $("#partial_payment").prop('disabled', false);
             $(".paymentInfo").text("Pending amount : {{$payamentDetails->pending_amount  }}");
          } else if(changedValue == 1){
-            yes = $("#partial_payment").val("{{$payamentDetails->total  }}");
+            
             $("#partial_payment").prop('disabled', true);
             $(".partialPayment").addClass("hidden");
             $("#paymentReminder").addClass("hidden");

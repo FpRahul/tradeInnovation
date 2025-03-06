@@ -20,7 +20,7 @@
             <select name="reply_status" id="reply_status" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                <option value="" disabled selected>Select status</option>
                <option value="0"> Accepeted</option>
-               <option value="1"> Awaited For hearing  </option>
+               <option value="1"> Ready For Show Cause Hearing  </option>
             </select>
             <div class="showWarning" style="color: red;font-size: 14px; font-weight: 500;"></div>
             @error('reply_status')
@@ -80,9 +80,9 @@
             <input type="text" name="stage_id" id="stage_id" value="{{$onHideSatge->title}}" class="  w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
             <input type="hidden" name="stage_id" id = "SatgeID"  value="{{$onHideSatge->id}}">
             @endif
-            <!-- <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-                        Next stage will be: {{$getStage->title}}
-                    </p> -->
+             <p id="nextTitle" style="color: skyblue; font-size: 14px; font-weight: 500;">
+                        Next stage will be: {{$onHideSatge->title}}
+                    </p> 
          </div>
          
          @if($taskDetails->count() > 0)
@@ -174,12 +174,13 @@
            
            $("#stage_id").val('{{ $getStage->title }}') 
            $("#SatgeID").val('{{ $getStage->id }}') 
-
+           $("#nextTitle").text(' Next stage will be: ' + '{{ $getStage->title }}')
            $('#showStage').text('Set a dead line for ' + '{{ $getStage->title }}');
 
          } else if (reply_status == 0) {
            $("#stage_id").val('{{ $onHideSatge->title }}'); 
            $("#SatgeID").val('{{ $onHideSatge->id }}') 
+           $("#nextTitle").text(' Next stage will be: ' + '{{ $onHideSatge->title }}')
             
             $('#showStage').text('Set a dead line for ' + '{{ $onHideSatge->title }}');
            

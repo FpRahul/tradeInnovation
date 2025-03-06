@@ -85,7 +85,7 @@
                         <div class="w-full md:w-5/12">
                             <label class="flex text-[15px] text-[#000] mb-[5px]">Date Range</label>
                             <div class="w-[100%] relative">
-                                <input type="text" placeholder="Start Date" name="dateRange" class="daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" value="">
+                                <input type="text" placeholder="Start Date" name="dateRange" id="dateRange" class="daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" value="">
                                 {{-- <i class="ri-calendar-line absolute right-[8px] top-[9px]"></i> --}}
                             </div>
                         </div>
@@ -98,9 +98,9 @@
                         </button>
     
                         <!-- Reset Button -->
-                        <button id="resetButton" class="text-[14px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[12px] py-[16px] px-[35px]">
+                        <a href="{{ route('lead.paymentStatus') }}" id="resetButton" class="text-[14px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[12px] py-[16px] px-[35px]">
                             Reset
-                        </button>
+                        </a>
                     </div>
                 </div>
             </form>
@@ -202,7 +202,7 @@
 </div>
    {{-- modal open --}}
    <div id="assignUserModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[100%)] max-h-full bg-[rgba(0,0,0,0.6)] ">
-    <div class="relative p-4 w-full max-w-[1220px] max-h-full m-auto">
+    <div class="relative p-4 w-full max-w-[1200px] max-h-full m-auto">
         <!-- Modal content -->
         <div class="relative bg-white  shadow">
 
@@ -280,9 +280,9 @@ $(document).ready(function(){
               data: {payment_id:payment_id},
               success: function (response){
                         if(response.status == 200) {
-                console.log(response);
                 $('#payment-table-body').empty();
                     if (response.data.length > 0) {
+                    
                         response.data.forEach(function(item, index) {
                             const formattedDate = item.created_at ? moment(item.created_at).format('DD MMM YYYY') : 'N/A';
                             let paidAmount = item.submitted_amount;
@@ -305,7 +305,7 @@ $(document).ready(function(){
                             $('#payment-table-body').append(newRow);
                         });
                     } else {
-                        $('#payment-table-body').html("<tr><td colspan="9" class="text-center text-red-500">No Record Found!</td></tr>");
+                        $('#payment-table-body').html("<tr><td colspan='9' class='text-center text-red-500'>No Record Found!</td></tr>");
                     }
                 } else {
                     console.error('Failed to load payment details');
@@ -329,13 +329,20 @@ $(document).ready(function(){
         }, function(start, end, label) {
             console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
         });
+        
 
-        $("#resetButton").on('click', function(event) {
-            event.preventDefault();
-            window.history.replaceState({}, document.title, window.location.pathname);
-            window.location.reload();
-            $("#filterForm")[0].reset();
-        });
+        
+
+            var urlParams = new URLSearchParams(window.location.search);
+            var dateRange = urlParams.get('dateRange');
+            if (dateRange) {
+                var decodedDateRange = decodeURIComponent(dateRange.replace(/\+/g, ' '));
+                $("#dateRange").val(decodedDateRange);
+            }
+         
+           
+
+        
 })
     $(document).on('keyup', '.search', function() {
         var key = $(this).val();
@@ -358,6 +365,9 @@ $(document).ready(function(){
         })
 
     });
+
+   
+
     
 </script>
 @stop

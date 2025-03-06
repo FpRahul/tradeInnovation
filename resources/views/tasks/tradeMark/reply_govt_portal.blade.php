@@ -65,9 +65,9 @@
                <input type="text" name="stage_id" id="stage_id" value="{{$getStage->title}}" class="  w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
                <input type="hidden" name="stage_id" id="SatgeID" value="{{$getStage->id}}">
                @endif
-               <!-- <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+                <p style="color: skyblue; font-size: 14px; font-weight: 500;">
                         Next stage will be: {{$getStage->title}}
-                    </p> -->
+                    </p> 
             </div>
 
             @if($taskDetails->count() > 0)

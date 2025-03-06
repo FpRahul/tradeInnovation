@@ -15,7 +15,6 @@
 
       <div class="flex flex-col md:flex-row gap-[20px]">
          <input type="hidden" name="checkValid" id="checkValid" value="">
-
          <div class="w-full md:w-1/2" >
             <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
                Hearing Date
@@ -52,8 +51,6 @@
                </div>
             </div>
          </div>
-         
-
       </div>
       <div class="flex justify-start flex-wrap w-[100%] md:w-[49%]">
             <label class="block w-full text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload</label>
@@ -84,9 +81,9 @@
                <input type="text" name="stage_id" id="stage_id" value="{{$getStage->title}}" class="  w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
                <input type="hidden" name="stage_id" id="SatgeID" value="{{$getStage->id}}">
                @endif
-               <!-- <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+              <p style="color: skyblue; font-size: 14px; font-weight: 500;">
                         Next stage will be: {{$getStage->title}}
-                    </p> -->
+                    </p> 
             </div>
 
             @if($taskDetails->count() > 0)

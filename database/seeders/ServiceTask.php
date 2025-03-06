@@ -56,8 +56,8 @@ class ServiceTask extends Seeder
             ],
             [
                 'service_id' => '1',
-                'title' => 'Initial Examination',
-                'description' => 'Update the initial examination status.',
+                'title' => 'Examination report',
+                'description' => 'Update the examination report status.',
                 'stage' => '0',
             ],
             [

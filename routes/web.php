@@ -144,6 +144,9 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('documentation/{id}','documentation')->name('task.documentation');
         Route::Post('documentation-status/{id}','documenStatus')->name('task.documenStatus');
         Route::Post('hold-task','holdtask')->name('task.hold');
+        Route::get('document-draft/{id}', "DocumentDraft")->name('task.DocumentDraft');
+        Route::post('document-draft/status/{id}', "DocumentDraftStatus")->name('task.DocumentDraftStatus');
+
         Route::get('client-approval/{id}','clientApproval')->name('task.clientApproval');
         Route::post('client-approval/status/{id}','clientApprovalStatus')->name('task.clientApprovalStatus');
         Route::get('draft-application/{id}','draftApplication')->name('task.draftApplication');
@@ -162,6 +165,10 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('show-case-hearing/status/{id}','showCaseHearingStatus')->name('task.showCaseHearingStatus');
         Route::get('mark-publish/{id}','markAsPublish')->name('task.markAsPublish');
         Route::post('mark-publish/status/{id}','markAsPublishStatus')->name('task.markAsPublishStatus');
+        Route::get('mark-publish/opposition/{id}','markPublishOpposition')->name('task.markPublishOpposition');
+        Route::Post('mark-publish/opposition/{id}','markPublishOppositionStatus')->name('task.markPublishOppositionStatus');
+        
+
 
          
         // For patent.........

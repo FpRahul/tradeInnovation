@@ -38,6 +38,12 @@ class ServiceTask extends Seeder
             ], 
             [
                 'service_id' => '1',
+                'title' => 'Document Draft',
+                'description' => 'Draft sent to the client for review and feedback to finalize the details.',
+                'stage' => '0',
+            ], 
+            [
+                'service_id' => '1',
                 'title' => 'Client approval on documentation',
                 'description' => 'Client confirmation on the documents which is used to file the application',
                 'stage' => '0',
@@ -92,7 +98,7 @@ class ServiceTask extends Seeder
             ],
             [
                 'service_id' => '1',
-                'title' => 'Opposition',
+                'title' => 'Opposition Status',
                 'description' => 'Update the opposition status.',
                 'stage' => '0',
             ],
@@ -124,6 +130,12 @@ class ServiceTask extends Seeder
                 'service_id' => '1',
                 'title' => 'Show cause hearing (Opposition)',
                 'description' => 'Update the show cause hearing status / or next hearing date',
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Trademark Published',
+                'description' => 'Complete the trademark registration ',
                 'stage' => '13',
             ],
             //patnet

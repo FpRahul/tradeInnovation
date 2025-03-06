@@ -9,21 +9,21 @@
    <x-client-task-details :taskID="$id" />
 </div>
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
-   <form action="{{route('task.formalityCheckStatus',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
+   <form action="{{route('task.markPublishOppositionStatus',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
       <strong class="mt-4 block"> Update Current Task</strong>
 
       <div class="flex flex-col md:flex-row gap-[20px]">
          <input type="hidden" name="checkValid" id="checkValid" value="">
          <div class="w-full md:w-1/2">
-            <label for="formality_check" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
-            <select name="formality_check" id="formality_check" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            <label for="publish_opposition" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
+            <select name="publish_opposition" id="publish_opposition" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                <option value="" disabled selected>Select status</option>
-               <option value="1"> Formality Checked Pass</option>
-               <option value="2"> Formality Checked Failed </option>
+               <option value="0"> Opposition Filed</option>
+               <option value="1"> Opposition Not Filed </option>
             </select>
             <div class="showWarning" style="color: red;font-size: 14px; font-weight: 500;"></div>
-            @error('formality_check')
+            @error('publish_opposition')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
          </div>
@@ -61,28 +61,7 @@
          @error('attachment.*')
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
-         <div class=" reminderDate hidden w-full md:w-1/2" id="verifiedDate">
-            <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-               Reminder Date
-            </label>
-            <div class="w-[100%] relative">
-               <input
-                  type="text"
-                  placeholder="Dead Line"
-                  name="reminder_date"
-                  id="deadline"
-                  class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
-                  value=""
-                  autocomplete="off">
-               <div class="absolute right-[10px] top-[10px]">
-                  <i class="ri-calendar-line"></i>
-               </div>
-            </div>
-            @error('reminder_date')
-            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
-            @enderror
-
-         </div>
+         
       </div>
       <div class="">
          <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
@@ -91,20 +70,21 @@
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
       </div>
-      <strong class="onHoldHide mt-5 block">Update Upcoming Actions</strong>
+      <strong class= mt-5 block>Update Upcoming Actions</strong>
 
-      <div class=" onHoldHide flex flex-col md:flex-row gap-[20px]">
+      <div class=" flex flex-col md:flex-row gap-[20px]">
 
-         <div class="w-full md:w-1/2 onHoldHide">
-            <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Satge</label>
+         <div class="w-full md:w-1/2 ">
+            <label for="stage" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Satge</label>
             @if($getStage->count() > 0)
-            <input type="text" name="stage_id" id="stage_id" value="{{$getStage->title}}" class="  w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
-            <input type="hidden" name="stage_id" value="{{$getStage->id}}">
+            <input type="text" name="stage_id" id="stage_id" value="{{$onHideSatge->title}}" class="  w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
+            <input type="hidden" name="stage_id" id = "SatgeID"  value="{{$onHideSatge->id}}">
             @endif
-            <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-                        Next stage will be: {{$getStage->title}}
-                    </p>
+             <p id="nextTitle" style="color: skyblue; font-size: 14px; font-weight: 500;">
+                        Next stage will be: {{$onHideSatge->title}}
+                    </p> 
          </div>
+         
          @if($taskDetails->count() > 0)
          @php
          $selectedId = $taskDetails->user->id;
@@ -131,11 +111,10 @@
             <p style="color: skyblue; font-size: 14px; font-weight: 500;">
                Current user assigned: {{$taskDetails->user->name}}.
             </p>
-
             @endif
          </div>
       </div>
-      <div class=" onHoldHide w-full md:w-1/2" id="verifiedDate">
+      <div class=" w-full md:w-1/2" id="deadLineDate">
          <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
             Dead line
          </label>
@@ -153,8 +132,8 @@
                <i class="ri-calendar-line"></i>
             </div>
          </div>
-         <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-            Set a dead line for Initial Examination.
+         <p id="showStage" style="color: skyblue; font-size: 14px; font-weight: 500;">
+            Set a dead line for {{ $onHideSatge->title }}.
          </p>
       </div>
       <div class="flex justify-end gap-[15px]">
@@ -187,23 +166,39 @@
       }).on('apply.daterangepicker', function(ev, picker) {
          console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
       });
-      $("#formality_check").on('change', function() {
-         var documentStatus = $(this).val();
-         if (documentStatus == 2) {
-            $(".onHoldHide").addClass('hidden');
-            $(".showWarning").text('You are going to hold the formality check')
-            $(".reminderDate").removeClass('hidden')
-            $('label[for="verified"]').text('Hold On');
 
-         } else if (documentStatus == 1) {
-            $(".onHoldHide").removeClass('hidden');
-            $(".showWarning").text('')
-            $(".reminderDate").addClass('hidden')
-            $('label[for="verified"]').text('Verified On');
+     
+      $("#publish_opposition").on('change', function() {
+         var publish_opposition = $(this).val();
+         if (publish_opposition == 0) {
+           
+           $("#stage_id").val('{{ $getStage->title }}') 
+           $("#SatgeID").val('{{ $getStage->id }}') 
+
+           $('#showStage').text('Set a dead line for: ' + '{{ $getStage->title }}');
+           $('#nextTitle').text('Next stage will be: ' + '{{ $getStage->title }}');
 
 
-
+         } else if (publish_opposition == 1) {
+           $("#stage_id").val('{{ $onHideSatge->title }}'); 
+           $("#SatgeID").val('{{ $onHideSatge->id }}') 
+            $('#nextTitle').text('Next stage will be: ' + '{{ $onHideSatge->title }}');
+            $('#showStage').text('Set a dead line for: ' + '{{ $onHideSatge->title }}');
+           
+ 
          }
+
+    //   $("#publish_opposition").on('change', function () {
+    //      var changeValue = $(this).val();
+    //      if (changeValue == 0) {
+    //         $("#verifiedDate label").text("Verified On");
+    //      }
+    //      else if (changeValue == 1) {
+    //         $("#verifiedDate label").text("Objected Date");
+    //      }
+         
+    //   });
+
       })
    });
 </script>

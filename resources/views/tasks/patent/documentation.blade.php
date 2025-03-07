@@ -9,21 +9,20 @@
    <x-client-task-details :taskID="$id" />
 </div>
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
-   <form action="{{route('task.formalityCheckStatus',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
+   <form action="{{route('task.documenStatus',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
       <strong class="mt-4 block"> Update Current Task</strong>
-
       <div class="flex flex-col md:flex-row gap-[20px]">
          <input type="hidden" name="checkValid" id="checkValid" value="">
          <div class="w-full md:w-1/2">
-            <label for="formality_check" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
-            <select name="formality_check" id="formality_check" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            <label for="document" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
+            <select name="document" id="document" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                <option value="" disabled selected>Select status</option>
-               <option value="1"> Formality Checked Pass</option>
-               <option value="2"> Formality Checked Failed </option>
+               <option value="1">Document Verified</option>
+               <option value="2">Document Not Verified </option>
             </select>
             <div class="showWarning" style="color: red;font-size: 14px; font-weight: 500;"></div>
-            @error('formality_check')
+            @error('document')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
          </div>
@@ -61,6 +60,7 @@
          @error('attachment.*')
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
+
          <div class=" reminderDate hidden w-full md:w-1/2" id="verifiedDate">
             <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
                Reminder Date
@@ -91,28 +91,27 @@
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
       </div>
-      <strong class="onHoldHide mt-5 block">Update Upcoming Actions</strong>
-
-      <div class=" onHoldHide flex flex-col md:flex-row gap-[20px]">
-
+      <strong class=" onHoldHide mt-5 block">Update Upcoming Actions</strong>
+      <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2 onHoldHide">
             <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Satge</label>
             @if($getStage->count() > 0)
             <input type="text" name="stage_id" id="stage_id" value="{{$getStage->title}}" class="  w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
             <input type="hidden" name="stage_id" value="{{$getStage->id}}">
             @endif
-            <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+             <p style="color: skyblue; font-size: 14px; font-weight: 500;">
                         Next stage will be: {{$getStage->title}}
-                    </p>
+                    </p> 
          </div>
          @if($taskDetails->count() > 0)
+
          @php
          $selectedId = $taskDetails->user->id;
          @endphp
 
          @endif
 
-         <div class="w-full md:w-1/2">
+         <div class="onHoldHide w-full md:w-1/2">
             <label for="assignUser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign User</label>
             <select name="assignUser" id="assignUser" class="filterData assignUserData allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]" required>
                <option value="" disabled selected>Select a user</option>
@@ -154,9 +153,11 @@
             </div>
          </div>
          <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-            Set a dead line for: {{$getStage->title}}
+            Set a dead line for Client approval.
          </p>
       </div>
+
+
       <div class="flex justify-end gap-[15px]">
          <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
       </div>
@@ -165,16 +166,16 @@
 <script>
    $(document).ready(function() {
       $('.daterangepicker-verified').daterangepicker({
-         singleDatePicker: true,
-         opens: 'right',
-         locale: {
-            format: 'DD MMM YYYY'
-         },
-         minDate: null,
-         maxDate: moment().endOf('day'),
-      }).on('apply.daterangepicker', function(ev, picker) {
-         console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
-      });
+            singleDatePicker: true,
+            opens: 'right',
+            locale: {
+                format: 'DD MMM YYYY'
+            },
+            minDate: null,
+            maxDate: moment().endOf('day'),
+        }).on('apply.daterangepicker', function(ev, picker) {
+            console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+        });
 
       $('.daterangepicker-taskdeadline').daterangepicker({
          singleDatePicker: true,
@@ -187,11 +188,21 @@
       }).on('apply.daterangepicker', function(ev, picker) {
          console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
       });
-      $("#formality_check").on('change', function() {
+
+      // $("#document").on("change", function() {
+      //    var changedValue = $(this).val();
+      //    if (changedValue == 2) {
+      //       $('label[for="verified"]').text('Hold On'); // Change label text
+      //    } else {
+      //       $('label[for="verified"]').text('Verified On'); // Revert label text
+      //    }
+      // });
+
+      $("#document").on('change', function() {
          var documentStatus = $(this).val();
          if (documentStatus == 2) {
             $(".onHoldHide").addClass('hidden');
-            $(".showWarning").text('You are going to hold the formality check')
+            $(".showWarning").text('You are going to hold the Document verification')
             $(".reminderDate").removeClass('hidden')
             $('label[for="verified"]').text('Hold On');
 

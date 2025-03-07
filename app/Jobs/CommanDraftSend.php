@@ -18,17 +18,20 @@ class CommanDraftSend implements ShouldQueue
     public $subject; // single varabel define the what we register User Or client or associate
     public $service;
     public $remark;
+    public $leadID;
     public $filePaths;
     public $clientName;
     public $clientEmail;
     public $userName;
 
 
-    public function __construct($subject,$service,$remark,$filePaths,$clientName,$clientEmail,$userName)
+    
+    public function __construct($subject,$service,$remark,$leadID,$filePaths,$clientName,$clientEmail,$userName)
     {
         $this->subject = $subject;
         $this->service = $service;
         $this->remark  = $remark;
+        $this->leadID  = $leadID;
         $this->filePaths = $filePaths;
         $this->clientName = $clientName;
         $this->clientEmail = $clientEmail;
@@ -46,6 +49,7 @@ class CommanDraftSend implements ShouldQueue
             $this->subject, 
             $this->service, 
             $this->remark, 
+            $this->leadID, 
             $this->filePaths,
             $this->clientName, 
             $this->clientEmail,

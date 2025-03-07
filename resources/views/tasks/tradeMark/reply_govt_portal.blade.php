@@ -117,7 +117,7 @@
                </div>
             </div>
             <p id="showStage" style="color: skyblue; font-size: 14px; font-weight: 500;">
-               Set a dead line for {{ $onHideSatge->title }}.
+               Set a dead line for: {{$getStage->title}}
             </p>
          </div>
          <div class="flex justify-end gap-[15px]">

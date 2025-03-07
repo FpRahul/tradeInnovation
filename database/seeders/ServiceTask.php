@@ -162,6 +162,12 @@ class ServiceTask extends Seeder
                 'title' => 'Document verification',
                 'description' => 'Verify documents internally which will be used to file the application.',
                 'stage' => '0',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Document Draft',
+                'description' => 'Draft sent to the client for review and feedback to finalize the details.',
+                'stage' => '0',
             ], 
             [
                 'service_id' => '2',
@@ -169,12 +175,7 @@ class ServiceTask extends Seeder
                 'description' => 'Client confirmation on the documents which is used to file the application',
                 'stage' => '0',
             ],
-            [
-                'service_id' => '2',
-                'title' => 'Draft application',
-                'description' => 'Draft application on the portal',
-                'stage' => '0',
-            ]
+            
         ]);
     }
 }

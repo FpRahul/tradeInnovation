@@ -146,7 +146,6 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('hold-task','holdtask')->name('task.hold');
         Route::get('document-draft/{id}', "DocumentDraft")->name('task.DocumentDraft');
         Route::post('document-draft/status/{id}', "DocumentDraftStatus")->name('task.DocumentDraftStatus');
-
         Route::get('client-approval/{id}','clientApproval')->name('task.clientApproval');
         Route::post('client-approval/status/{id}','clientApprovalStatus')->name('task.clientApprovalStatus');
         Route::get('draft-application/{id}','draftApplication')->name('task.draftApplication');
@@ -177,6 +176,10 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/patent/payment-verification/{id?}','patentPaymentVerification')->name('task.patentPaymentVerification');
         Route::get('/patent/prior-art/{id?}','patentPriorArt')->name('task.patentPriorArt');
         Route::post('/patent/submit-prior-art/{id?}','patentSubmitPriorArt')->name('task.patentSubmitPriorArt');
+        Route::get('/patent/documentation/{id?}','patentDocumentation')->name('task.patentDocumentation');
+        Route::get('/patent/draft/{id?}','patentDraft')->name('task.patentDraft');
+        Route::post('/patent/submit-draft/{id?}','patentSubmitDraft')->name('task.patentSubmitDraft');
+
         
     });
     //Services Routes

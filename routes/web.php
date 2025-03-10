@@ -164,8 +164,15 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('show-case-hearing/status/{id}','showCaseHearingStatus')->name('task.showCaseHearingStatus');
         Route::get('mark-publish/{id}','markAsPublish')->name('task.markAsPublish');
         Route::post('mark-publish/status/{id}','markAsPublishStatus')->name('task.markAsPublishStatus');
-        Route::get('mark-publish/opposition/{id}','markPublishOpposition')->name('task.markPublishOpposition');
-        Route::Post('mark-publish/opposition/{id}','markPublishOppositionStatus')->name('task.markPublishOppositionStatus');
+        Route::get('opposition/mark-publish/{id}','markPublishOpposition')->name('task.markPublishOpposition');
+        Route::Post('opposition/mark-publish/status{id}','markPublishOppositionStatus')->name('task.markPublishOppositionStatus');
+        Route::get('opposition/inform-client/{id}','informClientAfterPublish')->name('task.informClientAfterPublish');
+        Route::Post('opposition/inform-client/status{id}','informClientAfterPublishStatus')->name('task.informClientAfterPublishStatus');
+        Route::get('opposition/payment/{id}','oppositionPayment')->name('task.oppositionPayment');
+        Route::Post('opposition/payment/status/{id}', 'oppositionPaymentStatus')->name('task.oppositionPaymentStatus');
+
+
+
         
 
 

@@ -108,6 +108,13 @@ class ServiceTask extends Seeder
                 'description' => 'Inform client about the opposition and mark the payment status.',
                 'stage' => '13',
             ],
+            
+            [
+                'service_id' => '1',
+                'title' => 'Trademark Opposition Charge',
+                'description' => 'Opposition-Driven Additional Charge After Trademark Publication',
+                'stage' => '13',
+            ],
             [
                 'service_id' => '1',
                 'title' => 'Counter Statment',

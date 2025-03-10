@@ -31,7 +31,7 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-[#F1F2F4] ">
+<body class="bg-[#F1F2F4]">
     <div class="flex flex-wrap h-[100vh]">
         <div id="sidebar" class="hidden xl:block bg-white shadow-lg xl:shadow-none w-[270px]  transform transition-transform duration-500 ease-in-out -translate-x-full xl:translate-x-0 fixed xl:relative top-0 left-0 z-[99] md:z-[2] border-r-[1px] border-[#0000001A] ">
             <div class="space-y-[24px] h-[100vh] lg:h-[calc(100vh-54px)] max-h-[100vh] lg:max-h-[calc(100vh-54px)] px-[18px] md:px-[25px] py-[14px] overflow-y-auto ">
@@ -39,7 +39,7 @@
             </div>
         </div>
         <div class="w-full xl:w-[calc(100%-270px)]">
-            <div class="bg-[#F1F2F4] admin-header sticky top-0 z-[9] px-[15px] md:px-[30px] py-[15px] ">
+            <div class="bg-[#fdfeff] admin-header sticky top-0 z-[9] px-[15px] md:px-[30px] py-[15px] ">
                 @include('layouts.header')
             </div>
             <div class="main-right-content xl:h-[calc(100vh-153px)] xl:max-h-[calc(100vh-129px)] overflow-y-auto py-[23px] pt-[14px] overflow-hidden px-[15px] md:px-[30px]">

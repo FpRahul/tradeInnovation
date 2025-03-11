@@ -9,7 +9,7 @@
    <x-client-task-details :taskID="$id" />
 </div>
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
-   <form action="{{route('task.oppositionPaymentStatus',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
+   <form action="{{route('task.examinationPaymentStatus',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
       <strong class="mt-4 block"> Update Current Task</strong>
       <input type="hidden" name="paymentId" value="{{ $paymentId }}">

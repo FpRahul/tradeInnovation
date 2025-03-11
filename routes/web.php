@@ -158,6 +158,10 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::post('government-portal/status/{id}','replyAddedStatus')->name('task.replyAddedStatus');
         Route::get('government-portal/reply/{id}','govtPortalReply')->name('task.govtPortalReply');
         Route::Post('government-portal/reply/status/{id}','govtPortalReplyStatus')->name('task.govtPortalReplyStatus');
+        Route::get('examintion/inform-client/{id}' , 'examinationInform')->name('task.examinationInform');
+        Route::Post('examintion/inform-client/status/{id}' , 'examinationInformStatus')->name('task.examinationInformStatus');
+        Route::get('examination/payment/{id}' , 'examinationPayment')->name('task.examinationPayment');
+        Route::Post('examination/payment/status/{id}' , 'examinationPaymentStatus')->name('task.examinationPaymentStatus');
         Route::get('hearing-date/{id}','hearingDate')->name('task.hearingDate');
         Route::Post('hearing-date/status/{id}','hearingDateStatus')->name('task.hearingDateStatus');
         Route::get('show-case-hearing/{id}','showCaseHearing')->name('task.showCaseHearing');

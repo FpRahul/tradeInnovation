@@ -80,6 +80,19 @@ class ServiceTask extends Seeder
             ],
             [
                 'service_id' => '1',
+                'title' => 'Examination Objected (Payment verifiction)',
+                'description' => 'Notify client of examination objection and payment verification.',
+                'stage' => '8',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Examination Objected Charge',
+                'description' => 'Cost for Processing Examination Objection Requests"',
+                'stage' => '8',
+
+            ],
+            [
+                'service_id' => '1',
                 'title' => 'Awaited for hearing (Objection)',
                 'description' => 'Add the hearing date provided by the court for the raised objection',
                 'stage' => '8',

@@ -136,8 +136,14 @@ class ServiceTask extends Seeder
             ],
             [
                 'service_id' => '1',
-                'title' => 'Submit Evidence',
-                'description' => 'Submitt the evidence on the received opposition.',
+                'title' => 'Opponent Evidence Submission status',
+                'description' => 'Updates the status of the opponent evidence submission.',
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Applicant Evidence Submission status',
+                'description' => 'Updates the status of the applicant evidence submission.',
                 'stage' => '13',
             ],
             [

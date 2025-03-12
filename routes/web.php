@@ -124,9 +124,6 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::post('/client','existedClientDetail')->name('lead.existedClientDetail');
         Route::get('/payment', 'paymentStatus')->name('lead.paymentStatus');
         Route::Post('/payment-details', 'paymentDetails')->name('lead.paymentDetails');
-        
-
-
     });
     //Tasks Routes
     Route::prefix('tasks')->controller(TasksController::class)->group(function () {
@@ -174,6 +171,14 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('opposition/inform-client/status{id}','informClientAfterPublishStatus')->name('task.informClientAfterPublishStatus');
         Route::get('opposition/payment/{id}','oppositionPayment')->name('task.oppositionPayment');
         Route::Post('opposition/payment/status/{id}', 'oppositionPaymentStatus')->name('task.oppositionPaymentStatus');
+        Route::get('opposition/counter-statement/{id}', 'oppositionCounterStatement')->name('task.oppositionCounterStatement');
+        Route::Post('opposition/counter-statement/status/{id}', 'oppositionCounterStatementStatus')->name('task.oppositionCounterStatementStatus');
+        Route::get('opposition/evidence-submission/{id}', 'opponentEvidenceSubmission')->name('task.opponentEvidenceSubmission');
+        Route::Post('opposition/evidence-submission/status/{id}', 'opponentEvidenceSubmissionStatus')->name('task.opponentEvidenceSubmissionStatus');
+        
+
+
+
 
 
 

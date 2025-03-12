@@ -322,7 +322,7 @@
 
 <script>
     $(document).on('click', '.hold-on-pop', function() {
-        var task_id = $(this).attr('data-taskId')
+        var task_id = $(this).attr('data-taskId');
         $("#task_hidden_id").val(task_id);
     });
 

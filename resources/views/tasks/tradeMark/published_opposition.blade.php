@@ -12,7 +12,6 @@
    <form action="{{route('task.markPublishOppositionStatus',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
       <strong class="mt-4 block"> Update Current Task</strong>
-
       <div class="flex flex-col md:flex-row gap-[20px]">
          <input type="hidden" name="checkValid" id="checkValid" value="">
          <div class="w-full md:w-1/2">
@@ -70,7 +69,62 @@
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
       </div>
-      <strong class= mt-5 block>Update Upcoming Actions</strong>
+      
+      <strong class ="mt-[20px] block hidden hideOpposition" >Opposition Details</strong>
+      <div class="flex flex-col md:flex-row gap-[20px] hidden hideOpposition">
+         <div class="w-full md:w-1/2">
+            <label for="opposition_number" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Opposition Number<strong class="text-[#f83434]">*</strong></label>
+            <input type="text" name="opposition_number" id="opposition_number" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            @error('opposition_number')
+            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+            @enderror
+         </div>
+         <div class="w-full md:w-1/2">
+            <label for="opponent_name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Opponent Name<strong class="text-[#f83434]">*</strong></label>
+            <input type="text" id="opponent_name" name="opponent_name"  class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            @error('opponent_name')
+            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+            @enderror
+         </div>
+
+      </div>
+      <div class="flex flex-col md:flex-row gap-[20px] hidden hideOpposition">
+         <div class="w-full md:w-1/2">
+            <label for="opponent_address" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Opponent Address<strong class="text-[#f83434]">*</strong></label>
+            <input type="text" name="opponent_address" id="opponent_address" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            @error('opponent_address')
+            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+            @enderror
+         </div>
+         <div class="w-full md:w-1/2">
+            <label for="advocate_name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Advocate Name<strong class="text-[#f83434]">*</strong> </label>
+            <input type="text" name="advocate_name" id="advocate_name" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            @error('advocate_name')
+            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+            @enderror
+         </div>
+      </div>
+
+      <div class="w-full md:w-1/2 mb-3 hidden hideOpposition" id="opposition_datedDate">
+         <label for="opposition_date" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+            Opposition Date 
+         </label>
+         <div class="w-[100%] relative">
+            <input
+               type="text"
+               placeholder="Dead Line"
+               name="opposition_date"
+               class="daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
+               value=""
+               id="opposition_date"
+               autocomplete="off">
+            <div class="absolute right-[10px] top-[10px]">
+               <i class="ri-calendar-line"></i>
+            </div>
+         </div>
+      </div>
+
+      <strong class="mt-5 block">Update Upcoming Actions</strong>
 
       <div class=" flex flex-col md:flex-row gap-[20px]">
 
@@ -82,7 +136,7 @@
             @endif
              <p id="nextTitle" style="color: skyblue; font-size: 14px; font-weight: 500;">
                         Next stage will be: {{$onHideSatge->title}}
-                    </p> 
+              </p> 
          </div>
          
          @if($taskDetails->count() > 0)
@@ -174,31 +228,16 @@
            
            $("#stage_id").val('{{ $getStage->title }}') 
            $("#SatgeID").val('{{ $getStage->id }}') 
-
+           $('.hideOpposition').removeClass('hidden');
            $('#showStage').text('Set a dead line for: ' + '{{ $getStage->title }}');
            $('#nextTitle').text('Next stage will be: ' + '{{ $getStage->title }}');
-
-
          } else if (publish_opposition == 1) {
            $("#stage_id").val('{{ $onHideSatge->title }}'); 
            $("#SatgeID").val('{{ $onHideSatge->id }}') 
             $('#nextTitle').text('Next stage will be: ' + '{{ $onHideSatge->title }}');
             $('#showStage').text('Set a dead line for: ' + '{{ $onHideSatge->title }}');
-           
- 
+            $('.hideOpposition').addClass('hidden');
          }
-
-    //   $("#publish_opposition").on('change', function () {
-    //      var changeValue = $(this).val();
-    //      if (changeValue == 0) {
-    //         $("#verifiedDate label").text("Verified On");
-    //      }
-    //      else if (changeValue == 1) {
-    //         $("#verifiedDate label").text("Objected Date");
-    //      }
-         
-    //   });
-
       })
    });
 </script>

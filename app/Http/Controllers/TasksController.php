@@ -3736,16 +3736,18 @@ class TasksController extends Controller
             return redirect()->route('task.oppositionPayment', ['id' => $id]);
         }
         // For Patent...............
-        else if ($taskDetails && $serviceId == 2 && $stageId == 20) {
+        else if ($taskDetails && $serviceId == 2 && $stageId == 25) {
             return redirect()->route('task.patentSendQuotation', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 21) {
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 26) {
             return redirect()->route('task.patentPaymentVerification', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 22) {
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 27) {
             return redirect()->route('task.patentPriorArt', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 23) {
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 28) {
             return redirect()->route('task.patentDocumentation', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 24) {
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 29) {            
             return redirect()->route('task.patentDraft', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 30) {            
+            return redirect()->route('task.patentClientApproval', ['id' => $id]);
         }
     }
 
@@ -3814,15 +3816,18 @@ class TasksController extends Controller
     public function patentSubmitPriorArt(Request $request, $id)
     {
         if ($request->isMethod('post')) {
+            // dd($request);
             $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
             $dead_line = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
             $existedLeaedTask = LeadTask::with(['lead', 'services', 'subService', 'serviceSatge'])->where('id', $id)->first();
+            
             $newLeadtask = new LeadTask();
             $newLeadTaskDeatails  = new LeadTaskDetail();
             $existedLeaedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
             $stageId = (int) $request->stage_id;
             $serviceId = $existedLeaedTask->services->id;
             $subServiceId = $existedLeaedTask->subService->id;
+            $existedStageName = ServiceStages::where('id', $existedLeaedTask->service_stage_id)->first();
             $assignedStageName = ServiceStages::where('id', $stageId)->first();
             $userName = Auth::user()->name;
 
@@ -3835,7 +3840,7 @@ class TasksController extends Controller
                 $newLeadtask->service_stage_id = $stageId;
                 $newLeadtask->assign_by = Auth::id();
                 $newLeadtask->task_title = $assignedStageName->description;
-                $existedLeaedTask->update(['task_description' => $request->description]);
+                $existedLeaedTask->update(['task_title'=>$existedStageName->title,'task_description' => $request->description]);
 
                 if ($newLeadtask->save()) {
                     $newLeadTaskDeatails->task_id = $newLeadtask->id;
@@ -3918,7 +3923,7 @@ class TasksController extends Controller
     }
 
     public function patentDraft(Request $request, $id)
-    {
+    {        
         if ($id) {
             $notifyData = LeadNotification::where('task_id', $id)->update(['status' => 1]);
         }
@@ -3932,7 +3937,7 @@ class TasksController extends Controller
         $getStage = ServiceStages::where('service_id', 2)->where('id', '>', $stageId)->first();
         $leadTaskdetials = LeadTaskDetail::find($id);
         $header_title_name = $taskDetails->serviceSatge->title;
-        return view('tasks.patent.draft-application', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage'));
+        return view('tasks/patent/draft-application', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage'));
     }
 
     public function patentSubmitDraft(Request $request, $id)
@@ -3963,6 +3968,8 @@ class TasksController extends Controller
             $newLeadtask->service_stage_id = $request->stage_id;
             $newLeadtask->assign_by = Auth::id();
             $newLeadtask->task_title = $newTaskTitle->title;
+            $existedLeaedTask->task_description = $request->description;
+            $existedLeaedTask->save();
             if ($newLeadtask->save()) {
                 $existedLeaedTaskDetails->status = 1;
                 $existedLeaedTaskDetails->status_date = $verifiedDate;
@@ -3981,9 +3988,8 @@ class TasksController extends Controller
                         }
                     }
                     $existedLeaedTaskDetails->attachment = json_encode($filePaths);
-                    $existedLeaedTask->task_description = $request->description;
                 }
-                if ($existedLeaedTaskDetails->save() || $existedLeaedTask->save()) {
+                if ($existedLeaedTaskDetails->save()) {
                     $newLeadTaskDeatails->task_id = $newLeadtask->id;
                     $newLeadTaskDeatails->dead_line = $deadlineDate;
                     $newLeadTaskDeatails->status = 0;

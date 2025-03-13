@@ -3879,17 +3879,17 @@ class TasksController extends Controller
             return redirect()->route('task.opponentEvidenceSubmission', ['id' => $id]);
         }
         // For Patent...............
-        else if ($taskDetails && $serviceId == 2 && $stageId == 25) {
+        else if ($taskDetails && $serviceId == 2 && $stageId == 26) {
             return redirect()->route('task.patentSendQuotation', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 26) {
-            return redirect()->route('task.patentPaymentVerification', ['id' => $id]);
         } else if ($taskDetails && $serviceId == 2 && $stageId == 27) {
-            return redirect()->route('task.patentPriorArt', ['id' => $id]);
+            return redirect()->route('task.patentPaymentVerification', ['id' => $id]);
         } else if ($taskDetails && $serviceId == 2 && $stageId == 28) {
+            return redirect()->route('task.patentPriorArt', ['id' => $id]);
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 29) {
             return redirect()->route('task.patentDocumentation', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 29) {            
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 30) {            
             return redirect()->route('task.patentDraft', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 2 && $stageId == 30) {            
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 31) {            
             return redirect()->route('task.patentClientApproval', ['id' => $id]);
         }
     }
@@ -4066,7 +4066,7 @@ class TasksController extends Controller
     }
 
     public function patentDraft(Request $request, $id)
-    {        
+    {
         if ($id) {
             $notifyData = LeadNotification::where('task_id', $id)->update(['status' => 1]);
         }
@@ -4181,6 +4181,23 @@ class TasksController extends Controller
         } else {
             return redirect()->back()->with('error', 'no task found');
         }
+    }
+
+    public function patentclientapproval(Request $request,$id){
+        if ($id) {
+            $notifyData = LeadNotification::where('task_id', $id)->update(['status' => 1]);
+        }
+        $taskDetails = LeadTask::with(['user', 'lead', 'services', 'subService', 'leadTaskDetails', 'serviceSatge'])
+            ->where('id', $id)
+            ->first();
+        $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
+        
+
+        $stageId = $taskDetails->service_stage_id;
+        $getStage = ServiceStages::where('service_id', 2)->where('id', '>', $stageId)->first();
+        $leadTaskdetials = LeadTaskDetail::find($id);
+        $header_title_name = $taskDetails->serviceSatge->title;
+        return view('tasks/patent/client-approval', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage'));
     }
 
     public function holdtask(Request $request)

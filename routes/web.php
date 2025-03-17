@@ -200,7 +200,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/patent/documentation/{id?}','patentDocumentation')->name('task.patentDocumentation');
         Route::get('/patent/draft/{id?}','patentDraft')->name('task.patentDraft');
         Route::post('/patent/submit-draft/{id?}','patentSubmitDraft')->name('task.patentSubmitDraft');
-        Route::post('/patent/client-approval/{id?}','patentclientapproval')->name('task.patentClientApproval');
+        Route::get('/patent/client-approval/{id?}','patentclientapproval')->name('task.patentClientApproval');
 
         
     });

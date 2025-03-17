@@ -14,13 +14,13 @@
       <strong class="mt-4 block"> Update Current Task</strong>
 
       <div class="flex flex-col md:flex-row gap-[20px]">
-         <input type="hidden" name="checkValid" id="checkValid" value="">
+         <input type="hidden" name="checkStatus" id="checkStatus" value="{{ $leadTaskdetials->status ?? "N/A" }}">
          <div class="w-full md:w-1/2">
             <label for="opponent_evidence" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
             <select name="opponent_evidence" id="opponent_evidence" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                <option value="" disabled selected>Select status</option>
-               <option value="0">Opponent Evidence Submit</option>
-               <option value="1">Opponent Evidence Not Submit</option>
+               <option value="0">Opponent Has Submitted Evidence</option>
+               <option value="1">Opponent Has Not Submitted Evidence</option>
             </select>
             <div class="showWarning" style="color: red;font-size: 14px; font-weight: 500;"></div>
             @error('opponent_evidence')
@@ -64,7 +64,7 @@
 
 
          <div class="w-full md:w-1/2">
-            <label for="opponent_status" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Opponent opponent Status</label>
+            <label for="opponent_status" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Opponent Status</label>
             <input type="text" name="opponent_status" id="opponent_status" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" >
             @error('opponent_status')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>

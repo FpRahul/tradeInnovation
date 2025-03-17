@@ -19,8 +19,8 @@
             <label for="applicant_evidence" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
             <select name="applicant_evidence" id="applicant_evidence" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                <option value="" disabled selected>Select status</option>
-               <option value="0">Applicant Evidence Submit</option>
-               <option value="1">Applicant Evidence Not Submit</option>
+               <option value="0">Applicant Has Submitted Evidence </option>
+               <option value="1">Applicant Has Not Submitted Evidence  </option>
             </select>
             <div class="showWarning" style="color: red;font-size: 14px; font-weight: 500;"></div>
             @error('applicant_evidence')

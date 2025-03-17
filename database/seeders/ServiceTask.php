@@ -207,6 +207,13 @@ class ServiceTask extends Seeder
                 'description' => 'Client confirmation on the documents which is used to file the application',
                 'stage' => '0',
             ],
+            [
+                'service_id' => '2',
+                'title' => 'Filing the application',
+                'description' => 'Client want to file the application for the early publication',
+                'stage' => '0',
+            ],
+            
             
         ]);
     }

@@ -175,6 +175,11 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('opposition/counter-statement/status/{id}', 'oppositionCounterStatementStatus')->name('task.oppositionCounterStatementStatus');
         Route::get('opposition/evidence-submission/{id}', 'opponentEvidenceSubmission')->name('task.opponentEvidenceSubmission');
         Route::Post('opposition/evidence-submission/status/{id}', 'opponentEvidenceSubmissionStatus')->name('task.opponentEvidenceSubmissionStatus');
+        Route::get('applicant/evidence-submission/{id}', 'applicantEvidenceSubmission')->name('task.applicantEvidenceSubmission');
+        Route::Post('applicant/evidence-submission/status/{id}', 'applicantEvidenceSubmissionStatus')->name('task.applicantEvidenceSubmissionStatus');
+
+        
+
         
 
 

@@ -5,12 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class OpponentDetails extends Model
-{
+class Evidence extends Model
+{  
+    //  OpponentDetails
     use HasFactory;
 
     // Table name is automatically inferred as 'payments', but you can explicitly define it
-    protected $table = 'opponent_details';
+    protected $table = 'evidence';
 
     // Specify the fillable attributes for mass assignment
     protected $fillable = [

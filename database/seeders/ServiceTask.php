@@ -148,6 +148,12 @@ class ServiceTask extends Seeder
             ],
             [
                 'service_id' => '1',
+                'title' => 'Non compliance intimation to register',
+                'description' => 'Update Department for Non-Compliance Intimation register',
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '1',
                 'title' => 'Awaited for hearing (Opposition)',
                 'description' => 'Add the hearing date provided by the court for the raised opposition',
                 'stage' => '13',

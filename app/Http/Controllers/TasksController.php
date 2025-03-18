@@ -4161,18 +4161,20 @@ class TasksController extends Controller
             return redirect()->route('task.applicantEvidenceSubmission', ['id' => $id]);
         }
         // For Patent...............
-        else if ($taskDetails && $serviceId == 2 && $stageId == 26) {
+        else if ($taskDetails && $serviceId == 2 && $stageId == 27) {
             return redirect()->route('task.patentSendQuotation', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 27) {
-            return redirect()->route('task.patentPaymentVerification', ['id' => $id]);
         } else if ($taskDetails && $serviceId == 2 && $stageId == 28) {
-            return redirect()->route('task.patentPriorArt', ['id' => $id]);
+            return redirect()->route('task.patentPaymentVerification', ['id' => $id]);
         } else if ($taskDetails && $serviceId == 2 && $stageId == 29) {
+            return redirect()->route('task.patentPriorArt', ['id' => $id]);
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 30) {
             return redirect()->route('task.patentDocumentation', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 30) {            
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 31) {            
             return redirect()->route('task.patentDraft', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 2 && $stageId == 31) {            
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 32) {            
             return redirect()->route('task.patentClientApproval', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 33) {            
+            return redirect()->route('task.patentFileApplication', ['id' => $id]);
         }
     }
 
@@ -4627,6 +4629,9 @@ class TasksController extends Controller
         }
     }
 
+    public function patentFileApplication(Request $request ,$id){
+        dd($id);
+    }
     public function holdtask(Request $request)
     {
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');

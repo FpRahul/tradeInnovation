@@ -19,8 +19,8 @@
             <label for="opponent_evidence" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
             <select name="opponent_evidence" id="opponent_evidence" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                <option value="" disabled selected>Select status</option>
-               <option value="0">Opponent Has Submitted Evidence</option>
-               <option value="1">Opponent Has Not Submitted Evidence</option>
+               <option value="1">Opponent Has Submitted Evidence</option>
+               <option value="3">Opponent Has Not Submitted Evidence</option>
             </select>
             <div class="showWarning" style="color: red;font-size: 14px; font-weight: 500;"></div>
             @error('opponent_evidence')
@@ -89,12 +89,23 @@
            </div>
         </div>
        </div>
-      <div class="">
-         <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
+      <div class="flex flex-col md:flex-row gap-[20px]">
+         <div class="flex w-[49%] flex-col descriptionHidden">
+            <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
          <textarea type="text" name="description" id="description" class="w-full h-[80px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
          @error('description')
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
+         </div>
+         <div class="flex w-[49%] flex-col">
+            <label for="reason" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Reason</label>
+         <textarea type="text" name="reason" id="reason" class="w-full h-[80px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
+         @error('reason')
+         <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+         @enderror
+         </div>
+         
+         
       </div>
       
       <strong class= "mt-5 block">Update Upcoming Actions</strong>
@@ -197,7 +208,7 @@
      
       $("#opponent_evidence").on('change', function() {
          var opponent_evidence = $(this).val();
-         if (opponent_evidence == 0) {
+         if (opponent_evidence == 1) {
            
            $("#stage_id").val('{{ $getStage->title }}') 
            $("#SatgeID").val('{{ $getStage->id }}') 
@@ -205,7 +216,7 @@
            $('#showStage').text('Set a dead line for ' + '{{ $getStage->title }}');
            $('.evidence_submit').removeClass('hidden');
            
-         } else if (opponent_evidence == 1) {
+         } else if (opponent_evidence == 3) {
            $("#stage_id").val('{{ $onHideSatge->title }}'); 
            $("#SatgeID").val('{{ $onHideSatge->id }}') 
            $("#nextTitle").text(' Next stage will be: ' + '{{ $onHideSatge->title }}')
@@ -216,6 +227,12 @@
 
          }
       })
+     var status =  $("#checkStatus").val();
+      if(status == 0){
+         $('.descriptionHidden').removeClass('hidden');
+      }else if('.descriptionHidden'){
+         $('.descriptionHidden').addClass('hidden');
+      }
    });
 </script>
 @stop

@@ -3933,7 +3933,9 @@ class TasksController extends Controller
                             $newEvidencedetails->status = 0;
                             $newEvidencedetails->remark = $request->opponent_status ?? null;
                             $newEvidencedetails->reason = $request->reason;
-                            $newEvidencedetails->opposition_date = $evidence_submit;
+                            $newEvidencedetails->opposition_date = $existedOpponentDetails->opposition_date;
+                            $newEvidencedetails->evidence_received = $evidence_submit;
+
                             if ($request->hasFile('attachment')) {
                                 $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
                                 if (!file_exists($folderPath)) {
@@ -4037,7 +4039,8 @@ class TasksController extends Controller
                         $newEvidencedetails->status = 0;
                         $newEvidencedetails->remark = $request->opponent_status ?? null;
                         $newEvidencedetails->reason = $request->reason;
-                        $newEvidencedetails->opposition_date = $evidence_submit;
+                        $newEvidencedetails->opposition_date = $existedOpponentDetails->opposition_date;
+                        $newEvidencedetails->evidence_received = $evidence_submit;
                         if ($request->hasFile('attachment')) {
                             $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
                             if (!file_exists($folderPath)) {
@@ -4124,7 +4127,8 @@ class TasksController extends Controller
                         $newEvidencedetails->status = 0;
                         $newEvidencedetails->remark = $request->opponent_status ?? null;
                         $newEvidencedetails->reason = $request->reason;
-                        $newEvidencedetails->opposition_date = $evidence_submit;
+                        $newEvidencedetails->opposition_date = $existedOpponentDetails->opposition_date;
+                        $newEvidencedetails->evidence_received = $evidence_submit;
                         if ($request->hasFile('attachment')) {
                             $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
                             if (!file_exists($folderPath)) {
@@ -4197,7 +4201,6 @@ class TasksController extends Controller
                         $newLeadTaskDeatails->dead_line = $deadlineDate;
                         $newLeadTaskDeatails->status = 0;
                         if($newLeadTaskDeatails->save()){
-
                         $newEvidencedetails = new Evidence();
                         $newEvidencedetails->task_id = $existedLeaedTask->id;
                         $newEvidencedetails->lead_id = $existedLeaedTask->lead_id;
@@ -4209,7 +4212,8 @@ class TasksController extends Controller
                         $newEvidencedetails->status = 0;
                         $newEvidencedetails->remark = $request->opponent_status ?? null;
                         $newEvidencedetails->reason = $request->reason;
-                        $newEvidencedetails->opposition_date = $evidence_submit;
+                        $newEvidencedetails->opposition_date = $existedOpponentDetails->opposition_date;
+                        $newEvidencedetails->evidence_received = $evidence_submit;
                         if ($request->hasFile('attachment')) {
                             $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
                             if (!file_exists($folderPath)) {
@@ -4248,7 +4252,6 @@ class TasksController extends Controller
             }else{
                     return redirect()->back()->with('error' , 'there is something wrong while updating new lead task details');
                 }
-
             }
         } else {
             return redirect()->back()->with('erroe', "no task found");
@@ -4271,7 +4274,7 @@ class TasksController extends Controller
         $header_title_name = $taskDetails->serviceSatge->title;
         return view('tasks.tradeMark.applicant_evidence', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'onHideSatge'));
     }
-
+    
     public function applicantEvidenceSubmissionStatus(Request $request, $id)
     {
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
@@ -4311,7 +4314,6 @@ class TasksController extends Controller
                         if (!file_exists($folderPath)) {
                             mkdir($folderPath, 0755, true);
                         }
-
                         $existingAttachments = json_decode($existedLeaedTaskDetails->attachment, true) ?? [];
                         foreach ($request->file('attachment') as $file) {
                             if ($file->isValid()) {
@@ -4330,14 +4332,15 @@ class TasksController extends Controller
                         $newEvidencedetails->task_id = $existedLeaedTask->id;
                         $newEvidencedetails->lead_id = $existedLeaedTask->lead_id;
                         $newEvidencedetails->reference_id = $existedOpponentDetails->id ?? 0;
-                        $newEvidencedetails->opposition_number = "N/A";
-                        $newEvidencedetails->opponent_name = "N/A" ;
-                        $newEvidencedetails->advocate_name = "N/A" ;
-                        $newEvidencedetails->address = "N/A" ;
-                        $newEvidencedetails->status = 0;
-                        $newEvidencedetails->remark = "N/A" ;
-                        $newEvidencedetails->reason = "N/A" ;
-                        $newEvidencedetails->opposition_date = $evidence_submit;
+                        $newEvidencedetails->opposition_number = $existedOpponentDetails->opposition_number;
+                        $newEvidencedetails->opponent_name = $existedOpponentDetails->opponent_name ;
+                        $newEvidencedetails->advocate_name = $existedOpponentDetails->advocate_name ;
+                        $newEvidencedetails->address = $existedOpponentDetails->address ;
+                        $newEvidencedetails->status = 1;
+                        $newEvidencedetails->remark = $request->opponent_status ?? null  ;
+                        $newEvidencedetails->reason = $request->reason ?? null ;
+                        $newEvidencedetails->opposition_date = $existedOpponentDetails->opposition_date;
+                        $newEvidencedetails->evidence_submit = $evidence_submit;
                         if ($request->hasFile('attachment')) {
                             $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
                             if (!file_exists($folderPath)) {
@@ -4374,8 +4377,6 @@ class TasksController extends Controller
                 dd('yet to be done');
             }
         }
-        
-        
     }
     public function assignTask(Request $request)
     {

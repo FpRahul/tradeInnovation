@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Lead;
 
 class Evidence extends Model
 {  
@@ -23,4 +24,9 @@ class Evidence extends Model
         'address',
         'opposition_date'
     ];
+    
+    public function lead(){
+        return $this->belongsTo(Lead::class,'lead_id');
+    }
+
 }

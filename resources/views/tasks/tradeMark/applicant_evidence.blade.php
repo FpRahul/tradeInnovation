@@ -61,8 +61,6 @@
          @error('attachment.*')
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
-
-
          <div class="w-full md:w-1/2">
             <label for="opponent_status" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Applicant Status</label>
             <input type="text" name="opponent_status" id="opponent_status" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" >
@@ -104,11 +102,7 @@
        <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
        @enderror
        </div>
-       
-       
     </div>
-      
-      
       <div class="flex justify-end gap-[15px]">
          <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
       </div>
@@ -140,7 +134,15 @@
          console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
       });
 
-     
+     $("#applicant_evidence").on('change' , function (){
+        var applicant_evidence = $(this).val();
+        if(applicant_evidence == 1){
+         $('.evidence_submit').removeClass('hidden');
+        }else if(applicant_evidence == 3){
+         $('.evidence_submit').addClass('hidden');
+
+        }
+     })
      
    });
 </script>

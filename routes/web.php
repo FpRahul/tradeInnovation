@@ -36,7 +36,7 @@ Route::get('seed/{seeder}', function($seeder){
 });
 
 
-//Users Routes
+//Users  Routes
 Route::match(['get','post'],'/', [UsersController::class,'login'])->name('login');
 Route::match(['get','post'],'forget_password', [UsersController::class,'forgetPassword'])->name('forgetPassword');
 Route::get('reset/password/{token?}',[UsersController::class, 'resetPassword'])->name('resetPassword.resetPassword');
@@ -179,20 +179,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('opposition/evidence-submission/status/{id}', 'opponentEvidenceSubmissionStatus')->name('task.opponentEvidenceSubmissionStatus');
         Route::get('applicant/evidence-submission/{id}', 'applicantEvidenceSubmission')->name('task.applicantEvidenceSubmission');
         Route::Post('applicant/evidence-submission/status/{id}', 'applicantEvidenceSubmissionStatus')->name('task.applicantEvidenceSubmissionStatus');
-
-        
-
-        
-
-
-
-
-
-
-        
-
-
-         
+        Route::Post('opposition/hearing/{id}', 'oppositionHearing')->name('task.oppositionHearing');
         // For patent.........
         // For payment verification........
         Route::get('/patent/send-quotation/{id?}','patentSendQuotation')->name('task.patentSendQuotation');
@@ -205,8 +192,6 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/patent/client-approval/{id?}','patentclientapproval')->name('task.patentClientApproval');
         Route::post('/patent/submit-client-approval/{id?}','patentSubmitClientApproval')->name('task.patentSubmitClientApproval');
         Route::get('/patent/file-application/{id?}','patentFileApplication')->name('task.patentFileApplication');
-
-        
     });
     //Services Routes
     Route::prefix('services')->controller(ServicesController::class)->group(function () {

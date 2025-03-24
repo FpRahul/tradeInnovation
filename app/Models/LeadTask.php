@@ -23,6 +23,10 @@ class LeadTask extends Model
     {
         return $this->belongsTo(User::class,'user_id');
     }
+    public function userAssignBy()
+    {
+        return $this->belongsTo(User::class,'assign_by');
+    }
 
     public function lead(){
         return $this->belongsTo(Lead::class,'lead_id');

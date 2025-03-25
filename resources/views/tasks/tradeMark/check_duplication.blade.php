@@ -174,8 +174,11 @@
 </div>
 <script>
     $(document).ready(function() {
+        $('.daterangepicker-verified').attr("placeholder", "DD/MM/YYYY"); // Set placeholder
+
         $('.daterangepicker-verified').daterangepicker({
             singleDatePicker: true,
+            autoUpdateInput: false, // Prevent auto-filling input with a default date
             opens: 'right',
             locale: {
                 format: 'DD MMM YYYY'
@@ -183,16 +186,21 @@
             minDate: null,
             maxDate: moment().endOf('day'),
         }).on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('DD MMM YYYY')); // Set selected date
             console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
         });
+        $('.daterangepicker-taskdeadline').attr("placeholder", "DD/MM/YYYY"); // Set placeholder
+
         $('.daterangepicker-taskdeadline').daterangepicker({
             singleDatePicker: true,
+            autoUpdateInput: false, // Prevent auto-filling input with a default date
             opens: 'right',
             locale: {
                 format: 'DD MMM YYYY'
             },
             minDate: moment().startOf('day'),
         }).on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('DD MMM YYYY')); // Set selected date
             console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
         });
         $("#status").on('change', function() {

@@ -323,6 +323,11 @@ button.swal-button:hover,button.swal-button:focus {
     background: #13103a!important;
 }
 
+
+
+
+
+
 /* responsive */
 @media (max-width: 767px){
 .employee_repeater_wrapper .repeater-default > div > div:first-child { flex-direction: column; } 

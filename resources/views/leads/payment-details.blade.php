@@ -62,13 +62,13 @@
         </div>
     </div>
     <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] ">
-        <div class="py-[15px] md:py-[25px] px-[15px] md:px-[20px] gap-[10px] flex flex-col md:flex-row items-end justify-between">
+        <div class="py-[15px] md:py-[25px] px-[15px] md:px-[20px] gap-[10px] flex flex-col lg:flex-row items-end justify-between">
             <form action="{{ route('lead.paymentStatus') }}" method="GET" id="filterForm" class="w-full flex flex-col md:flex-row gap-[30px]">
                 @csrf
-                <div class="w-full md:w-9/12 flex items-center gap-[30px]">
-                    <div class="w-full flex items-end gap-[20px]">
+                <div class="w-full w-full flex flex-wrap items-center gap-[30px]">
+                    <div class="w-full flex items-end flex-wrap lg:flex-nowrap gap-[20px]">
                         <!-- Lead ID Select (Increased width to 5/12) -->
-                        <div class="w-full md:w-5/12">
+                        <div class="w-full lg:w-5/12">
                             <label for="leadId" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Lead ID</label>
                             <select name="leadId" id="leadId" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
                                 <option value="">Select Lead ID</option>
@@ -82,10 +82,10 @@
     
                         
                         <!-- User Select (visible only for roles 1 or 4, increased width to 5/12) -->
-                        <div class="w-full md:w-5/12">
+                        <div class="w-full lg:w-5/12">
                             <label class="flex text-[15px] text-[#000] mb-[5px]">Date Range</label>
                             <div class="w-[100%] relative">
-                                <input type="text" placeholder="Start Date" name="dateRange" id="dateRange" class="daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" value="">
+                                <input type="text" placeholder="Start Date" name="dateRange" id="dateRange" class="daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[12px] md:text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" value="">
                                 {{-- <i class="ri-calendar-line absolute right-[8px] top-[9px]"></i> --}}
                             </div>
                         </div>

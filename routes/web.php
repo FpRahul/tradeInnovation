@@ -129,6 +129,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     });
     //Tasks Routes
     Route::prefix('tasks')->controller(TasksController::class)->group(function () {
+        Route::post('/negotiate-price/{id}', 'negotiatePrice')->name('task.negotiatePrice');
+
         Route::get('/{request_type?}', 'index')->name('task.index');
         Route::get('/logs', 'logs')->name('task.log');
         Route::get('/details/{id}', 'detail')->name('task.detail');

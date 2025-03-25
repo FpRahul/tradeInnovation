@@ -600,6 +600,7 @@ class LeadsController extends Controller
             }
         }
     }
+
     public function paymentStatus(Request $request)
     {
 
@@ -645,6 +646,7 @@ class LeadsController extends Controller
             return response()->json(['data' => null, 'status' => 404], 404);
         }
     }
+    
     public function oppositionDetails(Request $request)
     {
         $leadData = Lead::all();

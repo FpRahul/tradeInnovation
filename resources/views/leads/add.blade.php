@@ -52,7 +52,7 @@
                             @foreach ($sourceTypeData as $key => $value)
                                 <option value="{{ $value->id }}" 
                                     {{ old('sourcetypenamelist', $leadData->source_id) == $value->id ? 'selected' : '' }}>
-                                    {{ $value->name }}
+                                    {{ $value->name .'('.$value->mobile.')' }}
                                 </option>
                             @endforeach                            
                         @endif

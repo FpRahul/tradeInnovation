@@ -33,8 +33,10 @@ class LeadsController extends Controller
             $request->tab = 1;
         }
         if (base64_decode($request->id) > 0) {
-            $baseNotifyId = base64_decode($request->NotifyId);
-            $notifyData = LeadNotification::where('id', $baseNotifyId)->update(['status' => 1]);
+            if(auth()->user()->role != 1){
+                $baseNotifyId = base64_decode($request->NotifyId);
+                $notifyData = LeadNotification::where('id', $baseNotifyId)->update(['status' => 1]);
+            }            
             $baseId = base64_decode($request->id);
             $leadList = Lead::with('leadTasks')->where('id', $baseId);
         } else {
@@ -435,7 +437,8 @@ class LeadsController extends Controller
         $userData = User::where('role', $sign, $value)->get();
         $options = '<option value="">Select</option>';
         foreach ($userData as $k => $v) {
-            $options .= "<option value=\"{$v['id']}\">{$v['name']}</option>";
+            $options .= "<option value=\"{$v['id']}\">{$v['name']} ({$v['mobile']})</option>";
+
         }
         return response()->json([
             'data' => $options

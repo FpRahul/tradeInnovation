@@ -11,7 +11,7 @@
             </ul>
         </div>
         @if(in_array('firm.add',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
-        <a href="javascript:void(0)" type="button" data-btn-name="Add"  data-name="" data-city="" data-state="" data-zip="" data-id="0" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal"  class="openModalFirm inline-flex items-center gap-[10px] text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px] ">
+        <a href="javascript:void(0)" type="button" data-btn-name="Add"  data-name="" data-city="" data-state="" data-zip="" data-id="0" data-holder="" data-bank="" data-branch="" data-account="" data-ifsc="" data-swift="" data-upi="" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal"  class="openModalFirm inline-flex items-center gap-[10px] text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px] ">
             <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M8.75 5.625H5.625V8.75C5.625 9.09375 5.34375 9.375 5 9.375C4.65625 9.375 4.375 9.09375 4.375 8.75V5.625H1.25C0.90625 5.625 0.625 5.34375 0.625 5C0.625 4.65625 0.90625 4.375 1.25 4.375H4.375V1.25C4.375 0.90625 4.65625 0.625 5 0.625C5.34375 0.625 5.625 0.90625 5.625 1.25V4.375H8.75C9.09375 4.375 9.375 4.65625 9.375 5C9.375 5.34375 9.09375 5.625 8.75 5.625Z" fill="white" />
             </svg>
@@ -89,7 +89,7 @@
                                     <div class="dropdown_menus absolute right-0 z-10 mt-2 w-[100px] origin-top-right rounded-md bg-white shadow-md ring-1 ring-black/5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                                         <div class="text-start" role="none">
                                             @if(in_array('firm.add',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
-                                                <a href="javascript:void(0)" type="button" data-btn-name="edit" data-name="{{$val->name}}" data-city="{{$val->city}}" data-state="{{$val->state}}" data-zip="{{$val->zipcode}}"  data-id="{{$val->id}}" class="openModalFirm block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal">Edit</a>
+                                                <a href="javascript:void(0)" type="button" data-btn-name="edit" data-name="{{$val->name}}" data-city="{{$val->city}}" data-state="{{$val->state}}" data-zip="{{$val->zipcode}}"  data-id="{{$val->id}}" data-holder="{{$val->acc_holder_name}}" data-bank="{{$val->bank_name}}" data-branch="{{$val->branch_name}}" data-account="{{$val->account_number}}" data-ifsc="{{$val->ifsc_code}}" data-swift="{{$val->swift_code}}" data-upi="{{$val->upi_id}}" class="openModalFirm block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal">Edit</a>
                                             @endif
                                             @if(in_array('firm.status',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
                                                 <a href="{{ route('firm.status',['id'=>$val->id])}}" class="firm_status block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">
@@ -218,11 +218,28 @@
         let city = $(this).attr('data-city');
         let state = $(this).attr('data-state');
         let zip = $(this).attr('data-zip');
+
+        let holder = $(this).attr('data-holder');
+        let bankName = $(this).attr('data-bank');
+        let branchName = $(this).attr('data-branch');
+        let accountNumber = $(this).attr('data-account');
+        let ifsc = $(this).attr('data-ifsc');
+        let swift = $(this).attr('data-swift');
+        let upi = $(this).attr('data-upi');
+
         $('#firm_id').val(id);
         $('#firmname').val(name);
         $('#firmcity').val(city);
         $('#firmstate').val(state);
         $('#firmzipcode').val(zip);
+
+        $('#account_holder_name').val(holder);
+        $('#bank_name').val(bankName);
+        $('#branch_name').val(branchName);
+        $('#account_number').val(accountNumber);
+        $('#ifsc_code').val(ifsc);
+        $('#swift_code').val(swift);
+        $('#upi_id').val(upi);
     });
 
     $(document).on('keyup', '.search', function() {

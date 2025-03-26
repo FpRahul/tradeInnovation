@@ -61,7 +61,7 @@
          @error('attachment.*')
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
-         <div class=" reminderDate hidden w-full md:w-1/2" id="verifiedDate">
+         <div class=" reminderDate hidden w-full md:w-1/2" id="reminderDate">
             <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
                Reminder Date
             </label>
@@ -71,7 +71,7 @@
                   placeholder="Dead Line"
                   name="reminder_date"
                   id="deadline"
-                  class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
+                  class="daterangepicker-reminderDate w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                   value=""
                   autocomplete="off">
                <div class="absolute right-[10px] top-[10px]">
@@ -164,8 +164,11 @@
 </div>
 <script>
    $(document).ready(function() {
+      $('.daterangepicker-verified').attr("placeholder", "DD/MM/YYYY"); // Set placeholder
+
       $('.daterangepicker-verified').daterangepicker({
          singleDatePicker: true,
+         autoUpdateInput: false,
          opens: 'right',
          locale: {
             format: 'DD MMM YYYY'
@@ -173,20 +176,44 @@
          minDate: null,
          maxDate: moment().endOf('day'),
       }).on('apply.daterangepicker', function(ev, picker) {
+         $(this).val(picker.startDate.format('DD MMM YYYY')); 
          console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
       });
 
+      $('.daterangepicker-taskdeadline').attr("placeholder", "DD/MM/YYYY"); 
+
       $('.daterangepicker-taskdeadline').daterangepicker({
          singleDatePicker: true,
+         autoUpdateInput: false, 
          opens: 'right',
          locale: {
             format: 'DD MMM YYYY'
          },
          minDate: moment().startOf('day'),
-
       }).on('apply.daterangepicker', function(ev, picker) {
+         $(this).val(picker.startDate.format('DD MMM YYYY')); 
          console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
       });
+
+
+
+      $('.daterangepicker-reminderDate').attr("placeholder", "DD/MM/YYYY"); 
+
+      $('.daterangepicker-reminderDate').daterangepicker({
+         singleDatePicker: true,
+         autoUpdateInput: false, 
+         opens: 'right',
+         locale: {
+            format: 'DD MMM YYYY'
+         },
+         minDate: moment().startOf('day'),
+      }).on('apply.daterangepicker', function(ev, picker) {
+         $(this).val(picker.startDate.format('DD MMM YYYY')); 
+         console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+      });
+
+
+      
       $("#formality_check").on('change', function() {
          var documentStatus = $(this).val();
          if (documentStatus == 2) {

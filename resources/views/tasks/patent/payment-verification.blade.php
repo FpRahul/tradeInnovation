@@ -16,11 +16,14 @@ $paymentData = $taskList->payment[0];
       @csrf
       <div class="flex justify-between">
          <strong class="m-0 block"> Update Current Task</strong>
-        
+        @if ($paymentData->submitted_amount == 0)
          <div class="flex items-ceter gap-[8px]">                            
             <input type="checkbox" name="negocheck" class="negocheck openModalProf" id="negocheck"/>  
             <label for="negocheck">is Negotiate</label>                          
          </div>
+                  
+        @endif
+        
       </div>
       
       <input type="hidden" name="paymentId" value="{{ $paymentData->id }}">      
@@ -215,7 +218,7 @@ $paymentData = $taskList->payment[0];
            <div class="p-[20px]">
                <form method="POST" action={{ route('task.negotiatePrice',['id'=>$taskId])}} class="space-y-[20px]">
                    @csrf
-                   {{-- <span>Origin Service Price </span> --}}
+                   <span>Origin Service Price {{$paymentData->service_price}}</span>
                   <div class="flex flex-col md:flex-row gap-[20px]">                     
                      <div class="w-full">
                         <label for="name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Negotiated Price</label>

@@ -242,6 +242,9 @@
                                             @if(in_array('task.hold',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
                                             <a href="#" class="hold-on-pop block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-taskId="{{$task->leadTaskDetails->task_id }}" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal">Hold</a>
                                             @endif
+                                            @if(in_array('task.reject',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                            <button class="reject-on-pop block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-taskId="{{$task->leadTaskDetails->task_id }}" >Rejected</button>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -272,12 +275,10 @@
                 <h3 class="flex items-center gap-[8px] text-[24px] font-[600] leading-[17px] text-[#000]">
                     Hold Task<p id="rowLeadId" class="text-sky-500"></p>
                 </h3>
-
                 <button type="button" class=" absolute top-[-10px] right-[-10px] w-[35px] h-[35px] bg-[#13103A] flex items-center justify-center text-[#fff] rounded-[60px]" data-modal-hide="assignUserModal">
                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                     </svg>
-
                 </button>
             </div>
 
@@ -296,6 +297,26 @@
                                     type="text"
                                     placeholder="Hold On"
                                     name="verified"
+                                    class="daterangepicker-verified w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
+                                    value=""
+                                    id="verified"
+                                    autocomplete="off">
+                                <div class="absolute right-[10px] top-[10px]">
+                                    <i class="ri-calendar-line"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/2" id="verifiedDate">
+                        <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+                            Follow-up Date
+                        </label>                        
+                        <div class="w-full">
+                            <div class="w-full relative">
+                                <input
+                                    type="text"
+                                    placeholder="follow-up date"
+                                    name="followUp"
                                     class="daterangepicker-verified w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                                     value=""
                                     id="verified"
@@ -326,6 +347,30 @@
         $("#task_hidden_id").val(task_id);
     });
 
+    $(document).on('click','.reject-on-pop',function(){
+        let taskId = $(this).data('taskid');
+        if(confirm('Are you want to sure to reject this task ?')){
+           $.ajax({
+                method:'POST',
+                url:"{{route('task.reject')}}",
+                headers:{
+                    'X-CSRF-TOKEN':"{{csrf_token()}}"
+                },
+                data:{
+                    taskId:taskId
+                },
+                success: function(res){
+                    if(res){
+                        window.location.reload();
+                    }
+                },
+                error:function(err){
+                    alert(err);
+                }
+
+           })
+        }
+    })
     $(document).on('keyup', '.search', function() {
         var key = $(this).val();
         var formData = $("#filterForm").serialize()

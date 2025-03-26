@@ -129,7 +129,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     });
     //Tasks Routes
     Route::prefix('tasks')->controller(TasksController::class)->group(function () {
-        Route::post('/negotiate-price/{id}', 'negotiatePrice')->name('task.negotiatePrice');
+        Route::match(['POST','GET'],'/negotiate-price/{id}', 'negotiatePrice')->name('task.negotiatePrice');
 
         Route::get('/{request_type?}', 'index')->name('task.index');
         Route::get('/logs', 'logs')->name('task.log');
@@ -145,6 +145,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('documentation/{id}','documentation')->name('task.documentation');
         Route::Post('documentation-status/{id}','documenStatus')->name('task.documenStatus');
         Route::Post('hold-task','holdtask')->name('task.hold');
+        Route::Post('reject-task','rejecttask')->name('task.reject');
         Route::get('document-draft/{id}', "DocumentDraft")->name('task.DocumentDraft');
         Route::post('document-draft/status/{id}', "DocumentDraftStatus")->name('task.DocumentDraftStatus');
         Route::get('client-approval/{id}','clientApproval')->name('task.clientApproval');

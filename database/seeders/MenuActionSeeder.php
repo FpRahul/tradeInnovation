@@ -45,12 +45,13 @@ class MenuActionSeeder extends Seeder
             array('id' => '30','menuId' => '17','actionName' => 'Follow up','route' => 'task.followup','created_at' => NULL,'updated_at' => NULL),
             array('id' => '31','menuId' => '17','actionName' => 'Task Logs','route' => 'task.log','created_at' => NULL,'updated_at' => NULL),
             array('id' => '32','menuId' => '17','actionName' => 'Hold Task','route' => 'task.hold','created_at' => NULL,'updated_at' => NULL),
-            array('id' => '33','menuId' => '18','actionName' => 'Add / Edit','route' => 'partner.add','created_at' => NULL,'updated_at' => NULL),
-            array('id' => '34','menuId' => '18','actionName' => 'Update Status','route' => 'partner.status','created_at' => NULL,'updated_at' => NULL),
-            array('id' => '35','menuId' => '19','actionName' => 'Add / Edit','route' => 'firm.add','created_at' => NULL,'updated_at' => NULL),
-            array('id' => '36','menuId' => '19','actionName' => 'Update Status','route' => 'firm.status','created_at' => NULL,'updated_at' => NULL),
-            array('id' => '37','menuId' => '15','actionName' => 'Invoice','route' => 'lead.invoice','created_at' => NULL,'updated_at' => NULL),
-            array('id' => '38','menuId' => '20','actionName' => 'Payment','route' => 'lead.paymentStatus','created_at' => NULL,'updated_at' => NULL),
+            array('id' => '33','menuId' => '17','actionName' => 'Reject Task','route' => 'task.reject','created_at' => NULL,'updated_at' => NULL),
+            array('id' => '34','menuId' => '18','actionName' => 'Add / Edit','route' => 'partner.add','created_at' => NULL,'updated_at' => NULL),
+            array('id' => '35','menuId' => '18','actionName' => 'Update Status','route' => 'partner.status','created_at' => NULL,'updated_at' => NULL),
+            array('id' => '36','menuId' => '19','actionName' => 'Add / Edit','route' => 'firm.add','created_at' => NULL,'updated_at' => NULL),
+            array('id' => '37','menuId' => '19','actionName' => 'Update Status','route' => 'firm.status','created_at' => NULL,'updated_at' => NULL),
+            array('id' => '38','menuId' => '15','actionName' => 'Invoice','route' => 'lead.invoice','created_at' => NULL,'updated_at' => NULL),
+            array('id' => '39','menuId' => '20','actionName' => 'Payment','route' => 'lead.paymentStatus','created_at' => NULL,'updated_at' => NULL),
           ));
     }
 }

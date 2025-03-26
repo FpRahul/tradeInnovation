@@ -393,8 +393,21 @@ class TasksController extends Controller
         return view('tasks.tradeMark.send_quotation', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'serviceName', 'clientName'));
     }
 
-    public function negotiatePrice(Request $request){
-        dd($request);
+    public function negotiatePrice(Request $request,$id){
+        $paymentData = Payment::where(['task_id'=>$id])->first();
+        $gst = $request->negotiatePrice * 0.18;   
+        $paymentData->service_price = $request->negotiatePrice;
+        $govtPrice = $paymentData->govt_price;
+        $total = $request->negotiatePrice + $gst + $govtPrice;
+        $paymentData->gst = $gst;
+        $paymentData->total = $total;
+        $paymentData->pending_amount = $total;
+
+        if($paymentData->save()){
+            return redirect()->back()->with('success',"Price is successfully updated!");
+        }else{
+            return redirect()->back()->with('error',"Some error is occur while update price");
+        }
     }
 
     public function sendQuotation(Request $request, $id)
@@ -5177,8 +5190,10 @@ class TasksController extends Controller
     public function holdtask(Request $request)
     {
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
+        $followUpDate = Carbon::createFromFormat('d M Y', $request->input('followUp'))->format('Y-m-d');
         $rule = [
             'verified' => 'required',
+            'followUp' => 'required',
             'description' => 'required'
         ];
         $validtor =  Validator::make($request->all(), $rule);
@@ -5188,6 +5203,7 @@ class TasksController extends Controller
         $taskDetails = LeadTaskDetail::where('task_id', $request->task_hidden_id)->first();
         $taskDetails->status = 2;
         $taskDetails->status_date = $verifiedDate;
+        $taskDetails->reminderDate = $followUpDate;
         $taskDetails->comment = $request->description;
         if ($taskDetails->save()) {
             return redirect()->route('task.index')->with('success', 'Task on hold');
@@ -5196,6 +5212,14 @@ class TasksController extends Controller
         }
     }
 
+    public function rejecttask(Request $request){
+       $leadData = LeadTaskDetail::where(['task_id'=>$request->taskId])->first();
+       $leadData->status = 4;
+       if($leadData->save()){
+            echo "1";
+       }
+
+    }
     public function generateUniqueUserCode($type, $symb, $role)
     {
         $lastUser = User::where('role', $symb, $role)->latest()->first();

@@ -16,6 +16,8 @@
             <input type="hidden" name="savetype" id="savetype" value='0'/>  
             
             <div class="flex flex-col md:flex-row gap-[20px]">
+               
+
                 <div class="w-full md:w-1/2">
                     <label for="source" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Source</label>
                     <select name="source" id="source" class="allform-select2 showSourceListName w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required onchange="displayRequired(this)">
@@ -137,6 +139,15 @@
                                         <div class="w-[calc(100%-75px)] ">
                                             <input type="hidden" name="lead_task_id" value="{{$serviceVal->id}}">
                                             <div class="w-full outline-[1px] outline-dashed outline-[#ccc] p-[10px] rounded-[5px] flex flex-wrap 2xl:flex-nowrap gap-[5px] lg:gap-[10px] xl:gap-[15px]">
+                                                <div class="w-full md:w-[32%] lg:w-[18%]">
+                                                    <label class="block mb-[5px] text-[14px] font-[400]">Class Rule</label>
+                                                    <select name="classrule" id="classrule" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                        <option value="">Class Rule</option>
+                                                        @for ($i=1;$i <= 45;$i++)
+                                                        <option value="{{$i}}" @selected(old('classrule',$serviceVal->class_rule) == $i)>{{$i}}</option>
+                                                        @endfor                         
+                                                    </select>                                                
+                                                </div>
                                                 <div class="w-full  md:w-[32%] lg:w-[18%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Project Manager</label>
                                                     <select name="projectmanager" id="projectmanager" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
@@ -246,6 +257,16 @@
                                     <div class="w-[calc(100%-75px)] ">
                                         <input type="hidden" name="lead_task_id" value="0">
                                         <div class="w-full outline-[1px] outline-dashed outline-[#ccc] p-[10px] rounded-[5px] flex flex-wrap 2xl:flex-nowrap gap-[5px] lg:gap-[10px] xl:gap-[15px]">
+                                            
+                                            <div class="w-full md:w-[32%] lg:w-[18%]">
+                                                <label class="block mb-[5px] text-[14px] font-[400]">Class Rule</label>
+                                                <select name="classrule" id="classrule" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                    <option value="">Class Rule</option>
+                                                    @for ($i=1;$i <= 45;$i++)
+                                                    <option value="{{$i}}">{{$i}}</option>
+                                                    @endfor                         
+                                                </select>                                                
+                                            </div>
                                             <div class="w-full md:w-[32%] lg:w-[18%]">
                                                 <label class="block mb-[5px] text-[14px] font-[400]">Project Manager</label>
                                                 <select name="projectmanager" id="projectmanager" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>

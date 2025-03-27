@@ -33,7 +33,7 @@
                   <i class="ri-calendar-line"></i>
                </div>
             </div>
-         </div>
+         </div> 
          <div class="flex justify-start flex-wrap w-[100%] md:w-[49%]">
             <label class="block w-full text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload</label>
             <label for="attachment" class="flex items-center gap-[10px] w-full text-[13px] font-[500] leading-[15px] text-[#666666] tracking-[0.01em] bg-[#fff] border-dashed border-[1px] border-[#ccc] rounded-[6px] py-[6px] px-[10px] cursor-pointer">
@@ -149,29 +149,36 @@
 </div>
 <script>
    $(document).ready(function() {
-      $('.daterangepicker-verified').daterangepicker({
-         singleDatePicker: true,
-         opens: 'right',
-         locale: {
-            format: 'DD MMM YYYY'
-         },
-         minDate: null,
-         maxDate: moment().endOf('day'),
-      }).on('apply.daterangepicker', function(ev, picker) {
-         console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
-      });
+      $('.daterangepicker-verified').attr("placeholder", "DD/MM/YYYY"); // Set placeholder
 
-      $('.daterangepicker-taskdeadline').daterangepicker({
-         singleDatePicker: true,
-         opens: 'right',
-         locale: {
-            format: 'DD MMM YYYY'
-         },
-         minDate: moment().startOf('day'),
+$('.daterangepicker-verified').daterangepicker({
+    singleDatePicker: true,
+    autoUpdateInput: false,
+    opens: 'right',
+    locale: {
+        format: 'DD MMM YYYY'
+    },
+    minDate: null,
+    maxDate: moment().endOf('day'),
+}).on('apply.daterangepicker', function(ev, picker) {
+    $(this).val(picker.startDate.format('DD MMM YYYY')); 
+    console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+});
 
-      }).on('apply.daterangepicker', function(ev, picker) {
-         console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
-      });
+$('.daterangepicker-taskdeadline').attr("placeholder", "DD/MM/YYYY"); 
+
+ $('.daterangepicker-taskdeadline').daterangepicker({
+    singleDatePicker: true,
+    autoUpdateInput: false, 
+    opens: 'right',
+    locale: {
+       format: 'DD MMM YYYY'
+    },
+    minDate: moment().startOf('day'),
+ }).on('apply.daterangepicker', function(ev, picker) {
+    $(this).val(picker.startDate.format('DD MMM YYYY')); 
+    console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+ });
 
 
       

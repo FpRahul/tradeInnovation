@@ -15,7 +15,7 @@
       <input type="hidden" name="paymentId" value="{{ $paymentId }}">
       @foreach ($taskDetails as $task )
       <input type="hidden" name="checkStatus" id="checkStatus" value="{{$task->leadTaskDetails->status}}">
-      @endforeach
+      @endforeach 
       @if ($firstPaymentId)
       <input type="hidden" name="firstPaymentId" id="firstPaymentId" value="{{$firstPaymentId->id}}">
       @endif
@@ -200,29 +200,36 @@
 </div>
 <script>
    $(document).ready(function() {
-      $('.daterangepicker-verified').daterangepicker({
-         singleDatePicker: true,
-         opens: 'right',
-         locale: {
-            format: 'DD MMM YYYY'
-         },
-         minDate: null,
-         maxDate: moment().endOf('day'),
-      }).on('apply.daterangepicker', function(ev, picker) {
-         console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
-      });
+      $('.daterangepicker-verified').attr("placeholder", "DD/MM/YYYY"); // Set placeholder
 
-      $('.daterangepicker-taskdeadline').daterangepicker({
-         singleDatePicker: true,
-         opens: 'right',
-         locale: {
-            format: 'DD MMM YYYY'
-         },
-         minDate: moment().startOf('day'),
+        $('.daterangepicker-verified').daterangepicker({
+            singleDatePicker: true,
+            autoUpdateInput: false,
+            opens: 'right',
+            locale: {
+                format: 'DD MMM YYYY'
+            },
+            minDate: null,
+            maxDate: moment().endOf('day'),
+        }).on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('DD MMM YYYY')); 
+            console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+        });
 
-      }).on('apply.daterangepicker', function(ev, picker) {
-         console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
-      });
+        $('.daterangepicker-taskdeadline').attr("placeholder", "DD/MM/YYYY"); 
+
+         $('.daterangepicker-taskdeadline').daterangepicker({
+            singleDatePicker: true,
+            autoUpdateInput: false, 
+            opens: 'right',
+            locale: {
+               format: 'DD MMM YYYY'
+            },
+            minDate: moment().startOf('day'),
+         }).on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('DD MMM YYYY')); 
+            console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+         });
 
       $("#payment").on("change", function() {
          var changedValue = $(this).val();

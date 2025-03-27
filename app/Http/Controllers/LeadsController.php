@@ -209,7 +209,15 @@ class LeadsController extends Controller
                             $leadTaskData = new LeadTask();
                             $LeadTaskDetail = new LeadTaskDetail();
                         }
+                        $leadTaskData->class_rule = $serviceVal['classrule'];
+                        $leadTaskData->applied_for = $serviceVal['appliedfor'];
+                        if (isset($serviceVal['serviceLogo']) && $serviceVal['serviceLogo'] instanceof \Illuminate\Http\UploadedFile) {
 
+                            $image_name = $serviceVal['serviceLogo'];
+                            $imageName = rand(100000, 999999) . '.' . $image_name->getClientOriginalExtension();
+                            $image_name->move(public_path('uploads/leads/' . $leadData->id), $imageName);
+                            $leadTaskData->service_logo = $imageName;
+                        }
                         $leadTaskData->lead_id = $leadData->id;
                         $leadTaskData->project_manager_id = $serviceVal['projectmanager'];
                         $leadTaskData->service_id = $serviceVal['serviceid'];
@@ -562,6 +570,9 @@ class LeadsController extends Controller
 
     public function leadInvoice(Request $request, $id = null)
     {
+        // $taskDetails = LeadTask::with(['user', 'lead', 'leadTaskDetails', 'services', 'subService', 'serviceSatge'])
+        // ->where('id', $id)
+        // ->get();
         $header_title_name = 'Manage Invoice';
         return view('leads.invoice', compact('header_title_name'));
     }

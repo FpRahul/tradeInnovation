@@ -323,9 +323,24 @@ button.swal-button:hover,button.swal-button:focus {
     background: #13103a!important;
 }
 
+.prviewServ {
+    overflow: hidden;
+    position: relative;
+    border: 1px solid #0000001a;
+    padding: 7px 10px;
+    border-radius: 5px;
+}
 
+.prviewServ input {
+    width: 100%;
+}
 
-
+.prviewServ {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+}
 
 
 /* responsive */

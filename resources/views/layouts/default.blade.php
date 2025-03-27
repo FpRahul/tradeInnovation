@@ -78,13 +78,21 @@
                 tags: true,
                 multiple: true
             });
+            
             $('.allform-filter-select2').select2({
                 placeholder: 'Select'
             });
+
             $('.allform-select2').select2({
                 placeholder: 'Select',
                 allowClear: true
             });
+            
+            $('.allform-select2-service').select2({
+                placeholder: 'Select',
+                allowClear: true
+            });
+
         })
         $(document).ready(function() {
             $('.userExperienceRepeater').repeater({

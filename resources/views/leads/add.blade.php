@@ -138,16 +138,53 @@
                                     <div data-repeater-item class="flex flex-wrap items-end gap-[20px]">
                                         <div class="w-[calc(100%-75px)] ">
                                             <input type="hidden" name="lead_task_id" value="{{$serviceVal->id}}">
-                                            <div class="w-full outline-[1px] outline-dashed outline-[#ccc] p-[10px] rounded-[5px] flex flex-wrap 2xl:flex-nowrap gap-[5px] lg:gap-[10px] xl:gap-[15px]">
+                                            <div class="w-full outline-[1px] outline-dashed outline-[#ccc] p-[10px] rounded-[5px] flex flex-wrap gap-[5px] lg:gap-[10px] xl:gap-[15px]">
                                                 <div class="w-full md:w-[32%] lg:w-[18%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Class Rule</label>
-                                                    <select name="classrule" id="classrule" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                    <select name="classrule" 
+                                                        class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                        required >
+                                                    
                                                         <option value="">Class Rule</option>
                                                         @for ($i=1;$i <= 45;$i++)
                                                         <option value="{{$i}}" @selected(old('classrule',$serviceVal->class_rule) == $i)>{{$i}}</option>
                                                         @endfor                         
                                                     </select>                                                
+                                                </div>                                                
+                                                <div class="w-full md:w-[32%] lg:w-[18%]">
+                                                    <label class="block mb-[5px] text-[14px] font-[400]">Applied For</label>
+                                                    <input type="text" name="appliedfor" 
+                                                           value="{{ isset($serviceVal) ? $serviceVal->applied_for : '' }}" 
+                                                           class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                           required>                                                
                                                 </div>
+                                                <div class="w-full md:w-[32%] lg:w-[18%]">
+                                                    {{-- <label class="block mb-[5px] text-[14px] font-[400]">Logo</label> --}}
+                                                    @php
+                                                        $logoPath = !empty($serviceVal['service_logo']) ? 'uploads/leads/'.$leadData->id.'/'.$serviceVal['service_logo'] : 'assets/images/noimage.png';
+                                                        $extension = pathinfo($logoPath, PATHINFO_EXTENSION);
+                                                    @endphp
+                                                    {{-- <img src="{{ asset($logoPath)}}" class="getpreviewlogo w-[100%] max-w-[100px] rounded-[10px] object-cover" />                                                                       
+                                                    <div class="relative prviewServ">
+                                                        <input class="previewServiceLogo" type="file" name="serviceLogo" >                                                            
+                                                    </div> --}}
+
+
+                                                    <div class="w-full md:w-[32%] lg:w-[18%]">
+                                                        <label class="block mb-[5px] text-[14px] font-[400]">Logo</label>
+                                                        <div class="flex items-center gap-[5px] border-[1px] border-[#ccc] p-[10px]">
+                                                            <img src="{{ asset($logoPath)}}" class="getpreviewlogo w-[30px] h-[30px] max-w-[30px] max-h-[30px] rounded-[80px] object-cover" />   
+                                                            <div class="relative prviewServ">
+                                                                <input class="previewServiceLogo  max-w-[80%] text-[14px] p-[8px]" type="file" name="serviceLogo" >                                                            
+                                                            </div>       
+                                                        </div>                                             
+                                                       
+                                                        <div class="logoErrorMsg text-[12px] italic font-[400] text-[#e70e0e]"></div>                                             
+                                                    </div>    
+
+
+                                                    <div class="logoErrorMsg text-[12px] italic font-[400] text-[#e70e0e]"></div>                                             
+                                                </div>  
                                                 <div class="w-full  md:w-[32%] lg:w-[18%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Project Manager</label>
                                                     <select name="projectmanager" id="projectmanager" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
@@ -256,17 +293,35 @@
                                 <div data-repeater-item class="flex flex-wrap items-end gap-[20px]">
                                     <div class="w-[calc(100%-75px)] ">
                                         <input type="hidden" name="lead_task_id" value="0">
-                                        <div class="w-full outline-[1px] outline-dashed outline-[#ccc] p-[10px] rounded-[5px] flex flex-wrap 2xl:flex-nowrap gap-[5px] lg:gap-[10px] xl:gap-[15px]">
+                                        <div class="w-full outline-[1px] outline-dashed outline-[#ccc] p-[10px] rounded-[5px] flex flex-wrap gap-[5px] lg:gap-[10px] xl:gap-[15px]">
                                             
                                             <div class="w-full md:w-[32%] lg:w-[18%]">
                                                 <label class="block mb-[5px] text-[14px] font-[400]">Class Rule</label>
-                                                <select name="classrule" id="classrule" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                <select name="classrule" 
+                                                        class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                        required >
                                                     <option value="">Class Rule</option>
                                                     @for ($i=1;$i <= 45;$i++)
                                                     <option value="{{$i}}">{{$i}}</option>
                                                     @endfor                         
                                                 </select>                                                
                                             </div>
+                                            <div class="w-full md:w-[32%] lg:w-[18%]">
+                                                <label class="block mb-[5px] text-[14px] font-[400]">Applied For</label>
+                                                <input type="text" name="appliedfor" id="appliedfor" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>                                                
+                                            </div>
+                                            
+                                            <div class="w-full md:w-[32%] lg:w-[18%]">
+                                                <label class="block mb-[5px] text-[14px] font-[400]">Logo</label>
+                                                <div class="flex items-center gap-[5px] border-[1px] border-[#ccc] p-[10px]">
+                                                    <img src="{{ asset('assets/images/noimage.png')}}" class="getpreviewlogo w-[30px] h-[30px] max-w-[30px] max-h-[30px] rounded-[80px] object-cover" />   
+                                                    <div class="relative prviewServ">
+                                                        <input class="previewServiceLogo  max-w-[80%] text-[14px] p-[8px]" type="file" name="serviceLogo" >                                                            
+                                                    </div>       
+                                                </div>                                             
+                                               
+                                                <div class="logoErrorMsg text-[12px] italic font-[400] text-[#e70e0e]"></div>                                             
+                                            </div>                                            
                                             <div class="w-full md:w-[32%] lg:w-[18%]">
                                                 <label class="block mb-[5px] text-[14px] font-[400]">Project Manager</label>
                                                 <select name="projectmanager" id="projectmanager" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
@@ -580,6 +635,48 @@
        
     });
    
+    $(document).on('change','.previewServiceLogo' ,function () { 
+        var file = this.files[0]; 
+        var maxSize = 2 * 1024 * 1024;
+        var allowedExtensions = ["jpg", "jpeg", "png", "pdf"];  
+        if (file) {
+            var fileSize = file.size;
+            var fileName = file.name;
+            var fileExtension = fileName.split('.').pop().toLowerCase();
+
+            // Check file extension
+            if (!allowedExtensions.includes(fileExtension)) {
+                $(this).parent().parent().parent().find('.logoErrorMsg').text("Invalid file type. Allowed types: " + allowedExtensions.join(", "));
+                $(this).val(""); // Clear file input
+                return false;
+            }
+
+            // Check file size
+            if (fileSize > maxSize) {
+                $(this).parent().parent().parent().find('.logoErrorMsg').text("File size exceeds 2MB limit.");
+                $(this).val(""); // Clear file input
+                return false;
+            }
+            var input = event.target;
+            var previewContainer = $(this).parent().parent().find('.getpreviewlogo');   
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    if(fileExtension == 'pdf'){
+                        previewContainer.attr('src', '/assets/images/pdf_logo.jpg').show();
+                    }else{
+                        previewContainer.attr('src', e.target.result).show();
+                    }
+                    $('.logoErrorMsg').text('');
+                };
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                previewContainer.hide();
+                previewContainer.attr('src', '');
+            }
+        }                  
+       
+    });
     $(document).on('change','.setSubService',function(){
         var serviceId = $(this).val();
         $(this).parent().parent().find('.serviceNameLoader').removeClass('hidden');

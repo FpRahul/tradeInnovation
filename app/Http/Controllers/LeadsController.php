@@ -99,7 +99,9 @@ class LeadsController extends Controller
 
     public function add(Request $request, $id = null)
     {
+       
         if ($id > 0) {
+            
             $leadData = Lead::where('id', $id)->first();
             if ($leadData) {
                 if ($leadData->status == 1) {
@@ -130,7 +132,6 @@ class LeadsController extends Controller
         $firmList = Firm::where('status', 1)->get();
 
         if ($request->isMethod('POST')) {
-            // dd($request);
             $scopeOfBusinessArray = $request->scopeofbusiness;
             if (in_array('other', $request->scopeofbusiness)) {
                 $scopeOfBusinessArray = array_diff($scopeOfBusinessArray, ['other']);
@@ -209,7 +210,8 @@ class LeadsController extends Controller
                             $leadTaskData = new LeadTask();
                             $LeadTaskDetail = new LeadTaskDetail();
                         }
-                        $leadTaskData->class_rule = $serviceVal['classrule'];
+                        $leadTaskData->class_rule = implode(',',$serviceVal['classrule']);
+                        // $leadTaskData->class_rule = $serviceVal['classrule'];
                         $leadTaskData->applied_for = $serviceVal['appliedfor'];
                         if (isset($serviceVal['serviceLogo']) && $serviceVal['serviceLogo'] instanceof \Illuminate\Http\UploadedFile) {
 

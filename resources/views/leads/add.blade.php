@@ -142,14 +142,19 @@
                                                 <div class="w-full md:w-[32%] lg:w-[18%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Class Rule</label>
                                                     <select name="classrule" 
-                                                        class="allform-select2-service w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
-                                                        required multiple >
+                                                            class="allform-select2-service w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                            required multiple>
                                                     
                                                         <option value="">Class Rule</option>
-                                                        @for ($i=1;$i <= 45;$i++)
-                                                        <option value="{{$i}}" @selected(old('classrule',$serviceVal->class_rule) == $i)>{{$i}}</option>
+                                                        @php
+                                                            $selectedValues = explode(',', old('classrule', $serviceVal->class_rule ?? ''));
+                                                        @endphp
+                                                    
+                                                        @for ($i = 1; $i <= 45; $i++)
+                                                            <option value="{{$i}}" @if(in_array($i, $selectedValues)) selected @endif>{{$i}}</option>
                                                         @endfor                         
-                                                    </select>                                                
+                                                    </select>
+                                                                                            
                                                 </div>                                                
                                                 <div class="w-full md:w-[32%] lg:w-[18%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Applied For</label>
@@ -162,7 +167,6 @@
                                                     {{-- <label class="block mb-[5px] text-[14px] font-[400]">Logo</label> --}}
                                                     @php
                                                         $logoPath = !empty($serviceVal['service_logo']) ? 'uploads/leads/'.$leadData->id.'/'.$serviceVal['service_logo'] : 'assets/images/noimage.png';
-                                                        $extension = pathinfo($logoPath, PATHINFO_EXTENSION);
                                                     @endphp
                                                     {{-- <img src="{{ asset($logoPath)}}" class="getpreviewlogo w-[100%] max-w-[100px] rounded-[10px] object-cover" />                                                                       
                                                     <div class="relative prviewServ">
@@ -170,19 +174,15 @@
                                                     </div> --}}
 
 
-                                                    <div class="w-full md:w-[32%] lg:w-[18%]">
+                                                   
                                                         <label class="block mb-[5px] text-[14px] font-[400]">Logo</label>
-                                                        <div class="flex items-center gap-[5px] border-[1px] border-[#ccc] p-[10px]">
-                                                            <img src="{{ asset($logoPath)}}" class="getpreviewlogo w-[30px] h-[30px] max-w-[30px] max-h-[30px] rounded-[80px] object-cover" />   
+                                                        <div class="flex w-full items-center gap-[5px]">
+                                                            <img src="{{ asset($logoPath)}}" class="getpreviewlogo w-[30px] h-[30px] max-w-[30px] max-h-[30px] object-cover border-[1px] border-[#999] rounded-[5px]" />   
                                                             <div class="relative prviewServ">
                                                                 <input class="previewServiceLogo  max-w-[80%] text-[14px] p-[8px]" type="file" name="serviceLogo" >                                                            
                                                             </div>       
-                                                        </div>                                             
+                                                        </div>  
                                                        
-                                                        <div class="logoErrorMsg text-[12px] italic font-[400] text-[#e70e0e]"></div>                                             
-                                                    </div>    
-
-
                                                     <div class="logoErrorMsg text-[12px] italic font-[400] text-[#e70e0e]"></div>                                             
                                                 </div>  
                                                 <div class="w-full  md:w-[32%] lg:w-[18%]">

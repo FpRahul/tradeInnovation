@@ -12,7 +12,7 @@
         <ul class="flex items-center text-[14px] font-[400] leading-[16px] text-[#000000] gap-[5px]">
             <li>lead /</li> 
             <li class="text-gray">Manage logs</li>
-        </ul>
+        </ul> 
     </div>
     <div class="mt-5 shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] mb-[20px] p-[23px]">
         <form id="filterForm" action="" class="w-full" method="GET">
@@ -91,21 +91,12 @@
                                     Lead Added
                                     @elseif($log->description == 'Lead assigned to the user')
                                     Lead Assign
-                                    @elseif(optional(optional($log->leadTask)->leadTaskDetails)->status === 0)
-                                    Pending
-                                    @elseif(optional(optional($log->leadTask)->leadTaskDetails)->status === 1)
-                                    Completed
-                                    @elseif(optional(optional($log->leadTask)->leadTaskDetails)->status === 2)
-                                    On Hold
-                                    @elseif(optional(optional($log->leadTask)->leadTaskDetails)->status === 3)
-                                    Follow Up
-                                    @elseif(optional(optional($log->leadTask)->leadTaskDetails)->status === null)
                                     @else
-                                    NA
+                                    {{ $log->remark }}
                                     @endif
                                 </div>
                                 <div class="relative flex flex-col items-center group">
-                                    <a href="#" data-rowId="{{$log->id}}" class=" viewLogDeatails flex items-center gap-[8px] text-[15px] font-[600]  text-[#000]">
+                                    <a href="#" data-rowId="{{$log->id}}" data-taskID="{{ $log->task_id }}" class=" viewLogDeatails flex items-center gap-[8px] text-[15px] font-[600]  text-[#000]">
                                         Action
                                     </a>
                                     <div class=" absolute bottom-0 flex flex-col items-center hidden mb-5 group-hover:flex">
@@ -166,87 +157,53 @@
             <!-- Modal header -->
             <div class="flex items-center justify-between p-4 md:px-5 md:py-[20px] border-b border-[#f2f2f2]">
                 <h3 class="flex items-center gap-[8px] text-[24px] font-[600] leading-[17px] text-[#000]">
-                    Log Review<p id="rowLeadId" class="text-sky-500"></p>
+                    Log Review<p id="rowLeadId" class="text-sky-500" val=""></p>
 
                 </h3>
                 <button type="button" class=" absolute top-[-10px] right-[-10px] w-[35px] h-[35px] bg-[#13103A] flex items-center justify-center text-[#fff] rounded-[60px]" data-modal-hide="assignUserModal">
                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                     </svg>
-
+`
                 </button>
             </div>
             <!-- Modal body -->
             <div class="p-[20px]">
                 <form method="POST" class="space-y-[20px]">
                     @csrf
-                    <div class="flex flex-col md:flex-row gap-[20px]">
-                        <div class="w-full border-[1px] border-[#f2f2f2] min-h-[150px] p-[15px] rounded-[8px] text-[#000] text-[15px] leading-[22px] font-[400]">
-                            <!-- Client Name -->
-                            <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626]">
-                                <label class="text-[15px] font-[600] text-[#000] w-[40%]">
-                                    Client Name:
-                                </label>
-                                <p id="rowClient" class="text-[15px] font-[500] text-[#262626] w-[60%] overflow-hidden truncate"></p>
-                            </div>
-
-
-                            <!-- Service -->
-                            <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
-                                <label class="text-[15px] font-[600] text-[#000] w-[40%]">
-                                    Service:
-                                </label>
-                                <p id="rowService" class="w-[60%]"></p>
-                            </div>
-
-                            <!-- Stage -->
-                            <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
-                                <label class="text-[15px] font-[600] text-[#000] w-[40%]">
-                                    Stage:
-                                </label>
-                                <p id="rowStage" class="w-[60%]"></p>
-                            </div>
-
-                            <!-- Assigned To -->
-                            <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
-                                <label class="text-[15px] font-[600] text-[#000] w-[40%]">
-                                    Assigned To:
-                                </label>
-                                <p id="rowAssignedTo" class="w-[60%]"></p>
-                            </div>
-
-                            <!-- Status -->
-                            <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
-                                <label class="text-[15px] font-[600] text-[#000] w-[40%]">
-                                    Status:
-                                </label>
-                                <p id="rowStatus" class="w-[60%]"></p>
-                            </div>
-
-                            <!-- Verified On -->
-                            <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
-                                <label class="text-[15px] font-[600] text-[#000] w-[40%]">
-                                    Verified On:
-                                </label>
-                                <p id="rowVerifiedOn" class="w-[60%]"></p>
-                            </div>
-
-                            <!-- Clarification -->
-                            <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
-                                <label class="text-[15px] font-[600] text-[#000] w-[40%]">
-                                    Clarification:
-                                </label>
-                                <p id="rowClarification" class="w-[60%]"></p>
-                            </div>
-
-                            <!-- Dead Line -->
-                            <div class="flex flex-wrap lg:flex-nowrap items-center gap-[10px] w-[100%] lg:w-[40%] text-[15px] leading-[20px] font-[500] tracking-[-0.03em] text-[#262626] ">
-                                <label class="text-[15px] font-[600] text-[#000] w-[40%]">
-                                    Dead Line:
-                                </label>
-                                <p id="rowDeadLine" class="w-[60%]"></p>
+                    <div class="flex gap-[20px]">
+                        <div class="w-full border-[1px] border-[#f2f2f2] min-h-[150px] rounded-[8px] text-[#000] text-[15px] leading-[22px] font-[400]">
+                            <div class="flex w-full items-center gap-[10px]">
+                                <ul class="flex flex-wrap w-full items-start gap-[0]">
+                                    <li class="w-full p-[15px]">
+                                        <label class="flex items-center  w-full text-[15px] text-[#000] font-[600] text-center">
+                                            Old Value
+                                        </label>
+                                        <div class="old-value-container flex flex-col items-center  w-full text-[13px] text-[#000] font-[400] text-center">
+                                            <p>Loading...</p>
+                                        </div>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
+                        
+                        <div class="w-full border-[1px] border-[#f2f2f2] min-h-[150px] rounded-[8px] text-[#000] text-[15px] leading-[22px] font-[400]">
+                            <div class="flex w-full items-center gap-[10px]">
+                                <ul class="flex flex-wrap w-full items-start gap-[0]">
+                                    <li class="w-full p-[15px]">
+                                        <label class="flex items-center  w-full text-[15px] text-[#000] font-[600] text-center">
+                                            New Value
+                                        </label>
+                                        <div class="new-value-container flex flex-col items-center  w-full text-[13px] text-[#000] font-[400] text-center">
+                                            <p>Loading...</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+
+
                     </div>
 
                     <div class="flex items-center justify-between p-4 md:px-5 md:py-[20px] border-b border-[#f2f2f2]">
@@ -277,60 +234,74 @@
             $('#showLog').removeAttr('hidden');
         }
         $(document).on('click', '.viewLogDeatails', function(e) {
-            e.preventDefault();
+    e.preventDefault(); // Prevent default action
+
+    var logID = $(this).data('rowid');
+
+    $.ajax({
+        url: "{{ route('leads.getLogs') }}",
+        method: 'POST',
+        data: { logID: logID },
+        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+        success: function (response) {
+            if (!response.data || !response.data.remark) {
+                console.error("Missing remark in response.");
+                return;
+            }
+
+            let remark = response.data.remark.toLowerCase(); 
+
+            if (remark.includes("assign")) {
+                console.log("Remark contains 'assign', modal will NOT open.");
+                return;
+            }
+          
+
+            let oldValue = {};
+            let newValue = {};
+
+            try {
+                oldValue = response.data.old_value ? JSON.parse(response.data.old_value) : {};
+            } catch (error) {
+                console.error("Error parsing old_value:", error);
+            }
+
+            try {
+                newValue = response.data.new_value ? JSON.parse(response.data.new_value) : {};
+            } catch (error) {
+                console.error("Error parsing new_value:", error);
+            }
+
+            console.log("Old Value (After Parsing):", oldValue);
+            console.log("New Value (After Parsing):", newValue);
+
+            $(".old-value-container").html(formatData(oldValue));
+            $(".new-value-container").html(formatData(newValue));
+
+            // ✅ Only show the modal if the remark is NOT 'assign'
             $('#assignUserModal').removeClass('hidden');
-        });
-        $(document).on('click', '[data-modal-hide="assignUserModal"]', function() {
-            $('#assignUserModal').addClass('hidden');
-        });
+        }
+    });
 
-        
-        $(".viewLogDeatails").on('click', function() {
-            var lead_id = $(this).data('rowid');
+    function formatData(data) {
+        if (!data || Object.keys(data).length === 0) {
+            return "<p>No Data Available</p>";
+        }
+        let html = "<ul class='w-full text-left'>";
+        for (let key in data) {
+            html += `<li class='py-1 '><strong>${key}:</strong> ${data[key]}</li>`;
+        }
+        html += "</ul>";
+        return html;
+    }
+});
 
-            $.ajax({
-                url: "{{ route('leads.getLogs') }}",
-                method: 'POST',
-                data: {
-                    lead_id: lead_id
-                },
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    console.log(response);
-                    if (response.status == 200) {
-                        
-                        var lead = response.data[0]; 
-                            
-                        $('#rowClient').text(lead.client_name ? lead.client_name : 'Not Updated');
-                        $('#rowLeadId').text(lead.lead_id ? lead.lead_id : 'Not Updated');
-                        $('#rowService').text(lead.services.join(", "));
-                        $('#rowStage').text(lead.stage ? lead.stage : 'Not Updated');
-                        $('#rowAssignedTo').text(lead.assignTo ? lead.assignTo : 'Not Updated');
-                        $('#remark').val(lead.logDescription ? lead.logDescription : 'Not Updated');
-                        $('#rowStatus').text(function() {
-                            
-                            switch (lead.status) {
-                                case 0:
-                                    return 'Pending';
-                                case 1:
-                                    return 'Completed';
-                                case 2:
-                                    return 'Hold';
-                                case 3:
-                                    return 'Follow Up';
-                                default:
-                                    return 'Not Updated';
-                            }
-                        });
-                        $('#rowVerifiedOn').text(lead.verifiedOn ? lead.verifiedOn : 'Not Updated');
-                        $('#rowClarification').text(lead.remark ? lead.remark : 'Not Updated');
-                        $('#rowDeadLine').text(lead.deadLine ? lead.deadLine : 'Not Updated');
-                    }
-                }
-            })
-        })
+// ✅ Close modal when clicking the close button
+$(document).on('click', '[data-modal-hide="assignUserModal"]', function() {
+    $('#assignUserModal').addClass('hidden');
+});
+
+
       $('.download').on('click',function(){
         var task_id = $(this).attr('data-taskId');
         $(this).parent().parent().parent().find($('.laod-file-'+task_id)).each(function(){
@@ -342,3 +313,4 @@
     })
 </script>
 @stop
+

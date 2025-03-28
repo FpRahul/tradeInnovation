@@ -3778,7 +3778,10 @@ class TasksController extends Controller
     public function markPublishOppositionStatus(Request $request, $id)
     {
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
-        $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
+        if($request->opposition_date){
+
+            $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
+        }
         if($request->opposition_date){
 
             $opposition_date = Carbon::createFromFormat('d M Y', $request->input('opposition_date'))->format('Y-m-d');

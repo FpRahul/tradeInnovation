@@ -395,6 +395,7 @@ class LeadsController extends Controller
         $requestParams = $request->all();
         $leadLogs = LeadLog::with('leadTask', 'leadTask.leadTaskDetails', 'leadTask.serviceSatge')->get();
         if ($request->lead_id > 0) {
+           
             $leadLogs = LeadLog::with('leadAttch', 'leadTask', 'leadTask.leadTaskDetails', 'leadTask.serviceSatge')->where('lead_id', $request->lead_id)->orderBy('id', 'desc')->get();
         }
         return view('leads.logs', compact('leadData', 'leadLogs', 'header_title_name', 'requestParams'));
@@ -402,30 +403,30 @@ class LeadsController extends Controller
 
     public function getLogs(Request $request)
     {
-        if ($request->lead_id > 0) {
-            $lead_id = $request->lead_id;
-            $leadLogs = LeadLog::with('leadTask', 'lead', 'leadTask.user', 'leadTask.leadTaskDetails', 'leadTask.serviceSatge')->where('id', $request->lead_id)->get();
-            $allLeadData = [];
-            foreach ($leadLogs as $lead) {
-                $data = [
-                    'client_name' => $lead->lead->client_name,
-                    'lead_id' => $lead->lead->lead_id,
-                    'stage' => $lead->leadTask->serviceSatge->title,
-                    'assignTo' => $lead->leadTask->user->name,
-                    'status' => $lead->leadTask->leadTaskDetails->status,
-                    'deadLine' => $lead->leadTask->leadTaskDetails->dead_line,
-                    'verifiedOn' => $lead->leadTask->leadTaskDetails->status_date,
-                    'remark' => $lead->leadTask->task_description,
-                    'logDescription' => $lead->description,
-                    'services' => []
-                ];
+        if ($request->logID > 0) {
+            $logID = $request->logID;
+            $leadLogs = LeadLog::with('leadTask', 'lead', 'leadTask.user', 'leadTask.leadTaskDetails', 'leadTask.serviceSatge')->where('id', $request->logID)->first();
+            // $allLeadData = [];
+            // foreach ($leadLogs as $lead) {
+            //     $data = [
+            //         'client_name' => $lead->lead->client_name,
+            //         'lead_id' => $lead->lead->lead_id,
+            //         'stage' => $lead->leadTask->serviceSatge->title,
+            //         'assignTo' => $lead->leadTask->user->name,
+            //         'status' => $lead->leadTask->leadTaskDetails->status,
+            //         'deadLine' => $lead->leadTask->leadTaskDetails->dead_line,
+            //         'verifiedOn' => $lead->leadTask->leadTaskDetails->status_date,
+            //         'remark' => $lead->leadTask->task_description,
+            //         'logDescription' => $lead->description,
+            //         'services' => []
+            //     ];
 
-                $data['services'][] = $lead->leadTask->services->serviceName;
+            //     $data['services'][] = $lead->leadTask->services->serviceName;
 
 
-                $allLeadData[] = $data;
-            }
-            return response()->json(['data' => $allLeadData, 'status' => 200]);
+            //     $allLeadData[] = $data;
+            // }
+            return response()->json(['data' => $leadLogs, 'status' => 200]);
         } else {
             return response()->json(['data' => 0, 'status' => 400]);
         }

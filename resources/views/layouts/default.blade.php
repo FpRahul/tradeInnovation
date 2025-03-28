@@ -175,6 +175,7 @@
             $('.leadServiceRepeater').repeater({
                 initEmpty: false,
                 show: function() {
+                    console.log($(this).html());
                     $(this).find('.daterangepicker-taskdeadline').daterangepicker({
                         singleDatePicker: true, 
                         opens: 'right',

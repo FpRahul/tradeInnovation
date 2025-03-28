@@ -139,52 +139,7 @@
                                         <div class="w-[calc(100%-75px)] ">
                                             <input type="hidden" name="lead_task_id" value="{{$serviceVal->id}}">
                                             <div class="w-full outline-[1px] outline-dashed outline-[#ccc] p-[10px] rounded-[5px] flex flex-wrap gap-[5px] lg:gap-[10px] xl:gap-[15px]">
-                                                <div class="w-full md:w-[32%] lg:w-[18%]">
-                                                    <label class="block mb-[5px] text-[14px] font-[400]">Class Rule</label>
-                                                    <select name="classrule" 
-                                                            class="allform-select2-service w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
-                                                            required multiple>
-                                                    
-                                                        <option value="">Class Rule</option>
-                                                        @php
-                                                            $selectedValues = explode(',', old('classrule', $serviceVal->class_rule ?? ''));
-                                                        @endphp
-                                                    
-                                                        @for ($i = 1; $i <= 45; $i++)
-                                                            <option value="{{$i}}" @if(in_array($i, $selectedValues)) selected @endif>{{$i}}</option>
-                                                        @endfor                         
-                                                    </select>
-                                                                                            
-                                                </div>                                                
-                                                <div class="w-full md:w-[32%] lg:w-[18%]">
-                                                    <label class="block mb-[5px] text-[14px] font-[400]">Applied For</label>
-                                                    <input type="text" name="appliedfor" 
-                                                           value="{{ isset($serviceVal) ? $serviceVal->applied_for : '' }}" 
-                                                           class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
-                                                           required>                                                
-                                                </div>
-                                                <div class="w-full md:w-[32%] lg:w-[18%]">
-                                                    {{-- <label class="block mb-[5px] text-[14px] font-[400]">Logo</label> --}}
-                                                    @php
-                                                        $logoPath = !empty($serviceVal['service_logo']) ? 'uploads/leads/'.$leadData->id.'/'.$serviceVal['service_logo'] : 'assets/images/noimage.png';
-                                                    @endphp
-                                                    {{-- <img src="{{ asset($logoPath)}}" class="getpreviewlogo w-[100%] max-w-[100px] rounded-[10px] object-cover" />                                                                       
-                                                    <div class="relative prviewServ">
-                                                        <input class="previewServiceLogo" type="file" name="serviceLogo" >                                                            
-                                                    </div> --}}
-
-
-                                                   
-                                                        <label class="block mb-[5px] text-[14px] font-[400]">Logo</label>
-                                                        <div class="flex w-full items-center gap-[5px]">
-                                                            <img src="{{ asset($logoPath)}}" class="getpreviewlogo w-[30px] h-[30px] max-w-[30px] max-h-[30px] object-cover border-[1px] border-[#999] rounded-[5px]" />   
-                                                            <div class="relative prviewServ">
-                                                                <input class="previewServiceLogo  max-w-[80%] text-[14px] p-[8px]" type="file" name="serviceLogo" >                                                            
-                                                            </div>       
-                                                        </div>  
-                                                       
-                                                    <div class="logoErrorMsg text-[12px] italic font-[400] text-[#e70e0e]"></div>                                             
-                                                </div>  
+                                                
                                                 <div class="w-full  md:w-[32%] lg:w-[18%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Project Manager</label>
                                                     <select name="projectmanager" id="projectmanager" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
@@ -276,6 +231,71 @@
                                                         />                                                        
                                                     </div>     
                                                 </div>
+                                                {{-- start service details --}}
+
+                                                <div class="flex flex-wrap w-full gap-[15px] border-[1px] border-[#ccc] outline-[#ccc] p-[10px] rounded-[5px] {{ $serviceVal->service_id == 1 ? '' : 'hidden'}}">
+                                                    <h2 class="w-full text-[22px] leading-[25px] mb-[5px] font-[600]">Details</h2>
+                                                    <div class="w-full md:w-[32%] lg:w-[32%]">
+                                                        <label class="block mb-[5px] text-[14px] font-[400]">Risk Class</label>
+                                                        <select name="classrule" 
+                                                                class="allform-select2-service w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                                required multiple>
+                                                        
+                                                            <option value="">Risk Class</option>
+                                                            @php
+                                                                $selectedValues = explode(',', old('classrule', $serviceVal->class_rule ?? ''));
+                                                            @endphp
+                                                        
+                                                            @for ($i = 1; $i <= 45; $i++)
+                                                                <option value="{{$i}}" @if(in_array($i, $selectedValues)) selected @endif>{{$i}}</option>
+                                                            @endfor                         
+                                                        </select>
+                                                                                                
+                                                    </div>                                                
+                                                    <div class="w-full md:w-[32%] lg:w-[32%]">
+                                                        <label class="block mb-[5px] text-[14px] font-[400]">Applied For</label>
+                                                        <input type="text" name="appliedfor" 
+                                                            value="{{ isset($serviceVal) ? $serviceVal->applied_for : '' }}" 
+                                                            class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                            required>                                                
+                                                    </div>
+                                                    <div class="w-full md:w-[32%] lg:w-[32%]">
+                                                        @php
+                                                            $logoPath = !empty($serviceVal['service_logo']) ? 'uploads/leads/'.$leadData->id.'/'.$serviceVal['service_logo'] : 'assets/images/noimage.png';
+                                                        @endphp
+                                                    
+                                                            <label class="block mb-[5px] text-[14px] font-[400]">Logo</label>
+                                                            <div class="flex w-full items-center gap-[5px]">
+                                                                <img src="{{ asset($logoPath)}}" class="getpreviewlogo w-[30px] h-[30px] max-w-[30px] max-h-[30px] object-cover border-[1px] border-[#999] rounded-[5px]" />   
+                                                                <div class="relative prviewServ">
+                                                                    <input class="previewServiceLogo  max-w-[80%] text-[14px] p-[8px]" type="file" name="serviceLogo" >                                                            
+                                                                </div>       
+                                                            </div>                                                         
+                                                        <div class="logoErrorMsg text-[12px] italic font-[400] text-[#e70e0e]"></div>                                             
+                                                    </div>
+                                                    <div class="w-full md:w-[32%] lg:w-[32%]">
+                                                        <label class="block mb-[5px] text-[14px] font-[400]">Filing Mode</label>
+                                                        <input type="text" name="filingmode" 
+                                                            value="{{ isset($serviceVal) ? $serviceVal->applied_for : '' }}" 
+                                                            class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                            > 
+                                                                                                
+                                                    </div>   
+                                                    <div class="w-full  md:w-[32%] lg:w-[32%]">  
+                                                        <label class="block mb-[5px] text-[14px] font-[400]">Filing Date</label>                                                                      
+                                                        <div class="w-[100%] relative">                                                            
+                                                            <input 
+                                                                type="text" 
+                                                                placeholder="Filing Date" 
+                                                                name="filingdate" 
+                                                                class="daterangepicker-taskdeadline daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
+                                                                value="{{ old('taskdeadline')}}" 
+                                                                autocomplete="off"
+                                                            >                                                            
+                                                        </div>     
+                                                    </div>
+                                                </div>
+                                                {{-- end service details --}}
                                             </div>
                                         </div>
                                         <div class="w-[55px]">
@@ -294,34 +314,7 @@
                                     <div class="w-[calc(100%-75px)] ">
                                         <input type="hidden" name="lead_task_id" value="0">
                                         <div class="w-full outline-[1px] outline-dashed outline-[#ccc] p-[10px] rounded-[5px] flex flex-wrap gap-[5px] lg:gap-[10px] xl:gap-[15px]">
-                                            
-                                            <div class="w-full md:w-[32%] lg:w-[18%]">
-                                                <label class="block mb-[5px] text-[14px] font-[400]">Class Rule</label>
-                                                <select name="classrule" 
-                                                        class="allform-select2-service w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
-                                                        required multiple>
-                                                    <option value="">Class Rule</option>
-                                                    @for ($i=1;$i <= 45;$i++)
-                                                    <option value="{{$i}}">{{$i}}</option>
-                                                    @endfor                         
-                                                </select>                                                
-                                            </div>
-                                            <div class="w-full md:w-[32%] lg:w-[18%]">
-                                                <label class="block mb-[5px] text-[14px] font-[400]">Applied For</label>
-                                                <input type="text" name="appliedfor" id="appliedfor" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>                                                
-                                            </div>
-                                            
-                                            <div class="w-full md:w-[32%] lg:w-[18%]">
-                                                <label class="block mb-[5px] text-[14px] font-[400]">Logo</label>
-                                                <div class="flex items-center gap-[5px]">
-                                                    <img src="{{ asset('assets/images/noimage.png')}}" class="getpreviewlogo w-[30px] h-[30px] max-w-[30px] max-h-[30px] object-cover border-[1px] border-[#999] rounded-[5px]" />   
-                                                    <div class="relative prviewServ">
-                                                        <input class="previewServiceLogo  max-w-[80%] text-[14px] p-[8px]" type="file" name="serviceLogo" >                                                            
-                                                    </div>       
-                                                </div>                                             
-                                               
-                                                <div class="logoErrorMsg text-[12px] italic font-[400] text-[#e70e0e]"></div>                                             
-                                            </div>                                            
+
                                             <div class="w-full md:w-[32%] lg:w-[18%]">
                                                 <label class="block mb-[5px] text-[14px] font-[400]">Project Manager</label>
                                                 <select name="projectmanager" id="projectmanager" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
@@ -390,6 +383,63 @@
                                                     
                                                 </div>     
                                             </div>
+
+
+                                            {{-- start service details --}}
+                                            <div class="flex flex-wrap w-full gap-[15px] border-[1px] border-[#ccc] outline-[#ccc] p-[10px] rounded-[5px]">
+                                                <h2 class="w-full text-[22px] leading-[25px] mb-[5px] font-[600]">Details</h2>
+                                                <div class="w-full md:w-[32%] lg:w-[32%]">
+                                                    <label class="block mb-[5px] text-[14px] font-[400]">Risk Class</label>
+                                                    <select name="classrule" 
+                                                            class="allform-select2-service w-full h-[55px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                            required multiple>
+                                                        <option value="">Risk Class</option>
+                                                        @for ($i=1;$i <= 45;$i++)
+                                                        <option value="{{$i}}">{{$i}}</option>
+                                                        @endfor                         
+                                                    </select>                                                
+                                                </div>
+                                                <div class="w-full md:w-[32%] lg:w-[32%]">
+                                                    <label class="block mb-[5px] text-[14px] font-[400]">Applied For</label>
+                                                    <input type="text" name="appliedfor" id="appliedfor" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>                                                
+                                                </div>                                            
+                                                <div class="w-full md:w-[32%] lg:w-[32%]">
+                                                    <label class="block mb-[5px] text-[14px] font-[400]">Logo</label>
+                                                    <div class="flex items-center gap-[5px]">
+                                                        <img src="{{ asset('assets/images/noimage.png')}}" class="getpreviewlogo w-[30px] h-[30px] max-w-[30px] max-h-[30px] object-cover border-[1px] border-[#999] rounded-[5px]" />   
+                                                        <div class="relative prviewServ">
+                                                            <input class="previewServiceLogo  max-w-[80%] text-[14px] p-[8px]" type="file" name="serviceLogo" >                                                            
+                                                        </div>       
+                                                    </div>                                             
+                                                
+                                                    <div class="logoErrorMsg text-[12px] italic font-[400] text-[#e70e0e]"></div>                                             
+                                                </div>
+                                                <div class="w-full md:w-[32%] lg:w-[32%]">
+                                                    <label class="block mb-[5px] text-[14px] font-[400]">Filing Mode</label>
+                                                    <input type="text" name="filingmode" 
+                                                        value="" 
+                                                        class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                        > 
+                                                                                            
+                                                </div>  
+                                                <div class="w-full  md:w-[32%] lg:w-[32%]">  
+                                                    <label class="block mb-[5px] text-[14px] font-[400]">Filing Date</label>                                                                      
+                                                    <div class="w-[100%] relative">
+                                                        
+                                                        <input 
+                                                            type="text" 
+                                                            placeholder="Filing Date" 
+                                                            name="filingdate" 
+                                                            class="daterangepicker-taskdeadline daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
+                                                            value="{{ old('taskdeadline')}}" 
+                                                            autocomplete="off"
+                                                        >
+                                                        
+                                                    </div>     
+                                                </div>
+                                            </div>
+
+                                            {{-- end service details --}}
                                         </div>
                                     </div>
                                    
@@ -412,8 +462,7 @@
                     </div>
                 </div>
                 {{-- service repeater end --}}               
-            </div>
-            
+            </div>            
             {{-- multi attachment --}}
             <div>
                 <label class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Attachments <span class="text-[12px] italic font-[400] text-[#e70e0e]"> (only jpg,jpeg png and pdf format supported & max:2 MB)</span></label>

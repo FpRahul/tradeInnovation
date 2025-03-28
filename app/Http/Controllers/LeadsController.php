@@ -132,6 +132,7 @@ class LeadsController extends Controller
         $firmList = Firm::where('status', 1)->get();
 
         if ($request->isMethod('POST')) {
+            
             $scopeOfBusinessArray = $request->scopeofbusiness;
             if (in_array('other', $request->scopeofbusiness)) {
                 $scopeOfBusinessArray = array_diff($scopeOfBusinessArray, ['other']);
@@ -221,6 +222,8 @@ class LeadsController extends Controller
                             $leadTaskData->service_logo = $imageName;
                         }
                         $leadTaskData->lead_id = $leadData->id;
+                        $leadTaskData->filing_mode = $serviceVal['filingmode'];
+                        $leadTaskData->filing_date = date('Y-m-d',strtotime($serviceVal['filingmode']));
                         $leadTaskData->project_manager_id = $serviceVal['projectmanager'];
                         $leadTaskData->service_id = $serviceVal['serviceid'];
                         $serviceidArray[] = $serviceVal['serviceid'];

@@ -412,6 +412,7 @@ class TasksController extends Controller
 
     public function sendQuotation(Request $request, $id)
     {
+        dd($request);
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
 
         $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
@@ -548,9 +549,9 @@ class TasksController extends Controller
                                     $newassignlog->remark = "Assign";
                                     $newassignlog->description =  "Lead assigned for next task";
                                     if ($newassignlog->save()) {
-                                        // if ($mail== true) {
-                                        //     SendTaskCommanMailJob::dispatch($subject, $service, $service_price, $govt_price, $clientName, $clientEmail, $userName);
-                                        // }
+                                        if ($mail== true) {
+                                            SendTaskCommanMailJob::dispatch($subject, $service, $service_price, $govt_price, $clientName, $clientEmail, $userName);
+                                        }
                                     }
                                     $id = $newTaskAssigned->id;
                                     return redirect()->route('task.index')

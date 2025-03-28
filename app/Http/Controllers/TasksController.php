@@ -518,7 +518,7 @@ class TasksController extends Controller
                                 $LeadLog->lead_id =  $existedTask->lead_id;
                                 $LeadLog->task_id =  $existedTask->id;
                                 $LeadLog->assign_by = Auth::id();
-                                $LeadLog->remark = "Completed";
+                                $LeadLog->remark = "Quotation sent";
                                 $oldValue = [
                                     'Status' => 'Pending',
                                     'Assigned On' => $formattedCreatedDate,
@@ -526,13 +526,13 @@ class TasksController extends Controller
                                     'Payment' => 'Pending'
                                 ];
                                 $newValue = [
-                                    'Status' => 'Quotation sent',
+                                    'Status' => 'Completed',
                                     'Sent On' => $verifiedDate ?? null,
                                     'Assigned To' => $existedTask->user->name,
                                     'Mail subject' => $request->subject ?? null,
                                     'Service Price' => $request->service_price ?? null,
                                     'Govt Price' => $request->govt_price,
-                                    'gst' => $gstApply,
+                                    'gst' => $gstApply ." "."₹".$gst_amount.""."(%18)",
                                 ];
 
                                 $LeadLog->old_value = json_encode($oldValue);
@@ -890,7 +890,7 @@ class TasksController extends Controller
                         $LeadLog->user_id =  $existedLeaedTask->user_id;
                         $LeadLog->lead_id =  $existedLeaedTask->lead_id;
                         $LeadLog->task_id =  $existedLeaedTask->id;
-                        $LeadLog->remark = "Whole Amount Paid";
+                        $LeadLog->remark = "Paid";
                         $oldValue = [
                             'Status' => $logStatus,
                             'Last Payment On' => $oldPaidExitedDate ?? null,
@@ -1435,7 +1435,7 @@ class TasksController extends Controller
                                 $newassignlog->lead_id = $existedLeaedTask->lead_id;
                                 $newassignlog->task_id = $newLeadtask->id;
                                 $newassignlog->assign_by = Auth::id();
-                                $LeadLog->remark = 'Assign';
+                                $newassignlog->remark = 'Assign';
 
                                 $newassignlog->description =  "Lead assigned for next task";
                                 if ($newassignlog->save()) {
@@ -1569,6 +1569,7 @@ class TasksController extends Controller
                                 $newassignlog->lead_id = $existedLeaedTask->lead_id;
                                 $newassignlog->task_id = $newLeadtask->id;
                                 $newassignlog->assign_by = Auth::id();
+                                $newassignlog->remark = "Assign";
                                 $newassignlog->description =  "Lead assigned for next task";
                                 if ($newassignlog->save()) {
                                     $id = $newLeadtask->id;
@@ -1701,7 +1702,7 @@ class TasksController extends Controller
                                 $newassignlog->lead_id = $existedLeaedTask->lead_id;
                                 $newassignlog->task_id = $newLeadtask->id;
                                 $newassignlog->assign_by = Auth::id();
-                                $LeadLog->remark = 'Assign';
+                                $newassignlog->remark = 'Assign';
 
                                 $newassignlog->description =  "Lead assigned for next task";
                                 if ($newassignlog->save()) {
@@ -1905,6 +1906,19 @@ class TasksController extends Controller
                                 $LeadLog->lead_id = $existedLeaedTask->lead_id;
                                 $LeadLog->task_id = $existedLeaedTask->id;
                                 $LeadLog->assign_by = Auth::id();
+                                $LeadLog->remark = 'Formality check pass';
+                                $oldValue = [
+                                    'status' => $logStatus,
+                                    'Assigned On' => $formattedCreatedDate,
+                                    'Assigned By' =>  $existedLeaedTask->userAssignBy->name,
+                                ];
+                                $newValue = [
+                                    'status' => 'Completed',
+                                    'pass On' => $request->verified,
+                                    'Assigned To' =>  $existedLeaedTask->user->name,
+                                ];
+                                $LeadLog->old_value = json_encode($oldValue);
+                                $LeadLog->new_value = json_encode($newValue);
                                 $LeadLog->description = " formality check  marked as complete ";
                                 if ($LeadLog->save()) {
                                     $newassignlog = new leadLog();
@@ -1912,19 +1926,8 @@ class TasksController extends Controller
                                     $newassignlog->lead_id = $existedLeaedTask->lead_id;
                                     $newassignlog->task_id = $newLeadtask->id;
                                     $newassignlog->assign_by = Auth::id();
-                                    $newassignlog->remark = 'Formality check pass';
-                                    $oldValue = [
-                                        'status' => $logStatus,
-                                        'Assigned On' => $formattedCreatedDate,
-                                        'Assigned By' =>  $existedLeaedTask->userAssignBy->name,
-                                    ];
-                                    $newValue = [
-                                        'status' => 'Completed',
-                                        'pass On' => $request->verified,
-                                        'Assigned To' =>  $existedLeaedTask->user->name,
-                                    ];
-                                    $newassignlog->old_value = json_encode($oldValue);
-                                    $newassignlog->new_value = json_encode($newValue);
+                                    $newassignlog->remark = "Assign";
+                                    
                                     $newassignlog->description =  "Lead assigned for next task";
                                     if ($newassignlog->save()) {
                                         $id = $newLeadtask->id;
@@ -2046,7 +2049,7 @@ class TasksController extends Controller
                             }else if($request->initial_examination == 1){
                                 $logStatus = "Objected";
                             }
-                            $LeadLog->remark = 'Examination report as'." ".$logStatus ;
+                            $LeadLog->remark = $logStatus ;
                             $oldValue = [
                                 'status' => 'Pending',
                                 'Assigned On' => $formattedCreatedDate,
@@ -2400,13 +2403,14 @@ class TasksController extends Controller
         // dd($request->all());
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
-        $existedTask = LeadTask::with(['services', 'subService', 'lead', 'serviceSatge'])->where('id', $id)->first();
+        $existedTask = LeadTask::with(['services', 'subService', 'lead', 'serviceSatge', 'userAssignBy'])->where('id', $id)->first();
         $existedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
         $newPayment = new Payment();
         $newTaskAssigned = new LeadTask();
         $newTaskDetails = new LeadTaskDetail();
         $serviceId = $existedTask->services->id;
         $subServiceID = $existedTask->subService->id;
+        $formattedCreatedDate = $existedTask->created_at->format('d M Y');
         $rule = [
             'verified' => 'required',
             'attachment' => 'array',
@@ -2428,9 +2432,11 @@ class TasksController extends Controller
         $gst = $request->gst ?? null;
         $total_without_gst = $service_price + $govt_price;
         if (!empty($gst)) {
+            $gstApply  = "Apply";
             $gst_amount = $service_price * 0.18;
             $total = $total_without_gst + $gst_amount;
         } else {
+            $gstApply  = "Not Apply";
             $total = $total_without_gst;
             $gst_amount = 0;
         }
@@ -2499,6 +2505,25 @@ class TasksController extends Controller
                                 $LeadLog->lead_id =  $existedTask->lead_id;
                                 $LeadLog->task_id =  $existedTask->id;
                                 $LeadLog->assign_by = Auth::id();
+                                $LeadLog->remark = "Completed";
+                                $oldValue = [
+                                    'Status' => 'Pending',
+                                    'Assigned On' => $formattedCreatedDate,
+                                    'Assigned By' => $existedTask->userAssignBy->name,
+                                    'Payment' => 'Pending'
+                                ];
+                                $newValue = [
+                                    'Status' => 'Quotation sent',
+                                    'Sent On' => $verifiedDate ?? null,
+                                    'Assigned To' => $existedTask->user->name,
+                                    'Mail subject' => $request->subject ?? null,
+                                    'Service Price' => $request->service_price ?? null,
+                                    'Govt Price' => $request->govt_price,
+                                    'gst' => $gstApply ." "."₹".$gst_amount.""."(%18)",
+                                ];
+
+                                $LeadLog->old_value = json_encode($oldValue);
+                                $LeadLog->new_value = json_encode($newValue);
                                 $LeadLog->description = "Quotation sent to the client";
                                 if ($LeadLog->save()) {
                                     $newassignlog = new leadLog();
@@ -2506,6 +2531,8 @@ class TasksController extends Controller
                                     $newassignlog->lead_id = $existedTask->lead_id;
                                     $newassignlog->task_id = $newTaskAssigned->id;
                                     $newassignlog->assign_by = Auth::id();
+                                    $newassignlog->remark = "Assign";
+
                                     $newassignlog->description =  "Lead assigned for next task";
                                     if ($newassignlog->save()) {
                                         // if ($mail== true) {
@@ -2571,11 +2598,17 @@ class TasksController extends Controller
 
     public function examinationPaymentStatus(Request $request, $id)
     {
-        $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
-        $paymentDeadlineDate = Carbon::createFromFormat('d M Y', $request->input('paymentDeadline'))->format('Y-m-d');
-        $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
-        $existedLeaedTask = LeadTask::with(['lead', 'services', 'subService', 'serviceSatge'])->where('id', $id)->first();
+         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
+        if ($request->paymentDeadline){
 
+            $paymentDeadlineDate = Carbon::createFromFormat('d M Y', $request->input('paymentDeadline'))->format('Y-m-d');
+        }
+        if ($request->deadline){
+
+            $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
+        }
+        $existedLeaedTask = LeadTask::with(['lead', 'services', 'subService', 'serviceSatge', 'userAssignBy'])->where('id', $id)->first();
+        $client_id = $existedLeaedTask->lead->client_id;
         $existed_leadId = $existedLeaedTask->lead->id;
 
         $leadUpdate = Lead::find($existed_leadId);
@@ -2590,7 +2623,7 @@ class TasksController extends Controller
         $assignedStageName = ServiceStages::where('id', $stageId)->first();
         $rule = [
             'payment' => 'required',
-            'deadline' => 'required',
+            'deadline' => 'nullable',
             'verified' => 'required',
             'stage_id' => 'required',
             'attachment' => 'array',
@@ -2600,7 +2633,8 @@ class TasksController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-
+        $formattedCreatedDate = $existedLeaedTask->created_at->format('d M Y');
+     
         if ($id) {
             if ($request->checkStatus == 0) {
                 if ($request->payment == 1 || $request->payment == 2 || $request->payment == 3) {
@@ -2633,9 +2667,9 @@ class TasksController extends Controller
                         if ($request->payment == 1) {
                             $existedLeaedTaskDetails->reminderDate = Null;
                         } else if ($request->payment == 2) {
-                            $existedLeaedTaskDetails->comment = $paymentDeadlineDate;
+                            $existedLeaedTaskDetails->reminderDate = $paymentDeadlineDate;
                         } else if ($request->payment == 3) {
-                            $existedLeaedTaskDetails->comment = $paymentDeadlineDate;
+                            $existedLeaedTaskDetails->reminderDate = $paymentDeadlineDate;
                         }
                         if ($request->hasFile('attachment')) {
                             $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
@@ -2694,6 +2728,43 @@ class TasksController extends Controller
                                         $LeadLog->lead_id =  $existedLeaedTask->lead_id;
                                         $LeadLog->task_id =  $existedLeaedTask->id;
                                         $LeadLog->assign_by = Auth::id();
+                                        $remark = "";
+                                        $paidAmount = "";
+                                        if ($request->payment == 1) {
+
+                                            $remark = 'Whole Ammount Paid';
+                                            $paidAmount = $newPayment->total;
+                                        } else if ($request->payment == 2 && $request->partial_payment != $existedPayment->total) {
+                                            $remark = 'Partial Payment';
+                                            $paidAmount = $newPayment->submitted_amount;
+                                        } else if ($request->payment == 2 && $request->partial_payment == $existedPayment->total) {
+                                            $remark = 'Partial Payment(Paid)';
+                                            $paidAmount = $newPayment->submitted_amount;
+                                        } else if ($request->payment == 3) {
+                                            $remark = 'On Credit';
+                                            $paidAmount = 0.00;
+                                        }
+                                        $LeadLog->remark = $remark;
+                                        $oldValue = [
+                                            'Status' => 'Pending',
+                                            'Assigned On' => $formattedCreatedDate,
+                                            'Assigned By' => $existedLeaedTask->userAssignBy->name,
+                                            'Total Amount' => $existedPayment->total,
+                                            'Paid Amount' => $existedPayment->submitted_amount,
+                                            'pending_amount' => $existedPayment->pending_amount,
+
+                                        ];
+                                        
+                                        $newValue = [
+                                            'Status' => $remark,
+                                            'Paid On' => $verifiedDate ?? null,
+                                            'Assigned To' => $existedLeaedTask->user->name,
+                                            'Total Amount' => $existedPayment->total,
+                                            'Paid Amount' => $paidAmount,
+                                            'pending_amount' => $newPayment->pending_amount,
+                                        ];
+                                        $LeadLog->old_value = json_encode($oldValue);
+                                        $LeadLog->new_value = json_encode($newValue);
                                         $LeadLog->description = "payment status updated successfully";
                                         if ($LeadLog->save()) {
                                             $newassignlog = new leadLog();
@@ -2701,10 +2772,41 @@ class TasksController extends Controller
                                             $newassignlog->lead_id = $existedLeaedTask->lead_id;
                                             $newassignlog->task_id = $newLeadtask->id;
                                             $newassignlog->assign_by = Auth::id();
+                                            $newassignlog->remark = 'Assign';
+
                                             $newassignlog->description =  "Lead assigned for next task";
                                             if ($newassignlog->save()) {
-                                                return redirect()->route('task.index')
-                                                    ->with('success', 'payment status updated successfully');
+                                                if ($client_id == 0) {
+                                                    $type = 'Client';
+                                                    $mail = true;
+                                                    $randomNumber = substr(str_shuffle('9abcdefghijklmnopq045678rstuvwxyzABCDEFG123HIJKLMNOPQRSTUVWXYZ'), 0, 8);
+                                                    $hashedPassword = Hash::make($randomNumber);
+                                                    $newClient = new User();
+                                                    $newClient->uni_user_id =  $this->generateUniqueUserCode('C', '=', 2);
+                                                    $newClient->name = $existedLeaedTask->lead->client_name;
+                                                    $newClient->role = 2;
+                                                    $newClient->email = $existedLeaedTask->lead->email;
+                                                    $newClient->mobile = $existedLeaedTask->lead->mobile_number;
+                                                    $newClient->companyName = $existedLeaedTask->lead->company_name;
+                                                    $newClient->password = $hashedPassword;
+                                                    if ($newClient->save()) {
+                                                        $leadUpdate->client_id = $newClient->id;
+                                                        $leadUpdate->client_name = $newClient->name;
+                                                        if ($leadUpdate->save()) {
+                                                            if ($mail == true) {
+                                                                SendClientWelcomeEmail::dispatch($newClient, $randomNumber, $filePath = null, $type);
+                                                            }
+                                                            return redirect()->route('task.index')
+                                                                ->with('success', 'payment status updated successfully');
+                                                        } else {
+                                                            return redirect()->back()->with('error', 'there is something wrong while  updateing existed lead');
+                                                        }
+                                                    } else {
+                                                        return redirect()->back()->with('error', 'there is something wrong while  creating new client');
+                                                    }
+                                                } else {
+                                                    return redirect()->route('task.index')->with('success', 'payment status updated successfully');
+                                                }
                                             } else {
                                                 return redirect()->back()->with('error', 'there is something wrong while updating logs');
                                             }
@@ -2728,6 +2830,9 @@ class TasksController extends Controller
                     }
                 }
             } else if ($request->checkStatus == 3 && $request->payment == 1) {
+                $logStatus = $existedLeaedTaskDetails->comment;
+                $oldPaidExitedDate = $existedLeaedTaskDetails->status_date;
+
                 $newPayment = new Payment();
                 $newPayment->lead_id = $existedPayment->lead_id;
                 $newPayment->task_id = $existedPayment->task_id;
@@ -2745,6 +2850,7 @@ class TasksController extends Controller
                 $existedLeaedTask->save();
                 if ($newPayment->save()) {
                     $existedLeaedTaskDetails->status = 1;
+                    $existedLeaedTaskDetails->comment = 'Paid';
                     $existedLeaedTaskDetails->status_date = $verifiedDate;
                     $existedLeaedTaskDetails->reminderDate = Null;
                     if ($request->hasFile('attachment')) {
@@ -2764,12 +2870,31 @@ class TasksController extends Controller
                         $updatedAttachments = array_merge($existingAttachments, $filePaths);
                         $existedLeaedTaskDetails->attachment = json_encode($updatedAttachments);
                     }
-
                     if ($existedLeaedTaskDetails->save()) {
                         $LeadLog = new LeadLog();
                         $LeadLog->user_id =  $existedLeaedTask->user_id;
                         $LeadLog->lead_id =  $existedLeaedTask->lead_id;
                         $LeadLog->task_id =  $existedLeaedTask->id;
+                        $LeadLog->remark = "Paid";
+                        $oldValue = [
+                            'Status' => $logStatus,
+                            'Last Payment On' => $oldPaidExitedDate ?? null,
+                            'Assigned By' => $existedLeaedTask->userAssignBy->name,
+                            'Total Amount' => $existedPayment->total,
+                            'Paid Amount' => $existedPayment->submitted_amount,
+                            'pending_amount' => $existedPayment->pending_amount,
+                        ];
+
+                        $newValue = [
+                            'Status' => 'Completed',
+                            'Paid On' => $verifiedDate ?? null,
+                            'Assigned To' => $existedLeaedTask->user->name,
+                            'Total Amount' => $existedPayment->total,
+                            'Paid Amount' => $newPayment->submitted_amount,
+                            'pending_amount' => $newPayment->pending_amount,
+                        ];
+                        $LeadLog->old_value = json_encode($oldValue);
+                        $LeadLog->new_value = json_encode($newValue);
                         $LeadLog->assign_by = Auth::id();
                         $LeadLog->description = "payment status updated successfully";
                         if ($LeadLog->save()) {
@@ -2783,6 +2908,9 @@ class TasksController extends Controller
                     return redirect()->back()->with('error', 'there is soemthing wrong while updating payment status');
                 }
             } else if ($request->checkStatus == 3 && $request->payment == 2) {
+                $logStatus = $existedLeaedTaskDetails->comment;
+                $oldPaidExitedDate = $existedLeaedTaskDetails->status_date;
+                
                 $newPayment = new Payment();
                 $newPayment->lead_id = $existedPayment->lead_id;
                 $newPayment->task_id = $existedPayment->task_id;
@@ -2803,6 +2931,7 @@ class TasksController extends Controller
                         $existedLeaedTaskDetails->status = 3;
                     }
                     $existedLeaedTaskDetails->status_date = $verifiedDate;
+                    $existedLeaedTaskDetails->comment = 'Partial Payment';
                     $existedLeaedTaskDetails->reminderDate = null;
                     if ($request->hasFile('attachment')) {
                         $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
@@ -2826,6 +2955,32 @@ class TasksController extends Controller
                         $LeadLog->user_id =  $existedLeaedTask->user_id;
                         $LeadLog->lead_id =  $existedLeaedTask->lead_id;
                         $LeadLog->task_id =  $existedLeaedTask->id;
+                        $LeadLog->remark =  'Partial Payment';
+                        $oldValue = [
+                            'Status' => $logStatus,
+                            'Last payment On' => $oldPaidExitedDate,
+                            'Assigned By' => $existedLeaedTask->userAssignBy->name,
+                            'Total Amount' => $existedPayment->total,
+                            'Paid Amount' => $existedPayment->submitted_amount,
+                            'pending_amount' => $existedPayment->pending_amount,
+                        ];
+                        $newValueStatus = "";
+                        if ($newPayment->pending_amount == 0 ||  $newPayment->pending_amount == null || $newPayment->pending_amount == 0.00) {
+                            $newValueStatus = 'Completed';
+                        } else {
+                            $newValueStatus = 'Partial Payment';
+                        }
+
+                        $newValue = [
+                            'Status' => $newValueStatus,
+                            'Paid On' => $verifiedDate ?? null,
+                            'Assigned To' => $existedLeaedTask->user->name,
+                            'Total Amount' => $existedPayment->total,
+                            'Paid Amount' => $newPayment->submitted_amount,
+                            'pending_amount' => $newPayment->pending_amount,
+                        ];
+                        $LeadLog->old_value = json_encode($oldValue);
+                        $LeadLog->new_value = json_encode($newValue);
                         $LeadLog->assign_by = Auth::id();
                         $LeadLog->description = "payment status updated successfully";
                         if ($LeadLog->save()) {
@@ -2839,6 +2994,8 @@ class TasksController extends Controller
                     return redirect()->back()->with('error', 'while updating payment status');
                 }
             } else if ($request->checkStatus == 3 && $request->payment == 3) {
+                $logStatus = $existedLeaedTaskDetails->comment;
+                $oldPaidExitedDate = $existedLeaedTaskDetails->status_date;
                 $newPayment = new Payment();
                 $newPayment->lead_id = $existedPayment->lead_id;
                 $newPayment->task_id = $existedPayment->task_id;
@@ -2859,6 +3016,8 @@ class TasksController extends Controller
                         $existedLeaedTaskDetails->status = 3;
                     }
                     $existedLeaedTaskDetails->status_date = $verifiedDate;
+                    $existedLeaedTaskDetails->comment = "On Credit";
+
                     $existedLeaedTaskDetails->reminderDate = $paymentDeadlineDate;
                     if ($request->hasFile('attachment')) {
                         $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
@@ -2883,6 +3042,25 @@ class TasksController extends Controller
                         $LeadLog->lead_id =  $existedLeaedTask->lead_id;
                         $LeadLog->task_id =  $existedLeaedTask->id;
                         $LeadLog->assign_by = Auth::id();
+                        $LeadLog->remark = "On Credit";
+                        $oldValue = [
+                            'Status' => $logStatus,
+                            'Last payment On' => $oldPaidExitedDate ?? null,
+                            'Assigned By' => $existedLeaedTask->userAssignBy->name,
+                            'Total Amount' => $existedPayment->total,
+                            'Paid Amount' => $existedPayment->submitted_amount,
+                            'Pending Amount' => $existedPayment->pending_amount,
+                        ];
+                        $newValue = [
+                            'Status' => 'On Credit',
+                            'Verified On' => $verifiedDate ?? null,
+                            'Assigned To' => $existedLeaedTask->user->name,
+                            'Total Amount' => $existedPayment->total,
+                            'Paid Amount' => 0.00,
+                            'Pending Amount' => $existedPayment->pending_amount,
+                        ];
+                        $LeadLog->old_value = json_encode($oldValue);
+                        $LeadLog->new_value = json_encode($newValue);
                         $LeadLog->description = "payment status updated successfully";
                         if ($LeadLog->save()) {
                             return redirect()->route('task.index')
@@ -2934,6 +3112,8 @@ class TasksController extends Controller
         $newTaskStageId = $existedLeaedTask->service_stage_id + 1;
         $newTaskTitle = ServiceStages::find($newTaskStageId);
         $userName = Auth::user()->name;
+        $formattedCreatedDate = $existedLeaedTask->created_at->format('d M Y');
+
         $rule = [
             'hearing_date' => 'required',
             'verified' => 'required',
@@ -3001,6 +3181,21 @@ class TasksController extends Controller
                                 $LeadLog->lead_id = $existedLeaedTask->lead_id;
                                 $LeadLog->task_id = $existedLeaedTask->id;
                                 $LeadLog->assign_by = Auth::id();
+                                $LeadLog->remark = 'Hearing(Objection)';
+                                $oldValue = [
+                                    'status' => 'Pending',
+                                    'Assigned On' =>  $formattedCreatedDate,
+                                    'Assigned By' =>  $existedLeaedTask->userAssignBy->name,
+                                    'Hearing Date' => "N/A"
+                                ];
+                                $newValue = [
+                                    'status' => 'Completed',
+                                    'Verified On' => $request->verified,
+                                    'Assigned To' =>  $existedLeaedTask->user->name,
+                                    'Hearing Date' => $request->hearing_date,
+                                ];
+                                $LeadLog->old_value = json_encode($oldValue);
+                                $LeadLog->new_value = json_encode($newValue);
                                 $LeadLog->description = "Application status moved to the hearing stage.";
                                 if ($LeadLog->save()) {
                                     $newassignlog = new leadLog();
@@ -3008,6 +3203,7 @@ class TasksController extends Controller
                                     $newassignlog->lead_id = $existedLeaedTask->lead_id;
                                     $newassignlog->task_id = $newLeadtask->id;
                                     $newassignlog->assign_by = Auth::id();
+                                    $newassignlog->remark = 'Assign';
                                     $newassignlog->description =  "Lead assigned for next task";
                                     if ($newassignlog->save()) {
                                         $id = $newLeadtask->id;
@@ -3052,17 +3248,25 @@ class TasksController extends Controller
         $leadTaskdetials = LeadTaskDetail::find($id);
         $header_title_name = $taskDetails->serviceSatge->title;
         $hearingDateCount = HearingDateDetails::where('task_id', $id)->latest()->first();
-        $count = $hearingDateCount->count + 1;
+        $count = ($hearingDateCount->count ?? 0) + 1;
         return view('tasks.tradeMark.show_case_hearing', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'count'));
     }
 
     public function showCaseHearingStatus(Request $request, $id)
     {
-        //  dd($request->all());
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
-        $reminder_date = Carbon::createFromFormat('d M Y', $request->input('reminder_date'))->format('Y-m-d');
-        $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
-        $hearing_date = Carbon::createFromFormat('d M Y', $request->input('hearing_date'))->format('Y-m-d');
+        if($request->reminder_date){
+            
+            $reminder_date = Carbon::createFromFormat('d M Y', $request->input('reminder_date'))->format('Y-m-d');
+        }
+        if($request->deadline){
+            
+            $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
+        }
+        if($request->hearing_date){
+            
+            $hearing_date = Carbon::createFromFormat('d M Y', $request->input('hearing_date'))->format('Y-m-d');
+        }
 
         $existedLeaedTask = LeadTask::find($id);
         $existedLeaedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
@@ -3074,6 +3278,22 @@ class TasksController extends Controller
         $newTaskStageId = $existedLeaedTask->service_stage_id + 1;
         $newTaskTitle = ServiceStages::find($newTaskStageId);
         $userName = Auth::user()->name;
+        $formattedCreatedDate = (!empty($existedLeaedTaskDetails->status_date)) 
+        ? $existedLeaedTaskDetails->status_date 
+        : $existedLeaedTask->created_at->format('d M Y');
+        $reminderDate =   $existedLeaedTaskDetails->reminderDate ?? "N/A";
+        $comment = "";
+                if($request->show_case_hearing == 2){
+                    $comment = "Adjournmet";
+                }else if($request->show_case_hearing == 4){
+                    $comment = "Amendments";
+
+                }else if($request->show_case_hearing == 1){
+                    $comment = "Accepeted";
+                }else if($request->show_case_hearing == 3){
+                    $comment = "Rejected";
+
+                }
         $rule = [
             'show_case_hearing' => 'required',
             'verified' => 'required',
@@ -3085,6 +3305,7 @@ class TasksController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
         if ($id) {
+
             if ($request->show_case_hearing == 2 || $request->show_case_hearing == 4) {
                 $rule = [
                     'show_case_hearing' => 'required',
@@ -3097,9 +3318,13 @@ class TasksController extends Controller
                 if ($validator->fails()) {
                     return redirect()->back()->withErrors($validator)->withInput();
                 }
+                $logStatus = !empty($existedLeaedTaskDetails->comment) ? $existedLeaedTaskDetails->comment : 'Pending';
                 $existedLeaedTaskDetails->status = 2;
                 $existedLeaedTaskDetails->status_date = $verifiedDate;
+                
+                $existedLeaedTaskDetails->comment = $comment;
                 $existedLeaedTaskDetails->reminderDate = $reminder_date;
+
 
                 if ($request->hasFile('attachment')) {
                     $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
@@ -3148,9 +3373,30 @@ class TasksController extends Controller
                             $newLog->lead_id = $existedLeaedTask->lead_id;
                             $newLog->task_id = $existedLeaedTask->id;
                             $newLog->assign_by = Auth::id();
-                            $newLog->description = "Show case hearing marked as incomplete ";
+                            $newLog->remark = $comment." ". "(On Hold)";
+                            $oldValue = [
+                                'status' => $logStatus,
+                                'Assigned On' =>  $formattedCreatedDate ?? "N/A",
+                                'Assigned By' =>  $existedLeaedTask->userAssignBy->name,
+                                'Verified On' => "N/A",
+                                'Reminder Date' => $reminderDate ?? "N/A",
+                                'Hearing Date' => $existedHearing->hearing_date ?? "N/A",
+                                'Hearing Count' => $existedHearing->count ?? "N/A"
+                            ];
+                            $newValue = [
+                                'status' => $comment,
+                                'Verified On' => $request->verified,
+                                'Assigned To' =>  $existedLeaedTask->user->name,
+                                'Reminder Date' => $reminder_date,
+                                'Hearing Date' => $request->hearing_date,
+                                'Hearing Count' => $newHearing->count
 
-                            if ($newLog->save()) {
+                            ];
+                            $newLog->old_value = json_encode($oldValue);
+                            $newLog->new_value = json_encode($newValue);
+                            $newLog->description = "Show case hearing marked as" .$comment;
+
+                            if ($newLog->save()) {      
                                 return redirect()->route('task.index')->with('success', 'Show case hearing  status is Updated');
                             } else {
                                 return redirect()->back()->error('message', " there is something wrong during log generate ");
@@ -3173,6 +3419,8 @@ class TasksController extends Controller
                 if ($validator->fails()) {
                     return redirect()->back()->withErrors($validator)->withInput();
                 }
+                $logStatus = !empty($existedLeaedTaskDetails->comment) ? $existedLeaedTaskDetails->comment : 'Pending';
+
                 $existedLeaedTaskDetails->status = 4;
                 $existedLeaedTaskDetails->status_date = $verifiedDate;
                 $existedLeaedTaskDetails->reminderDate = null;
@@ -3184,7 +3432,7 @@ class TasksController extends Controller
                 } else if ($request->rejected_reason == 3) {
                     $reason  = 'Withdraw';
                 }
-                $existedLeaedTaskDetails->comment = $reason;
+                $existedLeaedTaskDetails->comment = $comment."( $reason)";
                 if ($request->hasFile('attachment')) {
                     $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
                     if (!file_exists($folderPath)) {
@@ -3203,7 +3451,8 @@ class TasksController extends Controller
                     $existedLeaedTaskDetails->attachment = json_encode($updatedAttachments);
                 }
                 $existedLeaedTask->task_description = $existedLeaedTask->task_description . ' ' . $request->description;
-                if ($existedLeaedTaskDetails->save() || $existedLeaedTask->save()) {
+                $existedLeaedTask->save();
+                if ($existedLeaedTaskDetails->save()) {
                     $newNotification->user_id = $existedLeaedTask->user_id;
                     $newNotification->lead_id = $existedLeaedTask->lead_id;
                     $newNotification->task_id = $existedLeaedTask->id;
@@ -3215,7 +3464,27 @@ class TasksController extends Controller
                         $newLog->lead_id = $existedLeaedTask->lead_id;
                         $newLog->task_id = $existedLeaedTask->id;
                         $newLog->assign_by = Auth::id();
-                        $newLog->description = "Show case hearing marked as rejected ";
+                        $newLog->remark = "Rejected"."($reason)";
+                        $oldValue = [
+                            'status' => $logStatus,
+                            'Assigned On' =>  $formattedCreatedDate ?? "N/A",
+                            'Assigned By' =>  $existedLeaedTask->userAssignBy->name,
+                            'Verified On' => "N/A",
+                            'Reminder Date' => $reminderDate ?? "N/A",
+                            'Hearing Date' => $existedHearing->hearing_date ?? "N/A",
+                            'Hearing Count' => $existedHearing->count ?? "N/A"
+                        ];
+                        $newValue = [
+                            'status' => $comment."($reason)",
+                            'Verified On' => $request->verified,
+                            'Assigned To' =>  $existedLeaedTask->user->name,
+                            'Reminder Date' => "N/A",
+                            'Hearing Date' => "N/A",
+                            'Hearing Count' => "N/A"
+                        ];
+                        $newLog->old_value = json_encode($oldValue);
+                        $newLog->new_value = json_encode($newValue);
+                        $newLog->description = "Show case hearing marked as rejected "."($reason)";
                         if ($newLog->save()) {
                             return redirect()->route('task.index')->with('success', 'Show case hearing  status is Updated');
                         } else {
@@ -3228,6 +3497,8 @@ class TasksController extends Controller
                     return redirect()->back()->with('error', 'there is something wrong while updating exist lead task details');
                 }
             } else if ($request->show_case_hearing == 1) {
+                $logStatus = !empty($existedLeaedTaskDetails->comment) ? $existedLeaedTaskDetails->comment : 'Pending';
+
                 $newLeadtask->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
                 $newLeadtask->lead_id = $existedLeaedTask->lead_id;
                 $newLeadtask->service_id = $existedLeaedTask->service_id;
@@ -3257,7 +3528,8 @@ class TasksController extends Controller
                         $existedLeaedTaskDetails->attachment = json_encode($updatedAttachments);
                     }
                     $existedLeaedTask->task_description = $existedLeaedTask->task_description . ' ' . $request->description;
-                    if ($existedLeaedTaskDetails->save() || $existedLeaedTask->save()) {
+                    $existedLeaedTask->save();
+                    if ($existedLeaedTaskDetails->save()) {
                         $newLeadTaskDeatails->task_id = $newLeadtask->id;
                         $newLeadTaskDeatails->dead_line = $deadlineDate;
                         $newLeadTaskDeatails->status = 0;
@@ -3268,12 +3540,35 @@ class TasksController extends Controller
                             $newNotification->title = 'Task Assigned';
                             $newNotification->description =  $userName . ' assigned you ' . $newTaskTitle->title . ' task';
                             $newNotification->status = 0;
+                            
                             if ($newNotification->save()) {
                                 $LeadLog =  new LeadLog();
                                 $LeadLog->user_id = $existedLeaedTask->user_id;
                                 $LeadLog->lead_id = $existedLeaedTask->lead_id;
                                 $LeadLog->task_id = $existedLeaedTask->id;
                                 $LeadLog->assign_by = Auth::id();
+                                $LeadLog->remark = "Accepted";
+                                $oldValue = [
+                                    'status' => $logStatus,
+                                    'Assigned On' =>  $formattedCreatedDate ?? "N/A",
+                                    'Assigned By' =>  $existedLeaedTask->userAssignBy->name,
+                                    'Verified On' => "N/A",
+                                    'Reminder Date' => $reminderDate ?? "N/A",
+                                    'Hearing Date' => $existedHearing->hearing_date ?? "N/A",
+                                    'Hearing Count' => $existedHearing->count ?? "N/A"
+                                ];
+                                $newValue = [
+                                    'status' => "Completed"."($comment)",
+                                    'Verified On' => $request->verified,
+                                    'Assigned To' =>  $existedLeaedTask->user->name,
+                                    'Reminder Date' =>"N/A",
+                                    'Hearing Date' => "N/A",
+                                    'Hearing Count' => "N/A"
+                                ];
+                                $LeadLog->old_value = json_encode($oldValue);
+                                $LeadLog->new_value = json_encode($newValue);
+                                
+
                                 $LeadLog->description = " Show case hearing  marked as complete ";
                                 if ($LeadLog->save()) {
                                     $newassignlog = new leadLog();
@@ -3281,6 +3576,8 @@ class TasksController extends Controller
                                     $newassignlog->lead_id = $existedLeaedTask->lead_id;
                                     $newassignlog->task_id = $newLeadtask->id;
                                     $newassignlog->assign_by = Auth::id();
+                                    $newassignlog->remark = "Assign";
+
                                     $newassignlog->description =  "Lead assigned for next task";
                                     if ($newassignlog->save()) {
                                         $id = $newLeadtask->id;
@@ -3328,7 +3625,7 @@ class TasksController extends Controller
     {
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
-        $reminderDate = Carbon::createFromFormat('d M Y', $request->input('reminderDate'))->format('Y-m-d');
+        // $reminderDate = Carbon::createFromFormat('d M Y', $request->input('reminderDate'))->format('Y-m-d');
 
         $existedLeaedTask = LeadTask::find($id);
         $existedLeaedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
@@ -3338,6 +3635,8 @@ class TasksController extends Controller
         $newTaskStageId = $existedLeaedTask->service_stage_id + 1;
         $newTaskTitle = ServiceStages::find($newTaskStageId);
         $userName = Auth::user()->name;
+        $formattedCreatedDate = $existedLeaedTask->created_at->format('d M Y');
+
         $rule = [
             'journal_number' => 'required',
             'verified' => 'required',
@@ -3362,7 +3661,7 @@ class TasksController extends Controller
             if ($newLeadtask->save()) {
                 $existedLeaedTaskDetails->status = 1;
                 $existedLeaedTaskDetails->status_date = $verifiedDate;
-                $existedLeaedTaskDetails->reminderDate = $reminderDate;
+                // $existedLeaedTaskDetails->reminderDate = $reminderDate;
                 $existedLeaedTaskDetails->journal_number  = $request->journal_number;
                 if ($request->hasFile('attachment')) {
                     $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
@@ -3394,6 +3693,23 @@ class TasksController extends Controller
                         $newLog->lead_id = $existedLeaedTask->lead_id;
                         $newLog->task_id = $existedLeaedTask->id;
                         $newLog->assign_by = Auth::id();
+                        $newLog->remark = "Trademark Published";
+                        $oldValue = [
+                            'status' => 'Pending',
+                            'Assigned On' => $formattedCreatedDate,
+                            'Assigned By' =>  $existedLeaedTask->userAssignBy->name,
+                            'Journal Number' => "N/A"
+                        ];
+                        $newValue = [
+                            'status' => 'Completed (Published)',
+                            'Published On' => $request->verified,
+                            'Assigned To' =>  $existedLeaedTask->user->name,
+                            'Journal Number' => $request->journal_number,
+
+                        ];
+                        $newLog->old_value = json_encode($oldValue);
+                        $newLog->new_value = json_encode($newValue);
+
                         $newLog->description = "Trademark publish successfully";
                         if ($newLog->save()) {
                             $newLeadTaskDeatails->task_id = $newLeadtask->id;
@@ -3412,6 +3728,8 @@ class TasksController extends Controller
                                     $newassignlog->lead_id = $existedLeaedTask->lead_id;
                                     $newassignlog->task_id = $newLeadtask->id;
                                     $newassignlog->assign_by = Auth::id();
+                                    $newassignlog->remark = "Assign";
+
                                     $newassignlog->description =  "Lead assigned for next task";
                                     if ($newassignlog->save()) {
                                         $id = $newLeadtask->id;
@@ -3461,7 +3779,10 @@ class TasksController extends Controller
     {
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
-        $opposition_date = Carbon::createFromFormat('d M Y', $request->input('opposition_date'))->format('Y-m-d');
+        if($request->opposition_date){
+
+            $opposition_date = Carbon::createFromFormat('d M Y', $request->input('opposition_date'))->format('Y-m-d');
+        }
 
         $existedLeaedTask = LeadTask::find($id);
         $existedLeaedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
@@ -3471,6 +3792,7 @@ class TasksController extends Controller
         $newTaskStageId = $existedLeaedTask->service_stage_id + 1;
         $newTaskTitle = ServiceStages::find($newTaskStageId);
         $userName = Auth::user()->name;
+        $formattedCreatedDate = $existedLeaedTask->created_at->format('d M Y');
         $rule = [
             'publish_opposition' => 'required',
             'verified' => 'required',
@@ -3562,21 +3884,69 @@ class TasksController extends Controller
                         $newNotification->status = 0;
                         if ($newNotification->save()) {
                             $LeadLog =  new LeadLog();
-                            $LeadLog->user_id = $existedLeaedTask->user_id;
-                            $LeadLog->lead_id = $existedLeaedTask->lead_id;
-                            $LeadLog->task_id = $existedLeaedTask->id;
-                            $LeadLog->assign_by = Auth::id();
-                            if ($request->publish_opposition == 0) {
+                            if($request->publish_opposition == 0){
+                                $LeadLog->user_id = $existedLeaedTask->user_id;
+                                $LeadLog->lead_id = $existedLeaedTask->lead_id;
+                                $LeadLog->task_id = $existedLeaedTask->id;
+                                $LeadLog->assign_by = Auth::id();
+
+                                $LeadLog->remark = "Opposition Filed";
+                                $oldValue = [
+                                    'status' => 'Pending',
+                                    'Assigned On' => $formattedCreatedDate,
+                                    'Assigned By' =>  $existedLeaedTask->userAssignBy->name,
+                                    'Opposition Number' => 'opposition_number',
+                                    'Opponent Name' => 'opponent_name',
+                                    'Opponent Address' => 'opponent_address',
+                                    'Advocate Name'=>'advocate_name', 
+                                    'Opposition Date' => 'opposition_date'
+                                ];
+                                $newValue = [
+                                    'status' => 'Completed (Published)',
+                                    'Published On' => $request->verified,
+                                    'Assigned To' =>  $existedLeaedTask->user->name,
+                                    'Opposition Number' => $request->opposition_number,
+                                    'Opponent Name' => $request->opponent_name,
+                                    'Opponent Address' => $request->opponent_address,
+                                    'Advocate Name'=>$request->advocate_name, 
+                                    'Opposition Date' => $opposition_date ?? "N/A"
+                                ];
                                 $LeadLog->description = "Opposition marked as filed";
-                            } else {
+                                $LeadLog->old_value = json_encode($oldValue);
+                                $LeadLog->new_value = json_encode($newValue);
+
+                            }else{
+                                $LeadLog->user_id = $existedLeaedTask->user_id;
+                                $LeadLog->lead_id = $existedLeaedTask->lead_id;
+                                $LeadLog->task_id = $existedLeaedTask->id;
+                                $LeadLog->assign_by = Auth::id();
+
+                                $LeadLog->remark = "Opposition Not Filed";
+                                $oldValue = [
+                                    'status' => 'Pending',
+                                    'Assigned On' => $formattedCreatedDate,
+                                    'Assigned By' =>  $existedLeaedTask->userAssignBy->name,
+                                    
+                                ];
+                                $newValue = [
+                                    'status' => 'Completed (Published)',
+                                    'Published On' => $request->verified,
+                                    'Assigned To' =>  $existedLeaedTask->user->name,
+                                ];
+                                $LeadLog->description = "Opposition marked as filed";
+                                $LeadLog->old_value = json_encode($oldValue);
+                                $LeadLog->new_value = json_encode($newValue);
                                 $LeadLog->description = "Opposition marked as not filed";
                             }
+                           
                             if ($LeadLog->save()) {
                                 $newassignlog = new leadLog();
                                 $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
                                 $newassignlog->lead_id = $existedLeaedTask->lead_id;
                                 $newassignlog->task_id = $newLeadtask->id;
                                 $newassignlog->assign_by = Auth::id();
+                                $newassignlog->remark = 'Assign';
+
                                 $newassignlog->description =  "Lead assigned for next task";
                                 if ($newassignlog->save()) {
                                     $id = $newLeadtask->id;
@@ -3638,6 +4008,9 @@ class TasksController extends Controller
         $newTaskDetails = new LeadTaskDetail();
         $serviceId = $existedTask->services->id;
         $subServiceID = $existedTask->subService->id;
+        $formattedCreatedDate = $existedTask->created_at->format('d M Y');
+
+        
         $rule = [
             'verified' => 'required',
             'attachment' => 'array',
@@ -3659,9 +4032,11 @@ class TasksController extends Controller
         $gst = $request->gst ?? null;
         $total_without_gst = $service_price + $govt_price;
         if (!empty($gst)) {
+            $gstApply  = "Apply";
             $gst_amount = $service_price * 0.18;
             $total = $total_without_gst + $gst_amount;
         } else {
+            $gstApply  = "Not Apply";
             $total = $total_without_gst;
             $gst_amount = 0;
         }
@@ -3730,6 +4105,25 @@ class TasksController extends Controller
                                 $LeadLog->lead_id =  $existedTask->lead_id;
                                 $LeadLog->task_id =  $existedTask->id;
                                 $LeadLog->assign_by = Auth::id();
+                                $LeadLog->remark = "Quotation sent";
+                                $oldValue = [
+                                    'Status' => 'Pending',
+                                    'Assigned On' => $formattedCreatedDate,
+                                    'Assigned By' => $existedTask->userAssignBy->name,
+                                    'Payment' => 'Pending'
+                                ];
+                                $newValue = [
+                                    'Status' => 'Completed',
+                                    'Sent On' => $verifiedDate ?? null,
+                                    'Assigned To' => $existedTask->user->name,
+                                    'Mail subject' => $request->subject ?? null,
+                                    'Service Price' => $request->service_price ?? null,
+                                    'Govt Price' => $request->govt_price,
+                                    'gst' => $gstApply ." "."₹".$gst_amount.""."(%18)",
+                                ];
+
+                                $LeadLog->old_value = json_encode($oldValue);
+                                $LeadLog->new_value = json_encode($newValue);
                                 $LeadLog->description = "Quotation sent to the client";
                                 if ($LeadLog->save()) {
                                     $newassignlog = new leadLog();
@@ -3737,6 +4131,8 @@ class TasksController extends Controller
                                     $newassignlog->lead_id = $existedTask->lead_id;
                                     $newassignlog->task_id = $newTaskAssigned->id;
                                     $newassignlog->assign_by = Auth::id();
+                                    $newassignlog->remark = 'Assign';
+
                                     $newassignlog->description =  "Lead assigned for next task";
                                     if ($newassignlog->save()) {
                                         // if ($mail== true) {
@@ -3801,11 +4197,18 @@ class TasksController extends Controller
 
     public function oppositionPaymentStatus(Request $request, $id)
     {
+        // dd($request->all());
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
-        $paymentDeadlineDate = Carbon::createFromFormat('d M Y', $request->input('paymentDeadline'))->format('Y-m-d');
-        $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
-        $existedLeaedTask = LeadTask::with(['lead', 'services', 'subService', 'serviceSatge'])->where('id', $id)->first();
+        if ($request->paymentDeadline){
 
+            $paymentDeadlineDate = Carbon::createFromFormat('d M Y', $request->input('paymentDeadline'))->format('Y-m-d');
+        }
+        if ($request->deadline){
+
+            $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
+        }
+        $existedLeaedTask = LeadTask::with(['lead', 'services', 'subService', 'serviceSatge', 'userAssignBy'])->where('id', $id)->first();
+        $client_id = $existedLeaedTask->lead->client_id;
         $existed_leadId = $existedLeaedTask->lead->id;
 
         $leadUpdate = Lead::find($existed_leadId);
@@ -3820,7 +4223,7 @@ class TasksController extends Controller
         $assignedStageName = ServiceStages::where('id', $stageId)->first();
         $rule = [
             'payment' => 'required',
-            'deadline' => 'required',
+            'deadline' => 'nullable',
             'verified' => 'required',
             'stage_id' => 'required',
             'attachment' => 'array',
@@ -3830,7 +4233,8 @@ class TasksController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-
+        $formattedCreatedDate = $existedLeaedTask->created_at->format('d M Y');
+     
         if ($id) {
             if ($request->checkStatus == 0) {
                 if ($request->payment == 1 || $request->payment == 2 || $request->payment == 3) {
@@ -3863,9 +4267,9 @@ class TasksController extends Controller
                         if ($request->payment == 1) {
                             $existedLeaedTaskDetails->reminderDate = Null;
                         } else if ($request->payment == 2) {
-                            $existedLeaedTaskDetails->comment = $paymentDeadlineDate;
+                            $existedLeaedTaskDetails->reminderDate = $paymentDeadlineDate;
                         } else if ($request->payment == 3) {
-                            $existedLeaedTaskDetails->comment = $paymentDeadlineDate;
+                            $existedLeaedTaskDetails->reminderDate = $paymentDeadlineDate;
                         }
                         if ($request->hasFile('attachment')) {
                             $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
@@ -3924,6 +4328,43 @@ class TasksController extends Controller
                                         $LeadLog->lead_id =  $existedLeaedTask->lead_id;
                                         $LeadLog->task_id =  $existedLeaedTask->id;
                                         $LeadLog->assign_by = Auth::id();
+                                        $remark = "";
+                                        $paidAmount = "";
+                                        if ($request->payment == 1) {
+
+                                            $remark = 'Whole Ammount Paid';
+                                            $paidAmount = $newPayment->total;
+                                        } else if ($request->payment == 2 && $request->partial_payment != $existedPayment->total) {
+                                            $remark = 'Partial Payment';
+                                            $paidAmount = $newPayment->submitted_amount;
+                                        } else if ($request->payment == 2 && $request->partial_payment == $existedPayment->total) {
+                                            $remark = 'Partial Payment(Paid)';
+                                            $paidAmount = $newPayment->submitted_amount;
+                                        } else if ($request->payment == 3) {
+                                            $remark = 'On Credit';
+                                            $paidAmount = 0.00;
+                                        }
+                                        $LeadLog->remark = $remark;
+                                        $oldValue = [
+                                            'Status' => 'Pending',
+                                            'Assigned On' => $formattedCreatedDate,
+                                            'Assigned By' => $existedLeaedTask->userAssignBy->name,
+                                            'Total Amount' => $existedPayment->total,
+                                            'Paid Amount' => $existedPayment->submitted_amount,
+                                            'pending_amount' => $existedPayment->pending_amount,
+
+                                        ];
+                                        
+                                        $newValue = [
+                                            'Status' => $remark,
+                                            'Paid On' => $verifiedDate ?? null,
+                                            'Assigned To' => $existedLeaedTask->user->name,
+                                            'Total Amount' => $existedPayment->total,
+                                            'Paid Amount' => $paidAmount,
+                                            'pending_amount' => $newPayment->pending_amount,
+                                        ];
+                                        $LeadLog->old_value = json_encode($oldValue);
+                                        $LeadLog->new_value = json_encode($newValue);
                                         $LeadLog->description = "payment status updated successfully";
                                         if ($LeadLog->save()) {
                                             $newassignlog = new leadLog();
@@ -3931,10 +4372,41 @@ class TasksController extends Controller
                                             $newassignlog->lead_id = $existedLeaedTask->lead_id;
                                             $newassignlog->task_id = $newLeadtask->id;
                                             $newassignlog->assign_by = Auth::id();
+                                            $newassignlog->remark = 'Assign';
+
                                             $newassignlog->description =  "Lead assigned for next task";
                                             if ($newassignlog->save()) {
-                                                return redirect()->route('task.index')
-                                                    ->with('success', 'payment status updated successfully');
+                                                if ($client_id == 0) {
+                                                    $type = 'Client';
+                                                    $mail = true;
+                                                    $randomNumber = substr(str_shuffle('9abcdefghijklmnopq045678rstuvwxyzABCDEFG123HIJKLMNOPQRSTUVWXYZ'), 0, 8);
+                                                    $hashedPassword = Hash::make($randomNumber);
+                                                    $newClient = new User();
+                                                    $newClient->uni_user_id =  $this->generateUniqueUserCode('C', '=', 2);
+                                                    $newClient->name = $existedLeaedTask->lead->client_name;
+                                                    $newClient->role = 2;
+                                                    $newClient->email = $existedLeaedTask->lead->email;
+                                                    $newClient->mobile = $existedLeaedTask->lead->mobile_number;
+                                                    $newClient->companyName = $existedLeaedTask->lead->company_name;
+                                                    $newClient->password = $hashedPassword;
+                                                    if ($newClient->save()) {
+                                                        $leadUpdate->client_id = $newClient->id;
+                                                        $leadUpdate->client_name = $newClient->name;
+                                                        if ($leadUpdate->save()) {
+                                                            if ($mail == true) {
+                                                                SendClientWelcomeEmail::dispatch($newClient, $randomNumber, $filePath = null, $type);
+                                                            }
+                                                            return redirect()->route('task.index')
+                                                                ->with('success', 'payment status updated successfully');
+                                                        } else {
+                                                            return redirect()->back()->with('error', 'there is something wrong while  updateing existed lead');
+                                                        }
+                                                    } else {
+                                                        return redirect()->back()->with('error', 'there is something wrong while  creating new client');
+                                                    }
+                                                } else {
+                                                    return redirect()->route('task.index')->with('success', 'payment status updated successfully');
+                                                }
                                             } else {
                                                 return redirect()->back()->with('error', 'there is something wrong while updating logs');
                                             }
@@ -3958,6 +4430,9 @@ class TasksController extends Controller
                     }
                 }
             } else if ($request->checkStatus == 3 && $request->payment == 1) {
+                $logStatus = $existedLeaedTaskDetails->comment;
+                $oldPaidExitedDate = $existedLeaedTaskDetails->status_date;
+
                 $newPayment = new Payment();
                 $newPayment->lead_id = $existedPayment->lead_id;
                 $newPayment->task_id = $existedPayment->task_id;
@@ -3975,6 +4450,7 @@ class TasksController extends Controller
                 $existedLeaedTask->save();
                 if ($newPayment->save()) {
                     $existedLeaedTaskDetails->status = 1;
+                    $existedLeaedTaskDetails->comment = 'Paid';
                     $existedLeaedTaskDetails->status_date = $verifiedDate;
                     $existedLeaedTaskDetails->reminderDate = Null;
                     if ($request->hasFile('attachment')) {
@@ -3994,12 +4470,31 @@ class TasksController extends Controller
                         $updatedAttachments = array_merge($existingAttachments, $filePaths);
                         $existedLeaedTaskDetails->attachment = json_encode($updatedAttachments);
                     }
-
                     if ($existedLeaedTaskDetails->save()) {
                         $LeadLog = new LeadLog();
                         $LeadLog->user_id =  $existedLeaedTask->user_id;
                         $LeadLog->lead_id =  $existedLeaedTask->lead_id;
                         $LeadLog->task_id =  $existedLeaedTask->id;
+                        $LeadLog->remark = "Paid";
+                        $oldValue = [
+                            'Status' => $logStatus,
+                            'Last Payment On' => $oldPaidExitedDate ?? null,
+                            'Assigned By' => $existedLeaedTask->userAssignBy->name,
+                            'Total Amount' => $existedPayment->total,
+                            'Paid Amount' => $existedPayment->submitted_amount,
+                            'pending_amount' => $existedPayment->pending_amount,
+                        ];
+
+                        $newValue = [
+                            'Status' => 'Completed',
+                            'Paid On' => $verifiedDate ?? null,
+                            'Assigned To' => $existedLeaedTask->user->name,
+                            'Total Amount' => $existedPayment->total,
+                            'Paid Amount' => $newPayment->submitted_amount,
+                            'pending_amount' => $newPayment->pending_amount,
+                        ];
+                        $LeadLog->old_value = json_encode($oldValue);
+                        $LeadLog->new_value = json_encode($newValue);
                         $LeadLog->assign_by = Auth::id();
                         $LeadLog->description = "payment status updated successfully";
                         if ($LeadLog->save()) {
@@ -4013,6 +4508,9 @@ class TasksController extends Controller
                     return redirect()->back()->with('error', 'there is soemthing wrong while updating payment status');
                 }
             } else if ($request->checkStatus == 3 && $request->payment == 2) {
+                $logStatus = $existedLeaedTaskDetails->comment;
+                $oldPaidExitedDate = $existedLeaedTaskDetails->status_date;
+                
                 $newPayment = new Payment();
                 $newPayment->lead_id = $existedPayment->lead_id;
                 $newPayment->task_id = $existedPayment->task_id;
@@ -4033,6 +4531,7 @@ class TasksController extends Controller
                         $existedLeaedTaskDetails->status = 3;
                     }
                     $existedLeaedTaskDetails->status_date = $verifiedDate;
+                    $existedLeaedTaskDetails->comment = 'Partial Payment';
                     $existedLeaedTaskDetails->reminderDate = null;
                     if ($request->hasFile('attachment')) {
                         $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
@@ -4056,6 +4555,32 @@ class TasksController extends Controller
                         $LeadLog->user_id =  $existedLeaedTask->user_id;
                         $LeadLog->lead_id =  $existedLeaedTask->lead_id;
                         $LeadLog->task_id =  $existedLeaedTask->id;
+                        $LeadLog->remark =  'Partial Payment';
+                        $oldValue = [
+                            'Status' => $logStatus,
+                            'Last payment On' => $oldPaidExitedDate,
+                            'Assigned By' => $existedLeaedTask->userAssignBy->name,
+                            'Total Amount' => $existedPayment->total,
+                            'Paid Amount' => $existedPayment->submitted_amount,
+                            'pending_amount' => $existedPayment->pending_amount,
+                        ];
+                        $newValueStatus = "";
+                        if ($newPayment->pending_amount == 0 ||  $newPayment->pending_amount == null || $newPayment->pending_amount == 0.00) {
+                            $newValueStatus = 'Completed';
+                        } else {
+                            $newValueStatus = 'Partial Payment';
+                        }
+
+                        $newValue = [
+                            'Status' => $newValueStatus,
+                            'Paid On' => $verifiedDate ?? null,
+                            'Assigned To' => $existedLeaedTask->user->name,
+                            'Total Amount' => $existedPayment->total,
+                            'Paid Amount' => $newPayment->submitted_amount,
+                            'pending_amount' => $newPayment->pending_amount,
+                        ];
+                        $LeadLog->old_value = json_encode($oldValue);
+                        $LeadLog->new_value = json_encode($newValue);
                         $LeadLog->assign_by = Auth::id();
                         $LeadLog->description = "payment status updated successfully";
                         if ($LeadLog->save()) {
@@ -4069,6 +4594,8 @@ class TasksController extends Controller
                     return redirect()->back()->with('error', 'while updating payment status');
                 }
             } else if ($request->checkStatus == 3 && $request->payment == 3) {
+                $logStatus = $existedLeaedTaskDetails->comment;
+                $oldPaidExitedDate = $existedLeaedTaskDetails->status_date;
                 $newPayment = new Payment();
                 $newPayment->lead_id = $existedPayment->lead_id;
                 $newPayment->task_id = $existedPayment->task_id;
@@ -4089,6 +4616,8 @@ class TasksController extends Controller
                         $existedLeaedTaskDetails->status = 3;
                     }
                     $existedLeaedTaskDetails->status_date = $verifiedDate;
+                    $existedLeaedTaskDetails->comment = "On Credit";
+
                     $existedLeaedTaskDetails->reminderDate = $paymentDeadlineDate;
                     if ($request->hasFile('attachment')) {
                         $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
@@ -4113,6 +4642,25 @@ class TasksController extends Controller
                         $LeadLog->lead_id =  $existedLeaedTask->lead_id;
                         $LeadLog->task_id =  $existedLeaedTask->id;
                         $LeadLog->assign_by = Auth::id();
+                        $LeadLog->remark = "On Credit";
+                        $oldValue = [
+                            'Status' => $logStatus,
+                            'Last payment On' => $oldPaidExitedDate ?? null,
+                            'Assigned By' => $existedLeaedTask->userAssignBy->name,
+                            'Total Amount' => $existedPayment->total,
+                            'Paid Amount' => $existedPayment->submitted_amount,
+                            'Pending Amount' => $existedPayment->pending_amount,
+                        ];
+                        $newValue = [
+                            'Status' => 'On Credit',
+                            'Verified On' => $verifiedDate ?? null,
+                            'Assigned To' => $existedLeaedTask->user->name,
+                            'Total Amount' => $existedPayment->total,
+                            'Paid Amount' => 0.00,
+                            'Pending Amount' => $existedPayment->pending_amount,
+                        ];
+                        $LeadLog->old_value = json_encode($oldValue);
+                        $LeadLog->new_value = json_encode($newValue);
                         $LeadLog->description = "payment status updated successfully";
                         if ($LeadLog->save()) {
                             return redirect()->route('task.index')
@@ -4157,6 +4705,8 @@ class TasksController extends Controller
         $newNotification = new LeadNotification();
         $userName = Auth::user()->name;
         $newTaskTitle = ServiceStages::find($request->stage_id);
+        $formattedCreatedDate = $existedLeaedTask->created_at->format('d M Y');
+
         $rule = [
             'verified' => 'required',
             'deadline' => 'required',
@@ -4210,6 +4760,20 @@ class TasksController extends Controller
                             $LeadLog->lead_id = $existedLeaedTask->lead_id;
                             $LeadLog->task_id = $existedLeaedTask->id;
                             $LeadLog->assign_by = Auth::id();
+                            $LeadLog->remark = 'Counter Statement';
+                            $oldValue = [
+                                'status' => 'Pending',
+                                'Assigned On' => $formattedCreatedDate ?? "N/A",
+                                'Assigned By' =>  $existedLeaedTask->userAssignBy->name,
+                            ];
+                            $newValue = [
+                                'status' => 'Completed',
+                                'Counter Statement On' => $request->verified,
+                                'Assigned To' =>  $existedLeaedTask->user->name,
+                            ];
+                            $LeadLog->old_value = json_encode($oldValue);
+                            $LeadLog->new_value = json_encode($newValue);
+
                             $LeadLog->description = "Documents drafted on portal successfully";
                             if ($LeadLog->save()) {
                                 $newassignlog = new leadLog();
@@ -4247,23 +4811,43 @@ class TasksController extends Controller
     public function opponentEvidenceSubmission($id)
     {
         if ($id) {
-            $notifyData = LeadNotification::where('task_id', $id)->update(['status' => 1]);
+            LeadNotification::where('task_id', $id)->update(['status' => 1]);
         }
-
-        $taskDetails = LeadTask::with(['user', 'lead', 'services', 'subService', 'leadTaskDetails', 'serviceSatge'])
-            ->where('id', $id)
+        
+        $taskDetails = LeadTask::with([
+            'user', 'lead', 'services', 'subService', 
+            'leadTaskDetails', 'serviceSatge'
+        ])->where('id', $id)->first();
+        
+        $users = User::where('role', '>', 4)
+            ->where('archive', 1)
+            ->where('status', 1)
+            ->get();
+        
+        $stageId = $taskDetails->service_stage_id ?? null;
+        $getStage = ServiceStages::where('service_id', 1)
+            ->where('id', '>', $stageId)
             ->first();
-        $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->where('archive', 1)->get();
-
-        $stageId = $taskDetails->service_stage_id;
-        $getStage = ServiceStages::where('service_id', 1)->where('id', '>', $stageId)->first();
+        
         $leadTaskdetials = LeadTaskDetail::find($id);
-        if ($leadTaskdetials->status == 3) {
-            $getStage = ServiceStages::where('service_id', 1)->where('id', '=', 25)->first();
+        
+        if ($leadTaskdetials && $leadTaskdetials->status == 3) {
+            $getStage = ServiceStages::where('service_id', 1)
+                ->where('id', 25)
+                ->first();
         }
-        $onHideSatge = ServiceStages::where('service_id', 1)->where('id', '=', 23)->first();
-        $header_title_name = $taskDetails->serviceSatge->title;
-        return view('tasks.tradeMark.opponent_evidence', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'onHideSatge'));
+        
+        $onHideSatge = ServiceStages::where('service_id', 1)
+            ->where('id', 23)
+            ->first();
+        
+        $header_title_name = $taskDetails->serviceSatge->title ?? 'Default Title';
+        
+        return view('tasks.tradeMark.opponent_evidence', compact(
+            'id', 'header_title_name', 'taskDetails', 
+            'leadTaskdetials', 'users', 'getStage', 'onHideSatge'
+        ));
+        
     }
 
     public function opponentEvidenceSubmissionStatus(Request $request, $id)

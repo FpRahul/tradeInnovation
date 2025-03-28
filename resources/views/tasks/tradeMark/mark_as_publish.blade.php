@@ -37,8 +37,15 @@
          @error('verified')
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
+         <div class="w-full md:w-1/2">
+            <label for="clientname" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Journal Number</label>
+            <input type="text" name="journal_number" id="journal_number"
+               value=""
+               class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="enter here journal number"
+               required>
+         </div>
 
-         <div class="w-full md:w-1/2" id="verifiedDate">
+         {{-- <div class="w-full md:w-1/2" id="verifiedDate">
             <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
                Reminder Date
             </label>
@@ -55,19 +62,13 @@
                   <i class="ri-calendar-line"></i>
                </div>
             </div>
-         </div>
+         </div> --}}
          @error('verified')
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
       </div>
    <div class=" flex flex-col md:flex-row gap-[20px]">
-      <div class="w-full md:w-1/2">
-         <label for="clientname" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Journal Number</label>
-         <input type="text" name="journal_number" id="journal_number"
-            value=""
-            class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="enter here journal number"
-            required>
-      </div>
+      
       @error('journal_number')
       <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
       @enderror
@@ -166,29 +167,36 @@
 </div>
 <script>
    $(document).ready(function() {
-      $('.daterangepicker-verified').daterangepicker({
-         singleDatePicker: true,
-         opens: 'right',
-         locale: {
-            format: 'DD MMM YYYY'
-         },
-         minDate: null,
-         maxDate: moment().endOf('day'),
-      }).on('apply.daterangepicker', function(ev, picker) {
-         console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
-      });
+      $('.daterangepicker-verified').attr("placeholder", "DD/MM/YYYY"); // Set placeholder
 
-      $('.daterangepicker-taskdeadline').daterangepicker({
-         singleDatePicker: true,
-         opens: 'right',
-         locale: {
-            format: 'DD MMM YYYY'
-         },
-         minDate: moment().startOf('day'),
+         $('.daterangepicker-verified').daterangepicker({
+            singleDatePicker: true,
+            autoUpdateInput: false,
+            opens: 'right',
+            locale: {
+               format: 'DD MMM YYYY'
+            },
+            minDate: null,
+            maxDate: moment().endOf('day'),
+         }).on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('DD MMM YYYY')); 
+            console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+         });
 
-      }).on('apply.daterangepicker', function(ev, picker) {
-         console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
-      });
+         $('.daterangepicker-taskdeadline').attr("placeholder", "DD/MM/YYYY"); 
+
+         $('.daterangepicker-taskdeadline').daterangepicker({
+            singleDatePicker: true,
+            autoUpdateInput: false, 
+            opens: 'right',
+            locale: {
+               format: 'DD MMM YYYY'
+            },
+            minDate: moment().startOf('day'),
+         }).on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('DD MMM YYYY')); 
+            console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+         });
 
 
 

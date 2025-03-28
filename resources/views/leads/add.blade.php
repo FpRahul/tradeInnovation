@@ -142,8 +142,8 @@
                                                 <div class="w-full md:w-[32%] lg:w-[18%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Class Rule</label>
                                                     <select name="classrule" 
-                                                        class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
-                                                        required >
+                                                        class="allform-select2-service w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                        required multiple >
                                                     
                                                         <option value="">Class Rule</option>
                                                         @for ($i=1;$i <= 45;$i++)
@@ -298,8 +298,8 @@
                                             <div class="w-full md:w-[32%] lg:w-[18%]">
                                                 <label class="block mb-[5px] text-[14px] font-[400]">Class Rule</label>
                                                 <select name="classrule" 
-                                                        class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
-                                                        required >
+                                                        class="allform-select2-service w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                        required multiple>
                                                     <option value="">Class Rule</option>
                                                     @for ($i=1;$i <= 45;$i++)
                                                     <option value="{{$i}}">{{$i}}</option>
@@ -313,8 +313,8 @@
                                             
                                             <div class="w-full md:w-[32%] lg:w-[18%]">
                                                 <label class="block mb-[5px] text-[14px] font-[400]">Logo</label>
-                                                <div class="flex items-center gap-[5px] border-[1px] border-[#ccc] p-[10px]">
-                                                    <img src="{{ asset('assets/images/noimage.png')}}" class="getpreviewlogo w-[30px] h-[30px] max-w-[30px] max-h-[30px] rounded-[80px] object-cover" />   
+                                                <div class="flex items-center gap-[5px]">
+                                                    <img src="{{ asset('assets/images/noimage.png')}}" class="getpreviewlogo w-[30px] h-[30px] max-w-[30px] max-h-[30px] object-cover border-[1px] border-[#999] rounded-[5px]" />   
                                                     <div class="relative prviewServ">
                                                         <input class="previewServiceLogo  max-w-[80%] text-[14px] p-[8px]" type="file" name="serviceLogo" >                                                            
                                                     </div>       

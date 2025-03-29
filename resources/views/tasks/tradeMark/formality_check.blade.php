@@ -61,10 +61,10 @@
          @error('attachment.*')
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
-         <div class="w-full md:w-1/2 applicationNumber hidden">
-            <label for="application_number" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Application Number<strong class="text-[#f83434]"></strong></label>
-            <input type="text" name="application_number" id="application_number" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
-            @error('application_number')
+         <div class="w-full md:w-1/2 mailSubject hidden ">
+            <label for="mail_subject" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mail Subject<strong class="text-[#f83434]"></strong></label>
+            <input type="text" name="mail_subject" required placeholder="Enter mail subject" id="mail_subject" value="" required class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            @error('mail_subject')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
          </div>
@@ -165,7 +165,7 @@
          </p>
       </div>
       <div class="flex justify-end gap-[15px]">
-         <a class="preview text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Preview</a>
+         <a  id= "previewMail" class=" hidden preview text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Preview</a>
          <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
       </div>
    </form>
@@ -185,7 +185,10 @@
               Hello <strong>{{ $taskDetails->lead->client_name }}</strong> 
             </p>
             <p style="font-size: 16px; line-height: 1.8; margin: 0 0 20px; color: #555;">
-              Thank you We are pleased to inform you that your application has been successfully registered on our online portal. You will receive further updates shortly.
+               
+               Thank you for confirming your details and documents. We appreciate your cooperation.
+               
+               We have  successfully verified the details on the portal. With this confirmation, we will now proceed with the formality check pass for your trademark application. Below are the details for your reference:
             </p>
 
             {{-- Task Invoice --}}
@@ -214,13 +217,15 @@
                               </th>
                            </tr>
                           
-                              
-                              <tr>
-                                 <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">
-                                 <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">
-                                 <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">
-                                 <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2]"></td>
-                              </tr>
+                           @if(!@empty($taskDetails))
+                                  
+                           <tr>
+                              <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{ $taskDetails->lead->client_name }}</td>
+                              <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{ $taskDetails->lead->mobile_number }}</td>
+                              <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{ $taskDetails->lead->email }}</td>
+                              <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2]">{{ $taskDetails->lead->company_name }}</td>
+                           </tr>
+                           @endif
                          
                            
                         </table>
@@ -238,51 +243,32 @@
                      <table class="w-full">
                         <tr>
                            <th class="px-[10px] py-[10px] text-[13px] font-[600] border-b-[1px] border-b-[#f2f2f2]  border-r-[1px] border-r-[#f2f2f2]">Current Service</th>
-                           <th class="px-[10px] py-[10px] text-[13px] font-[600] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">Applied For</th>
-                           <th class="px-[10px] py-[10px] text-[13px] font-[600] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">Application No.</th>
+                           <th class="px-[10px] py-[10px] text-[13px] font-[600] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">Trademark Name</th>
+                           <th class="px-[10px] py-[10px] text-[13px] font-[600] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]" >Application No.</th>
 
                         </tr>
                                                   
-                        @if(!empty($taskDetails))
-                        @foreach ($taskDetails as $details)
+                        @if(!empty($taskDetails) && !empty($applicationNumber))
+                        
                            
                            <tr>
-                              <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$details->user->name}}</td>
-                              <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$details->user->mobile}}</td>
-                              <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$details->user->email}}</td>
-                              <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2]">{{ ($userV->user->companyName !== null) ? $details->user->companyName : '-' }}</td>
+                              <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$taskDetails->services->serviceName}}</td>
+                              <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$applicationNumber->applied_for}}</td>
+                              <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#f02929] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]" id="appNumber">{{ $applicationNumber->application_number }}</td>
+                             
                            </tr>
-                        @endforeach
+                       
                         @endif          
                      </table>
                   </td>
                </tr>
             </table>
             </div>
+            <h4>Attachments</h4>
+            <div id="modal-file-preview" class="flex gap-4 flex-wrap p-4"></div>
 
          </div>
-            <table width="100%" border="0" cellspacing="0" cellpadding="10" style="border-collapse: collapse; border: 1px solid #ddd; background-color: #fafafa;">
-               <tr>
-                  <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">Service:</td>
-                  <td id='mailService' width="50%" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;"> </td>
-               </tr>
-               <tr>
-                  <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">Service Price:</td>
-                  <td width="50%" id="mailServicePrice" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">Not Updated</td>
-               </tr>
-               <tr>
-                  <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">Government Price:</td>
-                  <td width="50%" id="mailGovtPrice" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">Not Updated</td>
-               </tr>
-               <tr>
-                  <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">GST</td>
-                  <td width="50%" id="mailGst" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">Not Updated</td>
-               </tr>
-               <tr>
-                  <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">Total</td>
-                  <td width="50%" id="mailTotal" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">Not Updated</td>
-               </tr>
-            </table>
+           
             <p style="font-size: 16px; text-align: center; line-height: 1.2; margin: 35px 0 0; color: #555;">
                Thank you for choosing us! <br>
             </p>
@@ -359,12 +345,12 @@
             $(".onHoldHide").addClass('hidden');
             $(".showWarning").text('You are going to hold the formality check')
             $(".reminderDate").removeClass('hidden')
-            $(".applicationNumber").addClass('hidden')
+            $(".mailSubject").addClass('hidden')
 
             $('label[for="verified"]').text('Hold On');
 
          } else if (documentStatus == 1) {
-            $(".applicationNumber").removeClass('hidden')
+            $(".mailSubject").removeClass('hidden')
 
             $(".onHoldHide").removeClass('hidden');
             $(".showWarning").text('')
@@ -375,9 +361,18 @@
 
          }
       })
-      $('.preview').on('click', function() {
-         $('#assignUserModal').removeClass('hidden');
-      });
+      $("#formality_check").on("change", function () {
+        var formality_check = $(this).val();
+        if (formality_check == 1) {
+           $(".preview").removeClass("hidden");
+            $(".preview").off("click").on("click", function () {
+                $("#assignUserModal").removeClass("hidden");
+            });
+        } else if(formality_check == 2){
+            $(".preview").off("click"); 
+            $(".preview").addClass("hidden");
+        }
+    });
 
 
       $('#assignUserModal').on('click', function(e) {
@@ -386,6 +381,43 @@
             $('#assignUserModal').addClass('hidden');
          }
       });
+      $("#attachment").on("change", function () {
+        let files = this.files;
+        let fileList = $("#file-list");
+        let previewList = $("#modal-file-preview"); // Ensure this div exists inside your modal
+
+        fileList.empty();
+        previewList.empty();
+
+        if (files.length > 0) {
+            $.each(files, function (index, file) {
+                let fileType = file.type;
+                let reader = new FileReader();
+
+                // Append file name to the form file list
+                fileList.append(`<p class="text-[#000] text-sm">${file.name}</p>`);
+
+                // Create a preview in the modal
+                reader.onload = function (e) {
+                    let previewElement = "";
+                    
+                    if (fileType.startsWith("image")) {
+                        previewElement = `<img src="${e.target.result}" class="w-24 h-24 object-cover rounded-lg border" alt="Preview">`;
+                    } else {
+                        previewElement = `<p class="text-sm text-gray-700">${file.name}</p>`;
+                    }
+
+                    previewList.append(previewElement);
+                };
+
+                reader.readAsDataURL(file);
+            });
+
+            // Show modal when files are selected
+           
+        }
+    });
+         
    });
 </script>
 @stop

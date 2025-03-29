@@ -5,7 +5,7 @@ use App\Mail\CommonDraftSend;
 use Illuminate\Support\Facades\Mail; 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\SerializesModels; 
 
 
 class CommanDraftSend implements ShouldQueue
@@ -15,28 +15,34 @@ class CommanDraftSend implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public $subject; // single varabel define the what we register User Or client or associate
+    public $subject;
     public $service;
-    public $remark;
     public $leadID;
+    public $companyName;
     public $filePaths;
     public $clientName;
     public $clientEmail;
-    public $userName;
+    public $clientMobile;
+    public $trademarkName;
+    public $assignApplicationNumber;
 
 
     
-    public function __construct($subject,$service,$remark,$leadID,$filePaths,$clientName,$clientEmail,$userName)
-    {
+    public function __construct($subject,$service,$leadID,$companyName,$filePaths,$clientName,$clientEmail,$clientMobile, $trademarkName, $assignApplicationNumber)
+    {  
+        
         $this->subject = $subject;
         $this->service = $service;
-        $this->remark  = $remark;
         $this->leadID  = $leadID;
+        $this->companyName = $companyName;
         $this->filePaths = $filePaths;
         $this->clientName = $clientName;
         $this->clientEmail = $clientEmail;
-        $this->userName = $userName;
+        $this->clientMobile = $clientMobile;
+        $this->trademarkName = $trademarkName;
+        $this->assignApplicationNumber = $assignApplicationNumber;
 
+ 
 
     }
 
@@ -47,13 +53,16 @@ class CommanDraftSend implements ShouldQueue
     {
         Mail::to($this->clientEmail)->send(new CommonDraftSend(
             $this->subject, 
-            $this->service, 
-            $this->remark, 
+            $this->service,
             $this->leadID, 
+            $this->companyName,
             $this->filePaths,
             $this->clientName, 
             $this->clientEmail,
-            $this->userName
+            $this->clientMobile,
+            $this->trademarkName,
+            $this->assignApplicationNumber
+
         ));
 
     }

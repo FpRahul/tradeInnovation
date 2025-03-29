@@ -13,26 +13,31 @@ class CommonDraftSend extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $subject; // single varabel define the what we register User Or client or associate
+    public $subject;
     public $service;
-    public $remark;
     public $leadID;
+    public $companyName;
     public $filePaths;
     public $clientName;
     public $clientEmail;
-    public $userName;
+    public $clientMobile;
+    public $trademarkName;
+    public $assignApplicationNumber;
 
 
-    public function __construct($subject,$service,$remark,$leadID, $filePaths,$clientName,$clientEmail,$userName)
+    public function __construct($subject,$service,$leadID,$companyName, $filePaths,$clientName,$clientEmail , $clientMobile , $trademarkName , $assignApplicationNumber)
     {
         $this->subject = $subject;
         $this->service = $service;
-        $this->remark  = $remark;
+        $this->companyName = $companyName;
         $this->leadID  = $leadID;
         $this->filePaths = $filePaths;
         $this->clientName = $clientName;
         $this->clientEmail = $clientEmail;
-        $this->userName = $userName;
+        $this->clientMobile = $clientMobile;
+        $this->trademarkName = $trademarkName;
+        $this->assignApplicationNumber = $assignApplicationNumber;
+
 
 
     }
@@ -57,12 +62,14 @@ class CommonDraftSend extends Mailable
                 with: [
                     'subject' => $this->subject,
                     'service' => $this->service,
-                    'remark' => $this->remark,
-                    'remark' => $this->leadID,
+                    'companyName' =>  $this->companyName,
+                    'leadID' => $this->leadID,
                     'filePaths' => $this->filePaths,
                     'clientName' => $this->clientName,
                     'clientEmail' => $this->clientEmail,
-                    'userName' => $this->userName,
+                    'clientMobile' => $this->clientMobile,
+                    'trademarkName' => $this->trademarkName,
+                    'assignApplicationNumber' => $this->assignApplicationNumber
                 ]
             );
     

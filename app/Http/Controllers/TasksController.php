@@ -396,6 +396,7 @@ class TasksController extends Controller
     public function negotiatePrice(Request $request, $id)
     {
         $paymentData = Payment::where(['task_id' => $id])->first();
+        dd($paymentData->lead->lead_id);
         $gst = $request->negotiatePrice * 0.18;
         $paymentData->service_price = $request->negotiatePrice;
         $govtPrice = $paymentData->govt_price;
@@ -405,6 +406,11 @@ class TasksController extends Controller
         $paymentData->pending_amount = $total;
 
         if ($paymentData->save()) {
+            $leadLog = new LeadLog();
+            $leadLog->task_id = $id;
+            $leadLog->lead_id = $paymentData->lead_id;
+
+
             return redirect()->back()->with('success', "Price is successfully updated!");
         } else {
             return redirect()->back()->with('error', "Some error is occur while update price");
@@ -1124,7 +1130,6 @@ class TasksController extends Controller
 
     public function documenStatus(Request $request, $id)
     {
-        // dd($request->all());
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         if ($request->reminder_date) {
 
@@ -1298,7 +1303,6 @@ class TasksController extends Controller
                                     $newassignlog->task_id = $newLeadtask->id;
                                     $newassignlog->assign_by = Auth::id();
                                     $newassignlog->remark = "Assign";
-
                                     $newassignlog->description =  "Lead assigned for next task";
                                     if ($newassignlog->save()) {
                                         $id = $newLeadtask->id;
@@ -1334,12 +1338,14 @@ class TasksController extends Controller
             ->where('id', $id)
             ->first();
         $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->where('archive', 1)->get();
-
+        $applicationNumber = LeadTask::where('lead_id', $taskDetails->lead_id)
+        ->orderBy('id', 'asc')
+        ->first();
         $stageId = $taskDetails->service_stage_id;
         $getStage = ServiceStages::where('service_id', 1)->where('id', '>', $stageId)->first();
         $leadTaskdetials = LeadTaskDetail::find($id);
         $header_title_name = $taskDetails->serviceSatge->title;
-        return view('tasks.tradeMark.sent_draft', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage'));
+        return view('tasks.tradeMark.sent_draft', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'applicationNumber'));
     }
 
     public function DocumentDraftStatus(Request $request, $id)
@@ -1357,12 +1363,18 @@ class TasksController extends Controller
         $service = $existedLeaedTask->services->serviceName;
         $clientName = $existedLeaedTask->lead->client_name;
         $clientEmail = $existedLeaedTask->lead->email;
+        $clientMobile = $existedLeaedTask->lead->mobile_number;
+        $companyName = $existedLeaedTask->lead->company_name;
+        
         $remark = $request->description ?? null;
         $subject = "Document Sent to the client for approval";
         $leadID = $existedLeaedTask->lead->id;
         $formattedCreatedDate = $existedLeaedTask->created_at->format('d M Y');
+        $applicationNumber = LeadTask::where('lead_id', $existedLeaedTask->lead_id)
+        ->orderBy('id', 'asc')
+        ->first();
         $rule = [
-
+            
             'verified' => 'required',
             'assignUser' => 'required',
             'deadline' => 'required'
@@ -1380,9 +1392,12 @@ class TasksController extends Controller
             $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
             $newLeadtask->assign_by = Auth::id();
             $newLeadtask->task_title = $newTaskTitle->title;
+            $applicationNumber->application_number = $request->application_number;
+            $applicationNumber->save();
             if ($newLeadtask->save()) {
                 $existedLeaedTaskDetails->status = 1;
                 $existedLeaedTaskDetails->status_date = $verifiedDate;
+                $existedLeaedTaskDetails->mail_subject = $request->mail_subject;
                 $filePaths = [];
                 if ($request->hasFile('attachment')) {
                     $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
@@ -1398,15 +1413,19 @@ class TasksController extends Controller
                     }
                     $existedLeaedTaskDetails->attachment = json_encode($filePaths);
                 }
-                CommanDraftSend::dispatch(
+                $assignApplicationNumber = $applicationNumber->application_number;
+                $trademarkName = $applicationNumber->applied_for;
+                CommanDraftSend::dispatch( 
                     $subject,
                     $service,
-                    $remark,
                     $leadID,
+                    $companyName,
                     !empty($filePaths) ? $filePaths : null,
                     $clientName,
                     $clientEmail,
-                    $userName
+                    $clientMobile,
+                    $trademarkName,
+                    $assignApplicationNumber
                 );
                 if ($existedLeaedTaskDetails->save()) {
                     $newLeadTaskDeatails->task_id = $newLeadtask->id;
@@ -1750,12 +1769,15 @@ class TasksController extends Controller
         $taskDetails = LeadTask::with(['user', 'lead', 'services', 'subService', 'leadTaskDetails', 'serviceSatge'])
             ->where('id', $id)
             ->first();
+        $applicationNumber = LeadTask::where('lead_id', $taskDetails->lead_id)
+        ->orderBy('id', 'asc')
+        ->first();
         $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
         $stageId = $taskDetails->service_stage_id;
         $getStage = ServiceStages::where('service_id', 1)->where('id', '>', $stageId)->first();
         $leadTaskdetials = LeadTaskDetail::find($id);
         $header_title_name = $taskDetails->serviceSatge->title;
-        return view('tasks.tradeMark.formality_check', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage'));
+        return view('tasks.tradeMark.formality_check', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'applicationNumber'));
     }
 
     public function formalityCheckStatus(Request $request, $id)
@@ -1814,7 +1836,6 @@ class TasksController extends Controller
                 $existedLeaedTaskDetails->status = $request->formality_check;
                 $existedLeaedTaskDetails->status_date = $verifiedDate;
                 $existedLeaedTaskDetails->comment = "On Hold";
-
                 $existedLeaedTaskDetails->reminderDate = $reminder_date;
                 $existedLeaedTask->task_description = $request->description;
                 $existedLeaedTask->save();
@@ -1870,8 +1891,8 @@ class TasksController extends Controller
                     return redirect()->back()->error('message', " there is something wrong during hold the task ");
                 }
             } else if ($request->formality_check == 1) {
-                $addApplicationNumber->application_number = $request->application_number;
-                $addApplicationNumber->save();
+                // $addApplicationNumber->application_number = $request->application_number;
+                // $addApplicationNumber->save();
                 $logStatus = !empty($existedLeaedTaskDetails->comment) ? $existedLeaedTaskDetails->comment : 'Pending';
                 $newLeadtask->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
                 $newLeadtask->lead_id = $existedLeaedTask->lead_id;
@@ -1886,6 +1907,7 @@ class TasksController extends Controller
                 if ($newLeadtask->save()) {
                     $existedLeaedTaskDetails->status = $request->formality_check;
                     $existedLeaedTaskDetails->status_date = $verifiedDate;
+                    $existedLeaedTaskDetails->mail_subject = $request->mail_subject;
                     if ($request->hasFile('attachment')) {
                         $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
                         if (!file_exists($folderPath)) {
@@ -1907,7 +1929,6 @@ class TasksController extends Controller
                         $newLeadTaskDeatails->task_id = $newLeadtask->id;
                         $newLeadTaskDeatails->dead_line = $deadlineDate;
                         $newLeadTaskDeatails->status = 0;
-
                         if ($newLeadTaskDeatails->save()) {
                             $newNotification->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
                             $newNotification->lead_id = $existedLeaedTask->lead_id;

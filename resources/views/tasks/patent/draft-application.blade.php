@@ -46,19 +46,7 @@
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
       </div>
-      <div class="flex flex-col md:flex-row gap-[20px]">
-        <div class="w-full md:w-1/2" id="patentabilityDiv">
-           <label for="patentability" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-              Determine Patentability
-           </label>
-            <select name="patentability" id="patentability" class="patentabilityData !outline-none h-[45px] border border-[#0000001A] w-full rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]" required>
-                <option value="" disabled selected>Select Patentability</option>
-                <option value="Novelty">Novelty</option>
-                <option value="InventiveStep">Inventive Step</option>
-                <option value="IndustrialApplicability">Industrial Applicability</option>
-            </select>
-        </div>        
-     </div>
+      
       <div class="">
          <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
          <textarea type="text" name="description" id="description" class="w-full h-[80px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>

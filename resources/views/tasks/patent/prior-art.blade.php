@@ -118,7 +118,7 @@
         </div>
         <div class="">
             <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
-            <textarea type="text" name="description" id="description" class="w-full h-[60px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required></textarea>
+            <textarea type="text" name="description" id="description" class="w-full h-[60px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" ></textarea>
         </div>        
         
         <div class="flex justify-end gap-[15px]">

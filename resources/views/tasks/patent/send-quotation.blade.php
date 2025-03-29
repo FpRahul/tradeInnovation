@@ -125,7 +125,7 @@
         <strong class="mt-4 block">Quotation Template</strong>
         <div class="flex flex-col md:flex-row gap-[20px]">
             <div class="w-full md:w-1/2">
-                <label for="subject" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Subject<strong class="text-[#f83434]">*</strong></label>
+               <label for="subject" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Subject<strong class="text-[#f83434]">*</strong></label>
                 <input type="text" name="subject" id="subject" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                 @error('subject')
                 <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
@@ -214,10 +214,10 @@
                            @foreach ($taskDetails as $userK => $userV)
                               
                               <tr>
-                                 <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$userV->user->name}}</td>
-                                 <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$userV->user->mobile}}</td>
-                                 <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$userV->user->email}}</td>
-                                 <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2]">{{ ($userV->user->companyName !== null) ? $userV->user->companyName : '-' }}</td>
+                                 <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$userV->lead->client_name}}</td>
+                                 <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$userV->lead->mobile_number}}</td>
+                                 <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$userV->lead->email}}</td>
+                                 <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2]">{{ $userV->lead->company_name  }}</td>
                               </tr>
                            @endforeach
                            @endif
@@ -279,6 +279,8 @@
                   <td width="50%" id="mailTotal" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">Not Updated</td>
                </tr>
             </table>
+            <h4>Attachments</h4>
+            <div id="modal-file-preview" class="flex gap-4 flex-wrap p-4"></div>
             <p style="font-size: 16px; text-align: center; line-height: 1.2; margin: 35px 0 0; color: #555;">
                Thank you for choosing us! <br>
             </p>
@@ -386,6 +388,42 @@
             $('#assignUserModal').addClass('hidden');
          }
       });
+      $("#attachment").on("change", function () {
+        let files = this.files;
+        let fileList = $("#file-list");
+        let previewList = $("#modal-file-preview"); // Ensure this div exists inside your modal
+
+        fileList.empty();
+        previewList.empty();
+
+        if (files.length > 0) {
+            $.each(files, function (index, file) {
+                let fileType = file.type;
+                let reader = new FileReader();
+
+                // Append file name to the form file list
+                fileList.append(`<p class="text-[#000] text-sm">${file.name}</p>`);
+
+                // Create a preview in the modal
+                reader.onload = function (e) {
+                    let previewElement = "";
+                    
+                    if (fileType.startsWith("image")) {
+                        previewElement = `<img src="${e.target.result}" class="w-24 h-24 object-cover rounded-lg border" alt="Preview">`;
+                    } else {
+                        previewElement = `<p class="text-sm text-gray-700">${file.name}</p>`;
+                    }
+
+                    previewList.append(previewElement);
+                };
+
+                reader.readAsDataURL(file);
+            });
+
+            // Show modal when files are selected
+           
+        }
+    });
    });
 </script>
 @stop

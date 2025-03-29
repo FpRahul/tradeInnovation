@@ -205,7 +205,7 @@
                                         <a href="{{ route('leadLogs.index', ['lead_id' => $leadData->id]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Logs</a>
                                         @endif
                                         @if(in_array('lead.invoice',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)                                       
-                                        <a href="{{ route('lead.invoice', ['lead_id' => base64_encode($leadData->id)]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Invoice</a>
+                                        <a href="{{ route('lead.invoice', ['id' => base64_encode($leadData->id)]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Invoice</a>
                                         @endif
 
                                         {{-- <a href="#" class="block px-3 py-1 text-[12px] hover:bg-[#f7f7f7] text-gray-700">Delete</a> --}}

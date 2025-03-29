@@ -46,11 +46,19 @@ class Lead extends Model
     public function leadAttachments(){
         return $this->hasMany(LeadAttachment::class, 'lead_id','id');
     }
+    public function LeadFirm(){
+        return $this->belongsTo(Firm::class, 'firm');
+    }
+    
+
 
     public function categoryOptions(){
         return $this->hasOne(CategoryOption::class, 'id','source');
     }
     public function referral(){
         return $this->belongsTo(User::class, 'source_id');
+    }
+    public function payment(){
+        return $this->hasMany(Payment::class, 'lead_id');
     }
 }

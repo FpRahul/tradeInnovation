@@ -233,13 +233,13 @@
                                                 </div>
                                                 {{-- start service details --}}
 
-                                                <div class="flex flex-wrap w-full gap-[15px] border-[1px] border-[#ccc] outline-[#ccc] p-[10px] rounded-[5px] {{ $serviceVal->service_id == 1 ? '' : 'hidden'}}">
+                                                <div class="eachServiceDetails flex flex-wrap w-full gap-[15px] border-[1px] border-[#ccc] outline-[#ccc] p-[10px] rounded-[5px] hidden {{ isset($serviceVal->service_id) && $serviceVal->service_id == 1 ? '' : 'hidden'}}">
                                                     <h2 class="w-full text-[22px] leading-[25px] mb-[5px] font-[600]">Details</h2>
                                                     <div class="w-full md:w-[32%] lg:w-[32%]">
                                                         <label class="block mb-[5px] text-[14px] font-[400]">Risk Class</label>
                                                         <select name="classrule" 
                                                                 class="allform-select2-service w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
-                                                                required multiple>
+                                                                 multiple>
                                                         
                                                             <option value="">Risk Class</option>
                                                             @php
@@ -253,11 +253,11 @@
                                                                                                 
                                                     </div>                                                
                                                     <div class="w-full md:w-[32%] lg:w-[32%]">
-                                                        <label class="block mb-[5px] text-[14px] font-[400]">Applied For</label>
+                                                        <label class="block mb-[5px] text-[14px] font-[400]">Trademark Applied For</label>
                                                         <input type="text" name="appliedfor" 
                                                             value="{{ isset($serviceVal) ? $serviceVal->applied_for : '' }}" 
                                                             class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
-                                                            required>                                                
+                                                            >                                                
                                                     </div>
                                                     <div class="w-full md:w-[32%] lg:w-[32%]">
                                                         @php
@@ -386,13 +386,13 @@
 
 
                                             {{-- start service details --}}
-                                            <div class="flex flex-wrap w-full gap-[15px] border-[1px] border-[#ccc] outline-[#ccc] p-[10px] rounded-[5px]">
+                                            <div class="eachServiceDetails flex flex-wrap w-full gap-[15px] border-[1px] border-[#ccc] outline-[#ccc] p-[10px] rounded-[5px] hidden">
                                                 <h2 class="w-full text-[22px] leading-[25px] mb-[5px] font-[600]">Details</h2>
                                                 <div class="w-full md:w-[32%] lg:w-[32%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Risk Class</label>
                                                     <select name="classrule" 
                                                             class="allform-select2-service w-full h-[55px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
-                                                            required multiple>
+                                                             multiple>
                                                         <option value="">Risk Class</option>
                                                         @for ($i=1;$i <= 45;$i++)
                                                         <option value="{{$i}}">{{$i}}</option>
@@ -400,8 +400,8 @@
                                                     </select>                                                
                                                 </div>
                                                 <div class="w-full md:w-[32%] lg:w-[32%]">
-                                                    <label class="block mb-[5px] text-[14px] font-[400]">Applied For</label>
-                                                    <input type="text" name="appliedfor" id="appliedfor" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>                                                
+                                                    <label class="block mb-[5px] text-[14px] font-[400]">Trademark Applied For</label>
+                                                    <input type="text" name="appliedfor" id="appliedfor" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" >                                                
                                                 </div>                                            
                                                 <div class="w-full md:w-[32%] lg:w-[32%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Logo</label>
@@ -726,8 +726,13 @@
         }                  
        
     });
-    $(document).on('change','.setSubService',function(){
+    $(document).on('change','.setSubService',function(){    
         var serviceId = $(this).val();
+        if(serviceId == 1){
+            $(this).parent().parent().find('.eachServiceDetails').removeClass('hidden');
+        }else{
+            $(this).parent().parent().find('.eachServiceDetails').addClass('hidden');
+        }
         $(this).parent().parent().find('.serviceNameLoader').removeClass('hidden');
         
         var e = $(this);

@@ -16,23 +16,72 @@
                         <p style="font-size: 16px; line-height: 1.8; margin: 0 0 20px; color: #555;"> 
                             Your service request for <strong>{{ $service }}</strong> has been processed. Below are the details of your service and the associated pricing:
                         </p>
+                        <div class="pb-[25px]">
+                            <h2 class="text-[#000] text-[17px] font-[600] mb-[15px] text-[center]">Client Details</h2>
+                            <div class="mb-8">
+                               <table class="w-[100%] border-[1px] border-[#f2f2f2]" >
+                                  <tr>
+                                     <td class="">
+                                        <table class="w-full">
+                                           <tr>
+                                              <th class="px-[10px] py-[10px] text-[13px] font-[600] text-[#000] border-b-[1px] border-b-[#f2f2f2]  border-r-[1px] border-r-[#f2f2f2]">
+                                                 Name:
+                                              </th>
+             
+                                              <th class="px-[10px] py-[10px] text-[13px] font-[600] text-[#000] border-b-[1px] border-b-[#f2f2f2]  border-r-[1px] border-r-[#f2f2f2]">
+                                                 Mobile:
+                                              </th>
+             
+                                              <th class="px-[10px] py-[10px] text-[13px] font-[600] text-[#000] border-b-[1px] border-b-[#f2f2f2]  border-r-[1px] border-r-[#f2f2f2]">
+                                                 Email:
+                                              </th>
+             
+                                              <th class="px-[10px] py-[10px] text-[13px] font-[600] text-[#000] border-b-[1px] border-b-[#f2f2f2] ">
+                                                 Company Name:
+                                              </th>
+                                           </tr>
+                                              
+                                              <tr>
+                                                 <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$clientName}}</td>
+                                                 <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$clientMobile}}</td>
+                                                 <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$clientEmail}}</td>
+                                                 <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2]">{{ $clientCompany }}</td>
+                                              </tr>
+                                          
+                                        </table>
+                                     </td>
+                                     
+                                  </tr>
+                               </table>
+                            </div>
+             
+                            <div class="pb-[40px]">
+                               <table class="w-[100%] border-[1px] border-[#f2f2f2]" >
+                               
+                                  <tr>
+                                     <td>
+                                        <table class="w-full">
+                                           <tr>
+                                              <th class="px-[10px] py-[10px] text-[13px] font-[600] border-b-[1px] border-b-[#f2f2f2]  border-r-[1px] border-r-[#f2f2f2]">Current Service</th>
+                                              <th class="px-[10px] py-[10px] text-[13px] font-[600] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">Current Sub-Service</th>
+                                           
+                                              
+                                           </tr>
+                                                                    
+                                                 <tr>
+                                                    <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$serviceName}}</td>
+                                                    <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$subServiceName}}</td>
+                                                    
+                                                 </tr>    
+                                                                
+                                        </table>
+                                     </td>
+                                  </tr>
+                               </table>
+                            </div>
+                         </div>
                         <table width="100%" border="0" cellspacing="0" cellpadding="10" style="border-collapse: collapse; border: 1px solid #ddd; background-color: #fafafa;">
-                            <tr>
-                                <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">Name:</td>
-                                <td width="50%" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">{{ $service }}</td>
-                            </tr>
-                            <tr>
-                                <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">Name:</td>
-                                <td width="50%" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">{{ $service }}</td>
-                            </tr>
-                            <tr>
-                                <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">Name:</td>
-                                <td width="50%" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">{{ $service }}</td>
-                            </tr>
-                            <tr>
-                                <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">Service:</td>
-                                <td width="50%" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">{{ $service }}</td>
-                            </tr>
+                            
                             <tr>
                                 <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">Service Price:</td>
                                 <td width="50%" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">₹{{ number_format($service_price, 2) }}</td>
@@ -40,6 +89,14 @@
                             <tr>
                                 <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">Government Price:</td>
                                 <td width="50%" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">₹{{ number_format($govt_price, 2) }}</td>
+                            </tr>
+                            <tr>
+                                <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">GST (18%)</td>
+                                <td width="50%" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">₹{{ number_format($gst_amount, 2) }}(18%)</td>
+                            </tr>
+                            <tr>
+                                <td width="50%" style="font-size: 14px; font-weight: bold; color: #333; background-color: #f0f0f0; border-bottom: 1px solid #ddd;">Total Price:</td>
+                                <td width="50%" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">₹{{ number_format($total, 2) }}(18%)</td>
                             </tr>
                         </table>
                         <p style="font-size: 16px; text-align: center; line-height: 1.2; margin: 35px 0 0; color: #555;">

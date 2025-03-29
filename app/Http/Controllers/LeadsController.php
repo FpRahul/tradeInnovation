@@ -99,7 +99,6 @@ class LeadsController extends Controller
 
     public function add(Request $request, $id = null)
     {
-       
         if ($id > 0) {
             
             $leadData = Lead::where('id', $id)->first();
@@ -211,19 +210,24 @@ class LeadsController extends Controller
                             $leadTaskData = new LeadTask();
                             $LeadTaskDetail = new LeadTaskDetail();
                         }
-                        $leadTaskData->class_rule = implode(',',$serviceVal['classrule']);
-                        // $leadTaskData->class_rule = $serviceVal['classrule'];
-                        $leadTaskData->applied_for = $serviceVal['appliedfor'];
-                        if (isset($serviceVal['serviceLogo']) && $serviceVal['serviceLogo'] instanceof \Illuminate\Http\UploadedFile) {
+                        if(isset($serviceVal['classrule'])){
+                            $leadTaskData->class_rule = implode(',',$serviceVal['classrule']);
+                            $leadTaskData->applied_for = $serviceVal['appliedfor'];
+                            if (isset($serviceVal['serviceLogo']) && $serviceVal['serviceLogo'] instanceof \Illuminate\Http\UploadedFile) {
 
-                            $image_name = $serviceVal['serviceLogo'];
-                            $imageName = rand(100000, 999999) . '.' . $image_name->getClientOriginalExtension();
-                            $image_name->move(public_path('uploads/leads/' . $leadData->id), $imageName);
-                            $leadTaskData->service_logo = $imageName;
+                                $image_name = $serviceVal['serviceLogo'];
+                                $imageName = rand(100000, 999999) . '.' . $image_name->getClientOriginalExtension();
+                                $image_name->move(public_path('uploads/leads/' . $leadData->id), $imageName);
+                                $leadTaskData->service_logo = $imageName;
+                            }
+                            $leadTaskData->filing_mode = $serviceVal['filingmode'];
+                            $leadTaskData->filing_date = date('Y-m-d',strtotime($serviceVal['filingdate']));
                         }
-                        $leadTaskData->lead_id = $leadData->id;
-                        $leadTaskData->filing_mode = $serviceVal['filingmode'];
-                        $leadTaskData->filing_date = date('Y-m-d',strtotime($serviceVal['filingmode']));
+                       
+                        // $leadTaskData->class_rule = $serviceVal['classrule'];
+                       
+                       
+                        $leadTaskData->lead_id = $leadData->id;                       
                         $leadTaskData->project_manager_id = $serviceVal['projectmanager'];
                         $leadTaskData->service_id = $serviceVal['serviceid'];
                         $serviceidArray[] = $serviceVal['serviceid'];
@@ -576,11 +580,14 @@ class LeadsController extends Controller
 
     public function leadInvoice(Request $request, $id = null)
     {
-        // $taskDetails = LeadTask::with(['user', 'lead', 'leadTaskDetails', 'services', 'subService', 'serviceSatge'])
-        // ->where('id', $id)
-        // ->get();
+        
+        $leadDetails = Lead::with(['leadTasks' ,'leadTasks.services' ,'LeadFirm' , 'leadTasks.subService' , 'payment'])
+        ->where('id', base64_decode($id))
+        ->first();
+        
+        dd($leadDetails);
         $header_title_name = 'Manage Invoice';
-        return view('leads.invoice', compact('header_title_name'));
+        return view('leads.invoice', compact('header_title_name','leadDetails'));
     }
 
     public function existedClientDetail(Request $request)

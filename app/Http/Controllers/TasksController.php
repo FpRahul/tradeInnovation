@@ -413,7 +413,7 @@ class TasksController extends Controller
 
     public function sendQuotation(Request $request, $id)
     {
-        dd($request);
+       
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
 
         $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
@@ -446,6 +446,9 @@ class TasksController extends Controller
         $govt_price = $request->govt_price;
         $gst = $request->gst ?? null;
         $total_without_gst = $service_price + $govt_price;
+        $total = 0;
+
+       
         if (!empty($gst)) {
             $gstApply  = "Apply";
             $gst_amount = $service_price * 0.18;
@@ -458,6 +461,12 @@ class TasksController extends Controller
         $quoted_price = $service_price +  $govt_price;
         $clientName = $existedTask->lead->client_name;
         $clientEmail = $existedTask->lead->email;
+        $clientMobile = $existedTask->lead->mobile_number;
+        $clientCompany = $existedTask->lead->company_name;
+
+        $serviceName = $existedTask->services->serviceName;
+        $subServiceName = $existedTask->subService->subServiceName;
+
         $stageId = (int) $request->stage_id;
         $userName = Auth::user()->name;
         $assignedStageName = ServiceStages::where('id', $stageId)->first();
@@ -551,7 +560,7 @@ class TasksController extends Controller
                                     $newassignlog->description =  "Lead assigned for next task";
                                     if ($newassignlog->save()) {
                                         if ($mail== true) {
-                                            SendTaskCommanMailJob::dispatch($subject, $service, $service_price, $govt_price, $clientName, $clientEmail, $userName);
+                                            SendTaskCommanMailJob::dispatch($subject, $service, $service_price,$gst_amount,$total, $govt_price, $clientName, $clientEmail, $userName,$clientMobile,$clientCompany,$serviceName,$subServiceName);                                            
                                         }
                                     }
                                     $id = $newTaskAssigned->id;
@@ -5676,7 +5685,6 @@ class TasksController extends Controller
             if ($newLeadtask->save()) {
                 $existedLeaedTaskDetails->status = 1;
                 $existedLeaedTaskDetails->status_date = $verifiedDate;
-                $existedLeaedTaskDetails->comment = $request->patentability;
                 if ($request->hasFile('attachment')) {
                     $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
                     if (!file_exists($folderPath)) {
@@ -5795,7 +5803,6 @@ class TasksController extends Controller
                 if ($newLeadtask->save()) {
                     $existedLeadTaskDetails->status = 1;
                     $existedLeadTaskDetails->status_date = $verifiedDate;
-                    $existedLeadTaskDetails->comment = $request->patentability;
                     if ($request->hasFile('attachment')) {
                         $folderPath = public_path('uploads/leads/' . $existedLeadTask->lead_id);
                         if (!file_exists($folderPath)) {

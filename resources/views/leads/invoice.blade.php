@@ -1,17 +1,17 @@
 @extends('layouts.default')
 @section('content')
-<div class="w-full bg-[#fff] shadow-[] border-[1px] border-[#f2f2f2] p-[15px] rounded-[10px]">
-    <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); overflow: hidden;">
+<div class="w-full bg-[#fff] shadow-[] border-[1px] border-[#f2f2f2] p-[15px] pt-[50px] rounded-[10px]">
+    <table border="0" cellspacing="0" cellpadding="0" class="w-full max-w-[1400px] m-auto" style="background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); overflow: hidden;">
         <tr>
            <td style="background: url('assets/images/login-bg.jpg') center/cover no-repeat; padding: 60px 30px 0; text-align: center;">
-              <img src="{{asset('assets/images/logo.png')}}" alt="Your Logo" style="max-width: 200px; margin-bottom: 10px;">
+              <img src="{{asset('assets/images/logo.png')}}" alt="Your Logo" style="max-width: 200px; margin:0 auto 40px;">
               <h1 style="color: #000; font-size: 20px; margin: 0; font-weight: bold;">Welcome to Our Platform!</h1>
            </td>
         </tr>
         <tr>
            <td style="padding: 15px 15px; text-align: left;">
               <p style="font-size: 16px; line-height: 1.8; margin: 0 0 10px; color: #555;">
-                 Hello <strong id="mailClientName"></strong>,
+                 Hello <strong id="mailClientName">{{$leadDetails->client_name}}</strong>,
               </p>
               <p style="font-size: 16px; line-height: 1.8; margin: 0 0 20px; color: #555;">
                  Your service request for <strong></strong> has been processed. Below are the details of your service and the associated pricing:
@@ -42,21 +42,16 @@
                                    Company Name:
                                 </th>
                              </tr>
-                             @if(!empty($taskDetails))
-                             @foreach ($taskDetails as $userK => $userV)
-                                
+                                                            
                                 <tr>
-                                   <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$userV->user->name}}</td>
-                                   <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$userV->user->mobile}}</td>
-                                   <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$userV->user->email}}</td>
-                                   <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2]">{{ ($userV->user->companyName !== null) ? $userV->user->companyName : '-' }}</td>
+                                   <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$leadDetails->client_name}}</td>
+                                   <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$leadDetails->mobile_number}}</td>
+                                   <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$leadDetails->email}}</td>
+                                   <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2]">{{$leadDetails->company_name }}</td>
                                 </tr>
-                             @endforeach
-                             @endif
-                             
+                                                       
                           </table>
-                       </td>
-                       
+                       </td>                       
                     </tr>
                  </table>
               </div>
@@ -71,12 +66,13 @@
                              <th class="px-[10px] py-[10px] text-[13px] font-[600] border-b-[1px] border-b-[#f2f2f2]  border-r-[1px] border-r-[#f2f2f2]">Services</th>
                              <th class="px-[10px] py-[10px] text-[13px] font-[600] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">Sub-Services</th>
                           </tr>
-                          @if(!empty($taskDetails))
-                             @foreach ($taskDetails as $serK => $serV)                              
-                                <tr>
-                                   <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$serV->services->serviceName}}</td>
-                                   <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$serV->subService->subServiceName}}</td>
-                                </tr>    
+                          @if(!empty($leadDetails->leadTasks   ))
+                             @foreach ($leadDetails->leadTasks as $serK => $serV)   
+                                                      
+                                 <tr>
+                                    <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$serV->services->serviceName}}</td>
+                                    <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$serV->subService->subServiceName}}</td>
+                                 </tr>    
                              @endforeach
                           @endif                    
                        </table>
@@ -126,7 +122,7 @@
         </tr>
      </table>
 
-    <div class="mt-[50px] flex gap-[10px] justify-end">
+    <div class="mt-[20px] mb-[20px] flex gap-[10px] justify-center">
         <button class="px-[15px] py-[10px] bg-[#13103a] text-[15px] text-[#fff] rounded-[5px]">Save & Download</button>
         <button class="px-[15px] py-[10px] bg-[#13103a] text-[15px] text-[#fff] rounded-[5px]">Save & Email</button>
     </div>

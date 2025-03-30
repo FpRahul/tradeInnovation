@@ -28,5 +28,6 @@ class Evidence extends Model
     public function lead(){
         return $this->belongsTo(Lead::class,'lead_id');
     }
+   
 
 }

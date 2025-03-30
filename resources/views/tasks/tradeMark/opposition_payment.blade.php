@@ -13,6 +13,13 @@
       @csrf
       <strong class="mt-4 block"> Update Current Task</strong>
       <input type="hidden" name="paymentId" value="{{ $paymentId }}">
+      @if ($payamentDetails->submitted_amount == 0)
+         <div class="flex items-ceter gap-[8px]">                            
+            <input type="checkbox" name="negocheck" class="negocheck openModalProf" id="negocheck"/>  
+            <label for="negocheck">is Negotiate</label>                          
+         </div>
+                  
+        @endif
       @foreach ($taskDetails as $task )
       <input type="hidden" name="checkStatus" id="checkStatus" value="{{$task->leadTaskDetails->status}}">
       @endforeach
@@ -198,6 +205,42 @@
       </div>
    </form>
 </div>
+<div id="assignUserModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[100%)] max-h-full bg-[rgba(0,0,0,0.6)] ">
+   <div class="relative p-4 w-full max-w-[780px] max-h-full m-auto">
+       <!-- Modal content -->
+       <div class="relative bg-white rounded-[20px] shadow dark:bg-gray-700">
+           <!-- Modal header -->
+           <div class="flex items-center justify-between p-4 md:px-5 md:py-[20px] border-b border-[#0000001A] rounded-t dark:border-gray-600">
+               <h3 class="text-[14px] font-[400] leading-[17px] text-[#000000] dark:text-white">
+                  Edit Price
+               </h3>
+               <button type="button" class="closeModel text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="assignUserModal">
+                   <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                       <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                   </svg>
+                   <span class="sr-only">Close modal</span>
+               </button>
+           </div>
+           <!-- Modal body -->
+           <div class="p-[20px]">
+               <form method="POST" action={{ route('task.negotiatePrice',['id'=>$taskDetailsId])}} class="space-y-[20px]">
+                   @csrf
+                   <span>Origin Service Price {{$payamentDetails->service_price}}</span>
+                  <div class="flex flex-col md:flex-row gap-[20px]">                     
+                     <div class="w-full">
+                        <label for="name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Negotiated Price</label>
+                        <input type="text" name="negotiatePrice" id="negotiatePrice" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                     </div>
+                  </div>
+                  
+                   <div class="flex justify-end gap-[15px]">                        
+                       <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
+                   </div>
+               </form>
+           </div>
+       </div>
+   </div>
+</div>
 <script>
    $(document).ready(function() {
       $('.daterangepicker-verified').attr("placeholder", "DD/MM/YYYY"); // Set placeholder
@@ -244,7 +287,7 @@
             $(".paymentInfo").text("Pending amount : {{$payamentDetails->pending_amount  }}");
          } else if (changedValue == 2) {
            
-            $("#verifiedDate label").text("Verified On");
+            $("#verifiedDate label").text("Paid On");
             $("#paymentReminder").removeClass("hidden");
             $(".partialPayment").removeClass("hidden");
             $(".total_amount").removeClass("hidden");
@@ -273,16 +316,32 @@
             if (partial_payment > total_price) {
                   $(".PartialPaymentError").removeClass("hidden").text("The partial payment cannot be more than the total due.");
                   $("#hidePaymentInfo").addClass("hidden");
+                 
                   $("#submitDisabled").prop("disabled", true);
             } else {
                   $(".PartialPaymentError").addClass("hidden").text("");
+                 
                   $("#hidePaymentInfo").removeClass("hidden");
                   $("#submitDisabled").prop('disabled', false)
 
             }
+            if(partial_payment == total_price){
+               $("#paymentReminder").addClass("hidden");
+            }else{
+               $("#paymentReminder").removeClass("hidden");
+            }
          
       });
 
+      $(document).on('click','.openModalProf',function(){
+      if($(this).is(':checked')){
+         $('#assignUserModal').removeClass('hidden');
+      }      
+   });
+
+   $(document).on('click','.closeModel',function(){
+      window.location.reload();
+   });
 
    });
 </script>

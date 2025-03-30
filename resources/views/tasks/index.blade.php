@@ -183,9 +183,7 @@
                             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                                 @if($task->leadTaskDetails && !is_null($task->leadTaskDetails->status))
                                 @php
-                                // Default status is 'Other'
                                 $status = 'Other';
-                                // Switch based on the value of 'status'
                                 switch ($task->leadTaskDetails->status) {
                                 case 0:
                                 $status = 'Pending';
@@ -223,7 +221,7 @@
                                             @if(in_array('task.followup', $permissionDetails['accessableRoutes']) || auth()->user()->role == 1)
                                             @if(!empty($serviceID) && !empty($stageId))
                                            
-                                            @if($task->leadTaskDetails->status != 1 && $task->leadTaskDetails->status != 4)
+                                            @if($task->leadTaskDetails->status != 1 && $task->leadTaskDetails->status != 4  && $task->leadTaskDetails->status != 2)
                                             <a href="{{ route('task.followup', ['id' => $task->id, 'serviceId' => $serviceID, 'stageId' => $stageId]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">
                                                 Follow Up
                                             </a>
@@ -239,9 +237,15 @@
                                             @if(in_array('leadLogs.index',$permissionDetails['accessableRoutes']) || auth()->user()->role == 1)
                                             <a href="{{route('leadLogs.index', ['lead_id' => $leadId])}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Logs</a>
                                             @endif
+                                            @if($task->leadTaskDetails->status == 0 )
                                             @if(in_array('task.hold',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
                                             <a href="#" class="hold-on-pop block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-taskId="{{$task->leadTaskDetails->task_id }}" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal">Hold</a>
                                             @endif
+                                            @else
+                                            <a href="#" class=" unhold block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-unHoldId="{{$task->leadTaskDetails->task_id}}">Un Hold</a>
+                                            @endif
+
+
                                             @if(in_array('task.reject',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
                                             <button class="reject-on-pop block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-taskId="{{$task->leadTaskDetails->task_id }}" >Rejected</button>
                                             @endif
@@ -286,56 +290,71 @@
             <div class="p-[20px]">
                 <form method="POST" action="{{ route('task.hold') }}" class="space-y-[20px]">
                     @csrf
-                    <div class="w-full md:w-1/2" id="verifiedDate">
-                        <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-                            Hold On
+                    <div class="flex flex-col md:flex-row gap-[20px]">
+                        <div class="w-full md:w-1/2" id="verifiedDate">
+                            <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+                                Hold On
+                            </label>
+                            <input type="hidden" name="task_hidden_id" id="task_hidden_id">
+                            
+                            <div class="w-full">
+                                <div class="w-full relative">
+                                    <input
+                                        type="text"
+                                        placeholder="Hold On"
+                                        name="verified"
+                                        class="daterangepicker-verified w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
+                                        value=""
+                                        id="verified"
+                                        autocomplete="off">
+                                    <div class="absolute right-[10px] top-[10px]">
+                                        <i class="ri-calendar-line"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="w-full md:w-1/2" id="verifiedDate">
+                            <label for="followUp" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+                                Follow-up Date
+                            </label>                        
+                            <div class="w-full">
+                                <div class="w-full relative">
+                                    <input
+                                        type="text"
+                                        placeholder="Follow-up date"
+                                        name="followUp"
+                                        class="daterangepicker-verified w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
+                                        value=""
+                                        id="followUp"
+                                        autocomplete="off">
+                                    <div class="absolute right-[10px] top-[10px]">
+                                        <i class="ri-calendar-line"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full md:w-1/2">
+                        <label for="comment" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+                            Comment 
+                            <span style="font-size: 12px; color: gray; font-style: italic;">(Ensure your comments are short and to the point.)</span>
                         </label>
-                        <input type="hidden" name="task_hidden_id" id="task_hidden_id">
-                        <div class="w-full">
-                            <div class="w-full relative">
-                                <input
-                                    type="text"
-                                    placeholder="Hold On"
-                                    name="verified"
-                                    class="daterangepicker-verified w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
-                                    value=""
-                                    id="verified"
-                                    autocomplete="off">
-                                <div class="absolute right-[10px] top-[10px]">
-                                    <i class="ri-calendar-line"></i>
-                                </div>
-                            </div>
-                        </div>
+                        <input type="text" name="comment" id="comment" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                     </div>
-                    <div class="w-full md:w-1/2" id="verifiedDate">
-                        <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-                            Follow-up Date
-                        </label>                        
-                        <div class="w-full">
-                            <div class="w-full relative">
-                                <input
-                                    type="text"
-                                    placeholder="follow-up date"
-                                    name="followUp"
-                                    class="daterangepicker-verified w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
-                                    value=""
-                                    id="verified"
-                                    autocomplete="off">
-                                <div class="absolute right-[10px] top-[10px]">
-                                    <i class="ri-calendar-line"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                     <div class="">
                         <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Reason</label>
                         <textarea type="text" name="description" id="description" class="w-full h-[155px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
                     </div>
+
                     <div class="flex justify-end gap-[15px]">
                         <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[10px] px-[30px]">Hold Task</button>
                     </div>
                 </form>
             </div>
+
 
         </div>
     </div>
@@ -345,8 +364,27 @@
     $(document).on('click', '.hold-on-pop', function() {
         var task_id = $(this).attr('data-taskId');
         $("#task_hidden_id").val(task_id);
-    });
+        $('.daterangepicker-verified').attr("placeholder", "DD/MM/YYYY"); // Set placeholder
 
+$('.daterangepicker-verified').daterangepicker({
+    singleDatePicker: true,
+    autoUpdateInput: false,  // Prevent auto-update of input with selected date
+    opens: 'right',
+    locale: {
+        format: 'DD MMM YYYY'
+    },
+    minDate: null,
+    maxDate: moment().endOf('day'),
+}).on('apply.daterangepicker', function(ev, picker) {
+    // Set the selected date format when a date is picked
+    $(this).val(picker.startDate.format('DD MMM YYYY')); 
+    console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+});
+
+// Ensure no date is selected by default (it only shows placeholder)
+$('.daterangepicker-verified').val('');
+    });
+   
     $(document).on('click','.reject-on-pop',function(){
         let taskId = $(this).data('taskid');
         if(confirm('Are you want to sure to reject this task ?')){
@@ -416,6 +454,24 @@
         }).on('apply.daterangepicker', function(ev, picker) {
             console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
         });
+        $(".unhold").on('click' , function(){
+            var id = $(this).data('unholdid')
+            $.ajax({
+                url: "{{route('task.unHoldTask')}}",
+                method: "POST",
+                data: {
+                    id:id
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')  // Assuming you're using Laravel
+                },
+                success: function (response){
+                         if(response.status == 200){
+                            window.location.reload();
+                         }
+                }
+            })
+        })
     })
 </script>
 @stop

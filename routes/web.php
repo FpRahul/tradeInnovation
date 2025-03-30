@@ -144,7 +144,9 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::post('/payment-status/{id}','paymentStatus')->name('task.paymentStatus');
         Route::get('documentation/{id}','documentation')->name('task.documentation');
         Route::Post('documentation-status/{id}','documenStatus')->name('task.documenStatus');
+        Route::Post('unhold','unHoldTask')->name('task.unHoldTask');
         Route::Post('hold-task','holdtask')->name('task.hold');
+
         Route::Post('reject-task','rejecttask')->name('task.reject');
         Route::get('document-draft/{id}', "DocumentDraft")->name('task.DocumentDraft');
         Route::post('document-draft/status/{id}', "DocumentDraftStatus")->name('task.DocumentDraftStatus');
@@ -183,6 +185,14 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('applicant/evidence-submission/{id}', 'applicantEvidenceSubmission')->name('task.applicantEvidenceSubmission');
         Route::Post('applicant/evidence-submission/status/{id}', 'applicantEvidenceSubmissionStatus')->name('task.applicantEvidenceSubmissionStatus');
         Route::Post('opposition/hearing/{id}', 'oppositionHearing')->name('task.oppositionHearing');
+        Route::get('/opposition-notice/received {id?}','oppositionNoticeDate')->name('task.oppositionNoticeDate');
+        Route::Post('/opposition-notice/received /status{id?}','oppositionNoticeDateStatus')->name('task.oppositionNoticeDateStatus');
+        Route::get('/notice-sent/{id?}','noticeSent')->name('task.noticeSent');
+        Route::Post('/notice-sent/Status/{id?}','noticeSentStatus')->name('task.noticeSentStatus');
+
+
+
+
         // For patent.........
         // For payment verification........
         Route::get('/patent/send-quotation/{id?}','patentSendQuotation')->name('task.patentSendQuotation');
@@ -195,6 +205,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/patent/client-approval/{id?}','patentclientapproval')->name('task.patentClientApproval');
         Route::post('/patent/submit-client-approval/{id?}','patentSubmitClientApproval')->name('task.patentSubmitClientApproval');
         Route::get('/patent/file-application/{id?}','patentFileApplication')->name('task.patentFileApplication');
+
     });
     //Services Routes
     Route::prefix('services')->controller(ServicesController::class)->group(function () {

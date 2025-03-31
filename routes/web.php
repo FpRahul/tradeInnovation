@@ -184,11 +184,20 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('opposition/evidence-submission/status/{id}', 'opponentEvidenceSubmissionStatus')->name('task.opponentEvidenceSubmissionStatus');
         Route::get('applicant/evidence-submission/{id}', 'applicantEvidenceSubmission')->name('task.applicantEvidenceSubmission');
         Route::Post('applicant/evidence-submission/status/{id}', 'applicantEvidenceSubmissionStatus')->name('task.applicantEvidenceSubmissionStatus');
-        Route::Post('opposition/hearing/{id}', 'oppositionHearing')->name('task.oppositionHearing');
+        // Route::Post('opposition/hearing/{id}', 'oppositionHearing')->name('task.oppositionHearing');
         Route::get('/opposition-notice/received {id?}','oppositionNoticeDate')->name('task.oppositionNoticeDate');
         Route::Post('/opposition-notice/received /status{id?}','oppositionNoticeDateStatus')->name('task.oppositionNoticeDateStatus');
         Route::get('/notice-sent/{id?}','noticeSent')->name('task.noticeSent');
         Route::Post('/notice-sent/Status/{id?}','noticeSentStatus')->name('task.noticeSentStatus');
+        Route::get('/opposition/re-submission/evidence/{id?}','oppositionResubmissionEvedince')->name('task.oppositionResubmissionEvedince');
+        Route::Post('/opposition/re-submission/evidence/status/{id?}','oppositionResubmissionEvidenceStatus')->name('task.oppositionResubmissionEvidenceStatus');
+        Route::get('/non-Compliance/{id?}','nonCompliance')->name('task.nonCompliance');
+        Route::Post('/noncompliance/status/{id?}','nonComplianceStatus')->name('task.nonComplianceStatus');
+        Route::get('/opposition/hearing/{id?}','oppositionHearingDate')->name('task.oppositionHearingDate');
+        Route::Post('/opposition/hearing/Status{id?}','oppositionHearingDateStatus')->name('task.oppositionHearingDateStatus');
+
+
+
 
 
 

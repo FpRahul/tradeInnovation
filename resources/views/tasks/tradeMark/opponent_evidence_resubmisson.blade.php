@@ -9,27 +9,27 @@
    <x-client-task-details :taskID="$id" />
 </div>
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
-   <form action="{{route('task.oppositionNoticeDateStatus',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
+   <form action="{{route('task.oppositionResubmissionEvidenceStatus',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
       <strong class="mt-4 block"> Update Current Task</strong>
 
       <div class="flex flex-col md:flex-row gap-[20px]">
          <input type="hidden" name="checkStatus" id="checkStatus" value="{{ $leadTaskdetials->status ?? "N/A" }}">
          <div class="w-full md:w-1/2">
-            <label for="notice_received" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
-            <select name="notice_received" id="notice_received" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            <label for="opponent_evidence" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
+            <select name="opponent_evidence" id="opponent_evidence" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                <option value="" disabled selected>Select status</option>
-               <option value="1">Notice Received</option>
-               <option value="2">Notice Not Received</option>
+               <option value="1">Opponent Has Submitted Evidence</option>
+               <option value="3">Opponent Has Not Submitted Evidence</option>
             </select>
             <div class="showWarning" style="color: red;font-size: 14px; font-weight: 500;"></div>
-            @error('notice_received')
+            @error('opponent_evidence')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
          </div>
          <div class="w-full md:w-1/2" id="verifiedDate">
             <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-               Notice Received On
+               Verified On
             </label>
             <div class="w-[100%] relative">
                <input
@@ -61,17 +61,50 @@
          @error('attachment.*')
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
-         
+         <div class="w-full md:w-1/2">
+            <label for="opponent_status" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Opponent Status</label>
+            <input type="text" name="opponent_status" id="opponent_status" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" >
+            @error('opponent_status')
+            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+            @enderror
+         </div>
       </div>
-      
+      <div class="w-full md:w-1/2 hidden evidence_submit">
+        <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+           Evidence received On
+        </label>
+        <div class="w-[100%] relative">
+           <input
+              type="text"
+              placeholder="Dead Line"
+              name="evidence_submit"
+              class="daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
+              value=""
+              id="evidence_submit"
+              autocomplete="off">
+           <div class="absolute right-[10px] top-[10px]">
+              <i class="ri-calendar-line"></i>
+           </div>
+        </div>
+       </div>
       <div class="flex flex-col md:flex-row gap-[20px]">
-         <div class="flex w-full flex-col ">
+         <div class="flex w-[49%] flex-col ">
             <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
          <textarea type="text" name="description" id="description" class="w-full h-[80px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
          @error('description')
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
          </div>
+         
+         <div class="flex w-[49%] flex-col">
+            <label for="reason" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Reason</label>
+         <textarea type="text" name="reason" id="reason" class="w-full h-[80px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
+         @error('reason')
+         <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+         @enderror
+         </div>
+         
+         
       </div>
       
       <strong class= "mt-5 block">Update Upcoming Actions</strong>
@@ -179,34 +212,33 @@
          });
 
      
-      $("#notice_received").on('change', function() {
-         var notice_received = $(this).val();
-         if (notice_received == 1) {
+      $("#opponent_evidence").on('change', function() {
+         var opponent_evidence = $(this).val();
+         if (opponent_evidence == 1) {
            
            $("#stage_id").val('{{ $getStage->title }}') 
            $("#SatgeID").val('{{ $getStage->id }}') 
            $("#nextTitle").text(' Next stage will be: ' + '{{ $getStage->title }}')
            $('#showStage').text('Set a dead line for ' + '{{ $getStage->title }}');
            $('.evidence_submit').removeClass('hidden');
-           $("label[for='verified']").text("Notice Received On");
            
-         } else if (notice_received == 2) {
+         } else if (opponent_evidence == 3) {
            $("#stage_id").val('{{ $onHideSatge->title }}'); 
            $("#SatgeID").val('{{ $onHideSatge->id }}') 
            $("#nextTitle").text(' Next stage will be: ' + '{{ $onHideSatge->title }}')
            $('.evidence_submit').addClass('hidden');
-           $("label[for='verified']").text("Verified On");
+           
             $('#showStage').text('Set a dead line for ' + '{{ $onHideSatge->title }}');
            
 
          }
       })
-      var status =  $("#checkStatus").val();
-         if(status == 0){
-            $('.descriptionHidden').removeClass('hidden');
-         }else if('.descriptionHidden'){
-            $('.descriptionHidden').addClass('hidden');
-         }
+     var status =  $("#checkStatus").val();
+      if(status == 0){
+         $('.descriptionHidden').removeClass('hidden');
+      }else if('.descriptionHidden'){
+         $('.descriptionHidden').addClass('hidden');
+      }
    });
 </script>
 @stop

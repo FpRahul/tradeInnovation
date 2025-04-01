@@ -126,6 +126,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('/payment-details', 'paymentDetails')->name('lead.paymentDetails');
         Route::get('/opposition-details', 'oppositionDetails')->name('lead.oppositionDetails');
 
+        Route::get('/download-invoice/{id?}', 'downloadInvoice')->name('lead.downloadinvoice');
+
     });
     //Tasks Routes
     Route::prefix('tasks')->controller(TasksController::class)->group(function () {

@@ -23,6 +23,9 @@ use App\Models\Firm;
 use App\Models\LeadTaskDetail;
 use App\Models\ServiceStages;
 use Illuminate\Support\Facades\Validator;
+use Mpdf\Mpdf;
+use Illuminate\Support\Facades\View;
+
 
 class LeadsController extends Controller
 {
@@ -579,16 +582,43 @@ class LeadsController extends Controller
     }
 
     public function leadInvoice(Request $request, $id = null)
-    {
-        
-        $leadDetails = Lead::with(['leadTasks' ,'leadTasks.services' ,'LeadFirm' , 'leadTasks.subService' , 'payment'])
+    {        
+        $leadDetails = Lead::with(['leadTasks' ,'leadTasks.services' ,'LeadFirm' , 'leadTasks.subService' , 'leadTasks.payment'])
         ->where('id', base64_decode($id))
         ->first();
-        
-        dd($leadDetails);
         $header_title_name = 'Manage Invoice';
         return view('leads.invoice', compact('header_title_name','leadDetails'));
     }
+
+    
+    public function downloadInvoice($id = null) {
+        try {
+            $leadDetails = Lead::with(['leadTasks', 'leadTasks.services', 'LeadFirm', 'leadTasks.subService', 'leadTasks.payment'])
+                ->where('id', $id)
+                ->first();
+    
+            if (!$leadDetails) {
+                return response()->json(['error' => 'Lead not found'], 404);
+            }
+    
+            $header_title_name = 'Manage Invoice';
+            $html = View::make('leads.invoice', compact('leadDetails', 'header_title_name'))->render();
+    
+            // Create MPDF instance
+            $mpdf = new Mpdf();
+            $mpdf->WriteHTML($html);
+    
+            // Generate PDF output as a string
+            $pdfOutput = $mpdf->Output('', 'S'); 
+    
+            return response()->json([
+                'pdf' => base64_encode($pdfOutput),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+    
 
     public function existedClientDetail(Request $request)
     {

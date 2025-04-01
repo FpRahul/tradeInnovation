@@ -130,20 +130,38 @@ class ServiceTask extends Seeder
             ],
             [
                 'service_id' => '1',
+                'title' => 'Opposition Notice Date',
+                'description' => 'The opposition notice was received from the Trademark Registry',
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '1',
                 'title' => 'Counter Statment',
                 'description' => 'Add the counter statment on the received oppostion.',
                 'stage' => '13',
             ],
             [
                 'service_id' => '1',
-                'title' => 'Opponent Evidence Submission status',
-                'description' => 'Updates the status of the opponent evidence submission.',
+                'title' => 'Registry Sent Notice to Opponent',
+                'description' => 'The applicant has submitted a copy of the opposition to the trademark registry.',
                 'stage' => '13',
             ],
             [
                 'service_id' => '1',
-                'title' => 'Applicant Evidence Submission status',
-                'description' => 'Updates the status of the applicant evidence submission.',
+                'title' => 'Opponent Evidence Submission status (Rule 45)',
+                'description' => 'Updates the status of the opponent evidence submission under rule 45.',
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Applicant Evidence Submission status (Rule 46)',
+                'description' => 'Updates the status of the applicant evidence submission under rule 46.',
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Opponent Evidence Submission status Rule(47)',
+                'description' => 'Updates the status of the Opponent evidence submission under rule 47.',
                 'stage' => '13',
             ],
             [
@@ -160,8 +178,8 @@ class ServiceTask extends Seeder
             ],
             [
                 'service_id' => '1',
-                'title' => 'Show cause hearing (Opposition)',
-                'description' => 'Update the show cause hearing status / or next hearing date',
+                'title' => ' Hearing (Opposition)',
+                'description' => 'Update the hearing status / or next hearing date',
                 'stage' => '13',
             ],
             [

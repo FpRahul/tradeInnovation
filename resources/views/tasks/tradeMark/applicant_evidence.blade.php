@@ -14,13 +14,13 @@
       <strong class="mt-4 block"> Update Current Task</strong>
 
       <div class="flex flex-col md:flex-row gap-[20px]">
-         <input type="hidden" name="checkValid" id="checkValid" value="">
+         <input type="hidden" name="checkStatus" id="checkStatus" value="{{ $leadTaskdetials->status ?? "N/A" }}">
          <div class="w-full md:w-1/2">
             <label for="applicant_evidence" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
             <select name="applicant_evidence" id="applicant_evidence" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                <option value="" disabled selected>Select status</option>
-               <option value="1">Applicant Has Submitted Evidence </option>
-               <option value="3">Applicant Has Not Submitted Evidence  </option>
+               <option value="1">Applicant Has Submitted Evidence</option>
+               <option value="3">Applicant Has Not Submitted Evidence</option>
             </select>
             <div class="showWarning" style="color: red;font-size: 14px; font-weight: 500;"></div>
             @error('applicant_evidence')
@@ -62,9 +62,9 @@
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
          <div class="w-full md:w-1/2">
-            <label for="opponent_status" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Applicant Status</label>
-            <input type="text" name="opponent_status" id="opponent_status" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" >
-            @error('opponent_status')
+            <label for="applicant_status" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Applicant Status</label>
+            <input type="text" name="applicant_status" id="applicant_status" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" >
+            @error('applicant_status')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
          </div>
@@ -87,22 +87,92 @@
            </div>
         </div>
        </div>
-       <div class="flex flex-col md:flex-row gap-[20px]">
-       <div class="flex w-[49%] flex-col descriptionHidden">
-          <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
-       <textarea type="text" name="description" id="description" class="w-full h-[80px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
-       @error('description')
-       <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
-       @enderror
-       </div>
-       <div class="flex w-[49%] flex-col">
-          <label for="reason" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Reason</label>
-       <textarea type="text" name="reason" id="reason" class="w-full h-[80px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
-       @error('reason')
-       <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
-       @enderror
-       </div>
-    </div>
+      <div class="flex flex-col md:flex-row gap-[20px]">
+         <div class="flex w-[49%] flex-col ">
+            <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
+         <textarea type="text" name="description" id="description" class="w-full h-[80px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
+         @error('description')
+         <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+         @enderror
+         </div>
+         
+         <div class="flex w-[49%] flex-col">
+            <label for="reason" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Reason</label>
+         <textarea type="text" name="reason" id="reason" class="w-full h-[80px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
+         @error('reason')
+         <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+         @enderror
+         </div>
+         
+         
+      </div>
+      
+      <strong class= "mt-5 block">Update Upcoming Actions</strong>
+
+      <div class=" flex flex-col md:flex-row gap-[20px]">
+
+         <div class="w-full md:w-1/2 ">
+            <label for="stage" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Satge</label>
+            @if($getStage->count() > 0)
+            <input type="text" name="stage_id" id="stage_id" value="{{$onHideSatge->title}}" class="  w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
+            <input type="hidden" name="stage_id" id = "SatgeID"  value="{{$onHideSatge->id}}">
+            @endif
+             <p id="nextTitle" style="color: skyblue; font-size: 14px; font-weight: 500;">
+                        Next stage will be: {{$onHideSatge->title}}
+                    </p> 
+         </div>
+         
+         @if($taskDetails->count() > 0)
+         @php
+         $selectedId = $taskDetails->user->id;
+         @endphp
+
+         @endif
+
+         <div class="w-full md:w-1/2">
+            <label for="assignUser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign User</label>
+            <select name="assignUser" id="assignUser" class="filterData assignUserData allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]" required>
+               <option value="" disabled selected>Select a user</option>
+               @if($users->count() > 0)
+               <option value="" disabled selected>Select a user</option>
+               @foreach ($users as $user)
+               <option value="{{ $user->id }}" {{ !empty($selectedId) && $user->id == $selectedId ? 'selected' : '' }}>
+                  {{ $user->name }}
+               </option>
+               @endforeach
+               @else
+               <option value="" disabled>No users available</option>
+               @endif
+            </select>
+            @if($taskDetails->count() > 0)
+            <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+               Current user assigned: {{$taskDetails->user->name}}.
+            </p>
+            @endif
+         </div>
+      </div>
+      <div class=" w-full md:w-1/2" id="deadLineDate">
+         <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+            Dead line
+         </label>
+         <div class="w-[100%] relative">
+            <input
+               type="text"
+               placeholder="Dead Line"
+               name="deadline"
+               id="deadline"
+               class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
+               value=""
+
+               autocomplete="off">
+            <div class="absolute right-[10px] top-[10px]">
+               <i class="ri-calendar-line"></i>
+            </div>
+         </div>
+         <p id="showStage" style="color: skyblue; font-size: 14px; font-weight: 500;">
+            Set a dead line for {{ $onHideSatge->title }}.
+         </p>
+      </div>
       <div class="flex justify-end gap-[15px]">
          <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
       </div>
@@ -110,40 +180,65 @@
 </div>
 <script>
    $(document).ready(function() {
-      $('.daterangepicker-verified').daterangepicker({
-         singleDatePicker: true,
-         opens: 'right',
-         locale: {
-            format: 'DD MMM YYYY'
-         },
-         minDate: null,
-         maxDate: moment().endOf('day'),
-      }).on('apply.daterangepicker', function(ev, picker) {
-         console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
-      });
+      $('.daterangepicker-verified').attr("placeholder", "DD/MM/YYYY"); // Set placeholder
 
-      $('.daterangepicker-taskdeadline').daterangepicker({
-         singleDatePicker: true,
-         opens: 'right',
-         locale: {
-            format: 'DD MMM YYYY'
-         },
-         minDate: moment().startOf('day'),
+        $('.daterangepicker-verified').daterangepicker({
+            singleDatePicker: true,
+            autoUpdateInput: false,
+            opens: 'right',
+            locale: {
+                format: 'DD MMM YYYY'
+            },
+            minDate: null,
+            maxDate: moment().endOf('day'),
+        }).on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('DD MMM YYYY')); 
+            console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+        });
 
-      }).on('apply.daterangepicker', function(ev, picker) {
-         console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
-      });
+        $('.daterangepicker-taskdeadline').attr("placeholder", "DD/MM/YYYY"); 
 
-     $("#applicant_evidence").on('change' , function (){
-        var applicant_evidence = $(this).val();
-        if(applicant_evidence == 1){
-         $('.evidence_submit').removeClass('hidden');
-        }else if(applicant_evidence == 3){
-         $('.evidence_submit').addClass('hidden');
+         $('.daterangepicker-taskdeadline').daterangepicker({
+            singleDatePicker: true,
+            autoUpdateInput: false, 
+            opens: 'right',
+            locale: {
+               format: 'DD MMM YYYY'
+            },
+            minDate: moment().startOf('day'),
+         }).on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('DD MMM YYYY')); 
+            console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+         });
 
-        }
-     })
      
+      $("#applicant_evidence").on('change', function() {
+         var applicant_evidence = $(this).val();
+         if (applicant_evidence == 1) {
+           
+           $("#stage_id").val('{{ $getStage->title }}') 
+           $("#SatgeID").val('{{ $getStage->id }}') 
+           $("#nextTitle").text(' Next stage will be: ' + '{{ $getStage->title }}')
+           $('#showStage').text('Set a dead line for ' + '{{ $getStage->title }}');
+           $('.evidence_submit').removeClass('hidden');
+           
+         } else if (applicant_evidence == 3) {
+           $("#stage_id").val('{{ $onHideSatge->title }}'); 
+           $("#SatgeID").val('{{ $onHideSatge->id }}') 
+           $("#nextTitle").text(' Next stage will be: ' + '{{ $onHideSatge->title }}')
+           $('.evidence_submit').addClass('hidden');
+           
+            $('#showStage').text('Set a dead line for ' + '{{ $onHideSatge->title }}');
+           
+
+         }
+      })
+     var status =  $("#checkStatus").val();
+      if(status == 0){
+         $('.descriptionHidden').removeClass('hidden');
+      }else if('.descriptionHidden'){
+         $('.descriptionHidden').addClass('hidden');
+      }
    });
 </script>
 @stop

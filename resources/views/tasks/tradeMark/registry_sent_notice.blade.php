@@ -9,25 +9,25 @@
    <x-client-task-details :taskID="$id" />
 </div>
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
-   <form action="{{route('task.oppositionCounterStatementStatus',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
+   <form action="{{route('task.noticeSentStatus',['id' => $id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
       <strong class="mt-4 block"> Update Current Task</strong>
       <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2">
-            <label for="Counter_statement" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
-            <select name="Counter_statement" id="Counter_statement" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            <label for="notice_sent" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
+            <select name="notice_sent" id="notice_sent" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                <option value="" disabled selected>Select status</option>
-               <option value="1">Counter Statement Filed</option>
-               <option value="2">Counter Statement Not Filed</option>
+               <option value="1">Notice Sent </option>
+               <option value="2">Notice Not Sent</option>
             </select>
             <div class="showWarning" style="color: red;font-size: 14px; font-weight: 500;"></div>
-            @error('Counter_statement')
+            @error('notice_sent')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
          </div>
          <div class="w-full md:w-1/2" id="verifiedDate">
             <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-               Notice Sent On
+            Notice Sent On
             </label>
             <div class="w-[100%] relative">
                <input
@@ -44,7 +44,6 @@
             </div>
          </div>
       </div>
-      
       <div class="flex justify-start flex-wrap w-[100%] md:w-[49%]">
          <label class="block w-full text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload</label>
          <label for="attachment" class="flex items-center gap-[10px] w-full text-[13px] font-[500] leading-[15px] text-[#666666] tracking-[0.01em] bg-[#fff] border-dashed border-[1px] border-[#ccc] rounded-[6px] py-[6px] px-[10px] cursor-pointer">
@@ -56,7 +55,6 @@
          <input type="file" id="attachment" name="attachment[]" multiple style="display: none;" />
          <div id="file-list" class="mt-2"></div>
       </div>
-
       @error('attachment.*')
       <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
       @enderror
@@ -67,6 +65,7 @@
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
       </div>
+
       <strong class="mt-5 block">Update Upcoming Actions</strong>
       <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2 ">
@@ -106,7 +105,9 @@
             @endif
          </div>
       </div>
+
       <div class="  flex flex-col md:flex-row gap-[20px]">
+
          <div class=" w-full md:w-1/2" id="deadLineDate">
             <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
                Dead line
@@ -130,6 +131,7 @@
             </p>
          </div>
       </div>
+
       <div class="flex justify-end gap-[15px]">
          <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
       </div>
@@ -139,39 +141,38 @@
    $(document).ready(function() {
       $('.daterangepicker-verified').attr("placeholder", "DD/MM/YYYY"); // Set placeholder
 
-      $('.daterangepicker-verified').daterangepicker({
-         singleDatePicker: true,
-         autoUpdateInput: false,
-         opens: 'right',
-         locale: {
-            format: 'DD MMM YYYY'
-         },
-         minDate: null,
-         maxDate: moment().endOf('day'),
-      }).on('apply.daterangepicker', function(ev, picker) {
-         $(this).val(picker.startDate.format('DD MMM YYYY')); 
-         console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
-      });
+        $('.daterangepicker-verified').daterangepicker({
+            singleDatePicker: true,
+            autoUpdateInput: false,
+            opens: 'right',
+            locale: {
+                format: 'DD MMM YYYY'
+            },
+            minDate: null,
+            maxDate: moment().endOf('day'),
+        }).on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('DD MMM YYYY')); 
+            console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+        });
 
-      $('.daterangepicker-taskdeadline').attr("placeholder", "DD/MM/YYYY"); 
+        $('.daterangepicker-taskdeadline').attr("placeholder", "DD/MM/YYYY"); 
 
-      $('.daterangepicker-taskdeadline').daterangepicker({
-         singleDatePicker: true,
-         autoUpdateInput: false, 
-         opens: 'right',
-         locale: {
-            format: 'DD MMM YYYY'
-         },
-         minDate: moment().startOf('day'),
-      }).on('apply.daterangepicker', function(ev, picker) {
-         $(this).val(picker.startDate.format('DD MMM YYYY')); 
-         console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
-      });
+         $('.daterangepicker-taskdeadline').daterangepicker({
+            singleDatePicker: true,
+            autoUpdateInput: false, 
+            opens: 'right',
+            locale: {
+               format: 'DD MMM YYYY'
+            },
+            minDate: moment().startOf('day'),
+         }).on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('DD MMM YYYY')); 
+            console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+         });
 
-      $("#Counter_statement").on('change', function() {
-         var Counter_statement = $(this).val();
-         if (Counter_statement == 1) {
-           
+         $("#notice_sent").on('change', function() {
+         var notice_sent = $(this).val();
+         if (notice_sent == 1) {
            $("#stage_id").val('{{ $getStage->title }}') 
            $("#SatgeID").val('{{ $getStage->id }}') 
            $("#nextTitle").text(' Next stage will be: ' + '{{ $getStage->title }}')
@@ -179,7 +180,7 @@
            $('.evidence_submit').removeClass('hidden');
            $("label[for='verified']").text("Notice Sent On");
            
-         } else if (Counter_statement == 2) {
+         } else if (notice_sent == 2) {
            $("#stage_id").val('{{ $onHideSatge->title }}'); 
            $("#SatgeID").val('{{ $onHideSatge->id }}') 
            $("#nextTitle").text(' Next stage will be: ' + '{{ $onHideSatge->title }}')
@@ -190,6 +191,6 @@
 
          }
       })
- });
+   });
 </script>
 @stop

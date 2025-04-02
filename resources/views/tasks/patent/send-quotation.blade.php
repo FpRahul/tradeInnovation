@@ -279,8 +279,10 @@
                   <td width="50%" id="mailTotal" style="font-size: 14px; color: #555; border-bottom: 1px solid #ddd;">Not Updated</td>
                </tr>
             </table>
-            <h4>Attachments</h4>
-            <div id="modal-file-preview" class="flex gap-4 flex-wrap p-4"></div>
+            <div id="popup-attachment" class="hidden">
+               <h4>Attachments</h4>
+               <div id="modal-file-preview" class="flex gap-4 flex-wrap p-4"></div>
+            </div>
             <p style="font-size: 16px; text-align: center; line-height: 1.2; margin: 35px 0 0; color: #555;">
                Thank you for choosing us! <br>
             </p>
@@ -415,6 +417,11 @@
                     }
 
                     previewList.append(previewElement);
+                    if(previewList !== ''){
+                     $('#popup-attachment').removeClass('hidden');
+                    }else{
+                     $('#popup-attachment').addClass('hidden');
+                    }
                 };
 
                 reader.readAsDataURL(file);

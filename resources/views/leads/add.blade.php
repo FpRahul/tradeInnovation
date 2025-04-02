@@ -231,9 +231,25 @@
                                                         />                                                        
                                                     </div>     
                                                 </div>
+                                                <div class="">
+                                                    <label for="client_type" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Client Type</label>
+                                                    <div class="flex flex-wrap gap-[20px] mt-[20px]">
+                                                        <div class="flex items-center gap-[10px]">
+                                                            <input type="radio" name="client_type" id="client_type" value="1" 
+                                                                @checked(old('client_type', $leadData->client_type) == 1)>
+                                                            <label for="client_type" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Applicant</label>
+                                                        </div>
+                                                        <div class="flex items-center gap-[10px]">
+                                                            <input type="radio" name="client_type" id="client_type2" value="2" 
+                                                                @checked(old('client_type', $leadData->client_type) == 2)>
+                                                            <label for="client_type2" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Opponent</label>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
                                                 {{-- start service details --}}
+                                                <div class="eachServiceDetails flex flex-wrap w-full gap-[15px] border-[1px] border-[#ccc] outline-[#ccc] p-[10px] rounded-[5px] {{ isset($serviceVal->service_id) && $serviceVal->service_id == 1 ? '' : 'hidden' }}">
 
-                                                <div class="eachServiceDetails flex flex-wrap w-full gap-[15px] border-[1px] border-[#ccc] outline-[#ccc] p-[10px] rounded-[5px] hidden {{ isset($serviceVal->service_id) && $serviceVal->service_id == 1 ? '' : 'hidden'}}">
                                                     <h2 class="w-full text-[22px] leading-[25px] mb-[5px] font-[600]">Details</h2>
                                                     <div class="w-full md:w-[32%] lg:w-[32%]">
                                                         <label class="block mb-[5px] text-[14px] font-[400]">Risk Class</label>
@@ -258,6 +274,14 @@
                                                             value="{{ isset($serviceVal) ? $serviceVal->applied_for : '' }}" 
                                                             class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
                                                             >                                                
+                                                    </div>
+                                                    <div class="w-full md:w-[32%] lg:w-[32%]">
+                                                        <label class="block mb-[5px] text-[14px] font-[400]">Application Number</label>
+                                                        <input type="text" name="applicationNumber" 
+                                                            value="{{ isset($serviceVal) ? $serviceVal->application_number : '' }}" 
+                                                            class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                            > 
+                                                                                                
                                                     </div>
                                                     <div class="w-full md:w-[32%] lg:w-[32%]">
                                                         @php
@@ -294,6 +318,7 @@
                                                             >                                                            
                                                         </div>     
                                                     </div>
+                                                   
                                                 </div>
                                                 {{-- end service details --}}
                                             </div>
@@ -383,7 +408,21 @@
                                                     
                                                 </div>     
                                             </div>
-
+                                            <div class="">
+                                                <label for="client_type" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Client Type</label>
+                                                <div class="flex flex-wrap gap-[20px] mt-[20px]">
+                                                    <div class="flex items-center gap-[10px]">
+                                                        <input type="radio" name="client_type" id="client_type" value="1" 
+                                                            >
+                                                        <label for="client_type" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Applicant</label>
+                                                    </div>
+                                                    <div class="flex items-center gap-[10px]">
+                                                        <input type="radio" name="client_type" id="client_type2" value="2" >
+                                                        <label for="client_type2" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Opponent</label>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
 
                                             {{-- start service details --}}
                                             <div class="eachServiceDetails flex flex-wrap w-full gap-[15px] border-[1px] border-[#ccc] outline-[#ccc] p-[10px] rounded-[5px] hidden">
@@ -402,7 +441,15 @@
                                                 <div class="w-full md:w-[32%] lg:w-[32%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Trademark Applied For</label>
                                                     <input type="text" name="appliedfor" id="appliedfor" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" >                                                
-                                                </div>                                            
+                                                </div>      
+                                                <div class="w-full md:w-[32%] lg:w-[32%]">
+                                                    <label class="block mb-[5px] text-[14px] font-[400]">Application Number</label>
+                                                    <input type="text" name="applicationNumber" 
+                                                        value="" 
+                                                        class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                        > 
+                                                                                            
+                                                </div>                                      
                                                 <div class="w-full md:w-[32%] lg:w-[32%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Logo</label>
                                                     <div class="flex items-center gap-[5px]">
@@ -437,6 +484,7 @@
                                                         
                                                     </div>     
                                                 </div>
+                                               
                                             </div>
 
                                             {{-- end service details --}}

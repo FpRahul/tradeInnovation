@@ -134,8 +134,33 @@
                         <p class="text-[15px] text-[#000] font-[400]">{{ $leadDetails->LeadFirm->upi_id}}</p>
                      </div>                 
                   </div>
-  
+
+                  <div class="">
+                     <h2 class="text-[#000] text-[17px] font-[600] mb-[15px] text-[center] mb-[10px]">*Terms & Conditions:</h2>
+                     <ul class="p-[0] pl-[20px] m-[0] mb-[25px]">
+                        <li class="list-disc text-[15px] text-[#000] mb-[10px]">
+                           Payment will be made by cash or Cheque or NEFT in favor "TRADE INNOVATION SERVICES PVT. LTD." and in 100% advance
+                        </li>
+                        <li class="list-disc text-[15px] text-[#000] mb-[10px]">
+                           These charges do not include Show cause Hearing stage & Opposition stage fee.
+                        </li>
+                        <li class="list-disc text-[15px] text-[#000] mb-[10px]">
+                           Application for filing will be prepared on the basis of this form. Regarding any wrong information in this form, Trade Innovation Services will not be responsible.
+                        </li>
+                        <li class="list-disc text-[15px] text-[#000] mb-[10px]">
+                           No refund in any case.
+                        </li>
+                        <li class="list-disc text-[15px] text-[#000] mb-[10px]">
+                           Any balance amount should be settled within 7 days from filing date of application. After 7 days, if
+                        </li>
+                     </ul>
+
+                     <p class="text-[15px] text-[#ff0404] mb-[50px]">Amount dues remain, trade innovation services will not be responsible to your application for further proceedings.</p>
+                  </div>
            </div>
+
+
+
            
               <p style="font-size: 16px; text-align: center; line-height: 1.2; margin: 35px 0 0; color: #555;">
                  Thank you for choosing us! <br>

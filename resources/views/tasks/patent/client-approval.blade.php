@@ -12,16 +12,15 @@
    <form action="{{route('task.patentSubmitClientApproval',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
       <strong class="mt-4 block"> Update Current Task</strong>
-      <div class="flex flex-col md:flex-row gap-[20px]">
-         
-            <div class="w-full md:w-1/2" id="clientapproval">
+      <div class="flex flex-col md:flex-row gap-[20px]">         
+            <div class="w-full md:w-1/2" id="statusDrafting">
                <label for="approval" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-                  Client Approval
+                  Drafting Status
                </label>
-                <select name="clientApproval" id="clientApproval" class="clientApprovalData !outline-none h-[45px] border border-[#0000001A] w-full rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]" required>
+                <select name="statusDrafting" id="statusDrafting" class="clientApprovalData !outline-none h-[45px] border border-[#0000001A] w-full rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]" required>
                     <option value="" disabled selected>Select Data</option>
-                    <option value="0">Approved</option>
-                    <option value="1">Not Approved</option>
+                    <option value="provisional_drafting">Provisional Drafting</option>
+                    <option value="complete_drafting">Complete Drafting</option>
                 </select>
             </div> 
          <div class="w-full md:w-1/2" id="approvedDate">
@@ -68,7 +67,7 @@
          <strong class="mt-5 block">Update Upcoming Actions</strong>
          <div class="flex flex-col md:flex-row gap-[20px]">
             <div class="w-full md:w-1/2">
-                  <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Satge</label>
+                  <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
                   @if($getStage->count() > 0)
                   <input type="text" name="stage_id" id="stage_id" value="{{$getStage->title}}" class="  w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
                   <input type="hidden" name="stage_id" value="{{$getStage->id}}">
@@ -166,13 +165,14 @@
    });
 
    $(document).on('change','.clientApprovalData',function(){
-      if($(this).val() == 0){
-         $('.upcomingActionDiv').removeClass('hidden');
-         $(this).parent().parent().find('#approvedTextOn').text('Approved On');
-      }else{
-         $('.upcomingActionDiv').addClass('hidden');
-         $(this).parent().parent().find('#approvedTextOn').text('Hold On');
-      }
+      $('.upcomingActionDiv').removeClass('hidden');
+      // if($(this).val() == 'provisional_drafting'){
+      //    $('.upcomingActionDiv').removeClass('hidden');
+      //    $(this).parent().parent().find('#approvedTextOn').text('Approved On');
+      // }else{
+      //    $('.upcomingActionDiv').addClass('hidden');
+      //    $(this).parent().parent().find('#approvedTextOn').text('Hold On');
+      // }
    });
 </script>
 @stop

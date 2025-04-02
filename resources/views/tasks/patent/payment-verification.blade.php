@@ -83,6 +83,11 @@ $paymentData = $taskList->payment[0];
                </div>
             </div>
          </div>
+
+         <div class=" old_service_price w-full md:w-1/2">
+            <label for="oldServicePrice" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Old Service Price</label>            
+            <input type="text" name="old_service_price" id="old_service_price" value="{{$paymentData->old_service_price}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>          
+         </div>
       </div>
       <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="  w-full md:w-1/2 hidden total_amount ">
@@ -218,7 +223,7 @@ $paymentData = $taskList->payment[0];
            <div class="p-[20px]">
                <form method="POST" action={{ route('task.negotiatePrice',['id'=>$taskId])}} class="space-y-[20px]">
                    @csrf
-                   <span>Origin Service Price {{$paymentData->service_price}}</span>
+                   <span>Original Service Price {{$paymentData->service_price}}</span>
                   <div class="flex flex-col md:flex-row gap-[20px]">                     
                      <div class="w-full">
                         <label for="name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Negotiated Price</label>

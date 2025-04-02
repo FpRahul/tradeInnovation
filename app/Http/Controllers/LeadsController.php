@@ -225,6 +225,7 @@ class LeadsController extends Controller
                             }
                             $leadTaskData->filing_mode = $serviceVal['filingmode'];
                             $leadTaskData->filing_date = date('Y-m-d',strtotime($serviceVal['filingdate']));
+                            $leadTaskData->application_number = $serviceVal['applicationNumber'];
                         }
                        
                         // $leadTaskData->class_rule = $serviceVal['classrule'];

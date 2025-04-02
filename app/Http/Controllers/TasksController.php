@@ -394,17 +394,17 @@ class TasksController extends Controller
     }
 
     public function negotiatePrice(Request $request, $id)
-    {   
-        $paymentData = Payment::where(['task_id' => $id])->first();
-        
+    {
+        $paymentData = Payment::where(['task_id' => $id])->first();        
         $gst = $request->negotiatePrice * 0.18;
+        $old_price = $paymentData->service_price;
+        $paymentData->old_service_price = $old_price;
         $paymentData->service_price = $request->negotiatePrice;
         $govtPrice = $paymentData->govt_price;
         $total = $request->negotiatePrice + $gst + $govtPrice;
         $paymentData->gst = $gst;
         $paymentData->total = $total;
-        $paymentData->pending_amount = $total;
-        
+        $paymentData->pending_amount = $total;        
         if ($paymentData->save()) {
             $leadLog = new LeadLog();
             $leadLog->user_id = $paymentData->leadTask->user_id;
@@ -7854,19 +7854,19 @@ class TasksController extends Controller
         
         
         // For Patent...............
-        else if ($taskDetails && $serviceId == 2 && $stageId == 27) {
+        else if ($taskDetails && $serviceId == 2 && $stageId == 35) {
             return redirect()->route('task.patentSendQuotation', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 28) {
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 36) {
             return redirect()->route('task.patentPaymentVerification', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 29) {
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 36) {
             return redirect()->route('task.patentPriorArt', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 30) {
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 37) {
             return redirect()->route('task.patentDocumentation', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 31) {
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 38) {
             return redirect()->route('task.patentDraft', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 32) {
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 39) {
             return redirect()->route('task.patentClientApproval', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 33) {
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 40) {
             return redirect()->route('task.patentFileApplication', ['id' => $id]);
         }
     }
@@ -7898,12 +7898,13 @@ class TasksController extends Controller
 
     public function patentPaymentVerification(Request $request, $id = null)
     {
+        
         $taskId = $id;
         $taskList = LeadTask::with(['user', 'leadTaskDetails', 'payment' => function ($q) {
             $q->limit(1)->latest();
         }])->where('id', $taskId)->first();
         $firstPaymentId = Payment::where('task_id', $taskId)->OrderBy('id', 'ASC')->first();
-
+        
         $serviceStage = ServiceStages::where('id', '>', $taskList->service_stage_id)->where('service_id', 2)->first();
         $userList = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
         $getStage = ServiceStages::where('service_id', 2)->where('id', '>', $taskList->service_stage_id)->first();
@@ -8112,6 +8113,7 @@ class TasksController extends Controller
                     $newLeadTaskDeatails->task_id = $newLeadtask->id;
                     $newLeadTaskDeatails->dead_line = $deadlineDate;
                     $newLeadTaskDeatails->status = 0;
+                    $newLeadTaskDeatails->comment = $request->document;
                     if ($newLeadTaskDeatails->save()) {
                         $newNotification->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
                         $newNotification->lead_id = $existedLeaedTask->lead_id;
@@ -8179,6 +8181,7 @@ class TasksController extends Controller
 
     public function patentSubmitClientApproval(Request $request, $id)
     {
+        dd($request);
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
         $existedLeadTask = LeadTask::find($id);
@@ -8198,7 +8201,7 @@ class TasksController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
         if ($id) {
-            if ($request->clientApproval == 0) {
+            if ($request->statusDrafting == 'provisional_drafting') {
                 $newLeadtask->user_id = $request->assignUser;
                 $newLeadtask->lead_id = $existedLeadTask->lead_id;
                 $newLeadtask->service_id = $existedLeadTask->service_id;

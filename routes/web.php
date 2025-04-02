@@ -197,9 +197,20 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('/noncompliance/status/{id?}','nonComplianceStatus')->name('task.nonComplianceStatus');
         Route::get('/opposition/hearing/{id?}','oppositionHearingDate')->name('task.oppositionHearingDate');
         Route::Post('/opposition/hearing/Status{id?}','oppositionHearingDateStatus')->name('task.oppositionHearingDateStatus');
+        Route::get('/client-approval/opposition/hearing/{id?}','clientApprovalOnHearing')->name('task.clientApprovalOnHearing');
+        Route::Post('/client-approval/opposition/hearing/status/{id?}','clientApprovalOnHearingStatus')->name('task.clientApprovalOnHearingStatus');
+        Route::get('/client-inform/hearing/{id?}','clientInformForHearingCharge')->name('task.clientInformForHearingCharge');
+        Route::Post('/client-inform/hearing/status{id?}','clientInformForHearingChargeStatus')->name('task.clientInformForHearingChargeStatus');
+        Route::get('/hearing/charge{id?}','hearingChargeUpdate')->name('task.hearingChargeUpdate');
+        Route::Post('/hearing/charge/status{id?}','hearingChargeStatus')->name('task.hearingChargeStatus');
+        Route::get('/hearing/{id?}','hearing')->name('task.hearing');
+        Route::Post('/hearing/status/{id?}','hearingStatus')->name('task.hearingStatus');
+        Route::get('/agreement/submission/{id?}','agreementSubmission')->name('task.agreementSubmission');
 
 
-
+        
+        
+    
 
 
 

@@ -10,7 +10,7 @@
 </div>
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
 
-   <form action="{{route('task.informClientAfterPublishStatus',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
+   <form action="{{route('task.clientInformForHearingChargeStatus',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
       <strong class="mt-4 block"> Update Current Task</strong>
       <div class="flex flex-col md:flex-row gap-[20px]">
@@ -185,8 +185,9 @@
                Hello <strong id="mailClientName"></strong>,
             </p>
             <p style="font-size: 16px; line-height: 1.8; margin: 0 0 20px; color: #555;">
-            We would like to inform you that an opposition has been filed against your trademark. There are additional charges related to the opposition, which are listed below. Please let us know if you would like to proceed.
+                We would like to inform you that a hearing has been scheduled for your trademark. There are additional charges related to the hearing, which are listed below.
             </p>
+
 
             {{-- Task Invoice --}}
             <div class="pb-[25px]">

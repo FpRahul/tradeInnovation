@@ -142,25 +142,25 @@ class ServiceTask extends Seeder
             ],
             [
                 'service_id' => '1',
-                'title' => 'Registry Sent Notice to Opponent',
-                'description' => 'The applicant has submitted a copy of the opposition to the trademark registry.',
+                'title' => 'Trademark Registry Sent Notice to Opponent',
+                'description' => 'Update the date and status when the trademark registry sent the notice to the opponent.',
                 'stage' => '13',
             ],
             [
                 'service_id' => '1',
-                'title' => 'Opponent Evidence Submission status (Rule 45)',
+                'title' => 'Opponent Evidence Submission status (Under rule 45)',
                 'description' => 'Updates the status of the opponent evidence submission under rule 45.',
                 'stage' => '13',
             ],
             [
                 'service_id' => '1',
-                'title' => 'Applicant Evidence Submission status (Rule 46)',
+                'title' => 'Applicant Evidence Submission status (Under rule 46)',
                 'description' => 'Updates the status of the applicant evidence submission under rule 46.',
                 'stage' => '13',
             ],
             [
                 'service_id' => '1',
-                'title' => 'Opponent Evidence Submission status Rule(47)',
+                'title' => 'Opponent Evidence Submission status (Under rule 47)',
                 'description' => 'Updates the status of the Opponent evidence submission under rule 47.',
                 'stage' => '13',
             ],
@@ -170,12 +170,33 @@ class ServiceTask extends Seeder
                 'description' => 'Update Department for Non-Compliance Intimation register',
                 'stage' => '13',
             ],
+            
             [
                 'service_id' => '1',
-                'title' => 'Awaited for hearing (Opposition)',
-                'description' => 'Add the hearing date provided by the court for the raised opposition',
+                'title' => 'Awaited for Hearing (Opposition) and  Inform Client',
+                'description' => 'Add the court hearing date and inform the client about the scheduled session.',
                 'stage' => '13',
             ],
+            [
+                'service_id' => '1',
+                'title' => 'Client Decision on Hearing',
+                'description' => 'Client decision on whether to proceed with the hearing process.',
+                'stage' => '13',
+            ],
+
+            [
+                'service_id' => '1',
+                'title' => 'Notifying client of hearing extra charge.',
+                'description' => 'Client is informed about the additional charge for the hearing process.',
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Update the hearing charge status',
+                'description' => 'Providing an update on the latest status of the hearing charge and any changes.',
+                'stage' => '13',
+            ],
+
             [
                 'service_id' => '1',
                 'title' => ' Hearing (Opposition)',
@@ -184,7 +205,19 @@ class ServiceTask extends Seeder
             ],
             [
                 'service_id' => '1',
-                'title' => 'Trademark Published',
+                'title' => 'Submit the aggrenment to the registrar',
+                'description' => 'Submit the signed agreement to the registrar for official registration and approval.',
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Trademark Refused',
+                'description' => 'Action required after trademark refusal, including next steps or possible appeal.',
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Trademark Register',
                 'description' => 'Complete the trademark registration ',
                 'stage' => '13',
             ],

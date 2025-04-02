@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('lead_id')->constrained('leads')->onDelete('cascade');
             $table->integer('service_id')->default(0);
             $table->integer('subservice_id')->default(0);
-            $table->string('quoted_price')->nullable(true);
+            $table->string('quoted_price')->nullable(true); 
             $table->timestamps();
         });
     }

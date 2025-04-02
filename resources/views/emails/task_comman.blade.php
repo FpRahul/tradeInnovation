@@ -27,53 +27,41 @@
                                               <th class="px-[10px] py-[10px] text-[13px] font-[600] text-[#000] border-b-[1px] border-b-[#f2f2f2]  border-r-[1px] border-r-[#f2f2f2]">
                                                  Name:
                                               </th>
-             
                                               <th class="px-[10px] py-[10px] text-[13px] font-[600] text-[#000] border-b-[1px] border-b-[#f2f2f2]  border-r-[1px] border-r-[#f2f2f2]">
                                                  Mobile:
                                               </th>
-             
                                               <th class="px-[10px] py-[10px] text-[13px] font-[600] text-[#000] border-b-[1px] border-b-[#f2f2f2]  border-r-[1px] border-r-[#f2f2f2]">
                                                  Email:
                                               </th>
-             
                                               <th class="px-[10px] py-[10px] text-[13px] font-[600] text-[#000] border-b-[1px] border-b-[#f2f2f2] ">
                                                  Company Name:
                                               </th>
                                            </tr>
-                                              
                                               <tr>
                                                  <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$clientName}}</td>
                                                  <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$clientMobile}}</td>
                                                  <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$clientEmail}}</td>
                                                  <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2]">{{ $clientCompany }}</td>
                                               </tr>
-                                          
                                         </table>
                                      </td>
-                                     
                                   </tr>
                                </table>
                             </div>
-             
                             <div class="pb-[40px]">
                                <table class="w-[100%] border-[1px] border-[#f2f2f2]" >
-                               
                                   <tr>
                                      <td>
                                         <table class="w-full">
                                            <tr>
                                               <th class="px-[10px] py-[10px] text-[13px] font-[600] border-b-[1px] border-b-[#f2f2f2]  border-r-[1px] border-r-[#f2f2f2]">Current Service</th>
                                               <th class="px-[10px] py-[10px] text-[13px] font-[600] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">Current Sub-Service</th>
-                                           
-                                              
-                                           </tr>
-                                                                    
+                                           </tr>               
                                                  <tr>
                                                     <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$serviceName}}</td>
                                                     <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$subServiceName}}</td>
                                                     
-                                                 </tr>    
-                                                                
+                                                 </tr>          
                                         </table>
                                      </td>
                                   </tr>

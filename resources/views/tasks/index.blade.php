@@ -199,6 +199,8 @@
                                 break;
                                 case 4:
                                 $status = 'Rejected';
+                                case 5:
+                                $status = 'On Hold';
                                 }
                                 @endphp
                                 <span class="text-[#13103A] bg-[#ADD8E6] inline-block text-center min-w-[100px] py-[5px] px-[10px] rounded-[5px]">
@@ -221,7 +223,7 @@
                                             @if(in_array('task.followup', $permissionDetails['accessableRoutes']) || auth()->user()->role == 1)
                                             @if(!empty($serviceID) && !empty($stageId))
                                            
-                                            @if($task->leadTaskDetails->status != 1 && $task->leadTaskDetails->status != 4  && $task->leadTaskDetails->status != 2)
+                                            @if($task->leadTaskDetails->status != 1 && $task->leadTaskDetails->status != 4)
                                             <a href="{{ route('task.followup', ['id' => $task->id, 'serviceId' => $serviceID, 'stageId' => $stageId]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">
                                                 Follow Up
                                             </a>
@@ -237,15 +239,10 @@
                                             @if(in_array('leadLogs.index',$permissionDetails['accessableRoutes']) || auth()->user()->role == 1)
                                             <a href="{{route('leadLogs.index', ['lead_id' => $leadId])}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Logs</a>
                                             @endif
-                                            @if($task->leadTaskDetails->status == 0 )
+                                            
                                             @if(in_array('task.hold',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
                                             <a href="#" class="hold-on-pop block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-taskId="{{$task->leadTaskDetails->task_id }}" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal">Hold</a>
                                             @endif
-                                            @else
-                                            <a href="#" class=" unhold block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-unHoldId="{{$task->leadTaskDetails->task_id}}">Un Hold</a>
-                                            @endif
-
-
                                             @if(in_array('task.reject',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
                                             <button class="reject-on-pop block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-taskId="{{$task->leadTaskDetails->task_id }}" >Rejected</button>
                                             @endif

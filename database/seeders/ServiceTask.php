@@ -266,6 +266,12 @@ class ServiceTask extends Seeder
             ],
             [
                 'service_id' => '2',
+                'title' => 'Complete specification',
+                'description' => 'A complete specification of the service',
+                'stage' => '0',
+            ],
+            [
+                'service_id' => '2',
                 'title' => 'Early publication',
                 'description' => 'Application for fast-tracking the publication process.',
                 'stage' => '0',

@@ -22,6 +22,7 @@ use App\Models\LeadTask;
 use App\Models\Firm;
 use App\Models\LeadTaskDetail;
 use App\Models\ServiceStages;
+use App\Models\ServiceDetail;
 use Illuminate\Support\Facades\Validator;
 use Mpdf\Mpdf;
 use Illuminate\Support\Facades\View;
@@ -181,6 +182,7 @@ class LeadsController extends Controller
             $leadData->status = $request->savetype;
             $leadData->firm = $request->firm;
             if ($leadData->save()) {
+               
                 $serviceidArray = [];
                 // lead attachment repeater...         
                 if (!empty($request->leadAttachment)) {
@@ -205,27 +207,39 @@ class LeadsController extends Controller
                 }
                 // lead service repeater...
                 if (!empty($request->leadRepeater)) {
+                   
                     foreach ($request->leadRepeater as $serviceKey => $serviceVal) {
                         if ($serviceVal['lead_task_id'] > 0) {
                             $leadTaskData = LeadTask::where('id', $serviceVal['lead_task_id'])->first();
                             $LeadTaskDetail = LeadTaskDetail::where('task_id', $serviceVal['lead_task_id'])->first();
+                            $serviceDetailData = ServiceDetail::where('task_id',$serviceVal['lead_task_id'])->first();
+                            
                         } else {
                             $leadTaskData = new LeadTask();
                             $LeadTaskDetail = new LeadTaskDetail();
+                            $serviceDetailData = new ServiceDetail();
+                            
+                        }
+                        if (!$serviceDetailData) {
+                            $serviceDetailData = new ServiceDetail();
                         }
                         if(isset($serviceVal['classrule'])){
-                            $leadTaskData->class_rule = implode(',',$serviceVal['classrule']);
-                            $leadTaskData->applied_for = $serviceVal['appliedfor'];
+                            $serviceDetailData->lead_id = $leadData->id;
+                            $serviceDetailData->class_rule = implode(',',$serviceVal['classrule']);
+                            $serviceDetailData->applied_for = $serviceVal['appliedfor'];
                             if (isset($serviceVal['serviceLogo']) && $serviceVal['serviceLogo'] instanceof \Illuminate\Http\UploadedFile) {
 
                                 $image_name = $serviceVal['serviceLogo'];
                                 $imageName = rand(100000, 999999) . '.' . $image_name->getClientOriginalExtension();
                                 $image_name->move(public_path('uploads/leads/' . $leadData->id), $imageName);
-                                $leadTaskData->service_logo = $imageName;
+                                $serviceDetailData->service_logo = $imageName;
                             }
-                            $leadTaskData->filing_mode = $serviceVal['filingmode'];
-                            $leadTaskData->filing_date = date('Y-m-d',strtotime($serviceVal['filingdate']));
-                            $leadTaskData->application_number = $serviceVal['applicationNumber'];
+                            $serviceDetailData->filing_mode = $serviceVal['filingmode'];
+                            $serviceDetailData->filing_date = date('Y-m-d',strtotime($serviceVal['filingdate']));
+                            $serviceDetailData->application_number = $serviceVal['applicationNumber'];
+                            $serviceDetailData->service_id = $serviceVal['serviceid'];
+                            $serviceDetailData->client_status = $serviceVal['client_type'];
+                            $serviceDetailData->save();
                         }
                        
                         // $leadTaskData->class_rule = $serviceVal['classrule'];

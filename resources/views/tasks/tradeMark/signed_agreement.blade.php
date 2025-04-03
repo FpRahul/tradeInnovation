@@ -16,7 +16,7 @@
          <input type="hidden" name="checkValid" id="checkValid" value="">
          <div class="w-full md:w-1/2" id="verifiedDate">
             <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-            Agreement Signed On
+            Written Submission On
             </label>
             <div class="w-[100%] relative">
                <input
@@ -32,16 +32,7 @@
                </div>
             </div>
          </div>
-         <div class="w-full md:w-1/2 applicationNumber">
-            <label for="application_number" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Application Number<strong class="text-[#f83434]"></strong></label>
-            <input type="text" name="application_number" placeholder="Enter application number" id="application_number" value="" required class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
-            @error('application_number')
-            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
-            @enderror
-         </div>
-      </div>
-      <div class="flex flex-col md:flex-row gap-[20px]">
-      <div class="flex justify-start flex-wrap w-[100%] md:w-[49%]">
+         <div class="flex justify-start flex-wrap w-[100%] md:w-[49%]">
             <label class="block w-full text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload</label>
             <label for="attachment" class="flex items-center gap-[10px] w-full text-[13px] font-[500] leading-[15px] text-[#666666] tracking-[0.01em] bg-[#fff] border-dashed border-[1px] border-[#ccc] rounded-[6px] py-[6px] px-[10px] cursor-pointer">
                <svg width="22" height="28" viewBox="0 0 22 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -55,14 +46,8 @@
          @error('attachment.*')
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
-         <div class="w-full md:w-1/2 ">
-            <label for="mail_subject" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mail Subject<strong class="text-[#f83434]"></strong></label>
-            <input type="text" name="mail_subject" required placeholder="Enter mail subject" id="mail_subject" value="" required class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
-            @error('mail_subject')
-            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
-            @enderror
-         </div>
       </div>
+     
          <div class="">
             <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
             <textarea type="text" name="description" id="description" class="w-full h-[80px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>

@@ -206,6 +206,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/hearing/{id?}','hearing')->name('task.hearing');
         Route::Post('/hearing/status/{id?}','hearingStatus')->name('task.hearingStatus');
         Route::get('/agreement/submission/{id?}','agreementSubmission')->name('task.agreementSubmission');
+        Route::get('/trademark/{id?}','tradeMark')->name('task.tradeMark');
 
 
         

@@ -196,7 +196,7 @@
             </div>
          </div>
          <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-            Set a dead line for Documentation.
+            Set a dead line for: {{$getStage->title}}.
          </p>
       </div>
 

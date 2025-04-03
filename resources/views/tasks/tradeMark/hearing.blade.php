@@ -19,9 +19,9 @@
             <label for="show_case_hearing" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
             <select name="show_case_hearing" id="show_case_hearing" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                <option value="" disabled selected>Select status</option>
-               <option value="1">Accepted</option>
-               <option value="2">Appeal To IPAB</option>
-               <option value="3">Rejected</option>
+               <option value="1">Register</option>
+               <option value="2">Adjournment</option>
+               <option value="3">rejected</option>
                <option value="4">Settelment B/W Applicant and Opponent</option>
             </select>
             <div class="showWarning" style="color: red;font-size: 14px; font-weight: 500;"></div>
@@ -256,10 +256,11 @@ $('.daterangepicker-taskdeadline').attr("placeholder", "DD/MM/YYYY");
 
          
          }else if(show_case_hearing == 3){
-         $(".onHide").addClass('hidden');
+         $(".onHide").removeClass('hidden');
          $(".reasonHide").removeClass('hidden');
          $(".hearingDate").addClass('hidden');
          $(".showWarning").text('');
+         
 
 
          }else if(show_case_hearing == 4){

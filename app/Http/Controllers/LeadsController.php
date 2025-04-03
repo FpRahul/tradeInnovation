@@ -227,6 +227,7 @@ class LeadsController extends Controller
                             $serviceDetailData->lead_id = $leadData->id;
                             $serviceDetailData->class_rule = implode(',',$serviceVal['classrule']);
                             $serviceDetailData->applied_for = $serviceVal['appliedfor'];
+                           
                             if (isset($serviceVal['serviceLogo']) && $serviceVal['serviceLogo'] instanceof \Illuminate\Http\UploadedFile) {
 
                                 $image_name = $serviceVal['serviceLogo'];
@@ -236,6 +237,7 @@ class LeadsController extends Controller
                             }
                             $serviceDetailData->filing_mode = $serviceVal['filingmode'];
                             $serviceDetailData->filing_date = date('Y-m-d',strtotime($serviceVal['filingdate']));
+                            $serviceDetailData->applicant_name = $request->clientname;
                             $serviceDetailData->application_number = $serviceVal['applicationNumber'];
                             $serviceDetailData->service_id = $serviceVal['serviceid'];
                             $serviceDetailData->client_status = $serviceVal['client_type'];

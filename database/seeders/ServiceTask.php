@@ -205,8 +205,14 @@ class ServiceTask extends Seeder
             ],
             [
                 'service_id' => '1',
-                'title' => 'Submit the aggrenment to the registrar',
+                'title' => 'Written submission',
                 'description' => 'Submit the signed agreement to the registrar for official registration and approval.',
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Trademark Status',
+                'description' => 'Update the trademark status',
                 'stage' => '13',
             ],
             [

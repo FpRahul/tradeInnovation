@@ -226,8 +226,12 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::post('/patent/submit-draft/{id?}','patentSubmitDraft')->name('task.patentSubmitDraft');
         Route::get('/patent/client-approval/{id?}','patentclientapproval')->name('task.patentClientApproval');
         Route::post('/patent/submit-client-approval/{id?}','patentSubmitClientApproval')->name('task.patentSubmitClientApproval');
-        Route::get('/patent/file-application/{id?}','patentFileApplication')->name('task.patentFileApplication');
+        Route::get('/patent/approval/{id?}','clentApprovalOnPatent')->name('task.clentApprovalOnPatent');
+        Route::Post('/patent/approval/status{id?}','clentApprovalOnPatentStatus')->name('task.clentApprovalOnPatentStatus');
+        Route::get('/patent/filing/{id?}','patentfilingProccess')->name('task.patentfilingProccess');
+        Route::Post('/patent/filing/status{id?}','patentfilingProccessStatus')->name('task.patentfilingProccessStatus');
 
+        
     });
     //Services Routes
     Route::prefix('services')->controller(ServicesController::class)->group(function () {

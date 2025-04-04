@@ -60,54 +60,14 @@
 
         @endforeach
         @endif
-        <div class="flex flex-col md:flex-row gap-[20px]">
-            <div class="w-full md:w-1/2">
 
-                <label for="assignUser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign User</label>
-                <select name="assignUser" id="assignUser" class="filterData assignUserData allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]">
-                <option value="" disabled selected>Select a user</option>
-                @if($users->count() > 0)
-                <option value="" disabled selected>Select a user</option>
-                @foreach ($users as $user)
-                <option value="{{ $user->id }}" {{ !empty($selectedId) && $user->id == $selectedId ? 'selected' : '' }}>
-                    {{ $user->name }}
-                </option>
-                @endforeach
-                @else
-                <option value="" disabled>No users available</option>
-                @endif
-                </select>
-                @if($taskDetails->count() > 0)
-                @foreach ($taskDetails as $user )
-                <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-                Current user assigned: {{$user->user->name}}.
-                </p>
-                @endforeach
-                @endif
-            </div>
-            <div class="w-full md:w-1/2" id="verifiedDate">
-                <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-                Payment Dead line
-                </label>
-                <div class="w-[100%] relative">
-                <input
-                    type="text"
-                    placeholder="Dead Line"
-                    name="deadline"
-                    id="deadline"
-                    class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none bg-transparent z-10 relative"
-                    value=""
-                    autocomplete="off">
-                <div class="absolute right-[10px] top-[10px] z-0">
-                    <i class="ri-calendar-line"></i>
-                </div>
-                </div>
-                <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-                Set a dead line for payment.
-                </p>
-            </div>
-        </div>
+        <div class="">
+         <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
+         <textarea type="text" name="description" id="description" class="w-full h-[60px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
+     </div>
+       
         <strong>Update Upcoming Action</strong>
+        <div class="flex flex-col md:flex-row gap-[20px]">
         <div class="w-full md:w-1/2">
             <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
             @if($getStage->count() > 0)
@@ -118,10 +78,57 @@
                 {{-- Next stage will be: {{$getStage->title}} --}}
             </p>
         </div>
-        <div class="">
-            <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
-            <textarea type="text" name="description" id="description" class="w-full h-[60px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
-        </div>
+        <div class="w-full md:w-1/2">
+
+         <label for="assignUser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign User</label>
+         <select name="assignUser" id="assignUser" class="filterData assignUserData allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]">
+         <option value="" disabled selected>Select a user</option>
+         @if($users->count() > 0)
+         <option value="" disabled selected>Select a user</option>
+         @foreach ($users as $user)
+         <option value="{{ $user->id }}" {{ !empty($selectedId) && $user->id == $selectedId ? 'selected' : '' }}>
+             {{ $user->name }}
+         </option>
+         @endforeach
+         @else
+         <option value="" disabled>No users available</option>
+         @endif
+         </select>
+         @if($taskDetails->count() > 0)
+         @foreach ($taskDetails as $user )
+         <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+         Current user assigned: {{$user->user->name}}.
+         </p>
+         @endforeach
+         @endif
+     </div>
+   </div>
+
+        
+         
+         <div class="w-full md:w-1/2" id="verifiedDate">
+             <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+             Payment Dead line
+             </label>
+             <div class="w-[100%] relative">
+             <input
+                 type="text"
+                 placeholder="Dead Line"
+                 name="deadline"
+                 id="deadline"
+                 class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none bg-transparent z-10 relative"
+                 value=""
+                 autocomplete="off">
+             <div class="absolute right-[10px] top-[10px] z-0">
+                 <i class="ri-calendar-line"></i>
+             </div>
+             </div>
+             <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+             Set a dead line for payment.
+             </p>
+         </div>
+
+       
         <strong class="mt-4 block">Quotation Template</strong>
         <div class="flex flex-col md:flex-row gap-[20px]">
             <div class="w-full md:w-1/2">

@@ -437,7 +437,7 @@
             // Show modal when files are selected
            
         }
-    });
+      });
    });
 </script>
 @stop

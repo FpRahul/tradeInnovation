@@ -233,8 +233,16 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('/patent/approval/status{id?}','clentApprovalOnPatentStatus')->name('task.clentApprovalOnPatentStatus');
         Route::get('/patent/filing/{id?}','patentfilingProccess')->name('task.patentfilingProccess');
         Route::Post('/patent/filing/status{id?}','patentfilingProccessStatus')->name('task.patentfilingProccessStatus');
-
-        
+        Route::get('/patent/complete-specification/{id?}','patentCompleteSpecification')->name('task.patentCompleteSpecification');
+        Route::Post('/patent/complete-specification-submit{id?}','patentCompletedSpecificationSubmit')->name('task.patentCompletedSpecificationSubmit');
+        Route::get('/patent/form-9/{id?}','patentForm9')->name('task.patentForm9');
+        Route::Post('/patent/form-9-submit/{id?}','patentForm9Submit')->name('task.patentForm9Submit');
+        Route::get('/patent/early-publication/{id?}','patentEarlyPublication')->name('task.patentearlypublication');
+        Route::Post('/patent/early-publication-submit/{id?}','patentEarlyPublicationSubmit')->name('task.patentearlypublicationSubmit');
+        Route::get('/patent/standard-publication/{id?}','patentStandardPublication')->name('task.patentStandardpublication');
+        Route::Post('/patent/standard-publication-submit/{id?}','patentStandardPublicationSubmit')->name('task.patentStandardpublicationSubmit');
+        Route::get('/patent/form-18/{id?}','patentForm18')->name('task.patentForm18');
+        Route::Post('/patent/form-18-submit/{id?}','patentForm18Submit')->name('task.patentForm18Submit');
     });
     //Services Routes
     Route::prefix('services')->controller(ServicesController::class)->group(function () {

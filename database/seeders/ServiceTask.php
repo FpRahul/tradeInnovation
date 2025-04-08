@@ -278,10 +278,29 @@ class ServiceTask extends Seeder
             ],
             [
                 'service_id' => '2',
-                'title' => 'Early publication',
-                'description' => 'Application for fast-tracking the publication process.',
+                'title' => 'Form 9',
+                'description' => 'Request for early publication ',
                 'stage' => '0',
             ],
+            [
+                'service_id' => '2',
+                'title' => 'Early publication',
+                'description' => "Early publication requested via Form 9 to expedite the patent application's publication before 18 months.",
+                'stage' => '0',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Standard publication',
+                'description' => "Application is published automatically after 18 months from the filing or priority date.",
+                'stage' => '0',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Form 18',
+                'description' => 'Request for examination ',
+                'stage' => '0',
+            ],            
+           
             
         ]);
     }

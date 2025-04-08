@@ -236,7 +236,7 @@
                                                     <div class="flex flex-wrap gap-[20px] mt-[20px]">
                                                         <div class="flex items-center gap-[10px]">
                                                             <input type="radio" name="client_type" id="client_type" value="1" 
-                                                                @checked(old('client_type', $leadData->client_type) == 1)>
+                                                                @checked(old('client_type', $leadData->client_type) == 1) checked>
                                                             <label for="client_type" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Applicant</label>
                                                         </div>
                                                         <div class="flex items-center gap-[10px]">

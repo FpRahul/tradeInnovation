@@ -244,8 +244,7 @@
                                                                 @checked(old('client_type', $leadData->client_type) == 2)>
                                                             <label for="client_type2" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Opponent</label>
                                                         </div>
-                                                    </div>
-                                                    
+                                                    </div>                                                    
                                                 </div>
                                                 {{-- start service details --}}
                                                 <div class="eachServiceDetails flex flex-wrap w-full gap-[15px] border-[1px] border-[#ccc] outline-[#ccc] p-[10px] rounded-[5px] {{ isset($serviceVal->service_id) && $serviceVal->service_id == 1 ? '' : 'hidden' }}">
@@ -253,8 +252,8 @@
                                                     <h2 class="w-full text-[22px] leading-[25px] mb-[5px] font-[600]">Details</h2>
                                                     <div class="w-full md:w-[32%] lg:w-[32%]">
                                                         <label class="block mb-[5px] text-[14px] font-[400]">Risk Class</label>
-                                                        <select name="classrule" 
-                                                                class="allform-select2-service w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                        <select name="classrule"
+                                                                class="classrule allform-select2-service w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
                                                                  multiple>
                                                         
                                                             <option value="">Risk Class</option>
@@ -272,7 +271,7 @@
                                                         <label class="block mb-[5px] text-[14px] font-[400]">Trademark Applied For</label>
                                                         <input type="text" name="appliedfor" 
                                                             value="{{ isset($serviceVal) ? $serviceVal->applied_for : '' }}" 
-                                                            class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                            class="appliedfor w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
                                                             >                                                
                                                     </div>
                                                     <div class="w-full md:w-[32%] lg:w-[32%]">
@@ -301,7 +300,7 @@
                                                         <label class="block mb-[5px] text-[14px] font-[400]">Filing Mode</label>
                                                         <input type="text" name="filingmode" 
                                                             value="{{ isset($serviceVal) ? $serviceVal->applied_for : '' }}" 
-                                                            class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                            class="filingmode w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
                                                             > 
                                                                                                 
                                                     </div>   
@@ -312,7 +311,7 @@
                                                                 type="text" 
                                                                 placeholder="Filing Date" 
                                                                 name="filingdate" 
-                                                                class="daterangepicker-taskdeadline daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
+                                                                class="filingdate daterangepicker-taskdeadline daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
                                                                 value="{{ old('taskdeadline')}}" 
                                                                 autocomplete="off"
                                                             >                                                            
@@ -430,7 +429,7 @@
                                                 <div class="w-full md:w-[32%] lg:w-[32%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Risk Class</label>
                                                     <select name="classrule" 
-                                                            class="allform-select2-service w-full h-[55px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                            class="classrule allform-select2-service w-full h-[55px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
                                                              multiple>
                                                         <option value="">Risk Class</option>
                                                         @for ($i=1;$i <= 45;$i++)
@@ -440,7 +439,7 @@
                                                 </div>
                                                 <div class="w-full md:w-[32%] lg:w-[32%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Trademark Applied For</label>
-                                                    <input type="text" name="appliedfor" id="appliedfor" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" >                                                
+                                                    <input type="text" name="appliedfor" id="appliedfor" value="" class="appliedfor w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" >                                                
                                                 </div>      
                                                 <div class="w-full md:w-[32%] lg:w-[32%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Application Number</label>
@@ -465,7 +464,7 @@
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Filing Mode</label>
                                                     <input type="text" name="filingmode" 
                                                         value="" 
-                                                        class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                        class="filingmode w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
                                                         > 
                                                                                             
                                                 </div>  
@@ -477,7 +476,7 @@
                                                             type="text" 
                                                             placeholder="Filing Date" 
                                                             name="filingdate" 
-                                                            class="daterangepicker-taskdeadline daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
+                                                            class="filingdate daterangepicker-taskdeadline daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
                                                             value="{{ old('taskdeadline')}}" 
                                                             autocomplete="off"
                                                         >
@@ -777,8 +776,18 @@
     $(document).on('change','.setSubService',function(){    
         var serviceId = $(this).val();
         if(serviceId == 1){
+            $(this).parent().parent().find('.classrule').attr('required',true);
+            $(this).parent().parent().find('.appliedfor').attr('required',true);
+            $(this).parent().parent().find('.previewServiceLogo').attr('required',true);
+            $(this).parent().parent().find('.filingmode').attr('required',true);
+            $(this).parent().parent().find('.filingdate').attr('required',true);
             $(this).parent().parent().find('.eachServiceDetails').removeClass('hidden');
         }else{
+            $(this).parent().parent().find('.classrule').attr('required',false);
+            $(this).parent().parent().find('.appliedfor').attr('required',false);
+            $(this).parent().parent().find('.previewServiceLogo').attr('required',false);
+            $(this).parent().parent().find('.filingmode').attr('required',false);
+            $(this).parent().parent().find('.filingdate').attr('required',false);
             $(this).parent().parent().find('.eachServiceDetails').addClass('hidden');
         }
         $(this).parent().parent().find('.serviceNameLoader').removeClass('hidden');

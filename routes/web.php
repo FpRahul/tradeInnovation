@@ -211,15 +211,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
 
 
 
-        
-        
-    
-
-
-
-
-        // For patent.........
-        // For payment verification........
+        // For patent..........     
+        // For payment verification.........
         Route::get('/patent/send-quotation/{id?}','patentSendQuotation')->name('task.patentSendQuotation');
         Route::get('/patent/payment-verification/{id?}','patentPaymentVerification')->name('task.patentPaymentVerification');
         Route::get('/patent/prior-art/{id?}','patentPriorArt')->name('task.patentPriorArt');

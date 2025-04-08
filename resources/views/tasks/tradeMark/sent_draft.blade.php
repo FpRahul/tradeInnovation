@@ -32,10 +32,10 @@
                </div>
             </div>
          </div>
-         <div class="w-full md:w-1/2 applicationNumber">
-            <label for="application_number" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Application Number<strong class="text-[#f83434]"></strong></label>
-            <input type="text" name="application_number" placeholder="Enter application number" id="application_number" value="" required class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
-            @error('application_number')
+         <div class="w-full md:w-1/2 ">
+            <label for="mail_subject" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mail Subject<strong class="text-[#f83434]"></strong></label>
+            <input type="text" name="mail_subject" required placeholder="Enter mail subject" id="mail_subject" value="" required class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            @error('mail_subject')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
          </div>
@@ -55,13 +55,6 @@
          @error('attachment.*')
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
-         <div class="w-full md:w-1/2 ">
-            <label for="mail_subject" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mail Subject<strong class="text-[#f83434]"></strong></label>
-            <input type="text" name="mail_subject" required placeholder="Enter mail subject" id="mail_subject" value="" required class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
-            @error('mail_subject')
-            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
-            @enderror
-         </div>
       </div>
          <div class="">
             <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
@@ -202,16 +195,13 @@
             </div>
 
             <div class="pb-[40px]">
-            <table class="w-[100%] border-[1px] border-[#f2f2f2]" >
-              
+            <table class="w-[100%] border-[1px] border-[#f2f2f2]">
                <tr>
                   <td>
                      <table class="w-full">
                         <tr>
                            <th class="px-[10px] py-[10px] text-[13px] font-[600] border-b-[1px] border-b-[#f2f2f2]  border-r-[1px] border-r-[#f2f2f2]">Current Service</th>
                            <th class="px-[10px] py-[10px] text-[13px] font-[600] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">Trademark Name</th>
-                           <th class="px-[10px] py-[10px] text-[13px] font-[600] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]" >Application No.</th>
-
                         </tr>
                                                   
                         @if(!empty($taskDetails) && !empty($applicationNumber))
@@ -220,7 +210,6 @@
                            <tr>
                               <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$taskDetails->services->serviceName}}</td>
                               <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$applicationNumber->applied_for}}</td>
-                              <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#f02929] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]" id="appNumber"></td>
                              
                            </tr>
                        

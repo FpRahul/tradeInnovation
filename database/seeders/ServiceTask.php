@@ -26,8 +26,8 @@ class ServiceTask extends Seeder
             ],
             [
                 'service_id' => '1',
-                'title' => 'Payment verification',
-                'description' => 'Payment verification for the sent quotation.',
+                'title' => 'Payment confirmation',
+                'description' => 'Payment confirmation for the sent quotation.',
                 'stage' => '0',
             ],
             [
@@ -84,9 +84,10 @@ class ServiceTask extends Seeder
                 'description' => 'Notify client of examination objection and payment verification.',
                 'stage' => '8',
             ],
+            //
             [
                 'service_id' => '1',
-                'title' => 'Examination Objected Charge',
+                'title' => 'Payment Confirmation for Examination Objection',
                 'description' => 'Cost for Processing Examination Objection Requests"',
                 'stage' => '8',
 
@@ -124,7 +125,7 @@ class ServiceTask extends Seeder
             
             [
                 'service_id' => '1',
-                'title' => 'Trademark Opposition Charge',
+                'title' => 'Payment Confirmation for trademark Opposition ',
                 'description' => 'Opposition-Driven Additional Charge After Trademark Publication',
                 'stage' => '13',
             ],

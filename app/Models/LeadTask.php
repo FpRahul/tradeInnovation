@@ -50,6 +50,6 @@ class LeadTask extends Model
     }
     public function payment()
     {
-        return $this->hasMany(Payment::class, 'task_id')->latest();
+        return $this->hasMany(Payment::class, 'task_id');
     }
 }

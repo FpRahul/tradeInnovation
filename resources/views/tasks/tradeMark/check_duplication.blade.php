@@ -28,7 +28,7 @@
             </div>
 
             <div class="w-full md:w-1/2 ifRegister" style="display: none;">
-                <label for="ifRegister" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
+                <label for="ifRegister" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Remark</label>
                 <select name="ifRegister" id="ifRegister" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                     <option value="" disabled selected>Select status</option>
                     <option value="Prior Use">Prior Use</option>
@@ -47,7 +47,7 @@
 
             <div class="w-full md:w-1/2">
                 <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-                    Verified On
+                    Searched On
                 </label>
                 <div class="w-[100%] relative">
                     <input
@@ -56,7 +56,7 @@
                         name="verified"
                         id="verified"
                         class="daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
-                        value=""
+                        value="" required
                         autocomplete="off">
                     <div class="absolute right-[10px] top-[10px]">
                         <i class="ri-calendar-line"></i>
@@ -147,7 +147,7 @@
         </div>
         <div class=" hideOnChange w-full md:w-1/2">
             <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-                 DeadLine
+                 Deadline
             </label>
             <div class="w-[100%] relative">
                 <input
@@ -157,6 +157,7 @@
                     id="deadline"
                     class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                     value=""
+                    required
                     autocomplete=off>
                 <div class="absolute right-[10px] top-[10px]">
                     <i class="ri-calendar-line"></i>
@@ -166,7 +167,6 @@
                 Set a dead line for Sent quotation.
             </p>
         </div>
-
         <div class="flex justify-end gap-[15px]">
             <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
         </div>

@@ -131,8 +131,8 @@ class ServiceTask extends Seeder
             ],
             [
                 'service_id' => '1',
-                'title' => 'Opposition Notice Date',
-                'description' => 'The opposition notice was received from the Trademark Registry',
+                'title' => 'Notice Date',
+                'description' => 'A notice has been received from the Trademark Registry',
                 'stage' => '13',
             ],
             [

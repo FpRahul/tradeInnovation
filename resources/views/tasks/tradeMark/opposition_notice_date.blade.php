@@ -1,7 +1,7 @@
 @extends('layouts.default')
 @section('content')
 <style>
-   .Hidden {
+   .Hidden { 
       display: none;
    }
 </style>
@@ -14,6 +14,7 @@
       <strong class="mt-4 block"> Update Current Task</strong>
 
       <div class="flex flex-col md:flex-row gap-[20px]">
+         <input type="hidden" name="client_status" id="client_status" value="{{$service_details->client_status}}">
          <input type="hidden" name="checkStatus" id="checkStatus" value="{{ $leadTaskdetials->status ?? "N/A" }}">
          <div class="w-full md:w-1/2">
             <label for="notice_received" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
@@ -147,6 +148,62 @@
 </div>
 <script>
    $(document).ready(function() {
+    
+      var client_status = $('#client_status').val();
+      if(client_status == 2){
+         $("#notice_received").on('change', function() {
+         var notice_received = $(this).val();
+         if (notice_received == 1) {
+           
+           $("#stage_id").val('{{ $opponentStage->title }}') 
+           $("#SatgeID").val('{{ $opponentStage->id }}') 
+           $("#nextTitle").text(' Next stage will be: ' + '{{ $opponentStage->title }}')
+           $('#showStage').text('Set a dead line for ' + '{{ $opponentStage->title }}');
+           $('.evidence_submit').removeClass('hidden');
+           $("label[for='verified']").text("Notice Received On");
+           
+         } else if (notice_received == 2) {
+           $("#stage_id").val('{{ $onHideSatge->title }}'); 
+           $("#SatgeID").val('{{ $onHideSatge->id }}') 
+           $("#nextTitle").text(' Next stage will be: ' + '{{ $onHideSatge->title }}')
+           $('.evidence_submit').addClass('hidden');
+           $("label[for='verified']").text("Verified On");
+            $('#showStage').text('Set a dead line for ' + '{{ $onHideSatge->title }}');
+           
+
+         }
+      })
+      }else if(client_status == 1){
+         $("#notice_received").on('change', function() {
+         var notice_received = $(this).val();
+         if (notice_received == 1) {
+           
+           $("#stage_id").val('{{ $getStage->title }}') 
+           $("#SatgeID").val('{{ $getStage->id }}') 
+           $("#nextTitle").text(' Next stage will be: ' + '{{ $getStage->title }}')
+           $('#showStage').text('Set a dead line for ' + '{{ $getStage->title }}');
+           $('.evidence_submit').removeClass('hidden');
+           $("label[for='verified']").text("Notice Received On");
+           
+         } else if (notice_received == 2) {
+           $("#stage_id").val('{{ $onHideSatge->title }}'); 
+           $("#SatgeID").val('{{ $onHideSatge->id }}') 
+           $("#nextTitle").text(' Next stage will be: ' + '{{ $onHideSatge->title }}')
+           $('.evidence_submit').addClass('hidden');
+           $("label[for='verified']").text("Verified On");
+            $('#showStage').text('Set a dead line for ' + '{{ $onHideSatge->title }}');
+           
+
+         }
+      })
+      var status =  $("#checkStatus").val();
+         if(status == 0){
+            $('.descriptionHidden').removeClass('hidden');
+         }else if('.descriptionHidden'){
+            $('.descriptionHidden').addClass('hidden');
+         }
+      }
+   
       $('.daterangepicker-verified').attr("placeholder", "DD/MM/YYYY"); // Set placeholder
 
         $('.daterangepicker-verified').daterangepicker({
@@ -179,34 +236,7 @@
          });
 
      
-      $("#notice_received").on('change', function() {
-         var notice_received = $(this).val();
-         if (notice_received == 1) {
-           
-           $("#stage_id").val('{{ $getStage->title }}') 
-           $("#SatgeID").val('{{ $getStage->id }}') 
-           $("#nextTitle").text(' Next stage will be: ' + '{{ $getStage->title }}')
-           $('#showStage').text('Set a dead line for ' + '{{ $getStage->title }}');
-           $('.evidence_submit').removeClass('hidden');
-           $("label[for='verified']").text("Notice Received On");
-           
-         } else if (notice_received == 2) {
-           $("#stage_id").val('{{ $onHideSatge->title }}'); 
-           $("#SatgeID").val('{{ $onHideSatge->id }}') 
-           $("#nextTitle").text(' Next stage will be: ' + '{{ $onHideSatge->title }}')
-           $('.evidence_submit').addClass('hidden');
-           $("label[for='verified']").text("Verified On");
-            $('#showStage').text('Set a dead line for ' + '{{ $onHideSatge->title }}');
-           
-
-         }
-      })
-      var status =  $("#checkStatus").val();
-         if(status == 0){
-            $('.descriptionHidden').removeClass('hidden');
-         }else if('.descriptionHidden'){
-            $('.descriptionHidden').addClass('hidden');
-         }
+     
    });
 </script>
 @stop

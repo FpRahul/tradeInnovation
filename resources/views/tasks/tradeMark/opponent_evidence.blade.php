@@ -12,7 +12,7 @@
    <form action="{{route('task.opponentEvidenceSubmissionStatus',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
       <strong class="mt-4 block"> Update Current Task</strong>
-
+      <input type="hidden" name="client_status" id="client_status" value="{{$service_details->client_status}}">
       <div class="flex flex-col md:flex-row gap-[20px]">
          <input type="hidden" name="checkStatus" id="checkStatus" value="{{ $leadTaskdetials->status ?? "N/A" }}">
          <div class="w-full md:w-1/2">
@@ -70,7 +70,7 @@
          </div>
       </div>
       <div class="w-full md:w-1/2 hidden evidence_submit">
-        <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+        <label for="evidenceDate" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
            Evidence received On
         </label>
         <div class="w-[100%] relative">
@@ -180,6 +180,51 @@
 </div>
 <script>
    $(document).ready(function() {
+   var client_status =  $("#client_status").val()
+   
+   if(client_status == 2){
+      $('label[for="evidenceDate"]').text('Evidence Submit On');
+      $("#opponent_evidence").on('change', function() {
+         var opponent_evidence = $(this).val();
+         if (opponent_evidence == 1) {
+           
+           $("#stage_id").val('{{ $getStage->title }}') 
+           $("#SatgeID").val('{{ $getStage->id }}') 
+           $("#nextTitle").text(' Next stage will be: ' + '{{ $getStage->title }}')
+           $('#showStage').text('Set a dead line for ' + '{{ $getStage->title }}');
+           $('.evidence_submit').removeClass('hidden');
+           
+         } else if (opponent_evidence == 3) {
+           $("#stage_id").val('{{ $onHideSatge->title }}'); 
+           $("#SatgeID").val('{{ $onHideSatge->id }}') 
+           $("#nextTitle").text(' Next stage will be: ' + '{{ $onHideSatge->title }}')
+           $('.evidence_submit').addClass('hidden');
+           
+            $('#showStage').text('Set a dead line for ' + '{{ $onHideSatge->title }}');
+         }
+      })
+   }else if(client_status == 1){
+      $('label[for="evidenceDate"]').text('Evidence Recevied On');
+      $("#opponent_evidence").on('change', function() {
+         var opponent_evidence = $(this).val();
+         if (opponent_evidence == 1) {
+           
+           $("#stage_id").val('{{ $getStage->title }}') 
+           $("#SatgeID").val('{{ $getStage->id }}') 
+           $("#nextTitle").text(' Next stage will be: ' + '{{ $getStage->title }}')
+           $('#showStage').text('Set a dead line for ' + '{{ $getStage->title }}');
+           $('.evidence_submit').removeClass('hidden');
+           
+         } else if (opponent_evidence == 3) {
+           $("#stage_id").val('{{ $onHideSatge->title }}'); 
+           $("#SatgeID").val('{{ $onHideSatge->id }}') 
+           $("#nextTitle").text(' Next stage will be: ' + '{{ $onHideSatge->title }}')
+           $('.evidence_submit').addClass('hidden');
+           
+            $('#showStage').text('Set a dead line for ' + '{{ $onHideSatge->title }}');
+         }
+      })
+   }
       $('.daterangepicker-verified').attr("placeholder", "DD/MM/YYYY"); // Set placeholder
 
         $('.daterangepicker-verified').daterangepicker({
@@ -212,27 +257,7 @@
          });
 
      
-      $("#opponent_evidence").on('change', function() {
-         var opponent_evidence = $(this).val();
-         if (opponent_evidence == 1) {
-           
-           $("#stage_id").val('{{ $getStage->title }}') 
-           $("#SatgeID").val('{{ $getStage->id }}') 
-           $("#nextTitle").text(' Next stage will be: ' + '{{ $getStage->title }}')
-           $('#showStage').text('Set a dead line for ' + '{{ $getStage->title }}');
-           $('.evidence_submit').removeClass('hidden');
-           
-         } else if (opponent_evidence == 3) {
-           $("#stage_id").val('{{ $onHideSatge->title }}'); 
-           $("#SatgeID").val('{{ $onHideSatge->id }}') 
-           $("#nextTitle").text(' Next stage will be: ' + '{{ $onHideSatge->title }}')
-           $('.evidence_submit').addClass('hidden');
-           
-            $('#showStage').text('Set a dead line for ' + '{{ $onHideSatge->title }}');
-           
-
-         }
-      })
+     
      var status =  $("#checkStatus").val();
       if(status == 0){
          $('.descriptionHidden').removeClass('hidden');

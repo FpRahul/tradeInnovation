@@ -9,7 +9,7 @@
    <x-client-task-details :taskID="$id" />
 </div>
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
-   <form action="{{route('task.patentForm9Submit',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
+   <form action="{{route('task.patentForm18Submit',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
       <input type="hidden" name="previous_task_id" id="previous_task_id" value="{{$previousTask->id}}">
       <strong class="mt-4 block"> Update Current Task</strong>
@@ -22,15 +22,16 @@
          @enderror
       </div> --}}
       <div class="w-full md:w-1/2">
-        <label for="status" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
-        <select name="status" id="status" class="statusData allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]" required>
-           <option value="yes" data-title="{{$getStage->title}}" data-id="{{$getStage->id}}" selected>Yes</option>
-           <option value="no" data-title="{{$onNextStage->title}}" data-id="{{ $onNextStage->id }}">No</option>
-        </select>        
-     </div>
+         <label for="status" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Request For Examination Want</label>
+         <select name="status" id="status" class="statusData allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]" required>
+            <option value="yes" selected>Yes</option>
+            <option value="no" >No</option>
+         </select>   
+         <div class="showWarning hidden" style="color: red;font-size: 14px; font-weight: 500;">You are going to hold the task</div>     
+      </div>
       <div class="w-full md:w-1/2" id="verifiedDate">
-        <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-            Verified On
+        <label for="verified" class="filied_hold_date_text block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+            Filied On
         </label>
         <div class="w-[100%] relative">
             <input
@@ -68,90 +69,97 @@
    <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
    @enderror
 </div>
+<div class="form18hide">
+   <strong class="mt-5 block">Update Upcoming Actions</strong>
+   <div class="flex flex-col md:flex-row gap-[20px]">     
 
-<strong class="mt-5 block">Update Upcoming Actions</strong>
-<div class="flex flex-col md:flex-row gap-[20px]">
-
-   <div class="w-full md:w-1/2">
-      <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
-        @if($getStage)
-            <input type="text" name="stage_id" id="stage_id" value="{{ $getStage->title }}" class="stage_text w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
-            <input type="hidden" name="stage_id" class="stage_id" value="{{ $getStage->id }}">
-        @endif  
-        <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-            Next stage will be: <span class="stage_title">{{$getStage->title ?? ''}}</span>
-        </p> 
-   </div>
-   @if($taskDetails->count() > 0)
-   @php
-   $selectedId = $taskDetails->user->id;
-   @endphp
-   @endif
-   <div class="w-full md:w-1/2">
-      <label for="assignUser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign User</label>
-      <select name="assignUser" id="assignUser" class="filterData assignUserData allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]" required>
-         <option value="" disabled selected>Select a user</option>
-         @if($users->count() > 0)
-         <option value="" disabled selected>Select a user</option>
-         @foreach ($users as $user)
-         <option value="{{ $user->id }}" {{ !empty($selectedId) && $user->id == $selectedId ? 'selected' : '' }}>
-            {{ $user->name }}
-         </option>
-         @endforeach
-         @else
-         <option value="" disabled>No users available</option>
-         @endif
-      </select>
-      @if($taskDetails->count() > 0)
-      <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-         Current user assigned: {{$taskDetails->user->name}}.
-      </p>
-      @endif
-   </div>
-</div>
-
-<div class="  flex flex-col md:flex-row gap-[20px]">
-
-   <div class="w-full md:w-1/2" id="verifiedDate">
-      <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-         Dead line
-      </label>
-      <div class="w-[100%] relative">
-         <input
-            type="text"
-            placeholder="Dead Line"
-            name="deadline"
-            id="deadline"
-            class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
-            value=""
-
-            autocomplete="off">
-         <div class="absolute right-[10px] top-[10px]">
-            <i class="ri-calendar-line"></i>
-         </div>
-      </div>
-      <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+      <div class="w-full md:w-1/2">
+         <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
          @if($getStage)
-         Set a dead line for: {{$getStage->title}}
+               <input type="text" name="stage_id" id="stage_id" value="{{ $getStage->title }}" class="stage_text w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
+               <input type="hidden" name="stage_id" class="stage_id" value="{{ $getStage->id }}">
+         @endif  
+         <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+               Next stage will be: <span class="stage_title">{{$getStage->title ?? ''}}</span>
+         </p> 
+      </div>
+      @if($taskDetails->count() > 0)
+      @php
+      $selectedId = $taskDetails->user->id;
+      @endphp
+      @endif
+      <div class="w-full md:w-1/2">
+         <label for="assignUser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign User</label>
+         <select name="assignUser" id="assignUser" class="filterData assignUserData allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]" required>
+            <option value="" disabled selected>Select a user</option>
+            @if($users->count() > 0)
+            <option value="" disabled selected>Select a user</option>
+            @foreach ($users as $user)
+            <option value="{{ $user->id }}" {{ !empty($selectedId) && $user->id == $selectedId ? 'selected' : '' }}>
+               {{ $user->name }}
+            </option>
+            @endforeach
+            @else
+            <option value="" disabled>No users available</option>
+            @endif
+         </select>
+         @if($taskDetails->count() > 0)
+         <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+            Current user assigned: {{$taskDetails->user->name}}.
+         </p>
          @endif
-      </p>
+      </div>
+   </div>
+
+   <div class="  flex flex-col md:flex-row gap-[20px]">
+
+      <div class="w-full md:w-1/2" id="verifiedDate">
+         <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+            Dead line
+         </label>
+         <div class="w-[100%] relative">
+            <input
+               type="text"
+               placeholder="Dead Line"
+               name="deadline"
+               id="deadline"
+               class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
+               value=""
+
+               autocomplete="off">
+            <div class="absolute right-[10px] top-[10px]">
+               <i class="ri-calendar-line"></i>
+            </div>
+         </div>
+         <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+            @if($getStage)
+            Set a dead line for: {{$getStage->title}}
+            @endif
+         </p>
+      </div>
    </div>
 </div>
+   
 
-<div class="flex justify-end gap-[15px]">
-   <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
-</div>
+   <div class="flex justify-end gap-[15px]">
+      <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
+   </div>
 </form>
 </div>
 <script>
     $(document).on('change','.statusData',function(){
-        let selectedOption = $(this).find('option:selected');
-        let stageId = selectedOption.attr('data-id');
-        let stageTitle = selectedOption.attr('data-title');
-        var updateStage = $(this).parent().parent().parent();
-        updateStage.find('.stage_text').val(stageTitle);
-        updateStage.find('.stage_id').val(stageId);
-        updateStage.find('.stage_title').text(stageTitle);
+      let nextStageHide = $(this).parent().parent().parent().find('.form18hide');
+      let changeDateText = $(this).parent().parent().find('.filied_hold_date_text');
+      // let errorMsg = $(this).parent().parent().find('.showWarning').addClass('piy');
+        if($(this).val() == 'yes'){
+            nextStageHide.removeClass('hidden');
+            changeDateText.text('Filied On');
+            // errorMsg.removeClass('hidden');
+        }else{
+            nextStageHide.addClass('hidden');
+            changeDateText.text('Hold On');
+            // errorMsg.addClass('hidden');
+        }
     });
 
     $(document).ready(function() {

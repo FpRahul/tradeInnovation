@@ -70,7 +70,17 @@
         </div>
 
         <div class="noRelevantFound flex flex-wrap gap-[20px] hidden">   
-                <strong class="w-full onHoldHide block">Update Upcoming Actions</strong>         
+                <strong class="w-full onHoldHide block">Update Upcoming Actions</strong>
+                <div class="w-full md:w-[48%]">
+                    <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">stage</label>
+                    @if($getStage->count() > 0)
+                    <input type="text" name="stage_id" id="stage_id" value="{{$getStage->title}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
+                    <input type="hidden" name="stage_id" value="{{$getStage->id}}">
+                    @endif
+                    <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+                        {{-- Next stage will be: {{$getStage->title}} --}}
+                    </p>
+                </div>         
                 <div class="w-full md:w-[48%]">
                     <label for="assignUser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign User</label>
                     <select name="assignUser" id="assignUser" class="filterData assignUserData allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]">
@@ -94,16 +104,7 @@
                     @endforeach
                     @endif
                 </div>
-                <div class="w-full md:w-[48%]">
-                    <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Satge</label>
-                    @if($getStage->count() > 0)
-                    <input type="text" name="stage_id" id="stage_id" value="{{$getStage->title}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
-                    <input type="hidden" name="stage_id" value="{{$getStage->id}}">
-                    @endif
-                    <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-                        {{-- Next stage will be: {{$getStage->title}} --}}
-                    </p>
-                </div>  
+                  
                 <div class="w-full md:w-[48%]" id="deadlineDate">
                     <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
                     Dead Line

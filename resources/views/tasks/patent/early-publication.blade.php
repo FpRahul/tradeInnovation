@@ -9,7 +9,7 @@
    <x-client-task-details :taskID="$id" />
 </div>
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
-   <form action="{{route('task.patentForm9Submit',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
+   <form action="{{route('task.patentearlypublicationSubmit',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
       <input type="hidden" name="previous_task_id" id="previous_task_id" value="{{$previousTask->id}}">
       <strong class="mt-4 block"> Update Current Task</strong>
@@ -40,6 +40,11 @@
             </div>
         </div>
       </div>
+      <div class="w-full md:w-1/2">
+         <label for="journalNo" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Journal No.</label>
+         <input type="text" name="journalNo" id="journalNo" value="" class="journal_no w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+          
+      </div>
       <div class="flex justify-start flex-wrap w-[100%] md:w-[49%]">
          <label class="block w-full text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload</label>
          <label for="attachment" class="flex items-center gap-[10px] w-full text-[13px] font-[500] leading-[15px] text-[#666666] tracking-[0.01em] bg-[#fff] border-dashed border-[1px] border-[#ccc] rounded-[6px] py-[6px] px-[10px] cursor-pointer">
@@ -68,12 +73,12 @@
 
    <div class="w-full md:w-1/2">
       <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
-        @if($getStage)
-            <input type="text" name="stage_id" id="stage_id" value="{{ $getStage->title }}" class="stage_text w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
-            <input type="hidden" name="stage_id" class="stage_id" value="{{ $getStage->id }}">
+        @if($onNextStage)
+            <input type="text" name="stage_id" id="stage_id" value="{{ $onNextStage->title }}" class="stage_text w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
+            <input type="hidden" name="stage_id" class="stage_id" value="{{ $onNextStage->id }}">
         @endif  
         <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-            Next stage will be: <span class="stage_title">{{$getStage->title ?? ''}}</span>
+            Next stage will be: <span class="stage_title">{{$onNextStage->title ?? ''}}</span>
         </p> 
    </div>
    @if($taskDetails->count() > 0)
@@ -126,7 +131,7 @@
       </div>
       <p style="color: skyblue; font-size: 14px; font-weight: 500;">
          @if($getStage)
-         Set a dead line for: {{$getStage->title}}
+         Set a dead line for: {{$onNextStage->title}}
          @endif
       </p>
    </div>

@@ -135,6 +135,7 @@
                         <div data-repeater-list="leadRepeater" class="flex flex-col gap-[20px]">  
                             @if ($LeadTask && $LeadTask->isNotEmpty())
                                 @foreach ($LeadTask as $serviceKey => $serviceVal)
+                              
                                     <div data-repeater-item class="flex flex-wrap items-end gap-[20px]">
                                         <div class="w-[calc(100%-75px)] ">
                                             <input type="hidden" name="lead_task_id" value="{{$serviceVal->id}}">
@@ -236,18 +237,18 @@
                                                     <div class="flex flex-wrap gap-[20px] mt-[20px]">
                                                         <div class="flex items-center gap-[10px]">
                                                             <input type="radio" name="client_type" id="client_type" value="1" 
-                                                                @checked(old('client_type', $leadData->client_type) == 1) checked>
+                                                                @checked(old('client_type', $serviceVal->serviceDetails->client_status) == 1) checked>
                                                             <label for="client_type" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Applicant</label>
                                                         </div>
                                                         <div class="flex items-center gap-[10px]">
                                                             <input type="radio" name="client_type" id="client_type2" value="2" 
-                                                                @checked(old('client_type', $leadData->client_type) == 2)>
+                                                                @checked(old('client_type', $serviceVal->serviceDetails->client_status) == 2)>
                                                             <label for="client_type2" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Opponent</label>
                                                         </div>
                                                     </div>                                                    
                                                 </div>
                                                 {{-- start service details --}}
-                                                <div class="eachServiceDetails flex flex-wrap w-full gap-[15px] border-[1px] border-[#ccc] outline-[#ccc] p-[10px] rounded-[5px] {{ isset($serviceVal->service_id) && $serviceVal->service_id == 1 ? '' : 'hidden' }}">
+                                                <div class="eachServiceDetails flex flex-wrap w-full gap-[15px] border-[1px] border-[#ccc] outline-[#ccc] p-[10px] rounded-[5px] {{ isset($serviceVal->service_id) && $serviceVal->service_id == 1 || $serviceVal->service_id == 2 ? '' : 'hidden' }}">
 
                                                     <h2 class="w-full text-[22px] leading-[25px] mb-[5px] font-[600]">Details</h2>
                                                     <div class="w-full md:w-[32%] lg:w-[32%]">
@@ -258,7 +259,7 @@
                                                         
                                                             <option value="">Risk Class</option>
                                                             @php
-                                                                $selectedValues = explode(',', old('classrule', $serviceVal->class_rule ?? ''));
+                                                                $selectedValues = explode(',', old('classrule', $serviceVal->serviceDetails->class_rule ?? ''));
                                                             @endphp
                                                         
                                                             @for ($i = 1; $i <= 45; $i++)
@@ -270,21 +271,21 @@
                                                     <div class="w-full md:w-[32%] lg:w-[32%]">
                                                         <label class="block mb-[5px] text-[14px] font-[400]">Trademark Applied For</label>
                                                         <input type="text" name="appliedfor" 
-                                                            value="{{ isset($serviceVal) ? $serviceVal->applied_for : '' }}" 
+                                                            value="{{ isset($serviceVal->serviceDetails) ? $serviceVal->serviceDetails->applied_for : '' }}" 
                                                             class="appliedfor w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
                                                             >                                                
                                                     </div>
                                                     <div class="w-full md:w-[32%] lg:w-[32%]">
                                                         <label class="block mb-[5px] text-[14px] font-[400]">Application Number</label>
                                                         <input type="text" name="applicationNumber" 
-                                                            value="{{ isset($serviceVal) ? $serviceVal->application_number : '' }}" 
+                                                            value="{{ isset($serviceVal->serviceDetails) ? $serviceVal->serviceDetails->application_number : '' }}" 
                                                             class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
                                                             > 
                                                                                                 
                                                     </div>
                                                     <div class="w-full md:w-[32%] lg:w-[32%]">
                                                         @php
-                                                            $logoPath = !empty($serviceVal['service_logo']) ? 'uploads/leads/'.$leadData->id.'/'.$serviceVal['service_logo'] : 'assets/images/noimage.png';
+                                                            $logoPath = !empty($serviceVal->serviceDetails->service_logo) ? 'uploads/leads/'.$leadData->id.'/'.$serviceVal->serviceDetails->service_logo : 'assets/images/noimage.png';
                                                         @endphp
                                                     
                                                             <label class="block mb-[5px] text-[14px] font-[400]">Logo</label>
@@ -299,7 +300,7 @@
                                                     <div class="w-full md:w-[32%] lg:w-[32%]">
                                                         <label class="block mb-[5px] text-[14px] font-[400]">Filing Mode</label>
                                                         <input type="text" name="filingmode" 
-                                                            value="{{ isset($serviceVal) ? $serviceVal->applied_for : '' }}" 
+                                                            value="{{ isset($serviceVal->serviceDetails) ? $serviceVal->serviceDetails->filing_mode : '' }}" 
                                                             class="filingmode w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
                                                             > 
                                                                                                 
@@ -312,7 +313,7 @@
                                                                 placeholder="Filing Date" 
                                                                 name="filingdate" 
                                                                 class="filingdate daterangepicker-taskdeadline daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
-                                                                value="{{ old('taskdeadline')}}" 
+                                                                value="{{ old('taskdeadline', $serviceVal->serviceDetails->filing_date ?? '') }}"
                                                                 autocomplete="off"
                                                             >                                                            
                                                         </div>     
@@ -411,17 +412,15 @@
                                                 <label for="client_type" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Client Type</label>
                                                 <div class="flex flex-wrap gap-[20px] mt-[20px]">
                                                     <div class="flex items-center gap-[10px]">
-                                                        <input type="radio" name="client_type" id="client_type" value="1" 
-                                                            >
+                                                        <input type="radio" name="client_type" id="client_type" value="1" checked>
                                                         <label for="client_type" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Applicant</label>
                                                     </div>
                                                     <div class="flex items-center gap-[10px]">
-                                                        <input type="radio" name="client_type" id="client_type2" value="2" >
+                                                        <input type="radio" name="client_type" id="client_type2" value="2">
                                                         <label for="client_type2" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Opponent</label>
                                                     </div>
                                                 </div>
-                                                
-                                            </div>
+                                            </div>                                            
 
                                             {{-- start service details --}}
                                             <div class="eachServiceDetails flex flex-wrap w-full gap-[15px] border-[1px] border-[#ccc] outline-[#ccc] p-[10px] rounded-[5px] hidden">
@@ -775,7 +774,7 @@
     });
     $(document).on('change','.setSubService',function(){    
         var serviceId = $(this).val();
-        if(serviceId == 1){
+        if(serviceId == 1 || serviceId == 2){
             $(this).parent().parent().find('.classrule').attr('required',true);
             $(this).parent().parent().find('.appliedfor').attr('required',true);
             $(this).parent().parent().find('.previewServiceLogo').attr('required',true);

@@ -115,7 +115,7 @@ class LeadsController extends Controller
             }
             $leadOldData = Lead::where('id', $id)->first();
             $leadAttachment = LeadAttachment::where('lead_id', $id)->get();
-            $LeadTask = LeadTask::with('leadTaskDetails')->where('lead_id', $id)->get();
+            $LeadTask = LeadTask::with('leadTaskDetails','serviceDetails')->where('lead_id', $id)->get();
             $email = "required|email";
             $successMsg = 'Lead updated!';
         } else {
@@ -126,6 +126,7 @@ class LeadsController extends Controller
             $email = "required|email|unique:users,email";
             $successMsg = 'Lead added!';
         }
+        
         $sourceList = CategoryOption::where('type', 3)->where('status', 1)->get();
         $scopeOfBussinessList = CategoryOption::where('status', 1)->where('type', 4)->get();
         $serviceList = Service::where('status', 1)->get();
@@ -133,7 +134,6 @@ class LeadsController extends Controller
         $clientList = User::where('role', 2)->where('status', 1)->get();
         $projectManagerList = User::where('role', 4)->where('status', 1)->get();
         $firmList = Firm::where('status', 1)->get();
-
         if ($request->isMethod('POST')) {
             
             $scopeOfBusinessArray = $request->scopeofbusiness;
@@ -212,7 +212,7 @@ class LeadsController extends Controller
                         if ($serviceVal['lead_task_id'] > 0) {
                             $leadTaskData = LeadTask::where('id', $serviceVal['lead_task_id'])->first();
                             $LeadTaskDetail = LeadTaskDetail::where('task_id', $serviceVal['lead_task_id'])->first();
-                            $serviceDetailData = ServiceDetail::where('task_id',$serviceVal['lead_task_id'])->first();
+                            $serviceDetailData = ServiceDetail::where('id',$leadTaskData->service_detail_id)->first();
                             
                         } else {
                             $leadTaskData = new LeadTask();
@@ -223,6 +223,7 @@ class LeadsController extends Controller
                         if (!$serviceDetailData) {
                             $serviceDetailData = new ServiceDetail();
                         }
+                        $service_detail_id = 0;
                         if(isset($serviceVal['classrule'])){
                             $serviceDetailData->lead_id = $leadData->id;
                             $serviceDetailData->class_rule = implode(',',$serviceVal['classrule']);
@@ -242,11 +243,12 @@ class LeadsController extends Controller
                             $serviceDetailData->service_id = $serviceVal['serviceid'];
                             $serviceDetailData->client_status = $serviceVal['client_type'];
                             $serviceDetailData->save();
+                            $service_detail_id = $serviceDetailData->id;
                         }
                        
                         // $leadTaskData->class_rule = $serviceVal['classrule'];
                        
-                       
+                        $leadTaskData->service_detail_id = $service_detail_id; 
                         $leadTaskData->lead_id = $leadData->id;                       
                         $leadTaskData->project_manager_id = $serviceVal['projectmanager'];
                         $leadTaskData->service_id = $serviceVal['serviceid'];
@@ -258,6 +260,7 @@ class LeadsController extends Controller
                         $leadTaskData->task_title = ServiceStages::find($serviceVal['stage_id'])->description;
 
                         if ($leadTaskData->save()) {
+                            $serviceDetailData->where('id', $service_detail_id)->update(['task_id' => $leadTaskData->id]);
                             $LeadTaskDetail->task_id = $leadTaskData->id;
                             $LeadTaskDetail->dead_line = date('Y-m-d', strtotime($serviceVal['taskdeadline']));
                             $LeadTaskDetail->status = 0;

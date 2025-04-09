@@ -201,16 +201,13 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('/client-approval/opposition/hearing/status/{id?}','clientApprovalOnHearingStatus')->name('task.clientApprovalOnHearingStatus');
         Route::get('/client-inform/hearing/{id?}','clientInformForHearingCharge')->name('task.clientInformForHearingCharge');
         Route::Post('/client-inform/hearing/status{id?}','clientInformForHearingChargeStatus')->name('task.clientInformForHearingChargeStatus');
-        Route::get('/hearing/charge{id?}','hearingChargeUpdate')->name('task.hearingChargeUpdate');
+        Route::get('/hearing/charge/{id?}','hearingChargeUpdate')->name('task.hearingChargeUpdate');
         Route::Post('/hearing/charge/status{id?}','hearingChargeStatus')->name('task.hearingChargeStatus');
         Route::get('/hearing/{id?}','hearing')->name('task.hearing');
         Route::Post('/hearing/status/{id?}','hearingStatus')->name('task.hearingStatus');
         Route::get('/agreement/submission/{id?}','agreementSubmission')->name('task.agreementSubmission');
         Route::get('/trademark/{id?}','tradeMark')->name('task.tradeMark');
         Route::Post('/trademark/status/{id?}','trademarkStatus')->name('task.trademarkStatus');
-
-
-
         // For patent..........     
         // For payment verification.........
         Route::get('/patent/send-quotation/{id?}','patentSendQuotation')->name('task.patentSendQuotation');

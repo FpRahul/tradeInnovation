@@ -19,31 +19,15 @@
             <label for="show_case_hearing" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
             <select name="show_case_hearing" id="show_case_hearing" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                <option value="" disabled selected>Select status</option>
-               <option value="1">Register</option>
+               <option value="1">Hearing Done</option>
                <option value="2">Adjournment</option>
-               <option value="3">rejected</option>
-               <option value="4">Settelment B/W Applicant and Opponent</option>
             </select>
             <div class="showWarning" style="color: red;font-size: 14px; font-weight: 500;"></div>
             @error('show_case_hearing')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
          </div>
-          <div class="w-full md:w-1/2 reasonHide  hidden">
-            <label for="rejected_reason" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Reason</label>
-            <select name="rejected_reason" id="rejected_reason" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
-               <option value="" disabled selected>Reason</option>
-               <option value="1">Refused</option>
-               <option value="2">Abandon</option>
-               <option value="3">Withdraw</option>
-            </select>
-            <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-               Select the reason of rejected
-            </p>
-            @error('rejected_reason')
-            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
-            @enderror
-         </div>  
+          
          <div class="w-full md:w-1/2" id="verifiedDate">
             <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
                Verified On
@@ -68,7 +52,7 @@
       </div>
       <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2 hearingDate hidden">
-            <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+            <label for="reminder_date" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
                Reminder Date
             </label>
             <div class="w-[100%] relative">
@@ -89,7 +73,7 @@
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
          <div class="w-full md:w-1/2 hearingDate hidden">
-            <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+            <label for="nextHearing" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
                Next Hearing Date
             </label>
             <div class="w-[100%] relative">
@@ -244,14 +228,15 @@ $('.daterangepicker-taskdeadline').attr("placeholder", "DD/MM/YYYY");
             $(".onHide").removeClass('hidden');
             $(".hearingDate").addClass('hidden');
             $(".showWarning").text('');
-
-
+            $('label[for="verified"]').text('Hearing Done On');
          }
          else if (show_case_hearing == 2) {
          $(".onHide").addClass('hidden');
          $(".reasonHide").addClass('hidden');
          $(".hearingDate").removeClass('hidden');
          $(".showWarning").text('You are going to hold the task');
+         $('label[for="verified"]').text('Hold On');
+
 
 
          

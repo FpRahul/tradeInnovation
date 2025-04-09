@@ -29,7 +29,7 @@
          </div>
          <div class="w-full md:w-1/2" id="verifiedDate">
             <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-               Verified On
+               Pass On
             </label>
             <div class="w-[100%] relative">
                <input
@@ -63,27 +63,7 @@
          @enderror
          
         
-         <div class=" reminderDate hidden w-full md:w-1/2" id="reminderDate">
-            <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-               Reminder Date
-            </label>
-            <div class="w-[100%] relative">
-               <input
-                  type="text"
-                  placeholder="Dead Line"
-                  name="reminder_date"
-                  id="deadline"
-                  class="daterangepicker-reminderDate w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
-                  value=""
-                  autocomplete="off">
-               <div class="absolute right-[10px] top-[10px]">
-                  <i class="ri-calendar-line"></i>
-               </div>
-            </div>
-            @error('reminder_date')
-            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
-            @enderror
-         </div>
+         
       </div>
       <div class="">
          <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
@@ -222,7 +202,7 @@
             $('label[for="verified"]').text('Response Date');
          } else if (documentStatus == 1) {
             
-            $('label[for="verified"]').text('Verified On');
+            $('label[for="verified"]').text('Pass On');
          }
       })
       $("#formality_check").on("change", function () {

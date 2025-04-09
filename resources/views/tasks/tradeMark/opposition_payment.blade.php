@@ -17,8 +17,7 @@
          <div class="flex items-ceter gap-[8px]">                            
             <input type="checkbox" name="negocheck" class="negocheck openModalProf" id="negocheck"/>  
             <label for="negocheck">is Negotiate</label>                          
-         </div>
-                  
+         </div>    
         @endif
       @foreach ($taskDetails as $task )
       <input type="hidden" name="checkStatus" id="checkStatus" value="{{$task->leadTaskDetails->status}}">

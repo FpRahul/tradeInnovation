@@ -19,7 +19,7 @@
             <label for="trademark_status" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
             <select name="trademark_status" id="trademark_status" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                <option value="" disabled selected>Select status</option>
-               <option value="0"> Register</option>
+               <option value="0"> Registered</option>
                <option value="1"> Refused </option>
             </select>
             <div class="showWarning" style="color: red;font-size: 14px; font-weight: 500;"></div>
@@ -29,7 +29,7 @@
          </div>
          <div class="w-full md:w-1/2" id="verifiedDate">
             <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-               Verified On
+               Registered On
             </label>
             <div class="w-[100%] relative">
                <input
@@ -175,9 +175,9 @@ $('.daterangepicker-taskdeadline').attr("placeholder", "DD/MM/YYYY");
  });
 
      
-      $("#initial_examination").on('change', function() {
-         var initial_examination = $(this).val();
-         if (initial_examination == 1) {
+      $("#trademark_status").on('change', function() {
+         var trademark_status = $(this).val();
+         if (trademark_status == 1) {
            
            $("#stage_id").val('{{ $getStage->title }}') 
            $("#SatgeID").val('{{ $getStage->id }}') 
@@ -186,25 +186,23 @@ $('.daterangepicker-taskdeadline').attr("placeholder", "DD/MM/YYYY");
            $('#nextTitle').text('Next stage will be: ' + '{{ $getStage->title }}');
 
 
-         } else if (initial_examination == 0) {
+         } else if (trademark_status == 0) {
            $("#stage_id").val('{{ $onHideSatge->title }}'); 
            $("#SatgeID").val('{{ $onHideSatge->id }}') 
             $('#nextTitle').text('Next stage will be: ' + '{{ $onHideSatge->title }}');
             $('#showStage').text('Set a dead line for ' + '{{ $onHideSatge->title }}');
-           
- 
          }
 
-      // $("#initial_examination").on('change', function () {
-      //    var changeValue = $(this).val();
-      //    if (changeValue == 0) {
-      //       $("#verifiedDate label").text("Regsi On");
-      //    }
-      //    else if (changeValue == 1) {
-      //       $("#verifiedDate label").text("Refused Date");
-      //    }
+      $("#trademark_status").on('change', function () {
+         var changeValue = $(this).val();
+         if (changeValue == 0) {
+            $("#verifiedDate label").text("Registered On");
+         }
+         else if (changeValue == 1) {
+            $("#verifiedDate label").text("Refused On");
+         }
          
-      // });
+      });
 
       })
    });

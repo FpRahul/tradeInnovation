@@ -63,7 +63,7 @@
          @enderror
       </div>
       
-         <div class="flex w-[49%] flex-col ">
+         <div class="flex w-full flex-col ">
             <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
          <textarea type="text" name="description" id="description" class="w-full h-[80px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
          @error('description')
@@ -184,12 +184,14 @@
            $("#nextTitle").text(' Next stage will be: ' + '{{ $getStage->title }}')
            $('#showStage').text('Set a dead line for ' + '{{ $getStage->title }}');
            $('.evidence_submit').removeClass('hidden');
+           $("#verifiedDate label").text("Client Approved On");
            
          } else if (status == 3) {
            $("#stage_id").val('{{ $onHideSatge->title }}'); 
            $("#SatgeID").val('{{ $onHideSatge->id }}') 
            $("#nextTitle").text(' Next stage will be: ' + '{{ $onHideSatge->title }}')
            $('.evidence_submit').addClass('hidden');
+           $("#verifiedDate label").text("Verified On");
            
             $('#showStage').text('Set a dead line for ' + '{{ $onHideSatge->title }}');
            

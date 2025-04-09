@@ -177,7 +177,7 @@
            $("#nextTitle").text(' Next stage will be: ' + '{{ $getStage->title }}')
            $('#showStage').text('Set a dead line for ' + '{{ $getStage->title }}');
            $('.evidence_submit').removeClass('hidden');
-           $("label[for='verified']").text("Notice Sent On");
+           $("label[for='verified']").text("Counter Statement Date");
            
          } else if (Counter_statement == 2) {
            $("#stage_id").val('{{ $onHideSatge->title }}'); 

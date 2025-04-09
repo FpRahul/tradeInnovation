@@ -21,9 +21,7 @@ $paymentData = $taskList->payment[0];
             <input type="checkbox" name="negocheck" class="negocheck openModalProf" id="negocheck"/>  
             <label for="negocheck">is Negotiate</label>                          
          </div>
-                  
         @endif
-        
       </div>
       
       <input type="hidden" name="paymentId" value="{{ $paymentData->id }}">      

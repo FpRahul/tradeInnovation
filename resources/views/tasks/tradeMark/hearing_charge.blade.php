@@ -13,13 +13,14 @@
       @csrf
       <strong class="mt-4 block"> Update Current Task</strong>
       <input type="hidden" name="paymentId" value="{{ $paymentId }}">
-      <!-- @if ($payamentDetails->submitted_amount == 0)
+      @if ($payamentDetails->submitted_amount == 0)
          <div class="flex items-ceter gap-[8px]">                            
             <input type="checkbox" name="negocheck" class="negocheck openModalProf" id="negocheck"/>  
             <label for="negocheck">is Negotiate</label>                          
-         </div>
+         </div> 
                   
-        @endif -->
+        @endif 
+        
       @foreach ($taskDetails as $task )
       <input type="hidden" name="checkStatus" id="checkStatus" value="{{$task->leadTaskDetails->status}}">
       @endforeach
@@ -179,7 +180,7 @@
       </div>
       <div class="w-full md:w-1/2 hideOncredit" id="deadLineDate">
          <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-            Documentation Dead line
+             Dead line
          </label>
          <div class="w-[100%] relative">
             <input

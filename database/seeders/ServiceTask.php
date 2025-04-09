@@ -126,7 +126,7 @@ class ServiceTask extends Seeder
             [
                 'service_id' => '1',
                 'title' => 'Payment Confirmation for trademark Opposition ',
-                'description' => 'Opposition-Driven Additional Charge After Trademark Publication',
+                'description' => '(Payment confirmation) Additional charges related to the opposition process',
                 'stage' => '13',
             ],
             [

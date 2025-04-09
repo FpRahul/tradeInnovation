@@ -13,8 +13,9 @@
       @csrf
       <strong class="mt-4 block"> Update Current Task</strong>
       <div class="flex flex-col md:flex-row gap-[20px]">
+         <input type="hidden" name="client_status" id="client_status" value="{{ $service_details->client_status }}">
          <input type="hidden" name="checkValid" id="checkValid" value="">
-         <div class="w-full md:w-1/2">
+         <div class="w-full md:w-1/2 hideDropdown">
             <label for="publish_opposition" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
             <select name="publish_opposition" id="publish_opposition" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                <option value="" disabled selected>Select status</option>
@@ -197,6 +198,49 @@
 </div>
 <script>
    $(document).ready(function() {
+      
+      var client_status = $("#client_status").val()
+      
+      if(client_status == 2){
+         $('label[for="opposition_number"]').text('Applicant Number');
+         $('label[for="opponent_name"]').text('Applicant Name');
+         $('label[for="opponent_address"]').text('Applicant Address');
+         $('label[for="advocate_name"]').text('Advocate Name');
+         $('label[for="opposition_date"]').text('Opposed On');
+         $('.hideDropdown').addClass('hidden');
+         $('.hideOpposition').removeClass('hidden');
+         $("#stage_id").val('{{ $getStage->title }}') 
+           $("#SatgeID").val('{{ $getStage->id }}') 
+           $('.hideOpposition').removeClass('hidden');
+           $('#showStage').text('Set a dead line for: ' + '{{ $getStage->title }}');
+           $('#nextTitle').text('Next stage will be: ' + '{{ $getStage->title }}');
+      }else if(client_status == 1){
+         $('label[for="opposition_number"]').text('Opposition Number');
+         $('label[for="opponent_name"]').text('Opponent Name');
+         $('label[for="opponent_address"]').text('Opponent Address');
+         $('label[for="advocate_name"]').text('Advocate Name');
+         $('label[for="opposition_date"]').text('Opposition Date');
+         $('.hideDropdown').addClass('hidden');
+         $('.hideDropdown').removeClass('hidden');
+         $("#publish_opposition").on('change', function() {
+         var publish_opposition = $(this).val();
+         if (publish_opposition == 0) {
+           
+           $("#stage_id").val('{{ $getStage->title }}') 
+           $("#SatgeID").val('{{ $getStage->id }}') 
+           $('.hideOpposition').removeClass('hidden');
+           $('#showStage').text('Set a dead line for: ' + '{{ $getStage->title }}');
+           $('#nextTitle').text('Next stage will be: ' + '{{ $getStage->title }}');
+         } else if (publish_opposition == 1) {
+           $("#stage_id").val('{{ $onHideSatge->title }}'); 
+           $("#SatgeID").val('{{ $onHideSatge->id }}') 
+            $('#nextTitle').text('Next stage will be: ' + '{{ $onHideSatge->title }}');
+            $('#showStage').text('Set a dead line for: ' + '{{ $onHideSatge->title }}');
+            $('.hideOpposition').addClass('hidden');
+         }
+      })
+      }
+      
       $('.daterangepicker-verified').attr("placeholder", "DD/MM/YYYY"); // Set placeholder
 
          $('.daterangepicker-verified').daterangepicker({
@@ -228,23 +272,10 @@
             console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
          });
      
-      $("#publish_opposition").on('change', function() {
-         var publish_opposition = $(this).val();
-         if (publish_opposition == 0) {
-           
-           $("#stage_id").val('{{ $getStage->title }}') 
-           $("#SatgeID").val('{{ $getStage->id }}') 
-           $('.hideOpposition').removeClass('hidden');
-           $('#showStage').text('Set a dead line for: ' + '{{ $getStage->title }}');
-           $('#nextTitle').text('Next stage will be: ' + '{{ $getStage->title }}');
-         } else if (publish_opposition == 1) {
-           $("#stage_id").val('{{ $onHideSatge->title }}'); 
-           $("#SatgeID").val('{{ $onHideSatge->id }}') 
-            $('#nextTitle').text('Next stage will be: ' + '{{ $onHideSatge->title }}');
-            $('#showStage').text('Set a dead line for: ' + '{{ $onHideSatge->title }}');
-            $('.hideOpposition').addClass('hidden');
-         }
-      })
+    
+
+      
+
    });
 </script>
 @stop

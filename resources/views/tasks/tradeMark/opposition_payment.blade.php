@@ -12,6 +12,7 @@
    <form action="{{route('task.oppositionPaymentStatus',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
       <strong class="mt-4 block"> Update Current Task</strong>
+      <input type="hidden" name="service_details_id" id="service_details_id" value="{{ $service_details->id }}">
       <input type="hidden" name="paymentId" value="{{ $paymentId }}">
       @if ($payamentDetails->submitted_amount == 0)
          <div class="flex items-ceter gap-[8px]">                            

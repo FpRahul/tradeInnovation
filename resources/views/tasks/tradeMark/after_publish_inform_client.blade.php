@@ -13,6 +13,7 @@
    <form action="{{route('task.informClientAfterPublishStatus',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
       <strong class="mt-4 block"> Update Current Task</strong>
+      <input type="hidden" name="service_details_id" id="service_details_id" value="{{ $service_details->id }}">
       <div class="flex flex-col md:flex-row gap-[20px]">
          <input type="hidden" name="checkValid" id="checkValid" value="">
          <div class="w-full md:w-1/2" id="verifiedDate">
@@ -185,7 +186,7 @@
                Hello <strong id="mailClientName"></strong>,
             </p>
             <p style="font-size: 16px; line-height: 1.8; margin: 0 0 20px; color: #555;">
-            We would like to inform you that an opposition has been filed against your trademark. There are additional charges related to the opposition, which are listed below. Please let us know if you would like to proceed.
+               We would like to inform you that a trademark opposition matter has been initiated involving your application. There are additional charges associated with the opposition process, which are listed below.
             </p>
 
             {{-- Task Invoice --}}

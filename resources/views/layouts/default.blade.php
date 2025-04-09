@@ -46,7 +46,7 @@
                 @yield('content')
             </div>
         </div>
-        <div class="w-full mt-[auto] bg-[#13103A] text-center h-[54px] flex items-center justify-center ">
+        <div class="fixed bottom-0 z-[9] w-full mt-[auto] bg-[#13103A] text-center h-[54px] flex items-center justify-center ">
             @include('layouts.footer')
         </div>
     </div>

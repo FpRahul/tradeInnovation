@@ -18,6 +18,7 @@ class Evidence extends Model
     protected $fillable = [
         'lead_id',
         'task_id',
+        'service_detail_id',
         'opposition_number',
         'opponent_name',
         'advocate_name',
@@ -27,6 +28,9 @@ class Evidence extends Model
     
     public function lead(){
         return $this->belongsTo(Lead::class,'lead_id');
+    }
+    public function serviceDetail(){
+        return $this->belongsTo(ServiceDetail::class,'service_detail_id');
     }
    
 

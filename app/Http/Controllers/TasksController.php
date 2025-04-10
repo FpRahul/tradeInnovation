@@ -9009,7 +9009,7 @@ class TasksController extends Controller
         if ($id) {
             $notifyData = LeadNotification::where('task_id', $id)->update(['status' => 1]);
         }
-        $taskDetails = LeadTask::with(['user', 'lead', 'services', 'subService', 'leadTaskDetails', 'serviceSatge'])
+        $taskDetails = LeadTask::with(['user', 'lead', 'services', 'subService', 'leadTaskDetails', 'serviceSatge','serviceDetails'])
             ->where('id', $id)
             ->first();
             $leadTaskdetials = LeadTaskDetail::where('task_id', $id);
@@ -9023,7 +9023,7 @@ class TasksController extends Controller
         if ($previousTask->comment != 'Provisional Specification') {
             $getStage = ServiceStages::where('service_id', 2)->where('id', '>', $stageId)->skip(1)->first();
         }
-
+        // dd($taskDetails);
         $header_title_name = $taskDetails->serviceSatge->title;
         return view('tasks.patent.patent_filing_process', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'previousTask'));
     }
@@ -9805,7 +9805,11 @@ class TasksController extends Controller
 
     public function patentForm18Submit(Request $request,$id){
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verify'))->format('Y-m-d');
-        $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
+        $deadlineDate = $request->filled('deadline') 
+        ? Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d') 
+        : Carbon::now()->format('Y-m-d');
+
+    
         $existedLeaedTask = LeadTask::with('services', 'lead', 'userAssignBy')->where('id', $id)->first();
         $existedLeaedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
         $getPerviousAction = LeadTaskDetail::where('task_id', $request->previous_task_id)->first();
@@ -9816,16 +9820,21 @@ class TasksController extends Controller
         $userName = Auth::user()->name;
         $newTaskTitle = ServiceStages::find($request->stage_id);
         $formattedCreatedDate = $existedLeaedTask->created_at->format('d M Y');
-        $rule = [
-            'verify' => 'required',
-            'deadline' => 'required',
-        ];
-        $validator =  Validator::make($request->all(), $rule);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+        if($request->status == 'yes'){
+            $rule = [
+                'verify' => 'required',
+                'deadline' => 'required',
+            ];
+            $validator =  Validator::make($request->all(), $rule);
+            
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
         }
-        if ($id) {            
+        if ($id) { 
+                     
             if($request->status == 'no'){
+                
                 $existedLeaedTask->task_description = $request->description;
                 $existedLeaedTaskDetails->status =  2;
                 $existedLeaedTaskDetails->status_date = $verifiedDate;
@@ -9871,8 +9880,10 @@ class TasksController extends Controller
                     }                           
                     
                 }
+                dd("rwerqwe"); 
                 
             }
+             
             $newLeadtask->user_id = $request->assignUser;
             $newLeadtask->lead_id = $existedLeaedTask->lead_id;
             $newLeadtask->service_detail_id = $existedLeaedTask->service_detail_id;

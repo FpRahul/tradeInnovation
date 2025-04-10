@@ -304,7 +304,7 @@ class ServiceTask extends Seeder
             [
                 'service_id' => '2',
                 'title' => 'FER (First Examination Report)',
-                'description' => 'Report from the patent office with objections that need to be cleared.',
+                'description' => 'FER issued by the Patent Office with objections to be addressed.',
                 'stage' => '0',
             ],
             

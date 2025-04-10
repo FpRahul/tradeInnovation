@@ -286,63 +286,62 @@
             console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
          });
 
-         $(".preview").off("click").on("click", function () {
-                        $("#assignUserModal").removeClass("hidden");
-         });
-                  $('#assignUserModal').on('click', function(e) {
-                           if ($(e.target).is('#assignUserModal')) {
-
-                     $('#assignUserModal').addClass('hidden');
-                  }
-               });
-   $("#application_number").on("input", function () {
-         let inputVal = $(this).val();
-         $("#appNumber").text(inputVal ? inputVal : "Not Available");
-      });  
-
-
+      $(".preview").off("click").on("click", function () {
+         $("#assignUserModal").removeClass("hidden");
+      });
       $('#assignUserModal').on('click', function(e) {
          if ($(e.target).is('#assignUserModal')) {
-
             $('#assignUserModal').addClass('hidden');
          }
       });
-      $("#attachment").on("change", function () {
-        let files = this.files;
-        let fileList = $("#file-list");
-        let previewList = $("#modal-file-preview"); // Ensure this div exists inside your modal
+   $("#application_number").on("input", function () {
+      let inputVal = $(this).val();
+      $("#appNumber").text(inputVal ? inputVal : "Not Available");
+   });  
 
-        fileList.empty();
-        previewList.empty();
 
-        if (files.length > 0) {
-            $.each(files, function (index, file) {
-                let fileType = file.type;
-                let reader = new FileReader();
+   $('#assignUserModal').on('click', function(e) {
+      if ($(e.target).is('#assignUserModal')) {
 
-                // Append file name to the form file list
-                fileList.append(`<p class="text-[#000] text-sm">${file.name}</p>`);
+         $('#assignUserModal').addClass('hidden');
+      }
+   });
+   $("#attachment").on("change", function () {
+      let files = this.files;
+      let fileList = $("#file-list");
+      let previewList = $("#modal-file-preview"); // Ensure this div exists inside your modal
 
-                // Create a preview in the modal
-                reader.onload = function (e) {
-                    let previewElement = "";
-                    
-                    if (fileType.startsWith("image")) {
-                        previewElement = `<img src="${e.target.result}" class="w-24 h-24 object-cover rounded-lg border" alt="Preview">`;
-                    } else {
-                        previewElement = `<p class="text-sm text-gray-700">${file.name}</p>`;
-                    }
+      fileList.empty();
+      previewList.empty();
 
-                    previewList.append(previewElement);
-                };
+      if (files.length > 0) {
+         $.each(files, function (index, file) {
+               let fileType = file.type;
+               let reader = new FileReader();
 
-                reader.readAsDataURL(file);
-            });
+               // Append file name to the form file list
+               fileList.append(`<p class="text-[#000] text-sm">${file.name}</p>`);
 
-            // Show modal when files are selected
-           
-        }
-    });
+               // Create a preview in the modal
+               reader.onload = function (e) {
+                  let previewElement = "";
+                  
+                  if (fileType.startsWith("image")) {
+                     previewElement = `<img src="${e.target.result}" class="w-24 h-24 object-cover rounded-lg border" alt="Preview">`;
+                  } else {
+                     previewElement = `<p class="text-sm text-gray-700">${file.name}</p>`;
+                  }
+
+                  previewList.append(previewElement);
+               };
+
+               reader.readAsDataURL(file);
+         });
+
+         // Show modal when files are selected
+         
+      }
+   });
    });
 </script>
 @stop

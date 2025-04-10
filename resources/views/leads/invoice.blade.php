@@ -82,7 +82,8 @@
                                  <th class="px-[16px] py-[16px] bg-[#f2f2f2] text-[13px] font-[600] text-[#000] border-b-[1px] border-b-[#f2f2f2]">Total Price</th>
                               </tr>
                               @if(!empty($leadDetails->leadTasks ))
-                                 @foreach ($leadDetails->leadTasks as $serK => $serV)                            
+                                 @foreach ($leadDetails->leadTasks as $serK => $serV)    
+                                                         
                                           @php
                                              $payment = $serV->payment->last();   
                                           @endphp

@@ -132,7 +132,7 @@
       </div>
       <p style="color: skyblue; font-size: 14px; font-weight: 500;">
          @if($getStage)
-         Set a dead line for: {{$getStage->title}}
+         Set a dead line for: <span class="stage_title">{{$getStage->title}}</span> 
          @endif
       </p>
    </div>

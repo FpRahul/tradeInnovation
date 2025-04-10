@@ -729,19 +729,20 @@ class LeadsController extends Controller
         $commanData = collect();
         if ($request->lead_id) {
             $requestParams = $request->lead_id;
-            $commanData = Evidence::with(['lead:id,lead_id,client_name']) // Fetch only required lead fields
-            ->select('lead_id', 'opponent_name', 'opposition_number', 'opposition_date')
+            $commanData = Evidence::with(['lead:id,lead_id,client_name', 'serviceDetail']) // Fetch only required lead fields
+            ->select('lead_id', 'opponent_name', 'opposition_number', 'opposition_date', 'service_detail_id')
             ->where('lead_id', $request->lead_id)
             ->distinct()
             ->get();
 
-            $data = Evidence::with('lead')->where('lead_id', $request->lead_id)->get();
+            $data = Evidence::with('lead', 'serviceDetail')->where('lead_id', $request->lead_id)->get();
+            
             return view('leads.opposition_listing', compact('header_title_name', 'data', 'leadData', 'requestParams' , 'commanData'));
         } else {
-            $data = Evidence::with('lead')->get();
+            $data = Evidence::with('lead' , 'serviceDetail')->get();
             
         }
-        // dd($leadData);s
+       
         return view('leads.opposition_listing', compact('header_title_name', 'data', 'leadData', 'requestParams', 'commanData'));
 
     }

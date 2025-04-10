@@ -44,7 +44,8 @@
         <ul class="grid grid-cols-2 lg:grid-cols-3 gap-[20px]">
             @if(!$commanData->isEmpty())
             @foreach ($commanData as $opposition_details)
-                <li>
+            <input type="hidden" name="client_status" id="client_status" value="{{ $opposition_details->serviceDetail->client_status }}">
+            <li>
                     <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Lead ID</span>
                     <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize">
                         {{ $opposition_details->lead->lead_id ?? "N/A" }}
@@ -57,19 +58,19 @@
                     </strong>
                 </li>
                 <li>
-                    <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Opponent Name</span>
+                    <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1" id="name">Opponent Name</span>
                     <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize">
                         {{ $opposition_details->opponent_name ?? "N/A" }}
                     </strong>
                 </li>
                 <li>
-                    <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Opposition No.</span>
+                    <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1" id="number">Opposition No.</span>
                     <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize">
                         {{ $opposition_details->opposition_number ?? "N/A" }}
                     </strong>
                 </li>
                 <li>
-                    <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Opposition Date</span>
+                    <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1" id="date">Opposition Date</span>
                     <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize"> 
                         {{ $opposition_details->opposition_date ? \Carbon\Carbon::parse($opposition_details->opposition_date)->format('d M Y') : 'N/A' }}
                     </strong>
@@ -175,6 +176,10 @@
     } else if(requestParams == ''){
         $(".hiddenClass").addClass("hidden"); 
 
+    }
+    var client_status  = $("#client_status").val()
+    if(client_status == 2 ){
+        $("#name").text('');
     }
     $(document).ready(function () {
         $('.download-all').on('click', function (event) {

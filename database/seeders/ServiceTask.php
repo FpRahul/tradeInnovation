@@ -307,7 +307,24 @@ class ServiceTask extends Seeder
                 'description' => 'FER issued by the Patent Office with objections to be addressed.',
                 'stage' => '0',
             ],
-            
+            [
+                'service_id' => '2',
+                'title' => 'SER – Second Examination Report',
+                'description' => 'Issued after FER if further objections remain.',
+                'stage' => '0',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Hearing',
+                'description' => 'Conducted if objections persist after examination reports.',
+                'stage' => '0',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Opposition',
+                'description' => 'Opposition raised by a third party against the patent.',
+                'stage' => '0',
+            ],
             
         ]);
     }

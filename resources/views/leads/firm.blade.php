@@ -138,7 +138,11 @@
                 <form method="POST" action={{ route('firm.add')}} class="space-y-[20px]">
                     @csrf
                     <input type="hidden" name="firm_id" id="firm_id" value="">
-                    <div class="flex flex-wrap gap-[20px]">      
+                    <div class="flex flex-wrap gap-[20px]"> 
+                        <div class="flex items-ceter gap-[8px]">                            
+                            <input type="checkbox" name="gstIncluded" class="gstIncluded openModalProf" id="gstIncluded"/>  
+                            <label for="gstIncluded">GST</label>                          
+                         </div>     
                         <div class="flex w-full flex-wrap md:flex-nowrap gap-[10px]">
                             <div class="w-full">
                                 <label for="firmname" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Firm Name</label>

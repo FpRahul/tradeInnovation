@@ -233,6 +233,14 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('/patent/standard-publication-submit/{id?}','patentStandardPublicationSubmit')->name('task.patentStandardpublicationSubmit');
         Route::get('/patent/form-18/{id?}','patentForm18')->name('task.patentForm18');
         Route::Post('/patent/form-18-submit/{id?}','patentForm18Submit')->name('task.patentForm18Submit');
+        Route::get('/patent/first-examination-report/{id?}','patentFER')->name('task.patentFER');
+        Route::Post('/patent/first-examination-report-submit/{id?}','patentFERSubmit')->name('task.patentFERSubmit');
+        Route::get('/patent/second-examination-report/{id?}','patentSER')->name('task.patentSER');
+        Route::Post('/patent/second-examination-report-submit/{id?}','patentSERSubmit')->name('task.patentSERSubmit');
+        Route::get('/patent/hearing/{id?}','patentHearing')->name('task.patentHearing');
+        Route::Post('/patent/hearing-submit/{id?}','patentHearingSubmit')->name('task.patentHearingSubmit');
+        Route::get('/patent/opposition/{id?}','patentOpposition')->name('task.patentOpposition');
+        Route::Post('/patent/opposition-submit/{id?}','patentOppositionSubmit')->name('task.patentOppositionSubmit');
     });
     //Services Routes
     Route::prefix('services')->controller(ServicesController::class)->group(function () {

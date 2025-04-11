@@ -8500,6 +8500,14 @@ class TasksController extends Controller
             return redirect()->route('task.patentStandardpublication', ['id' => $id]);
         } else if ($taskDetails && $serviceId == 2 && $stageId == 47) {
             return redirect()->route('task.patentForm18', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 48) {
+            return redirect()->route('task.patentFER', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 49) {
+            return redirect()->route('task.patentSER', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 50) {
+            return redirect()->route('task.patentHearing', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 51) {
+            return redirect()->route('task.patentOpposition', ['id' => $id]);
         }
     }
 
@@ -8510,7 +8518,7 @@ class TasksController extends Controller
             $notifyData = LeadNotification::where('task_id', $id)->update(['status' => 1]);
         }
         $header_title_name = "Send Quotation";
-        $taskDetails = LeadTask::with(['user', 'lead', 'leadTaskDetails', 'services', 'subService', 'serviceSatge'])
+        $taskDetails = LeadTask::with(['user', 'lead','lead.LeadFirm', 'leadTaskDetails', 'services', 'subService', 'serviceSatge'])
             ->where('id', $id)
             ->get();
         foreach ($taskDetails as $task) {
@@ -8638,7 +8646,7 @@ class TasksController extends Controller
                     return redirect()->route('task.index')->with('error', 'Some error is occure while updating lead task.');
                 }
             } else {
-                $existedLeaedTaskDetails->update(['status' => 1, 'status_date' => $verifiedDate]);
+                $existedLeaedTaskDetails->update(['status' => 2, 'status_date' => $verifiedDate]);
             }
             if ($request->hasFile('attachment')) {
                 $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
@@ -9962,6 +9970,31 @@ class TasksController extends Controller
         } else {
             return redirect()->back()->with('error', 'no task found');
         }
+    }
+
+    public function patentFER(Request $request,$id){
+        if ($id) {
+            $notifyData = LeadNotification::where('task_id', $id)->update(['status' => 1]);
+        }
+        $taskDetails = LeadTask::with(['user', 'lead', 'services', 'subService', 'leadTaskDetails', 'serviceSatge'])
+            ->where('id', $id)
+            ->first();
+
+        $leadTaskdetials = LeadTaskDetail::find($id);
+        $previousTask = LeadTaskDetail::where('id', '<', $taskDetails->id)
+            ->orderBy('id', 'desc')
+            ->first();
+
+        $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
+        $stageId = $taskDetails->service_stage_id;
+
+        $getStage = ServiceStages::where('service_id', 2)
+            ->where('id', '>', $stageId)
+            ->orderBy('id')
+            ->first();
+
+        $header_title_name = $taskDetails->serviceSatge->title;
+        return view('tasks.patent.form18', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'previousTask'));
     }
 
     public function holdtask(Request $request)

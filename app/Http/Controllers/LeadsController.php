@@ -539,6 +539,7 @@ class LeadsController extends Controller
 
     public function leadFirm(Request $request)
     {
+        
         $firmData = Firm::where('id', '>', 0); // Query Builder instance
         $searchKey = $request->input('key') ?? '';
         $requestType = $request->input('requestType') ?? '';
@@ -563,6 +564,8 @@ class LeadsController extends Controller
             $firmData = new Firm();
         }
         if ($request->isMethod('post')) {
+            $gst = isset($request->gstIncluded) && $request->gstIncluded == "on" ? 1 : 0;
+            $firmData->gst = $gst;
             $firmData->name = $request->firmname;
             $firmData->city = $request->firmcity;
             $firmData->state = $request->firmstate;

@@ -32,6 +32,11 @@ class Evidence extends Model
     public function serviceDetail(){
         return $this->belongsTo(ServiceDetail::class,'service_detail_id');
     }
+    public function subServiceID(){
+        return $this->belongsTo(SubService::class,'subService_id');
+
+    }
+   
    
 
 }

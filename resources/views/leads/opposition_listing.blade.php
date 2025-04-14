@@ -75,6 +75,12 @@
                         {{ $opposition_details->opposition_date ? \Carbon\Carbon::parse($opposition_details->opposition_date)->format('d M Y') : 'N/A' }}
                     </strong>
                 </li>
+                <li>
+                    <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Service Type</span>
+                    <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#ff3232] capitalize"> 
+                        {{ $opposition_details->subServiceID->subServiceName ?? "N/A" }}
+                    </strong>
+                </li>
                 @endforeach
                 @endif
         </ul>

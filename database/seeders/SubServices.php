@@ -26,23 +26,38 @@ class SubServices extends Seeder
             ],
             [
                 'serviceId' => '1',
-                'subServiceName' => 'Modification',
-                'subServiceDescription' => 'Modification'
+                'subServiceName' => 'Assignment/registered user',
+                'subServiceDescription' => 'Assignment/registered user'
             ],
             [
                 'serviceId' => '1',
-                'subServiceName' => 'Annual returns',
-                'subServiceDescription' => 'Annual returns'
+                'subServiceName' => 'Objection',
+                'subServiceDescription' => 'Objection'
             ],
             [
                 'serviceId' => '1',
-                'subServiceName' => 'Legal notice',
-                'subServiceDescription' => 'Legal notice'
+                'subServiceName' => 'Opposition',
+                'subServiceDescription' => 'Opposition'
             ],
             [
                 'serviceId' => '1',
-                'subServiceName' => 'Litigation',
-                'subServiceDescription' => 'Litigation'
+                'subServiceName' => 'Applicant Adress Change',
+                'subServiceDescription' => 'Applicant Adress Change'
+            ],
+            [
+                'serviceId' => '1',
+                'subServiceName' => 'Rectification',
+                'subServiceDescription' => 'Rectification'
+            ],
+            [
+                'serviceId' => '1',
+                'subServiceName' => 'Request for Expedite process',
+                'subServiceDescription' => 'Request for Expedite process'
+            ],
+            [
+                'serviceId' => '1',
+                'subServiceName' => 'IP Watch',
+                'subServiceDescription' => 'IP Watch'
             ],
             [
                 'serviceId' => '2',
@@ -56,23 +71,33 @@ class SubServices extends Seeder
             ],
             [
                 'serviceId' => '2',
-                'subServiceName' => 'Modification',
+                'subServiceName' => 'opposition',
                 'subServiceDescription' => 'Modification'
             ],
             [
                 'serviceId' => '2',
-                'subServiceName' => 'Annual returns',
-                'subServiceDescription' => 'Annual returns'
+                'subServiceName' => 'Assignment/License',
+                'subServiceDescription' => 'Assignment/License'
             ],
             [
                 'serviceId' => '2',
-                'subServiceName' => 'Legal notice',
-                'subServiceDescription' => 'Legal notice'
+                'subServiceName' => 'Post-grant opposition',
+                'subServiceDescription' => 'Post-grant opposition'
             ],
             [
                 'serviceId' => '2',
-                'subServiceName' => 'Litigation',
-                'subServiceDescription' => 'Litigation'
+                'subServiceName' => 'Assignment/Registered User',
+                'subServiceDescription' => 'Assignment/Registered User'
+            ],
+            [
+                'serviceId' => '2',
+                'subServiceName' => 'PCT Filing',
+                'subServiceDescription' => 'PCT Filing'
+            ],
+            [
+                'serviceId' => '2',
+                'subServiceName' => 'Hearing',
+                'subServiceDescription' => 'Hearing'
             ],
             [
                 'serviceId' => '3',

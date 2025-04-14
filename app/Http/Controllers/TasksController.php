@@ -3874,6 +3874,7 @@ class TasksController extends Controller
         $taskDetails = LeadTask::with(['user', 'lead', 'services', 'subService', 'leadTaskDetails', 'serviceSatge'])
             ->where('id', $id)
             ->first();
+        
         $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->where('archive', 1)->get();
         $stageId = $taskDetails->service_stage_id;
         $getStage = ServiceStages::where('service_id', 1)->where('id', '>', $stageId)->first();
@@ -3886,18 +3887,20 @@ class TasksController extends Controller
         return view('tasks.tradeMark.published_opposition', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'onHideSatge', 'service_details'));
     }
     public function markPublishOppositionStatus(Request $request, $id)
-    {
+    {   
+
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         if ($request->opposition_date) {
-
+            
             $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
         }
         if ($request->opposition_date) {
-
+            
             $opposition_date = Carbon::createFromFormat('d M Y', $request->input('opposition_date'))->format('Y-m-d');
         }
-
+        
         $existedLeaedTask = LeadTask::find($id);
+       
         $existedLeaedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
         $newLeadtask = new LeadTask();
         $newLeadTaskDeatails  = new LeadTaskDetail();
@@ -3971,6 +3974,7 @@ class TasksController extends Controller
                                 $newOpponent->task_id = $existedLeaedTask->id;
                                 $newOpponent->lead_id = $existedLeaedTask->lead_id;
                                 $newOpponent->service_id = $existedLeaedTask->service_id;
+                                $newOpponent->subService_id = $existedLeaedTask->subservice_id;
                                 $newOpponent->service_detail_id = $existedLeaedTask->service_detail_id;
                                 $newOpponent->opposition_number =  $request->opposition_number;
                                 $newOpponent->opponent_name = $request->opponent_name;
@@ -4142,6 +4146,7 @@ class TasksController extends Controller
                                 $newOpponent->task_id = $existedLeaedTask->id;
                                 $newOpponent->lead_id = $existedLeaedTask->lead_id;
                                 $newOpponent->service_id = $existedLeaedTask->service_id;
+                                $newOpponent->subService_id = $existedLeaedTask->subservice_id;
                                 $newOpponent->service_detail_id = $existedLeaedTask->service_detail_id;
                                 $newOpponent->opposition_number =  $request->opposition_number;
                                 $newOpponent->opponent_name = $request->opponent_name;
@@ -4182,7 +4187,6 @@ class TasksController extends Controller
                                     'status' => 'Pending',
                                     'Assigned On' => $formattedCreatedDate,
                                     'Assigned By' =>  $existedLeaedTask->userAssignBy->name,
-
                                 ];
                                 $newValue = [
                                     'status' => 'Completed',
@@ -4192,9 +4196,6 @@ class TasksController extends Controller
                                 $LeadLog->old_value = json_encode($oldValue);
                                 $LeadLog->new_value = json_encode($newValue);
                                 $LeadLog->description = "Opposition marked as filed";
-
-
-
                                 if ($LeadLog->save()) {
                                     $newassignlog = new leadLog();
                                     $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
@@ -5680,6 +5681,7 @@ class TasksController extends Controller
         $existedOpponentDetails = Evidence::where('lead_id', $existedLeaedTask->lead_id)
             ->orderBy('id', 'ASC')
             ->first();
+        
         $formattedCreatedDate = $existedLeaedTask->created_at->format('d M Y');
         $userName = Auth::user()->name;
         $rule = [
@@ -5878,6 +5880,7 @@ class TasksController extends Controller
                             $newEvidencedetails->lead_id = $existedLeaedTask->lead_id;
                             $newEvidencedetails->reference_id = $existedOpponentDetails->id ?? 0;
                             $newEvidencedetails->service_id = $existedOpponentDetails->service_id ?? 0;
+                            $newEvidencedetails->subService_id = $existedLeaedTask->subservice_id;
                             $newEvidencedetails->service_detail_id = $existedLeaedTask->service_detail_id ?? 0;
                             $newEvidencedetails->opposition_number = $existedOpponentDetails->opposition_number ?? "N/A";
                             $newEvidencedetails->opponent_name = $existedOpponentDetails->opponent_name ?? "N/A";
@@ -6050,6 +6053,7 @@ class TasksController extends Controller
                             $newEvidencedetails->lead_id = $existedLeaedTask->lead_id;
                             $newEvidencedetails->reference_id = $existedOpponentDetails->reference_id ?? 0;
                             $newEvidencedetails->service_id = $existedOpponentDetails->service_id ?? 0;
+                            $newEvidencedetails->subService_id = $existedLeaedTask->subservice_id;
                             $newEvidencedetails->service_detail_id = $existedLeaedTask->service_detail_id ?? 0;
                             $newEvidencedetails->opposition_number = $existedOpponentDetails->opposition_number ?? "N/A";
                             $newEvidencedetails->opponent_name = $existedOpponentDetails->opponent_name ?? "N/A";
@@ -6196,6 +6200,7 @@ class TasksController extends Controller
                             $newEvidencedetails->lead_id = $existedLeaedTask->lead_id;
                             $newEvidencedetails->reference_id = $existedOpponentDetails->reference_id ?? 0;
                             $newEvidencedetails->service_id = $existedOpponentDetails->service_id ?? 0;
+                            $newEvidencedetails->subService_id = $existedLeaedTask->subservice_id;
                             $newEvidencedetails->service_detail_id = $existedLeaedTask->service_detail_id ?? 0;
                             $newEvidencedetails->opposition_number = $existedOpponentDetails->opposition_number ?? "N/A";
                             $newEvidencedetails->opponent_name = $existedOpponentDetails->opponent_name ?? "N/A";
@@ -6400,6 +6405,7 @@ class TasksController extends Controller
                             $newEvidencedetails->lead_id = $existedLeaedTask->lead_id;
                             $newEvidencedetails->reference_id = $existedOpponentDetails->reference_id ?? 0;
                             $newEvidencedetails->service_id = $existedOpponentDetails->service_id ?? 0;
+                            $newEvidencedetails->subService_id = $existedLeaedTask->subservice_id;
                             $newEvidencedetails->service_detail_id = $existedLeaedTask->service_detail_id ?? 0;
                             $newEvidencedetails->opposition_number = $existedOpponentDetails->opposition_number ?? "N/A";
                             $newEvidencedetails->opponent_name = $existedOpponentDetails->opponent_name ?? "N/A";

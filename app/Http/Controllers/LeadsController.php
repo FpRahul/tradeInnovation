@@ -539,7 +539,6 @@ class LeadsController extends Controller
 
     public function leadFirm(Request $request)
     {
-        
         $firmData = Firm::where('id', '>', 0); // Query Builder instance
         $searchKey = $request->input('key') ?? '';
         $requestType = $request->input('requestType') ?? '';
@@ -564,8 +563,6 @@ class LeadsController extends Controller
             $firmData = new Firm();
         }
         if ($request->isMethod('post')) {
-            $gst = isset($request->gstIncluded) && $request->gstIncluded == "on" ? 1 : 0;
-            $firmData->gst = $gst;
             $firmData->name = $request->firmname;
             $firmData->city = $request->firmcity;
             $firmData->state = $request->firmstate;
@@ -731,12 +728,24 @@ class LeadsController extends Controller
         $commanData = collect();
         if ($request->lead_id) {
             $requestParams = $request->lead_id;
-            $commanData = Evidence::with(['lead:id,lead_id,client_name', 'serviceDetail']) // Fetch only required lead fields
-            ->select('lead_id', 'opponent_name', 'opposition_number', 'opposition_date', 'service_detail_id')
-            ->where('lead_id', $request->lead_id)
-            ->distinct()
-            ->get();
-
+            $commanData = Evidence::selectRaw('
+        lead_id,
+        service_detail_id,
+        MAX(opponent_name) as opponent_name,
+        MAX(opposition_number) as opposition_number,
+        MAX(opposition_date) as opposition_date,
+        MAX(subService_id) as subService_id
+    ')
+    ->where('lead_id', $request->lead_id)
+    ->groupBy('lead_id', 'service_detail_id')
+    ->with(['lead:id,lead_id,client_name', 'serviceDetail', 'subServiceID'])
+    ->get();
+            // $commanData = Evidence::with(['lead:id,lead_id,client_name', 'serviceDetail' , 'subServiceID']) 
+            // ->select('lead_id', 'opponent_name', 'opposition_number', 'opposition_date', 'service_detail_id', 'subService_id')
+            // ->where('lead_id', $request->lead_id)
+            // ->groupBy('lead_id', 'service_detail_id')
+            // ->get();
+          
             $data = Evidence::with('lead', 'serviceDetail')->where('lead_id', $request->lead_id)->get();
             
             return view('leads.opposition_listing', compact('header_title_name', 'data', 'leadData', 'requestParams' , 'commanData'));

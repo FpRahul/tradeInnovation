@@ -119,6 +119,9 @@
                     <tbody>
                         @if(!$data->isEmpty())
                             @foreach ($data as $opposition_details)
+                                @if ($loop->index == 0)
+                                @continue
+                            @endif
                                 <tr>
                                     <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                                         {{ $loop->index + 1}}
@@ -179,7 +182,13 @@
     }
     var client_status  = $("#client_status").val()
     if(client_status == 2 ){
-        $("#name").text('');
+        $("#name").text('Applicant Name');
+        $("#number").text('Applicant No.');
+        $("#date").text('Opposed On');
+    }else if(client_status == 1){
+        $("#name").text('Opponent Name');
+        $("#number").text('Opposition No');
+        $("#date").text('Opposition Date');
     }
     $(document).ready(function () {
         $('.download-all').on('click', function (event) {

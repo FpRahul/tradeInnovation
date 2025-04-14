@@ -680,7 +680,6 @@ class LeadsController extends Controller
 
 
         $header_title_name = 'Payment Status';
-
         $lead = Lead::all();
         $payment_details = Payment::with('lead', 'leadTask.services', 'leadTask.serviceSatge')->where('reference_id', 0);
         if ($request->leadId || $request->dateRange) {

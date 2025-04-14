@@ -237,6 +237,12 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('/patent/first-examination-report-submit/{id?}','patentFERSubmit')->name('task.patentFERSubmit');
         Route::get('/patent/second-examination-report/{id?}','patentSER')->name('task.patentSER');
         Route::Post('/patent/second-examination-report-submit/{id?}','patentSERSubmit')->name('task.patentSERSubmit');
+
+        Route::get('/patent/hearing-send-quotation/{id?}','patentHearingSendQuotation')->name('task.patentHearingSendQuotation');
+        Route::Post('/patent/hearing-send-quotation-submit/{id?}','patentHearingSendQuotationSubmit')->name('task.patentHearingSendQuotationSubmit');
+        Route::get('/patent/hearing-payment-verification/{id?}','patentHearingPaymentVerification')->name('task.patentHearingPaymentVerification');
+        Route::Post('/patent/hearing-payment-verification-submit/{id?}','patentHearingPaymentVerificationSubmit')->name('task.patentHearingPaymentVerificationSubmit');
+
         Route::get('/patent/hearing/{id?}','patentHearing')->name('task.patentHearing');
         Route::Post('/patent/hearing-submit/{id?}','patentHearingSubmit')->name('task.patentHearingSubmit');
         Route::get('/patent/opposition/{id?}','patentOpposition')->name('task.patentOpposition');

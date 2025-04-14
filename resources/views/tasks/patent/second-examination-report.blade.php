@@ -9,7 +9,7 @@
    <x-client-task-details :taskID="$id" />
 </div>
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
-   <form action="{{route('task.patentFERSubmit',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
+   <form action="{{route('task.patentSERSubmit',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
       <input type="hidden" name="previous_task_id" id="previous_task_id" value="{{$previousTask->id}}">
       <strong class="mt-4 block"> Update Current Task</strong>
@@ -29,28 +29,7 @@
             <option value="approved" data-id="{{$onNextToNextStage->id}}" data-val="{{$onNextToNextStage->title}}" >Approved</option>
          </select>   
       </div>
-      <div class="secondExaminationShowHide w-full md:w-1/2">
-         <label for="status" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Second Examination Want</label>
-         <select name="secondExaminationStatus" id="secondExaminationStatus" class="statusData allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]" required>
-            <option value="">
-                Select Status
-            </option>
-            <option value="yes" 
-                @if(isset($getStage)) selected @endif 
-                data-id="{{ isset($getStage) ? $getStage->id : '' }}" 
-                data-val="{{ isset($getStage) ? $getStage->title : '' }}">
-                Yes
-            </option>
-            <option value="no" 
-                @if(!isset($getStage) && isset($onNextStage)) selected @endif 
-                data-id="{{ isset($onNextStage) ? $onNextStage->id : '' }}" 
-                data-val="{{ isset($onNextStage) ? $onNextStage->title : '' }}">
-                No
-            </option>
-        </select>
-          
-         <div class="showWarning hidden" style="color: red;font-size: 14px; font-weight: 500;">You are going to hold the task</div>     
-      </div>
+   
       
       <div class="w-full md:w-1/2" id="verifiedDate">
         <label for="verified" class="filied_hold_date_text block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">

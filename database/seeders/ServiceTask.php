@@ -315,6 +315,18 @@ class ServiceTask extends Seeder
             ],
             [
                 'service_id' => '2',
+                'title' => 'Hearing Send Quotation',
+                'description' => 'Send hearing quotation to the client.',
+                'stage' => '0',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Hearing Payment Verification',
+                'description' => 'Check if hearing payment is received.',
+                'stage' => '0',
+            ],         
+            [
+                'service_id' => '2',
                 'title' => 'Hearing',
                 'description' => 'Conducted if objections persist after examination reports.',
                 'stage' => '0',

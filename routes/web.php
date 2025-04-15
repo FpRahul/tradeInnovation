@@ -239,14 +239,38 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('/patent/second-examination-report-submit/{id?}','patentSERSubmit')->name('task.patentSERSubmit');
 
         Route::get('/patent/hearing-send-quotation/{id?}','patentHearingSendQuotation')->name('task.patentHearingSendQuotation');
-        Route::Post('/patent/hearing-send-quotation-submit/{id?}','patentHearingSendQuotationSubmit')->name('task.patentHearingSendQuotationSubmit');
         Route::get('/patent/hearing-payment-verification/{id?}','patentHearingPaymentVerification')->name('task.patentHearingPaymentVerification');
-        Route::Post('/patent/hearing-payment-verification-submit/{id?}','patentHearingPaymentVerificationSubmit')->name('task.patentHearingPaymentVerificationSubmit');
+        Route::get('/patent/await-hearing-date/{id?}','patentawaitHearingDate')->name('task.patentawaitHearingDate');
+        Route::Post('/patent/await-hearing-date-submit/{id?}','patentawaitHearingDateSubmit')->name('task.patentawaitHearingDateSubmit');
 
         Route::get('/patent/hearing/{id?}','patentHearing')->name('task.patentHearing');
         Route::Post('/patent/hearing-submit/{id?}','patentHearingSubmit')->name('task.patentHearingSubmit');
-        Route::get('/patent/opposition/{id?}','patentOpposition')->name('task.patentOpposition');
-        Route::Post('/patent/opposition-submit/{id?}','patentOppositionSubmit')->name('task.patentOppositionSubmit');
+        Route::get('/patent/pre-grant-opposition/{id?}','patentPreGrantOpposition')->name('task.patentPreGrantOpposition');
+        Route::Post('/patent/pre-grant-opposition-submit/{id?}','patentPreGrantOppositionSubmit')->name('task.patentPreGrantOppositionSubmit');
+
+        Route::get('/patent/opposition-send-quotation/{id?}','patentoppositionSendQuotation')->name('task.patentoppositionSendQuotation');
+        Route::get('/patent/opposition-payment-verification/{id?}','patentoppositionPaymentVerification')->name('task.patentoppositionPaymentVerification');
+
+        Route::get('/patent/opposition-notice-date/{id?}','patentOppositionNoticeDate')->name('task.patentoppositionNoticeDate');
+        Route::Post('/patent/opposition-notice-date-submit/{id?}','patentOppositionNoticeDateSubmit')->name('task.patentoppositionNoticeDateSubmit');
+
+        Route::get('/patent/opposition-counter-statement/{id?}','patentOppositionCounterStatement')->name('task.patentoppositionCounterStatement');
+        Route::Post('/patent/opposition-counter-statement-submit/{id?}','patentOppositionCounterStatementSubmit')->name('task.patentoppositionCounterStatementSubmit');
+        
+        Route::get('/patent/opposition-registry/{id?}','patentOppositionRegistry')->name('task.patentoppositionRegistry');
+        Route::Post('/patent/opposition-registry-submit/{id?}','patentOppositionRegistrySubmit')->name('task.patentoppositionRegistrySubmit');
+
+        Route::get('/patent/opposition-rule45/{id?}','patentOppositionRule45')->name('task.patentoppositionEvidencerule45');
+        Route::Post('/patent/opposition-rule45-submit/{id?}','patentOppositionRule45Submit')->name('task.patentoppositionEvidencerule45Submit');
+
+        Route::get('/patent/opposition-rule46/{id?}','patentOppositionRule46')->name('task.patentoppositionEvidencerule46');
+        Route::Post('/patent/opposition-rule46-submit/{id?}','patentOppositionRule46Submit')->name('task.patentoppositionEvidencerule46Submit');
+        
+        Route::get('/patent/opposition-rule47/{id?}','patentOppositionRule47')->name('task.patentoppositionEvidencerule47');
+        Route::Post('/patent/opposition-rule47-submit/{id?}','patentOppositionRule47Submit')->name('task.patentoppositionEvidencerule47Submit');
+
+        Route::get('/patent/registered/{id?}','patentregistered')->name('task.patentregistered');
+        Route::Post('/patent/registered-submit/{id?}','patentregisteredSubmit')->name('task.patentregisteredSubmit');
     });
     //Services Routes
     Route::prefix('services')->controller(ServicesController::class)->group(function () {

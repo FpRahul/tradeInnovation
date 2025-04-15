@@ -208,6 +208,12 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/agreement/submission/{id?}','agreementSubmission')->name('task.agreementSubmission');
         Route::get('/trademark/{id?}','tradeMark')->name('task.tradeMark');
         Route::Post('/trademark/status/{id?}','trademarkStatus')->name('task.trademarkStatus');
+        Route::get('/trademark/post-registration/{id?}','postRegistration')->name('task.postRegistration');
+        Route::Post('/trademark/post-registration/status/{id?}','postRegistrationStatus')->name('task.postRegistrationStatus');
+        Route::get('/trademark/rectification/{id?}','rectification')->name('task.rectification');
+        Route::Post('/trademark/rectification/status/{id?}','rectificationStatus')->name('task.rectificationStatus');
+
+        
         // For patent..........     
         // For payment verification.........
         Route::get('/patent/send-quotation/{id?}','patentSendQuotation')->name('task.patentSendQuotation');

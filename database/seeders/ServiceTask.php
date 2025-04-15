@@ -218,16 +218,42 @@ class ServiceTask extends Seeder
             ],
             [
                 'service_id' => '1',
-                'title' => 'Trademark Refused',
-                'description' => 'Action required after trademark refusal, including next steps or possible appeal.',
-                'stage' => '13',
+                'title' => 'Post-Registration Actions',
+                'description' => 'Manage tasks such as Renewal, Applicant Address change, Assignment/Registered User, Rectification, or IP Watch',
+                'stage' => '14',
             ],
             [
                 'service_id' => '1',
-                'title' => 'Trademark Register',
-                'description' => 'Complete the trademark registration ',
-                'stage' => '13',
+                'title' => 'Rectification',
+                'description' => 'Respond to opposition or challenge raised against a registered trademark',
+                'stage' => '14',
             ],
+            [
+                'service_id' => '1',
+                'title' => 'Renewal',
+                'description' => 'Initiate or manage the trademark renewal process',
+                'stage' => '14',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Modification',
+                'description' => 'Apply changes or updates to existing trademark details',
+                'stage' => '14',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Assignment',
+                'description' => 'Transfer ownership or rights of the trademark to another entity',
+                'stage' => '14',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'IP Watch',
+                'description' => 'Service to monitor if others are registering trademarks similar to yours',
+                'stage' => '14',
+            ],
+            
+            
             //patnet
             [
                 'service_id' => '2',

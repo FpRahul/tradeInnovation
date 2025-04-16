@@ -84,7 +84,7 @@ class ServiceTask extends Seeder
                 'description' => 'Notify client of examination objection and payment verification.',
                 'stage' => '8',
             ],
-            //
+            
             [
                 'service_id' => '1',
                 'title' => 'Payment Confirmation for Examination Objection',
@@ -227,6 +227,113 @@ class ServiceTask extends Seeder
                 'title' => 'Rectification',
                 'description' => 'Respond to opposition or challenge raised against a registered trademark',
                 'stage' => '14',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Client Intimation for Additional Charges (Rectification)',
+                'description' => 'Notify the client regarding additional charges required to proceed with the rectification',
+                'stage' => '14',
+            ],
+            
+            [
+                'service_id' => '1',
+                'title' => 'Payment confirmation on (Rectification)',
+                'description' => 'Confirm receipt of payment from the client for the rectification process',
+                'stage' => '14',
+            ],
+            
+            [
+                'service_id' => '1',
+                'title' => 'Notice date (Rectification)',
+                'description' => 'A notice has been received from the Trademark Registry',
+                'stage' => '14',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Counter statement (Rectification)',
+                'description' => 'Add the counter statment on the received oppostion.',
+                'stage' => '14',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Trademark Registry Sent Notice to Opponent (Rectification)',
+                'description' => 'Update the date and status when the trademark registry sent the notice to the opponent.',
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Opponent Evidence Submission status (Under rule 45) (Rectification)',
+                'description' => 'Updates the status of the opponent evidence submission under rule 45.',
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Applicant Evidence Submission status (Under rule 46) (Rectification)',
+                'description' => 'Updates the status of the applicant evidence submission under rule 46.',
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Opponent Evidence Submission status (Under rule 47) (Rectification)',
+                'description' => 'Updates the status of the Opponent evidence submission under rule 47.',
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Non compliance intimation to register (Rectification)',
+                'description' => 'Update Department for Non-Compliance Intimation register',
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Interlocutory Petition (Rectification)',
+                'description' => 'Update Department for Non-Compliance Intimation register',
+                'stage' => '13',
+            ],
+            
+            [
+                'service_id' => '1',
+                'title' => 'Awaited for Hearing (Opposition) and  Inform Client (Rectification)',
+                'description' => 'Add the court hearing date and inform the client about the scheduled session.',
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Client Decision on Hearing (Rectification)',
+                'description' => 'Client decision on whether to proceed with the hearing process.',
+                'stage' => '13',
+            ],
+
+            [
+                'service_id' => '1',
+                'title' => 'Notifying client of hearing extra charge (Rectification)',
+                'description' => 'Client is informed about the additional charge for the hearing process.',
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Update the hearing charge status (Rectification)',
+                'description' => 'Providing an update on the latest status of the hearing charge and any changes.',
+                'stage' => '13',
+            ],
+
+            [
+                'service_id' => '1',
+                'title' => ' Hearing (Rectification)',
+                'description' => 'Update the hearing status / or next hearing date',
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Written submission (Rectification)',
+                'description' => 'Submit the signed agreement to the registrar for official registration and approval.',
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Trademark Status (Rectification)',
+                'description' => 'Update the trademark status',
+                'stage' => '13',
             ],
             [
                 'service_id' => '1',

@@ -210,8 +210,47 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('/trademark/status/{id?}','trademarkStatus')->name('task.trademarkStatus');
         Route::get('/trademark/post-registration/{id?}','postRegistration')->name('task.postRegistration');
         Route::Post('/trademark/post-registration/status/{id?}','postRegistrationStatus')->name('task.postRegistrationStatus');
-        Route::get('/trademark/rectification/{id?}','rectification')->name('task.rectification');
-        Route::Post('/trademark/rectification/status/{id?}','rectificationStatus')->name('task.rectificationStatus');
+        Route::get('/rectification/{id?}','rectification')->name('task.rectification');
+        Route::Post('/rectification/status/{id?}','rectificationStatus')->name('task.rectificationStatus');
+        Route::get('/rectification/inform-client/{id?}' , 'informClientRectification')->name('task.informClientRectification');
+        Route::Post('/rectification/inform-client/status/{id?}' , 'informClientRectificationStatus')->name('task.informClientRectificationStatus');
+        Route::get('/rectification/payment-confirmation/{id?}' , 'paymentOnRectification')->name('task.paymentOnRectification');
+        Route::Post('/rectification/payment-confirmation/status{id?}' , 'paymentOnRectificationStatus')->name('task.paymentOnRectificationStatus');
+        Route::get('/rectification/notice-recevied/{id?}' , 'rectificationNoticeReceived')->name('task.rectificationNoticeReceived');
+        Route::Post('/rectification/notice-recevied/status{id?}' , 'rectificationNoticeReceivedStatus')->name('task.rectificationNoticeReceivedStatus');
+        Route::get('/rectification/counter-statement/{id?}' , 'rectificationCounterStatement')->name('task.rectificationCounterStatement');
+        Route::Post('/rectification/counter-statement/status{id?}' , 'rectificationCounterStatementStatus')->name('task.rectificationCounterStatementStatus');
+        Route::get('/rectification/notice-sent/{id?}' , 'rectificationNoticeSent')->name('task.rectificationNoticeSent');
+        Route::Post('/rectification/notice-sent/{id?}' , 'rectificationNoticeSentStatus')->name('task.rectificationNoticeSentStatus');
+        Route::get('/rectification/opponent/evidemce-submission/{id?}' , 'rectificationOpponentEvidenceSubmission')->name('task.rectificationOpponentEvidenceSubmission');
+        Route::Post('/rectification/opponent/evidemce-submission/status/{id?}' , 'rectificationOpponentEvidenceSubmissionStatus')->name('task.rectificationOpponentEvidenceSubmissionStatus');
+        Route::get('/rectification/apllicant/evidemce-submission/{id?}' , 'rectifiactionApplicationEvidenceSubmission')->name('task.rectifiactionApplicationEvidenceSubmission');
+        Route::Post('/rectification/apllicant/evidemce-submission/status/{id?}' , 'rectifiactionApplicationEvidenceSubmissionStatus')->name('task.rectifiactionApplicationEvidenceSubmissionStatus');
+        Route::get('/rectification/opponent/evidemce/re-submission/{id?}' , 'rectificationOpponentResubmisson')->name('task.rectificationOpponentResubmisson');
+        Route::Post('/rectification/opponent/evidemce/re-submission/status/{id?}' , 'rectificationOpponentResubmissonStatus')->name('task.rectificationOpponentResubmissonStatus');
+        Route::get('/rectification/hearing/{id?}' , 'rectificationHearing')->name('task.rectificationHearing');
+        Route::Post('/rectification/hearing/status{id?}' , 'rectificationHearingStatus')->name('task.rectificationHearingStatus');
+        Route::get('/rectification/client-approval/{id?}' , 'clientApprovalOnHearingRectification')->name('task.clientApprovalOnHearingRectification');
+        Route::Post('/rectification/client-approval/status{id?}' , 'clientApprovalOnHearingRectificationStatus')->name('task.clientApprovalOnHearingRectificationStatus');
+        Route::get('/rectification/proforma-invoice/{id?}' , 'clientInformExtraChargeOnHearingRectification')->name('task.clientInformExtraChargeOnHearingRectification');
+        Route::Post('/rectification/proforma-invoice/status{id?}' , 'clientInformExtraChargeOnHearingRectificationStatus')->name('task.clientInformExtraChargeOnHearingRectificationStatus');
+
+
+        
+
+        
+
+        
+        
+
+
+
+
+        
+
+
+
+        
 
         
         // For patent..........     

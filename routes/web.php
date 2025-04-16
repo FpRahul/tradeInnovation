@@ -263,6 +263,22 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/patent/opposition-counter-statement/{id?}','patentOppositionCounterStatement')->name('task.patentoppositionCounterStatement');
         Route::Post('/patent/opposition-counter-statement-submit/{id?}','patentOppositionCounterStatementSubmit')->name('task.patentoppositionCounterStatementSubmit');
         
+        Route::get('/patent/opposition-non-compilance/{id?}','patentOppositionNonCompliance')->name('task.patentoppositionNonCompliance');
+        Route::Post('/patent/opposition-non-compilance-submit/{id?}','patentOppositionNonComplianceSubmit')->name('task.patentoppositionNonComplianceSubmit');
+
+        Route::get('/patent/opposition-awaiting-hearing/{id?}','patentOppositionAwaitingHearing')->name('task.patentoppositionAwaitingHearing');
+        Route::Post('/patent/opposition-awaiting-hearing-submit/{id?}','patentOppositionAwaitingHearingSubmit')->name('task.patentoppositionAwaitingHearingSubmit');
+
+        Route::get('/patent/opposition-client-confirmation/{id?}','patentOppositionClientConfirmation')->name('task.patentoppositionClientConfirmation');
+
+        Route::get('/patent/opposition-client-payment-verification/{id?}','patentOppositionClientPaymentVerification')->name('task.patentoppositionClientPaymentVerification');
+
+        Route::get('/patent/opposition-hearing/{id?}','patentOppositionHearing')->name('task.patentoppositionHearing');
+        Route::Post('/patent/opposition-hearing-submit/{id?}','patentOppositionHearingSubmit')->name('task.patentoppositionHearingSubmit');
+
+        Route::get('/patent/opposition-written-submission/{id?}','patentOppositionWrittenSubmission')->name('task.patentoppositionWrittenSubmission');
+        Route::Post('/patent/opposition-written-submission-submit/{id?}','patentOppositionWrittenSubmissionSubmit')->name('task.patentoppositionWrittenSubmissionSubmit');
+
         Route::get('/patent/opposition-registry/{id?}','patentOppositionRegistry')->name('task.patentoppositionRegistry');
         Route::Post('/patent/opposition-registry-submit/{id?}','patentOppositionRegistrySubmit')->name('task.patentoppositionRegistrySubmit');
 
@@ -275,8 +291,14 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/patent/opposition-rule47/{id?}','patentOppositionRule47')->name('task.patentoppositionEvidencerule47');
         Route::Post('/patent/opposition-rule47-submit/{id?}','patentOppositionRule47Submit')->name('task.patentoppositionEvidencerule47Submit');
 
-        Route::get('/patent/registered/{id?}','patentregistered')->name('task.patentregistered');
-        Route::Post('/patent/registered-submit/{id?}','patentregisteredSubmit')->name('task.patentregisteredSubmit');
+        Route::get('/patent/registered/{id?}','patentregistered')->name('task.patentStatus');
+        Route::Post('/patent/registered-submit/{id?}','patentregisteredSubmit')->name('task.patentStatusSubmit');
+
+        Route::get('/patent/post-registration-status/{id?}','patentPostRegistrationAction')->name('task.patentPostRegistrationAction');
+        Route::Post('/patent/post-registration-status-submit/{id?}','patentPostRegistrationActionSubmit')->name('task.patentPostRegistrationActionSubmit');
+
+        Route::get('/patent/interlocatory-petition/{id?}','patentInterlocatoryPetition')->name('task.patentInterlocatoryPetition');
+        Route::Post('/patent/interlocatory-petition-submit/{id?}','patentInterlocatoryPetitionSubmit')->name('task.patentInterlocatoryPetitionSubmit');
     });
     //Services Routes
     Route::prefix('services')->controller(ServicesController::class)->group(function () {

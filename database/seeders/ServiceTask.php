@@ -389,10 +389,52 @@ class ServiceTask extends Seeder
             ], 
             [
                 'service_id' => '2',
-                'title' => 'Counter Statment',
-                'description' => 'Add the counter statment on the received oppostion.',
+                'title' => 'Counter Statement',
+                'description' => 'Submit the counter statement in response to the received opposition.',
+                'stage' => '0',
+            ],            
+            [
+                'service_id' => '2',
+                'title' => 'Non-Compliance Intimation to Controller/Registrar',
+                'description' => 'Notify the Controller about missed action or deadline.',
                 'stage' => '0',
             ],
+            [
+                'service_id' => '2',
+                'title' => 'Opposition Awaiting Hearing Date',
+                'description' => 'Waiting for hearing date after opposition is filed.',
+                'stage' => '0',
+            ],  
+            [
+                'service_id' => '2',
+                'title' => 'Opposition Client Confirmation',
+                'description' => 'Confirm with client whether to proceed with opposition.',
+                'stage' => '0',
+            ], 
+            [
+                'service_id' => '2',
+                'title' => 'Opposition Client Payment Verification',
+                'description' => 'Verify if client has made the required payment.',
+                'stage' => '0',
+            ], 
+            [
+                'service_id' => '2',
+                'title' => 'Opposition Hearing',
+                'description' => 'Attend the hearing scheduled by the Registrar.',
+                'stage' => '0',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Written Submission',
+                'description' => 'Submit a reply to the hearing or notice from the Patent Office.',
+                'stage' => '0',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Patent Status',
+                'description' => 'Complete/Refuse the patent registration ',
+                'stage' => '0',
+            ],              
             [
                 'service_id' => '2',
                 'title' => 'Patent Registry Sent Notice to Opponent',
@@ -419,10 +461,40 @@ class ServiceTask extends Seeder
             ],                                          
             [
                 'service_id' => '2',
-                'title' => 'Patent Register',
-                'description' => 'Complete the patent registration ',
+                'title' => 'Post Registration Action',
+                'description' => 'Includes actions like renewal, opposition, or amendments after the patent is granted.',
                 'stage' => '0',
             ],
+            [
+                'service_id' => '2',
+                'title' => 'Interlocutory Petition',
+                'description' => 'Covers disputes or hearings during patent opposition or examination.',
+                'stage' => '0',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Awaiting Hearing (Oppostion)',
+                'description' => 'Waiting for hearing date after opposition is filed.',
+                'stage' => '0',
+            ],  
+            [
+                'service_id' => '2',
+                'title' => 'Opposition Client Confirmation',
+                'description' => 'Confirm with client whether to proceed with opposition.',
+                'stage' => '0',
+            ], 
+            [
+                'service_id' => '2',
+                'title' => 'Opposition Client Payment Verification',
+                'description' => 'Verify if client has made the required payment.',
+                'stage' => '0',
+            ], 
+            [
+                'service_id' => '2',
+                'title' => 'Opposition Hearing',
+                'description' => 'Attend the hearing scheduled by the Registrar.',
+                'stage' => '0',
+            ],    
             
         ]);
     }

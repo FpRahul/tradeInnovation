@@ -91,14 +91,21 @@
             </div>
             <div class="flex flex-col md:flex-row gap-[20px]">
 
-                <div class="w-full md:w-1/2">
+                <div class="w-full md:w-1/3">
                     <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Email-Id <strong class="text-[#f83434]">*</strong></label>
                     <input type="text" name="email" id="email" value="{{ old('email') ? old('email') : $newUser->email }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Email" required>
                     @error('email')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
-                <div class="w-full md:w-1/2">
+                <div class="w-full md:w-1/3">
+                    <label for="password" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Password <span class="text-[12px] italic font-[400] text-[#5e5e5e]">(If required you can change the password)</span> </label>
+                    <input type="text" minlength="8" name="password" id="password" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Password">
+                    @error('password')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="w-full md:w-1/3">
                     <label for="qualification" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Qualification <strong class="text-[#f83434]">*</strong></label>
                     <input type="text" name="qualification" id="qualification" value="{{ old('qualification') ? old('qualification') : (!empty($newUserDetails->qualification) ? $newUserDetails->qualification :'') }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Qualification" required>
                     @error('qualification')

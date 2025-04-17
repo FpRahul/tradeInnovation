@@ -153,6 +153,10 @@ class UsersController extends Controller
             $newUserExperiences = UserExperience::where('userId', $id)->get();
             $email = "required|email";
             $hashedPassword = $newUser->password;
+            if (!empty($request->password)) {
+                $hashedPassword = Hash::make($request->password);
+            }
+
             $successMessage = "User is successfully updated!";
             $moduleName = "Update";
             $logAct = 'updated';
@@ -170,6 +174,9 @@ class UsersController extends Controller
             $email = "required|email|unique:users,email";
             $randomNumber = substr(str_shuffle('9abcdefghijklmnopq045678rstuvwxyzABCDEFG123HIJKLMNOPQRSTUVWXYZ'), 0, 8);
             $hashedPassword = Hash::make($randomNumber);
+            if (!empty($request->password)) {
+                $hashedPassword = Hash::make($request->password);
+            }
             $successMessage = "User is successfully inserted!";
             $moduleName = "Add";
             $logAct = 'added';

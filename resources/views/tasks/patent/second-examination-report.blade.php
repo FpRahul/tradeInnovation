@@ -25,7 +25,7 @@
          <label for="status" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
          <select name="status" id="status" class="objectApproveStatus allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]" required>
             <option value="" selected>Select Status</option>
-            <option value="objected" >Objected</option>
+            <option value="objected" data-id="{{$getStage->id}}" data-val="{{$getStage->title}}">Objected</option>
             <option value="approved" data-id="{{$onNextToNextStage->id}}" data-val="{{$onNextToNextStage->title}}" >Approved</option>
          </select>   
       </div>
@@ -151,12 +151,21 @@
 <script>
    $(document).on('change','.objectApproveStatus',function(){
       let changeDateText = $(this).parent().parent().find('.filied_hold_date_text');
+      let selectedOption = $(this).find('option:selected');
+      let dataId = selectedOption.data('id'); // gets data-id
+      let dataVal = selectedOption.data('val');
         if($(this).val() == 'objected'){
             changeDateText.text('Objected On');
             $('.secondExaminationShowHide').removeClass('hidden');
+            $('.stage_text').val(dataVal);
+            $('.stage_id').val(dataId);
+            $('.stage_title').text(dataVal);
         }else{
             changeDateText.text('Approved On');
             $('.secondExaminationShowHide').addClass('hidden');
+            $('.stage_text').val(dataVal);
+            $('.stage_id').val(dataId);
+            $('.stage_title').text(dataVal);
         }
     });
 

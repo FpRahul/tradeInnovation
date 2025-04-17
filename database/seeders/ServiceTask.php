@@ -554,12 +554,7 @@ class ServiceTask extends Seeder
                 'description' => 'Submit a reply to the hearing or notice from the Patent Office.',
                 'stage' => '0',
             ],
-            [
-                'service_id' => '2',
-                'title' => 'Patent Status',
-                'description' => 'Complete/Refuse the patent registration ',
-                'stage' => '0',
-            ],              
+                         
             [
                 'service_id' => '2',
                 'title' => 'Patent Registry Sent Notice to Opponent',
@@ -584,12 +579,7 @@ class ServiceTask extends Seeder
                 'description' => 'Updates the status of the Opponent evidence submission under rule 47.',
                 'stage' => '0',
             ],                                          
-            [
-                'service_id' => '2',
-                'title' => 'Post Registration Action',
-                'description' => 'Includes actions like renewal, opposition, or amendments after the patent is granted.',
-                'stage' => '0',
-            ],
+            
             [
                 'service_id' => '2',
                 'title' => 'Interlocutory Petition',
@@ -620,7 +610,18 @@ class ServiceTask extends Seeder
                 'description' => 'Attend the hearing scheduled by the Registrar.',
                 'stage' => '0',
             ],    
-            
+            [
+                'service_id' => '2',
+                'title' => 'Patent Status',
+                'description' => 'Complete/Refuse the patent registration ',
+                'stage' => '0',
+            ], 
+            [
+                'service_id' => '2',
+                'title' => 'Post Registration Action',
+                'description' => 'Includes actions like renewal, opposition, or amendments after the patent is granted.',
+                'stage' => '0',
+            ],
         ]);
     }
 }

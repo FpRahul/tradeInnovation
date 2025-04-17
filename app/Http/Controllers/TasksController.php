@@ -13074,78 +13074,86 @@ class TasksController extends Controller
 
 
         // For Patent...............
-        else if ($taskDetails && $serviceId == 2 && $stageId == 40) {
+        else if ($taskDetails && $serviceId == 2 && $stageId == 60) {
             return redirect()->route('task.patentSendQuotation', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 41) {
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 61) {
             return redirect()->route('task.patentPaymentVerification', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 42) {
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 62) {
             return redirect()->route('task.patentPriorArt', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 43) {
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 63) {
             return redirect()->route('task.patentDocumentation', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 44) {
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 64) {
             return redirect()->route('task.patentDraft', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 45) {
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 65) {
             return redirect()->route('task.patentClientApproval', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 46) {
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 66) {
             return redirect()->route('task.patentfilingProccess', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 47) {
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 67) {
             return redirect()->route('task.patentCompleteSpecification', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 48) {
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 68) {
             return redirect()->route('task.patentForm9', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 49) {
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 69) {
             return redirect()->route('task.patentearlypublication', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 50) {
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 70) {
             return redirect()->route('task.patentStandardpublication', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 51) {
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 71) {
             return redirect()->route('task.patentForm18', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 52) {
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 72) {
             return redirect()->route('task.patentFER', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 53) {
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 73) {
             return redirect()->route('task.patentSER', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 54) {
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 74) {
             return redirect()->route('task.patentHearingSendQuotation', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 2 && $stageId == 55) {
-            return redirect()->route('task.patentHearingPaymentVerification', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 2 && $stageId == 56) {
-            return redirect()->route('task.patentawaitHearingDate', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 2 && $stageId == 57) {
-            return redirect()->route('task.patentHearing', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 2 && $stageId == 58) {
-            return redirect()->route('task.patentPreGrantOpposition', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 2 && $stageId == 59) {
-            return redirect()->route('task.patentoppositionSendQuotation', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 2 && $stageId == 60) {
-            return redirect()->route('task.patentoppositionPaymentVerification', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 2 && $stageId == 61) {
-            return redirect()->route('task.patentoppositionNoticeDate', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 2 && $stageId == 62) {
-            return redirect()->route('task.patentoppositionCounterStatement', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 2 && $stageId == 63) {
-            return redirect()->route('task.patentoppositionNonCompliance', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 2 && $stageId == 64) {
-            return redirect()->route('task.patentoppositionAwaitingHearing', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 2 && $stageId == 65) {
-            return redirect()->route('task.patentoppositionClientConfirmation', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 2 && $stageId == 66) {
-            return redirect()->route('task.patentoppositionClientPaymentVerification', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 2 && $stageId == 67) {
-            return redirect()->route('task.patentoppositionHearing', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 2 && $stageId == 68) {
-            return redirect()->route('task.patentoppositionWrittenSubmission', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 2 && $stageId == 69) {
-            return redirect()->route('task.patentStatus', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 2 && $stageId == 70) {
-            return redirect()->route('task.patentoppositionRegistry', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 2 && $stageId == 71) {
-            return redirect()->route('task.patentoppositionEvidencerule45', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 2 && $stageId == 72) {
-            return redirect()->route('task.patentoppositionEvidencerule46', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 2 && $stageId == 73) {
-            return redirect()->route('task.patentoppositionEvidencerule47', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 2 && $stageId == 74) {
-            return redirect()->route('task.patentPostRegistrationAction', ['id' => $id]);
         }else if ($taskDetails && $serviceId == 2 && $stageId == 75) {
+            return redirect()->route('task.patentHearingPaymentVerification', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 76) {
+            return redirect()->route('task.patentawaitHearingDate', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 77) {
+            return redirect()->route('task.patentHearing', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 78) {
+            return redirect()->route('task.patentPreGrantOpposition', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 79) {
+            return redirect()->route('task.patentoppositionSendQuotation', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 80) {
+            return redirect()->route('task.patentoppositionPaymentVerification', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 81) {
+            return redirect()->route('task.patentoppositionNoticeDate', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 82) {
+            return redirect()->route('task.patentoppositionCounterStatement', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 83) {
+            return redirect()->route('task.patentoppositionNonCompliance', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 84) {
+            return redirect()->route('task.patentoppositionAwaitingHearing', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 85) {
+            return redirect()->route('task.patentoppositionClientConfirmation', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 86) {
+            return redirect()->route('task.patentoppositionClientPaymentVerification', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 87) {
+            return redirect()->route('task.patentoppositionHearing', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 88) {
+            return redirect()->route('task.patentoppositionWrittenSubmission', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 89) {
+            return redirect()->route('task.patentoppositionRegistry', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 90) {
+            return redirect()->route('task.patentoppositionEvidencerule45', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 91) {
+            return redirect()->route('task.patentoppositionEvidencerule46', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 92) {
+            return redirect()->route('task.patentoppositionEvidencerule47', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 93) {
             return redirect()->route('task.patentInterlocatoryPetition', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 94) {
+            return redirect()->route('task.patentCounterStatementAwaitingHearing', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 95) {
+            return redirect()->route('task.patentCounterStatementClientConfirmation', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 96) {
+            return redirect()->route('task.patentCounterStatementClientPaymentVerification', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 97) {
+            return redirect()->route('task.patentCounterStatementHearing', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 98) {
+            return redirect()->route('task.patentStatus', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 99) {
+            return redirect()->route('task.patentPostRegistrationAction', ['id' => $id]);
         }
     }
 
@@ -14635,14 +14643,13 @@ class TasksController extends Controller
             $onNextStage = ServiceStages::where('service_id', 2)
                 ->where('id', '>', $getStage->id)
                 ->orderBy('id')
-                ->first();
-            if ($onNextStage) {
-                $onNextToNextStage = ServiceStages::where('service_id', 2)
-                    ->where('id', '>', $onNextStage->id)
-                    ->orderBy('id')
-                    ->first();
-            }
+                ->first();           
         }
+        $onNextToNextStage = ServiceStages::where('service_id', 2)
+        ->where('id', '=', 
+        78)
+        ->orderBy('id')
+        ->first();
         // dd($onNextToNextStage);
         $header_title_name = $taskDetails->serviceSatge->title;
         return view('tasks.patent.first-examination-report', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'previousTask', 'onNextStage', 'onNextToNextStage'));
@@ -14799,14 +14806,12 @@ class TasksController extends Controller
             $onNextStage = ServiceStages::where('service_id', 2)
                 ->where('id', '>', $getStage->id)
                 ->orderBy('id')
-                ->first();
-            if ($onNextStage) {
-                $onNextToNextStage = ServiceStages::where('service_id', 2)
-                    ->where('id', '>', $onNextStage->id)
-                    ->orderBy('id')
-                    ->first();
-            }
+                ->first();            
         }
+        $onNextToNextStage = ServiceStages::where('service_id', 2)
+            ->where('id', '>', 78)
+            ->orderBy('id')
+            ->first();
         // dd($onNextToNextStage);
         $header_title_name = $taskDetails->serviceSatge->title;
         return view('tasks.patent.second-examination-report', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'previousTask', 'onNextStage', 'onNextToNextStage'));
@@ -15511,7 +15516,7 @@ class TasksController extends Controller
         $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->where('archive', 1)->get();
         $stageId = $taskDetails->service_stage_id;
         $getStage = ServiceStages::where('service_id', 2)->where('id', '>', $stageId)->first();
-        $onHideSatge = ServiceStages::where('service_id', 2)->where('id', '=', 69)->first();
+        $onHideSatge = ServiceStages::where('service_id', 2)->where('id', '=', 98)->first();
         $leadTaskdetials = LeadTaskDetail::find($id);
         $header_title_name = $taskDetails->serviceSatge->title;
         $service_details = ServiceDetail::where('lead_id', $taskDetails->lead_id)->where('service_id', $taskDetails->service_id)
@@ -15926,14 +15931,14 @@ class TasksController extends Controller
 
         if ($leadTaskdetials && $leadTaskdetials->status == 3) {
             $getStage = ServiceStages::where('service_id', 2)
-                ->where('id', 71)
+                ->where('id', 90) //Done
                 ->first();
         }
         $opponentStage = ServiceStages::where('service_id', 2)
-            ->where('id', 73)
+            ->where('id', 92) //Done
             ->first();
         $onHideSatge = ServiceStages::where('service_id', 2)
-            ->where('id', 63)
+            ->where('id', 83)
             ->first();
 
         $header_title_name = $taskDetails->serviceSatge->title ?? 'Default Title';
@@ -16829,7 +16834,7 @@ class TasksController extends Controller
             ->orderBy('id', 'asc')
             ->first();
         $stageId = $taskDetails->service_stage_id;
-        $getStage = ServiceStages::where('service_id', 2)->where('id', '>', $stageId)->first();
+        $getStage = ServiceStages::where('service_id', 2)->where('id', '>', $stageId)->first(); // change to patent status
         $leadTaskdetials = LeadTaskDetail::find($id);
         $header_title_name = $taskDetails->serviceSatge->title;
         return view('tasks.patent.opposition-written-submission', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'applicationNumber'));
@@ -16968,14 +16973,13 @@ class TasksController extends Controller
         if ($id) {
             $notifyData = LeadNotification::where('task_id', $id)->update(['status' => 1]);
         }
-
         $taskDetails = LeadTask::with(['user', 'lead', 'services', 'subService', 'leadTaskDetails', 'serviceSatge'])
             ->where('id', $id)
             ->first();
         $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->where('archive', 1)->get();
         $stageId = $taskDetails->service_stage_id;
         $getStage = ServiceStages::where('service_id', 2)->where('id', '>', $stageId)->first();
-        $onHideSatge = ServiceStages::where('service_id', 2)->where('id', '=', 74)->first();
+        $onHideSatge = ServiceStages::where('service_id', 2)->where('id', '=', 99)->first(); // need to change post registration action id
         $leadTaskdetials = LeadTaskDetail::find($id);
         $header_title_name = $taskDetails->serviceSatge->title;
         return view('tasks.patent.registered', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'onHideSatge'));
@@ -17151,7 +17155,7 @@ class TasksController extends Controller
 
         $stageId = $taskDetails->service_stage_id ?? null;
         $getStage = ServiceStages::where('service_id', 2)
-            ->where('id', '=', 70)
+            ->where('id', '=', 89)
             ->first();
 
         $leadTaskdetials = LeadTaskDetail::find($id);
@@ -17163,7 +17167,7 @@ class TasksController extends Controller
         }
 
         $onHideSatge = ServiceStages::where('service_id', 2)
-            ->where('id', 75)
+            ->where('id', 93)
             ->first();
 
         $header_title_name = $taskDetails->serviceSatge->title ?? 'Default Title';
@@ -17506,7 +17510,7 @@ class TasksController extends Controller
         }
 
         $onHideSatge = ServiceStages::where('service_id', 2)
-            ->where('id', 63)
+            ->where('id', 83)
             ->first();
         $service_details = ServiceDetail::where('lead_id', $taskDetails->lead_id)->where('service_id', $taskDetails->service_id)
             ->where('id', $taskDetails->service_detail_id)->first();
@@ -17836,7 +17840,7 @@ class TasksController extends Controller
         $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->where('archive', 1)->get();
         $stageId = $taskDetails->service_stage_id;
         $getStage = ServiceStages::where('service_id', 2)->where('id', '>', $stageId)->first();
-        $onHideSatge = ServiceStages::where('service_id', 2)->where('id', '=', 75)->first();
+        $onHideSatge = ServiceStages::where('service_id', 2)->where('id', '=', 93)->first(); //Done
         $leadTaskdetials = LeadTaskDetail::find($id);
         $header_title_name = $taskDetails->serviceSatge->title;
         $service_details = ServiceDetail::where('lead_id', $taskDetails->lead_id)->where('service_id', $taskDetails->service_id)
@@ -18167,19 +18171,19 @@ class TasksController extends Controller
 
         $stageId = $taskDetails->service_stage_id ?? null;
         $getStage = ServiceStages::where('service_id', 2)
-            ->where('id', '=', 76)
+            ->where('id', '=', 94) //Done
             ->first();
 
         $leadTaskdetials = LeadTaskDetail::find($id);
 
         if ($leadTaskdetials && $leadTaskdetials->status == 3) {
             $getStage = ServiceStages::where('service_id', 2)
-                ->where('id', 76)
+                ->where('id', 94)  //Done
                 ->first();
         }
 
         $onHideSatge = ServiceStages::where('service_id', 2)
-            ->where('id', 63)
+            ->where('id', 83)
             ->first();
         $service_details = ServiceDetail::where('lead_id', $taskDetails->lead_id)->where('service_id', $taskDetails->service_id)
             ->where('id', $taskDetails->service_detail_id)->first();
@@ -18494,6 +18498,479 @@ class TasksController extends Controller
             return redirect()->back()->with('erroe', "no task found");
         }
     }
+
+    ///////////////////////////////////////
+    public function patentCounterStatementAwaitingHearing(Request $request ,$id){
+        if ($id) {
+            $notifyData = LeadNotification::where('task_id', $id)->update(['status' => 1]);
+        }
+
+        $taskDetails = LeadTask::with(['user', 'lead', 'services', 'subService', 'leadTaskDetails', 'serviceSatge'])
+            ->where('id', $id)
+            ->first();
+        $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->where('archive', 1)->get();
+
+        $stageId = $taskDetails->service_stage_id;
+        $getStage = ServiceStages::where('service_id', 2)->where('id', '>', $stageId)->first();
+        $leadTaskdetials = LeadTaskDetail::find($id);
+        $header_title_name = $taskDetails->serviceSatge->title;
+        return view('tasks.patent.counter-statement-awaiting-hearing', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage'));
+    }
+
+    public function patentCounterStatementAwaitingHearingSubmit(Request $request,$id){
+        $hearingDate = Carbon::createFromFormat('d M Y', $request->input('hearing_date'))->format('Y-m-d');
+        $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
+        $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
+        $existedLeaedTask = LeadTask::find($id);
+        $newHearing = new HearingDateDetails();
+        $existedHearing = HearingDateDetails::where('task_id', $existedLeaedTask->id)->latest()->first();
+    
+        $existedLeaedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
+        $newLeadtask = new LeadTask();
+        $newLeadTaskDeatails  = new LeadTaskDetail();
+        $newNotification = new LeadNotification();
+        $newTaskStageId = $existedLeaedTask->service_stage_id + 1;
+        $newTaskTitle = ServiceStages::find($newTaskStageId);
+        $userName = Auth::user()->name;
+        $formattedCreatedDate = $existedLeaedTask->created_at->format('d M Y');
+    
+        $rule = [
+            'hearing_date' => 'required',
+            'verified' => 'required',
+            'assignUser' => 'required',
+            'deadline' => 'required'
+        ];
+        $validator = Validator::make($request->all(), $rule);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        if ($id) {
+            $newLeadtask->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+            $newLeadtask->lead_id = $existedLeaedTask->lead_id;
+            $newLeadtask->service_detail_id = $existedLeaedTask->service_detail_id;
+            $newLeadtask->service_id = $existedLeaedTask->service_id;
+            $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
+            $newLeadtask->service_stage_id = $request->stage_id;
+            $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
+            $newLeadtask->assign_by = Auth::id();
+            $newLeadtask->task_title = $newTaskTitle->title;
+            $existedLeaedTask->task_description = $request->description;
+            $existedLeaedTask->save();
+            if ($newLeadtask->save()) {
+                $existedLeaedTaskDetails->status = 1;
+                $existedLeaedTaskDetails->status_date = $verifiedDate;
+                if ($request->hasFile('attachment')) {
+                    $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
+                    if (!file_exists($folderPath)) {
+                        mkdir($folderPath, 0755, true);
+                    }
+                    $filePaths = [];
+                    foreach ($request->file('attachment') as $file) {
+                        if ($file->isValid()) {
+                            $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
+                            $file->move($folderPath, $fileName);
+                            $filePaths[] = $fileName;
+                        }
+                    }
+                    $existedLeaedTaskDetails->attachment = json_encode($filePaths);
+                }
+                if ($existedLeaedTaskDetails->save()) {
+                    $newLeadTaskDeatails->task_id = $newLeadtask->id;
+                    $newLeadTaskDeatails->dead_line = $deadlineDate;
+                    $newLeadTaskDeatails->status = 0;
+    
+                    if ($newLeadTaskDeatails->save()) {
+                        $newHearing->task_id  = $newLeadtask->id;
+                        $newHearing->lead_id =  $existedLeaedTask->lead_id;
+                        $newHearing->stage_id =  $request->stage_id;
+                        $newHearing->reason =  Null;
+                        $newHearing->hearing_date =  $hearingDate;
+                        if ($existedHearing) {
+                            $newHearing->count = $existedHearing->count ? $existedHearing->count + 1 : 0;
+                        } else {
+                            $newHearing->count = 1;
+                        }
+                        if ($newHearing->save()) {
+                            $newNotification->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+                            $newNotification->lead_id = $existedLeaedTask->lead_id;
+                            $newNotification->task_id = $newLeadtask->id;
+                            $newNotification->title = 'Task Assigned';
+                            $newNotification->description =  $userName . ' assigned you ' . $newTaskTitle->title . ' task';
+                            $newNotification->status = 0;
+                            if ($newNotification->save()) {
+                                $LeadLog =  new LeadLog();
+                                $LeadLog->user_id = $existedLeaedTask->user_id;
+                                $LeadLog->lead_id = $existedLeaedTask->lead_id;
+                                $LeadLog->task_id = $existedLeaedTask->id;
+                                $LeadLog->assign_by = Auth::id();
+                                $LeadLog->remark = 'Hearing(Objection)';
+                                $oldValue = [
+                                    'status' => 'Pending',
+                                    'Assigned On' =>  $formattedCreatedDate,
+                                    'Assigned By' =>  $existedLeaedTask->userAssignBy->name,
+                                    'Hearing Date' => "N/A"
+                                ];
+                                $newValue = [
+                                    'status' => 'Completed',
+                                    'Verified On' => $request->verified,
+                                    'Assigned To' =>  $existedLeaedTask->user->name,
+                                    'Hearing Date' => $request->hearing_date,
+                                ];
+                                $LeadLog->old_value = json_encode($oldValue);
+                                $LeadLog->new_value = json_encode($newValue);
+                                $LeadLog->description = "Application status moved to the hearing stage.";
+                                if ($LeadLog->save()) {
+                                    $newassignlog = new leadLog();
+                                    $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+                                    $newassignlog->lead_id = $existedLeaedTask->lead_id;
+                                    $newassignlog->task_id = $newLeadtask->id;
+                                    $newassignlog->assign_by = Auth::id();
+                                    $newassignlog->remark = 'Assign';
+                                    $newassignlog->description =  "Lead assigned for next task";
+                                    if ($newassignlog->save()) {
+                                        $id = $newLeadtask->id;
+                                        return redirect()->route('task.index')->with('success', 'Hearing Date Confirmed');
+                                    }
+                                } else {
+                                    return redirect()->back()->with('error', 'there is something wrong during upadate logs');
+                                }
+                            } else {
+                                return redirect()->back()->with('error', 'there is something wrong during notification logs');
+                            }
+                        } else {
+                            return redirect()->back()->with('error', 'there is something wrong while updating new hearing date');
+                        }
+                    } else {
+                        return redirect()->back()->with('error', 'there is something wrong during update  new task details');
+                    }
+                } else {
+                    return redirect()->back()->with('error', 'there is something wrong during update  existed task details');
+                }
+            } else {
+                return redirect()->back()->with('error', 'there is something wrong during update  new task');
+            }
+        } else {
+            return redirect()->back()->with('erroe', "no task found");
+        }
+    }
+    
+    public function patentcounterStatementClientConfirmation(Request $request,$id){
+        $taskId = $id;
+        if ($id) {
+            $notifyData = LeadNotification::where('task_id', $id)->update(['status' => 1]);
+        }
+        $header_title_name = "Send Quotation";
+        $taskDetails = LeadTask::with(['user', 'lead', 'lead.LeadFirm', 'leadTaskDetails', 'services', 'subService', 'serviceSatge'])
+            ->where('id', $id)
+            ->get();
+        foreach ($taskDetails as $task) {
+            $taskDetailsId = $task->id;
+            $serviceName = $task->services->serviceName;
+            $serviceID = $task->services->id;
+            $clientName = $task->lead->client_name;
+        }
+        $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
+        foreach ($taskDetails as $value) {
+            $stage_id = $value->service_stage_id;
+        }
+        $getStage = ServiceStages::where('service_id', $serviceID)->where('id', '>', $stage_id)->first();
+        $leadTaskdetials = LeadTaskDetail::find($taskDetailsId);
+        return view('tasks/patent/counter-statement-client-confirmation', compact('taskId', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'serviceName', 'clientName'));
+    }
+
+    public function patentcounterStatementClientPaymentVerification(Request $request,$id){
+        $taskId = $id;
+        $taskList = LeadTask::with(['user', 'leadTaskDetails', 'payment' => function ($q) {
+            $q->limit(1)->latest();
+        }])->where('id', $taskId)->first();
+        $firstPaymentId = Payment::where('task_id', $taskId)->OrderBy('id', 'ASC')->first();
+
+        $serviceStage = ServiceStages::where('id', '>', $taskList->service_stage_id)->where('service_id', 2)->first();
+        $userList = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
+        $getStage = ServiceStages::where('service_id', 2)->where('id', '>', $taskList->service_stage_id)->first();
+        $currentUser = User::find($taskList->user_id);
+        $header_title_name = "Payment Verification";
+        return view('tasks/patent/counter-statement-client-payment-verification', compact('header_title_name', 'firstPaymentId', 'taskId', 'getStage', 'taskList', 'serviceStage', 'userList', 'currentUser'));
+    }
+
+    public function patentCounterStatementHearing(Request $request ,$id){
+        if ($id) {
+            $notifyData = LeadNotification::where('task_id', $id)->update(['status' => 1]);
+        }
+
+        $taskDetails = LeadTask::with(['user', 'lead', 'services', 'subService', 'leadTaskDetails', 'serviceSatge'])
+            ->where('id', $id)
+            ->first();
+        $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->where('archive', 1)->get();
+        // dd($taskDetails);
+        $stageId = $taskDetails->service_stage_id;
+        $getStage = ServiceStages::where('service_id', 2)->where('id', '=', 98)->first();
+        $leadTaskdetials = LeadTaskDetail::find($id);
+        $header_title_name = $taskDetails->serviceSatge->title;
+        $hearingDateCount = HearingDateDetails::where('lead_id', $taskDetails->lead_id)->where('stage_id', $taskDetails->service_stage_id)->latest()->first();
+        $count = ($hearingDateCount->count ?? 0) + 1;
+        return view('tasks.patent.counter-statement-hearing', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'count'));
+    }
+
+    public function patentCounterStatementHearingSubmit(Request $request,$id){
+        $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
+        if ($request->reminder_date) {
+
+            $reminder_date = Carbon::createFromFormat('d M Y', $request->input('reminder_date'))->format('Y-m-d');
+        }
+        if ($request->deadline) {
+
+            $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
+        }
+        if ($request->hearing_date) {
+
+            $hearing_date = Carbon::createFromFormat('d M Y', $request->input('hearing_date'))->format('Y-m-d');
+        }
+
+        $existedLeaedTask = LeadTask::find($id);
+        $existedLeaedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
+        $newHearing = new HearingDateDetails();
+        $existedHearing = HearingDateDetails::where('lead_id', $existedLeaedTask->lead_id)->where('stage_id', $request->old_count_id)->latest()->first();
+        $newLeadtask = new LeadTask();
+         
+        $newLeadTaskDeatails  = new LeadTaskDetail();
+        $newNotification = new LeadNotification();
+        $newTaskStageId = $existedLeaedTask->service_stage_id + 1;
+        $newTaskTitle = ServiceStages::find($newTaskStageId);
+        $userName = Auth::user()->name;
+        $formattedCreatedDate = (!empty($existedLeaedTaskDetails->status_date))
+            ? $existedLeaedTaskDetails->status_date
+            : $existedLeaedTask->created_at->format('d M Y');
+        $reminderDate =   $existedLeaedTaskDetails->reminderDate ?? "N/A";
+        $comment = "";
+        if ($request->show_case_hearing == 2) {
+            $comment = "Adjournment";
+        } else if ($request->show_case_hearing == 1) {
+            $comment = "Accepted";
+        }
+
+
+        $rule = [
+            'show_case_hearing' => 'required',
+            'verified' => 'required',
+            'assignUser' => 'required',
+            'deadline' => 'nullable'
+        ];
+        $validator = Validator::make($request->all(), $rule);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        if ($id) {
+
+            if ($request->show_case_hearing == 2) {
+                $rule = [
+                    'show_case_hearing' => 'required',
+                    'verified' => 'required',
+                    'reminder_date' => 'required',
+                    'hearing_date' => 'required',
+
+                ];
+                $validator = Validator::make($request->all(), $rule);
+                if ($validator->fails()) {
+                    return redirect()->back()->withErrors($validator)->withInput();
+                }
+
+                $logStatus = !empty($existedLeaedTaskDetails->comment) ? $existedLeaedTaskDetails->comment : 'Pending';
+                $existedLeaedTaskDetails->status = 2;
+                $existedLeaedTaskDetails->status_date = $verifiedDate;
+                $existedLeaedTaskDetails->comment = $comment;
+                $existedLeaedTaskDetails->reminderDate = $reminder_date;
+
+
+                if ($request->hasFile('attachment')) {
+                    $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
+                    if (!file_exists($folderPath)) {
+                        mkdir($folderPath, 0755, true);
+                    }
+                    $filePaths = [];
+                    $existingAttachments = json_decode($existedLeaedTaskDetails->attachment, true) ?? [];
+                    foreach ($request->file('attachment') as $file) {
+                        if ($file->isValid()) {
+                            $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
+                            $file->move($folderPath, $fileName);
+                            $filePaths[] = $fileName;
+                        }
+                    }
+                    $updatedAttachments = array_merge($existingAttachments, $filePaths);
+                    $existedLeaedTaskDetails->attachment = json_encode($updatedAttachments);
+                }
+                $existedLeaedTask->task_description = $existedLeaedTask->task_description . ' ' . $request->description;
+                $existedLeaedTask->save();
+                if ($existedLeaedTaskDetails->save()) {
+                    $newHearing->task_id = $existedLeaedTask->id;
+                    $newHearing->lead_id = $existedLeaedTask->lead_id;
+                    $newHearing->stage_id = $existedHearing->stage_id;
+
+                    $reason = '';
+                    if ($request->show_case_hearing == 2) {
+                        $reason = 'Adjournment';
+                    } 
+                    $newHearing->reason = $reason;
+                    $newHearing->hearing_date = $hearing_date;
+                    if ($existedHearing) {
+                        $newHearing->count = $existedHearing->count ? $existedHearing->count + 1 : 0;
+                    } else {
+                        $newHearing->count = 1;
+                    }
+                    if ($newHearing->save()) {
+                        $newNotification->user_id = $existedLeaedTask->user_id;
+                        $newNotification->lead_id = $existedLeaedTask->lead_id;
+                        $newNotification->task_id = $existedLeaedTask->id;
+                        $newNotification->title = 'Task On Hold ';
+                        $newNotification->description = 'Show cause hearing is on hold';
+                        if ($newNotification->save()) {
+                            $newLog =  new LeadLog();
+                            $newLog->user_id = $existedLeaedTask->user_id;
+                            $newLog->lead_id = $existedLeaedTask->lead_id;
+                            $newLog->task_id = $existedLeaedTask->id;
+                            $newLog->assign_by = Auth::id();
+                            $newLog->remark = $comment . " " . "(On Hold)";
+                            $oldValue = [
+                                'status' => $logStatus,
+                                'Assigned On' =>  $formattedCreatedDate ?? "N/A",
+                                'Assigned By' =>  $existedLeaedTask->userAssignBy->name,
+                                'Verified On' => "N/A",
+                                'Reminder Date' => $reminderDate ?? "N/A",
+                                'Hearing Date' => $existedHearing->hearing_date ?? "N/A",
+                                'Hearing Count' => $existedHearing->count ?? "N/A"
+                            ];
+                            $newValue = [
+                                'status' => $comment,
+                                'Verified On' => $request->verified,
+                                'Assigned To' =>  $existedLeaedTask->user->name,
+                                'Reminder Date' => $reminder_date,
+                                'Hearing Date' => $request->hearing_date,
+                                'Hearing Count' => $newHearing->count
+
+                            ];
+                            $newLog->old_value = json_encode($oldValue);
+                            $newLog->new_value = json_encode($newValue);
+                            $newLog->description = "Show cause hearing marked as " . $comment;
+
+                            if ($newLog->save()) {
+                                return redirect()->route('task.index')->with('success', 'Show cause hearing status is Updated');
+                            } else {
+                                return redirect()->back()->error('message', " there is something wrong during log generate ");
+                            }
+                        }
+                    } else {
+                        return redirect()->back()->back()->with('error', 'there is something wrong while updating new hearing');
+                    }
+                } else {
+                    return redirect()->back()->error('message', " there is something wrong during hold the task ");
+                }
+            }  else if ($request->show_case_hearing == 1) {
+                $logStatus = !empty($existedLeaedTaskDetails->comment) ? $existedLeaedTaskDetails->comment : 'Pending';
+
+                $newLeadtask->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+                $newLeadtask->lead_id = $existedLeaedTask->lead_id;
+                $newLeadtask->service_detail_id = $existedLeaedTask->service_detail_id;
+                $newLeadtask->service_id = $existedLeaedTask->service_id;
+                $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
+                $newLeadtask->service_stage_id = $request->stage_id;
+                $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
+                $newLeadtask->assign_by = Auth::id();
+                $newLeadtask->task_title = $newTaskTitle->title ?? 'Unknown Title';
+                if ($newLeadtask->save()) {
+                    $existedLeaedTaskDetails->status = 1;
+                    $existedLeaedTaskDetails->status_date = $verifiedDate;
+                    if ($request->hasFile('attachment')) {
+                        $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
+                        if (!file_exists($folderPath)) {
+                            mkdir($folderPath, 0755, true);
+                        }
+                        $filePaths = [];
+                        $existingAttachments = json_decode($existedLeaedTaskDetails->attachment, true) ?? [];
+                        foreach ($request->file('attachment') as $file) {
+                            if ($file->isValid()) {
+                                $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
+                                $file->move($folderPath, $fileName);
+                                $filePaths[] = $fileName;
+                            }
+                        }
+                        $updatedAttachments = array_merge($existingAttachments, $filePaths);
+                        $existedLeaedTaskDetails->attachment = json_encode($updatedAttachments);
+                    }
+                    $existedLeaedTask->task_description = $existedLeaedTask->task_description . ' ' . $request->description;
+                    $existedLeaedTask->save();
+                    if ($existedLeaedTaskDetails->save()) {
+                        $newLeadTaskDeatails->task_id = $newLeadtask->id;
+                        $newLeadTaskDeatails->dead_line = $deadlineDate;
+                        $newLeadTaskDeatails->status = 0;
+                        if ($newLeadTaskDeatails->save()) {
+                            $newNotification->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+                            $newNotification->lead_id = $existedLeaedTask->lead_id;
+                            $newNotification->task_id = $newLeadtask->id;
+                            $newNotification->title = 'Task Assigned';
+                            $newNotification->description =  $userName . ' assigned you ' . $newTaskTitle->title . ' task';
+                            $newNotification->status = 0;
+
+                            if ($newNotification->save()) {
+                                $LeadLog =  new LeadLog();
+                                $LeadLog->user_id = $existedLeaedTask->user_id;
+                                $LeadLog->lead_id = $existedLeaedTask->lead_id;
+                                $LeadLog->task_id = $existedLeaedTask->id;
+                                $LeadLog->assign_by = Auth::id();
+                                $LeadLog->remark = "Accepted";
+                                $oldValue = [
+                                    'status' => $logStatus,
+                                    'Assigned On' =>  $formattedCreatedDate ?? "N/A",
+                                    'Assigned By' =>  $existedLeaedTask->userAssignBy->name,
+                                    'Verified On' => "N/A",
+                                    'Reminder Date' => $reminderDate ?? "N/A",
+                                    'Hearing Date' => $existedHearing->hearing_date ?? "N/A",
+                                    'Hearing Count' => $existedHearing->count ?? "N/A"
+                                ];
+                                $newValue = [
+                                    'status' => "Completed" . "($comment)",
+                                    'Verified On' => $request->verified,
+                                    'Assigned To' =>  $existedLeaedTask->user->name,
+                                    'Reminder Date' => "N/A",
+                                    'Hearing Date' => "N/A",
+                                    'Hearing Count' => "N/A"
+                                ];
+                                $LeadLog->old_value = json_encode($oldValue);
+                                $LeadLog->new_value = json_encode($newValue);
+                                $LeadLog->description = " Show cause hearing  marked as complete ";
+                                if ($LeadLog->save()) {
+                                    $newassignlog = new leadLog();
+                                    $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+                                    $newassignlog->lead_id = $existedLeaedTask->lead_id;
+                                    $newassignlog->task_id = $newLeadtask->id;
+                                    $newassignlog->assign_by = Auth::id();
+                                    $newassignlog->remark = "Assign";
+
+                                    $newassignlog->description =  "Lead assigned for next task";
+                                    if ($newassignlog->save()) {
+                                        $id = $newLeadtask->id;
+                                        return redirect()->route('task.index')->with('success', 'document verification completed');
+                                    }
+                                } else {
+                                    return redirect()->back()->with('error', 'there is something wrong during upadate logs');
+                                }
+                            } else {
+                                return redirect()->back()->with('error', 'there is something wrong during notification logs');
+                            }
+                        } else {
+                            return redirect()->back()->with('error', 'there is something wrong during update  new task details');
+                        }
+                    } else {
+                        return redirect()->back()->with('error', 'there is something wrong during update  existed task details');
+                    }
+                }
+            } else {
+                return redirect()->back()->with('error', 'there is something wrong during update  new task');
+            }
+        } else {
+            return redirect()->back()->with('error', 'no task found');
+        }
+    }
+    ////////////////////////////////////////////////
 
     public function holdtask(Request $request)
     {

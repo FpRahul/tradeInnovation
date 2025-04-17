@@ -350,6 +350,16 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
 
         Route::get('/patent/interlocatory-petition/{id?}','patentInterlocatoryPetition')->name('task.patentInterlocatoryPetition');
         Route::Post('/patent/interlocatory-petition-submit/{id?}','patentInterlocatoryPetitionSubmit')->name('task.patentInterlocatoryPetitionSubmit');
+
+        Route::get('/patent/counter-statement-awaiting-hearing/{id?}','patentCounterStatementAwaitingHearing')->name('task.patentCounterStatementAwaitingHearing');
+        Route::Post('/patent/counter-statement-awaiting-hearing-submit/{id?}','patentCounterStatementAwaitingHearingSubmit')->name('task.patentCounterStatementAwaitingHearingSubmit');
+
+        Route::get('/patent/counter-statement-client-confirmation/{id?}','patentcounterStatementClientConfirmation')->name('task.patentCounterStatementClientConfirmation');
+
+        Route::get('/patent/counter-statement-client-payment-verification/{id?}','patentcounterStatementClientPaymentVerification')->name('task.patentCounterStatementClientPaymentVerification');
+
+        Route::get('/patent/counter-statement-hearing/{id?}','patentCounterStatementHearing')->name('task.patentCounterStatementHearing');
+        Route::Post('/patent/counter-statement-hearing-submit/{id?}','patentCounterStatementHearingSubmit')->name('task.patentCounterStatementHearingSubmit');
     });
     //Services Routes
     Route::prefix('services')->controller(ServicesController::class)->group(function () {

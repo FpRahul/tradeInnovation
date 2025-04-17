@@ -269,7 +269,13 @@
                                                                                                 
                                                     </div>                                                
                                                     <div class="w-full md:w-[32%] lg:w-[32%]">
-                                                        <label class="block mb-[5px] text-[14px] font-[400]">Trademark Applied For</label>
+                                                        <label class="appliedForText block mb-[5px] text-[14px] font-[400]">
+                                                            @if ($serviceVal->service_id == 1)
+                                                            Trademark Applied For
+                                                            @elseif ($serviceVal->service_id == 2)
+                                                            Patent Applied For
+                                                            @endif
+                                                            </label>
                                                         <input type="text" name="appliedfor" 
                                                             value="{{ isset($serviceVal->serviceDetails) ? $serviceVal->serviceDetails->applied_for : '' }}" 
                                                             class="appliedfor w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
@@ -437,7 +443,7 @@
                                                     </select>                                                
                                                 </div>
                                                 <div class="w-full md:w-[32%] lg:w-[32%]">
-                                                    <label class="block mb-[5px] text-[14px] font-[400]">Trademark Applied For</label>
+                                                    <label class="appliedForText block mb-[5px] text-[14px] font-[400]">Trademark Applied For</label>
                                                     <input type="text" name="appliedfor" id="appliedfor" value="" class="appliedfor w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" >                                                
                                                 </div>      
                                                 <div class="w-full md:w-[32%] lg:w-[32%]">
@@ -788,6 +794,12 @@
             $(this).parent().parent().find('.filingmode').attr('required',false);
             $(this).parent().parent().find('.filingdate').attr('required',false);
             $(this).parent().parent().find('.eachServiceDetails').addClass('hidden');
+        }
+        if(serviceId == 1 ){
+            $(this).parent().parent().find('.appliedForText').text('Trademark Applied For');
+        }
+        if(serviceId == 2){
+            $(this).parent().parent().find('.appliedForText').text('Patent Applied For');
         }
         $(this).parent().parent().find('.serviceNameLoader').removeClass('hidden');
         

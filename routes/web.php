@@ -256,7 +256,9 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('/trademark/change-address/status/{id?}' , 'changeAddressStatus')->name('task.changeAddressStatus');
         Route::get('/trademark/change-address/payment/{id?}' , 'changeAddressPayment')->name('task.changeAddressPayment');
         Route::Post('/trademark/change-address/payment/status/{id?}' , 'changeAddressPaymentStatus')->name('task.changeAddressPaymentStatus');
-        Route::get('/trademark/change-address/query-form/{id?}' , 'changeAddressPayment')->name('task.changeAddressPayment');
+        Route::get('/trademark/change-address/query-form/{id?}' , 'changeAddressQueryForm')->name('task.changeAddressQueryForm');
+        Route::Post('/trademark/change-address/query-form/status/{id?}' , 'changeAddressQueryFormStatus')->name('task.changeAddressQueryFormStatus');
+
 
 
 

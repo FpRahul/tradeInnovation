@@ -17051,14 +17051,14 @@ class TasksController extends Controller
 
         $stageId = $taskDetails->service_stage_id ?? null;
         $getStage = ServiceStages::where('service_id', 2)
-            ->where('id', '=', 27)
+            ->where('id', '=', 76)
             ->first();
 
         $leadTaskdetials = LeadTaskDetail::find($id);
 
         if ($leadTaskdetials && $leadTaskdetials->status == 3) {
-            $getStage = ServiceStages::where('service_id', 1)
-                ->where('id', 27)
+            $getStage = ServiceStages::where('service_id', 2)
+                ->where('id', 76)
                 ->first();
         }
 

@@ -243,6 +243,32 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/rectification/trademark/{id?}' , 'rectificationTrademark')->name('task.rectificationTrademark');
         Route::Post('/rectification/trademark-status/{id?}' , 'rectificationTrademarkStatus')->name('task.rectificationTrademarkStatus');
         Route::get('/trademark/renewal/{id?}' , 'trademarkRenewal')->name('task.trademarkRenewal');
+        Route::Post('/trademark/renewal/status/{id?}' , 'trademarkRenewalStatus')->name('task.trademarkRenewalStatus');
+        Route::get('/trademark/renewal/client-approval/{id?}' , 'clientApprovalOnRenewal')->name('task.clientApprovalOnRenewal');
+        Route::Post('/trademark/renewal/client-approval/status/{id?}' , 'clientApprovalOnRenewalStatus')->name('task.clientApprovalOnRenewalStatus');
+        Route::get('/trademark/renewal/payment/{id?}' , 'renewalPaymentConfirmation')->name('task.renewalPaymentConfirmation');
+        Route::Post('/trademark/renewal/payment/status/{id?}' , 'renewalPaymentConfirmationStatus')->name('task.renewalPaymentConfirmationStatus');
+        Route::get('/trademark/renewal/filed/{id?}' , 'renewalFiled')->name('task.renewalFiled');
+        Route::Post('/trademark/renewal/filed/status/{id?}' , 'renewalFiledStatus')->name('task.renewalFiledStatus');
+        Route::get('/trademark/renewal/inform-client/{id?}' , 'informClientRenwalApproved')->name('task.informClientRenwalApproved');
+        Route::Post('/trademark/renewal/inform-client/status/{id?}' , 'informClientRenwalApprovedStatus')->name('task.informClientRenwalApprovedStatus');
+        Route::get('/trademark/change-address/{id?}' , 'changeAddress')->name('task.changeAddress');
+        Route::Post('/trademark/change-address/status/{id?}' , 'changeAddressStatus')->name('task.changeAddressStatus');
+        Route::get('/trademark/change-address/payment/{id?}' , 'changeAddressPayment')->name('task.changeAddressPayment');
+        Route::Post('/trademark/change-address/payment/status/{id?}' , 'changeAddressPaymentStatus')->name('task.changeAddressPaymentStatus');
+        Route::get('/trademark/change-address/query-form/{id?}' , 'changeAddressPayment')->name('task.changeAddressPayment');
+
+
+
+
+
+
+
+        
+
+
+
+
 
 
 

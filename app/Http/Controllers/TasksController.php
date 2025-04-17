@@ -14989,85 +14989,85 @@ class TasksController extends Controller
 
 
         // For Patent...............
-        else if ($taskDetails && $serviceId == 2 && $stageId == 60) {
+        else if ($taskDetails && $serviceId == 2 && $stageId == 64) {
             return redirect()->route('task.patentSendQuotation', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 61) {
-            return redirect()->route('task.patentPaymentVerification', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 62) {
-            return redirect()->route('task.patentPriorArt', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 63) {
-            return redirect()->route('task.patentDocumentation', ['id' => $id]);
-        } else if ($taskDetails && $serviceId == 2 && $stageId == 64) {
-            return redirect()->route('task.patentDraft', ['id' => $id]);
         } else if ($taskDetails && $serviceId == 2 && $stageId == 65) {
-            return redirect()->route('task.patentClientApproval', ['id' => $id]);
+            return redirect()->route('task.patentPaymentVerification', ['id' => $id]);
         } else if ($taskDetails && $serviceId == 2 && $stageId == 66) {
-            return redirect()->route('task.patentfilingProccess', ['id' => $id]);
+            return redirect()->route('task.patentPriorArt', ['id' => $id]);
         } else if ($taskDetails && $serviceId == 2 && $stageId == 67) {
-            return redirect()->route('task.patentCompleteSpecification', ['id' => $id]);
+            return redirect()->route('task.patentDocumentation', ['id' => $id]);
         } else if ($taskDetails && $serviceId == 2 && $stageId == 68) {
-            return redirect()->route('task.patentForm9', ['id' => $id]);
+            return redirect()->route('task.patentDraft', ['id' => $id]);
         } else if ($taskDetails && $serviceId == 2 && $stageId == 69) {
-            return redirect()->route('task.patentearlypublication', ['id' => $id]);
+            return redirect()->route('task.patentClientApproval', ['id' => $id]);
         } else if ($taskDetails && $serviceId == 2 && $stageId == 70) {
-            return redirect()->route('task.patentStandardpublication', ['id' => $id]);
+            return redirect()->route('task.patentfilingProccess', ['id' => $id]);
         } else if ($taskDetails && $serviceId == 2 && $stageId == 71) {
-            return redirect()->route('task.patentForm18', ['id' => $id]);
+            return redirect()->route('task.patentCompleteSpecification', ['id' => $id]);
         } else if ($taskDetails && $serviceId == 2 && $stageId == 72) {
-            return redirect()->route('task.patentFER', ['id' => $id]);
+            return redirect()->route('task.patentForm9', ['id' => $id]);
         } else if ($taskDetails && $serviceId == 2 && $stageId == 73) {
-            return redirect()->route('task.patentSER', ['id' => $id]);
+            return redirect()->route('task.patentearlypublication', ['id' => $id]);
         } else if ($taskDetails && $serviceId == 2 && $stageId == 74) {
+            return redirect()->route('task.patentStandardpublication', ['id' => $id]);
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 75) {
+            return redirect()->route('task.patentForm18', ['id' => $id]);
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 76) {
+            return redirect()->route('task.patentFER', ['id' => $id]);
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 77) {
+            return redirect()->route('task.patentSER', ['id' => $id]);
+        } else if ($taskDetails && $serviceId == 2 && $stageId == 78) {
             return redirect()->route('task.patentHearingSendQuotation', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 2 && $stageId == 75) {
-            return redirect()->route('task.patentHearingPaymentVerification', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 2 && $stageId == 76) {
-            return redirect()->route('task.patentawaitHearingDate', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 2 && $stageId == 77) {
-            return redirect()->route('task.patentHearing', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 2 && $stageId == 78) {
-            return redirect()->route('task.patentPreGrantOpposition', ['id' => $id]);
         }else if ($taskDetails && $serviceId == 2 && $stageId == 79) {
-            return redirect()->route('task.patentoppositionSendQuotation', ['id' => $id]);
+            return redirect()->route('task.patentHearingPaymentVerification', ['id' => $id]);
         }else if ($taskDetails && $serviceId == 2 && $stageId == 80) {
-            return redirect()->route('task.patentoppositionPaymentVerification', ['id' => $id]);
+            return redirect()->route('task.patentawaitHearingDate', ['id' => $id]);
         }else if ($taskDetails && $serviceId == 2 && $stageId == 81) {
-            return redirect()->route('task.patentoppositionNoticeDate', ['id' => $id]);
+            return redirect()->route('task.patentHearing', ['id' => $id]);
         }else if ($taskDetails && $serviceId == 2 && $stageId == 82) {
-            return redirect()->route('task.patentoppositionCounterStatement', ['id' => $id]);
+            return redirect()->route('task.patentPreGrantOpposition', ['id' => $id]);
         }else if ($taskDetails && $serviceId == 2 && $stageId == 83) {
-            return redirect()->route('task.patentoppositionNonCompliance', ['id' => $id]);
+            return redirect()->route('task.patentoppositionSendQuotation', ['id' => $id]);
         }else if ($taskDetails && $serviceId == 2 && $stageId == 84) {
-            return redirect()->route('task.patentoppositionAwaitingHearing', ['id' => $id]);
+            return redirect()->route('task.patentoppositionPaymentVerification', ['id' => $id]);
         }else if ($taskDetails && $serviceId == 2 && $stageId == 85) {
-            return redirect()->route('task.patentoppositionClientConfirmation', ['id' => $id]);
+            return redirect()->route('task.patentoppositionNoticeDate', ['id' => $id]);
         }else if ($taskDetails && $serviceId == 2 && $stageId == 86) {
-            return redirect()->route('task.patentoppositionClientPaymentVerification', ['id' => $id]);
+            return redirect()->route('task.patentoppositionCounterStatement', ['id' => $id]);
         }else if ($taskDetails && $serviceId == 2 && $stageId == 87) {
-            return redirect()->route('task.patentoppositionHearing', ['id' => $id]);
+            return redirect()->route('task.patentoppositionNonCompliance', ['id' => $id]);
         }else if ($taskDetails && $serviceId == 2 && $stageId == 88) {
-            return redirect()->route('task.patentoppositionWrittenSubmission', ['id' => $id]);
+            return redirect()->route('task.patentoppositionAwaitingHearing', ['id' => $id]);
         }else if ($taskDetails && $serviceId == 2 && $stageId == 89) {
-            return redirect()->route('task.patentoppositionRegistry', ['id' => $id]);
+            return redirect()->route('task.patentoppositionClientConfirmation', ['id' => $id]);
         }else if ($taskDetails && $serviceId == 2 && $stageId == 90) {
-            return redirect()->route('task.patentoppositionEvidencerule45', ['id' => $id]);
+            return redirect()->route('task.patentoppositionClientPaymentVerification', ['id' => $id]);
         }else if ($taskDetails && $serviceId == 2 && $stageId == 91) {
-            return redirect()->route('task.patentoppositionEvidencerule46', ['id' => $id]);
+            return redirect()->route('task.patentoppositionHearing', ['id' => $id]);
         }else if ($taskDetails && $serviceId == 2 && $stageId == 92) {
-            return redirect()->route('task.patentoppositionEvidencerule47', ['id' => $id]);
+            return redirect()->route('task.patentoppositionWrittenSubmission', ['id' => $id]);
         }else if ($taskDetails && $serviceId == 2 && $stageId == 93) {
-            return redirect()->route('task.patentInterlocatoryPetition', ['id' => $id]);
+            return redirect()->route('task.patentoppositionRegistry', ['id' => $id]);
         }else if ($taskDetails && $serviceId == 2 && $stageId == 94) {
-            return redirect()->route('task.patentCounterStatementAwaitingHearing', ['id' => $id]);
+            return redirect()->route('task.patentoppositionEvidencerule45', ['id' => $id]);
         }else if ($taskDetails && $serviceId == 2 && $stageId == 95) {
-            return redirect()->route('task.patentCounterStatementClientConfirmation', ['id' => $id]);
+            return redirect()->route('task.patentoppositionEvidencerule46', ['id' => $id]);
         }else if ($taskDetails && $serviceId == 2 && $stageId == 96) {
-            return redirect()->route('task.patentCounterStatementClientPaymentVerification', ['id' => $id]);
+            return redirect()->route('task.patentoppositionEvidencerule47', ['id' => $id]);
         }else if ($taskDetails && $serviceId == 2 && $stageId == 97) {
-            return redirect()->route('task.patentCounterStatementHearing', ['id' => $id]);
+            return redirect()->route('task.patentInterlocatoryPetition', ['id' => $id]);
         }else if ($taskDetails && $serviceId == 2 && $stageId == 98) {
-            return redirect()->route('task.patentStatus', ['id' => $id]);
+            return redirect()->route('task.patentCounterStatementAwaitingHearing', ['id' => $id]);
         }else if ($taskDetails && $serviceId == 2 && $stageId == 99) {
+            return redirect()->route('task.patentCounterStatementClientConfirmation', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 100) {
+            return redirect()->route('task.patentCounterStatementClientPaymentVerification', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 101) {
+            return redirect()->route('task.patentCounterStatementHearing', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 102) {
+            return redirect()->route('task.patentStatus', ['id' => $id]);
+        }else if ($taskDetails && $serviceId == 2 && $stageId == 103) {
             return redirect()->route('task.patentPostRegistrationAction', ['id' => $id]);
         }
     }
@@ -16562,7 +16562,7 @@ class TasksController extends Controller
         }
         $onNextToNextStage = ServiceStages::where('service_id', 2)
         ->where('id', '=', 
-        78)
+        82) //82
         ->orderBy('id')
         ->first();
         // dd($onNextToNextStage);
@@ -16724,7 +16724,7 @@ class TasksController extends Controller
                 ->first();            
         }
         $onNextToNextStage = ServiceStages::where('service_id', 2)
-            ->where('id', '>', 78)
+            ->where('id', '>', 82) // 82
             ->orderBy('id')
             ->first();
         // dd($onNextToNextStage);
@@ -17431,7 +17431,7 @@ class TasksController extends Controller
         $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->where('archive', 1)->get();
         $stageId = $taskDetails->service_stage_id;
         $getStage = ServiceStages::where('service_id', 2)->where('id', '>', $stageId)->first();
-        $onHideSatge = ServiceStages::where('service_id', 2)->where('id', '=', 98)->first();
+        $onHideSatge = ServiceStages::where('service_id', 2)->where('id', '=', 102)->first(); //102
         $leadTaskdetials = LeadTaskDetail::find($id);
         $header_title_name = $taskDetails->serviceSatge->title;
         $service_details = ServiceDetail::where('lead_id', $taskDetails->lead_id)->where('service_id', $taskDetails->service_id)
@@ -17846,14 +17846,14 @@ class TasksController extends Controller
 
         if ($leadTaskdetials && $leadTaskdetials->status == 3) {
             $getStage = ServiceStages::where('service_id', 2)
-                ->where('id', 90) //Done
+                ->where('id', 94) //Done 94
                 ->first();
         }
         $opponentStage = ServiceStages::where('service_id', 2)
-            ->where('id', 92) //Done
+            ->where('id', 96) //Done 96
             ->first();
         $onHideSatge = ServiceStages::where('service_id', 2)
-            ->where('id', 83)
+            ->where('id', 87) //87
             ->first();
 
         $header_title_name = $taskDetails->serviceSatge->title ?? 'Default Title';
@@ -19070,7 +19070,7 @@ class TasksController extends Controller
 
         $stageId = $taskDetails->service_stage_id ?? null;
         $getStage = ServiceStages::where('service_id', 2)
-            ->where('id', '=', 89)
+            ->where('id', '=', 93) //93
             ->first();
 
         $leadTaskdetials = LeadTaskDetail::find($id);
@@ -19082,7 +19082,7 @@ class TasksController extends Controller
         }
 
         $onHideSatge = ServiceStages::where('service_id', 2)
-            ->where('id', 93)
+            ->where('id', 97) //97
             ->first();
 
         $header_title_name = $taskDetails->serviceSatge->title ?? 'Default Title';
@@ -19425,7 +19425,7 @@ class TasksController extends Controller
         }
 
         $onHideSatge = ServiceStages::where('service_id', 2)
-            ->where('id', 83)
+            ->where('id', 87) //87
             ->first();
         $service_details = ServiceDetail::where('lead_id', $taskDetails->lead_id)->where('service_id', $taskDetails->service_id)
             ->where('id', $taskDetails->service_detail_id)->first();
@@ -19755,7 +19755,7 @@ class TasksController extends Controller
         $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->where('archive', 1)->get();
         $stageId = $taskDetails->service_stage_id;
         $getStage = ServiceStages::where('service_id', 2)->where('id', '>', $stageId)->first();
-        $onHideSatge = ServiceStages::where('service_id', 2)->where('id', '=', 93)->first(); //Done
+        $onHideSatge = ServiceStages::where('service_id', 2)->where('id', '=', 97)->first(); //Done 97
         $leadTaskdetials = LeadTaskDetail::find($id);
         $header_title_name = $taskDetails->serviceSatge->title;
         $service_details = ServiceDetail::where('lead_id', $taskDetails->lead_id)->where('service_id', $taskDetails->service_id)
@@ -20086,19 +20086,19 @@ class TasksController extends Controller
 
         $stageId = $taskDetails->service_stage_id ?? null;
         $getStage = ServiceStages::where('service_id', 2)
-            ->where('id', '=', 94) //Done
+            ->where('id', '=', 98) //Done 98
             ->first();
 
         $leadTaskdetials = LeadTaskDetail::find($id);
 
         if ($leadTaskdetials && $leadTaskdetials->status == 3) {
             $getStage = ServiceStages::where('service_id', 2)
-                ->where('id', 94)  //Done
+                ->where('id', 98)  //Done 98
                 ->first();
         }
 
         $onHideSatge = ServiceStages::where('service_id', 2)
-            ->where('id', 83)
+            ->where('id', 87) //87
             ->first();
         $service_details = ServiceDetail::where('lead_id', $taskDetails->lead_id)->where('service_id', $taskDetails->service_id)
             ->where('id', $taskDetails->service_detail_id)->first();
@@ -20619,7 +20619,7 @@ class TasksController extends Controller
         $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->where('archive', 1)->get();
         // dd($taskDetails);
         $stageId = $taskDetails->service_stage_id;
-        $getStage = ServiceStages::where('service_id', 2)->where('id', '=', 98)->first();
+        $getStage = ServiceStages::where('service_id', 2)->where('id', '=', 102)->first(); // 102
         $leadTaskdetials = LeadTaskDetail::find($id);
         $header_title_name = $taskDetails->serviceSatge->title;
         $hearingDateCount = HearingDateDetails::where('lead_id', $taskDetails->lead_id)->where('stage_id', $taskDetails->service_stage_id)->latest()->first();

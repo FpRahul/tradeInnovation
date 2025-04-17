@@ -337,8 +337,26 @@ class ServiceTask extends Seeder
             ],
             [
                 'service_id' => '1',
-                'title' => 'Renewal',
-                'description' => 'Initiate or manage the trademark renewal process',
+                'title' => 'Trademark Renewal',
+                'description' => 'Notify the client to proceed with their trademark renewal process',
+                'stage' => '14',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Client Approval (Renewal)',
+                'description' => 'Awaiting client confirmation to proceed with the trademark renewal',
+                'stage' => '14',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Payment Confirmation (Renewal)',
+                'description' => 'Waiting for client payment confirmation',
+                'stage' => '14',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Renewal Filed',
+                'description' => 'Filing the trademark renewal with the registry',
                 'stage' => '14',
             ],
             [

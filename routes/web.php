@@ -234,8 +234,20 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('/rectification/client-approval/status{id?}' , 'clientApprovalOnHearingRectificationStatus')->name('task.clientApprovalOnHearingRectificationStatus');
         Route::get('/rectification/proforma-invoice/{id?}' , 'clientInformExtraChargeOnHearingRectification')->name('task.clientInformExtraChargeOnHearingRectification');
         Route::Post('/rectification/proforma-invoice/status{id?}' , 'clientInformExtraChargeOnHearingRectificationStatus')->name('task.clientInformExtraChargeOnHearingRectificationStatus');
+        Route::get('/rectification/hearing-charge/{id?}' , 'rectificationClientHearingCharge')->name('task.rectificationClientHearingCharge');
+        Route::Post('/rectification/hearing-charge/status/{id?}' , 'rectificationClientHearingChargeStatus')->name('task.rectificationClientHearingChargeStatus');
+        Route::get('/rectification/hearing/{id?}' , 'rectificationUpdateHearing')->name('task.rectificationUpdateHearing');
+        Route::Post('/rectification/hearing/status/{id?}' , 'rectificationUpdateHearingStatus')->name('task.rectificationUpdateHearingStatus');
+        Route::get('/rectification/written-submission/{id?}' , 'rectficationWrittenSubmission')->name('task.rectficationWrittenSubmission');
+        Route::Post('/rectification/written-submission/status/{id?}' , 'rectficationWrittenSubmissionStatus')->name('task.rectficationWrittenSubmissionStatus');
+        Route::get('/rectification/trademark/{id?}' , 'rectificationTrademark')->name('task.rectificationTrademark');
+        Route::Post('/rectification/trademark-status/{id?}' , 'rectificationTrademarkStatus')->name('task.rectificationTrademarkStatus');
+        Route::get('/trademark/renewal/{id?}' , 'trademarkRenewal')->name('task.trademarkRenewal');
 
 
+
+
+        
         
 
         

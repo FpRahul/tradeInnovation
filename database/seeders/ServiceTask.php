@@ -226,7 +226,7 @@ class ServiceTask extends Seeder
                 'service_id' => '1',
                 'title' => 'Rectification',
                 'description' => 'Respond to opposition or challenge raised against a registered trademark',
-                'stage' => '14',
+                'stage' => '1',
             ],
             [
                 'service_id' => '1',
@@ -339,14 +339,14 @@ class ServiceTask extends Seeder
                 'service_id' => '1',
                 'title' => 'Trademark Renewal',
                 'description' => 'Notify the client to proceed with their trademark renewal process',
-                'stage' => '14',
+                'stage' => '1',
             ],
-            [
-                'service_id' => '1',
-                'title' => 'Client Approval (Renewal)',
-                'description' => 'Awaiting client confirmation to proceed with the trademark renewal',
-                'stage' => '14',
-            ],
+            // [
+            //     'service_id' => '1',
+            //     'title' => 'Client Approval (Renewal)',
+            //     'description' => 'Awaiting client confirmation to proceed with the trademark renewal',
+            //     'stage' => '14',
+            // ],
             [
                 'service_id' => '1',
                 'title' => 'Payment Confirmation (Renewal)',
@@ -361,21 +361,52 @@ class ServiceTask extends Seeder
             ],
             [
                 'service_id' => '1',
-                'title' => 'Modification',
-                'description' => 'Apply changes or updates to existing trademark details',
+                'title' => 'Client Intimation After Filing (Renewal)',
+                'description' => 'Client has been informed about the successful filing of the renewal application',
                 'stage' => '14',
             ],
             [
                 'service_id' => '1',
-                'title' => 'Assignment',
-                'description' => 'Transfer ownership or rights of the trademark to another entity',
+                'title' => 'Applicant Address change',
+                'description' => 'Update the applicant address for a registered trademark with the Trademark Registry',
+                'stage' => '1',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Payment Confirmation (Applicant Address change)',
+                'description' => 'Waiting for client payment confirmation',
                 'stage' => '14',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'send a query form (Applicant Address change)',
+                'description' => 'Query form sent to client to collect details for address change request',
+                'stage' => '14',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Application Filed for Applicant Address Change',
+                'description' => 'The address change request has been successfully filed with the Trademark Registry',
+                'stage' => '14',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Client Intimation After Filing Applicant Address Change',
+                'description' => 'Client has been informed about the successful filing of the address change application',
+                'stage' => '14',
+            ],
+            
+            [
+                'service_id' => '1',
+                'title' => 'Assignment/Registered User',
+                'description' => 'Transfer ownership or rights of the trademark to another entity',
+                'stage' => '1',
             ],
             [
                 'service_id' => '1',
                 'title' => 'IP Watch',
                 'description' => 'Service to monitor if others are registering trademarks similar to yours',
-                'stage' => '14',
+                'stage' => '1',
             ],
             
             

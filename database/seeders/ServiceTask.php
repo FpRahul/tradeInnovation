@@ -417,7 +417,7 @@ class ServiceTask extends Seeder
             ],
             [
                 'service_id' => '1',
-                'title' => 'Execution of deeds &amp; affidavits (Assignment/Registered User)',
+                'title' => 'Execution of deeds and affidavits (Assignment/Registered User)',
                 'description' => 'Executing deeds and affidavits to transfer trademark ownership.',
                 'stage' => '12',
             ],

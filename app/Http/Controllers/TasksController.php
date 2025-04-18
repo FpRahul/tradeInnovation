@@ -15219,7 +15219,7 @@ class TasksController extends Controller
         }else if ($taskDetails && $serviceId == 2 && $stageId == 96) {
             return redirect()->route('task.patentoppositionEvidencerule47', ['id' => $id]);
         }else if ($taskDetails && $serviceId == 2 && $stageId == 97) {
-            return redirect()->route('task.patentInterlocatoryPetition', ['id' => $id]);
+            return redirect()->route('task.patentInterlocatoryPetitionCounter', ['id' => $id]);
         }else if ($taskDetails && $serviceId == 2 && $stageId == 98) {
             return redirect()->route('task.patentCounterStatementAwaitingHearing', ['id' => $id]);
         }else if ($taskDetails && $serviceId == 2 && $stageId == 99) {
@@ -19262,7 +19262,7 @@ class TasksController extends Controller
         ));
     }
 
-    public function patentOppositTrademarkionCounterStatementSubmit(Request $request,$id){
+    public function patentOppositionCounterStatementSubmit(Request $request,$id){
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
         $existedLeaedTask = LeadTask::find($id);
@@ -21049,6 +21049,23 @@ class TasksController extends Controller
         }
     }
     ////////////////////////////////////////////////
+
+    public function patentInterlocatoryPetitionCounter(Request $request,$id){
+        if ($id) {
+            $notifyData = LeadNotification::where('task_id', $id)->update(['status' => 1]);
+        }
+        $taskDetails = LeadTask::with(['user', 'lead', 'services', 'subService', 'leadTaskDetails', 'serviceSatge'])
+            ->where('id', $id)
+            ->first();
+        $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->where('archive', 1)->get();
+        $stageId = $taskDetails->service_stage_id;
+        $getStage = ServiceStages::where('service_id', 2)->where('id', '=', 86)->first(); // counter statement
+        $nextStage = ServiceStages::where('service_id', 2)->where('id', '=', 102)->first(); // patent status
+        $leadTaskdetials = LeadTaskDetail::find($id);
+        $header_title_name = $taskDetails->serviceSatge->title;
+        return view('tasks.patent.interlocatory-petition', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage','nextStage'));
+    
+    }
 
     public function holdtask(Request $request)
     {

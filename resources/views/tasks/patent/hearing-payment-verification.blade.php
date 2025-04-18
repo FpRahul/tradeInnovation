@@ -175,7 +175,7 @@ $paymentData = $taskList->payment[0];
       </div>
       <div class="w-full md:w-1/2 hideOncredit" id="deadLineDate">
          <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-            Documentation Dead line
+            Documentation Dead Line
          </label>
          <div class="w-[100%] relative">
             <input

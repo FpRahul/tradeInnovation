@@ -380,8 +380,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/patent/post-registration-status/{id?}','patentPostRegistrationAction')->name('task.patentPostRegistrationAction');
         Route::Post('/patent/post-registration-status-submit/{id?}','patentPostRegistrationActionSubmit')->name('task.patentPostRegistrationActionSubmit');
 
-        Route::get('/patent/interlocatory-petition/{id?}','patentInterlocatoryPetition')->name('task.patentInterlocatoryPetition');
-        Route::Post('/patent/interlocatory-petition-submit/{id?}','patentInterlocatoryPetitionSubmit')->name('task.patentInterlocatoryPetitionSubmit');
+        Route::get('/patent/interlocatory-petition/{id?}','patentInterlocatoryPetitionCounter')->name('task.patentInterlocatoryPetitionCounter');
+        Route::Post('/patent/interlocatory-petition-submit/{id?}','patentInterlocatoryPetitionCounterSubmit')->name('task.patentInterlocatoryPetitionCounterSubmit');
 
         Route::get('/patent/counter-statement-awaiting-hearing/{id?}','patentCounterStatementAwaitingHearing')->name('task.patentCounterStatementAwaitingHearing');
         Route::Post('/patent/counter-statement-awaiting-hearing-submit/{id?}','patentCounterStatementAwaitingHearingSubmit')->name('task.patentCounterStatementAwaitingHearingSubmit');

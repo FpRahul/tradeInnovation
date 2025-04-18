@@ -66,11 +66,12 @@
                     $displaypartnerClass = 'hidden';
                 @endphp
                 @if (!empty($partnerDataList))
-                    @if ($newClientDetails->incorporationType == 7 || $newClientDetails->incorporationType == null)
-                        @php               
-                            $displaypartnerClass = '';
-                        @endphp
-                    @endif                       
+                @if (optional($newClientDetails)->incorporationType == 7 || is_null(optional($newClientDetails)->incorporationType))
+                    @php
+                        $displaypartnerClass = '';
+                    @endphp
+                @endif
+                                  
                 @endif
                 <div class="partnerNameDiv w-full md:w-1/2 {{$displaypartnerClass}}" id="source_type">
                     <label for="partnerNameList" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Partners Name</label>
@@ -237,11 +238,12 @@
                 <label for="referralPartner" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Registered under startup scheme</label>
                 <div class="flex flex-wrap gap-[20px]">
                     <div>
-                        <input type="radio" name="registered" id="registered" value='1' {{$newClientDetails->registered == 1 ?'checked':''}} >
+                        <input type="radio" name="registered" id="registered" value="1" {{ optional($newClientDetails)->registered == 1 ? 'checked' : '' }}>
+
                         <label for="registered" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Yes</label>
                     </div>
                     <div>
-                        <input type="radio" name="registered" id="registered2" value='0' {{$newClientDetails->registered == 0 ?'checked':''}} >
+                        <input type="radio" name="registered" id="registered2" value='0' {{optional($newClientDetails)->registered == 0 ?'checked':''}} >
                         <label for="registered2" class="text-[12px] font-[400] leading-[14px] text-[#000000]">No</label>
                     </div>
                 </div>
@@ -250,11 +252,11 @@
                 <label for="msmem" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">MSME Registered Unit</label>
                 <div class="flex flex-wrap gap-[20px]">
                     <div>
-                        <input type="radio" name="msmem" id="msmem" value='1' {{$newClientDetails->msmem == 1 ?'checked':''}} >
+                        <input type="radio" name="msmem" id="msmem" value='1' {{optional($newClientDetails)->msmem == 1 ?'checked':''}} >
                         <label for="msmem" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Yes</label>
                     </div>
                     <div>
-                        <input type="radio" name="msmem" id="msmem2" value='0' {{$newClientDetails->msmem == 0 ?'checked':''}} >
+                        <input type="radio" name="msmem" id="msmem2" value='0' {{optional($newClientDetails)->msmem == 0 ?'checked':''}} >
                         <label for="msmem2" class="text-[12px] font-[400] leading-[14px] text-[#000000]">No</label>
                     </div>
                 </div>

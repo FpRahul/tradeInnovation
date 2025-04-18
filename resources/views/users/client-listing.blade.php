@@ -76,20 +76,26 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if (count($clientData) > 0)  
+                    
+                        
+                        
+                    
+                    @if ($clientData->count())                    
                         @foreach ($clientData as $clientDetails)
+
                             <tr>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
                                     #{{$clientDetails->uni_user_id ?? 0}}
                                 </td>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
-                                    {{$clientDetails->name}}
+                                    {{$clientDetails->name }}
                                 </td>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                                     {{$clientDetails->mobile}}
                                 </td>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
-                                    {{getScopeOfBusinessData($clientDetails->userdetail->business_scope)}}
+                                    {{ isset($clientDetails->userdetail) ? getScopeOfBusinessData($clientDetails->userdetail->business_scope) : 'N/A' }}
+
                                 </td>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                                     @if ($clientDetails->status == 1)

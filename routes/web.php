@@ -258,6 +258,21 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('/trademark/change-address/payment/status/{id?}' , 'changeAddressPaymentStatus')->name('task.changeAddressPaymentStatus');
         Route::get('/trademark/change-address/query-form/{id?}' , 'changeAddressQueryForm')->name('task.changeAddressQueryForm');
         Route::Post('/trademark/change-address/query-form/status/{id?}' , 'changeAddressQueryFormStatus')->name('task.changeAddressQueryFormStatus');
+        Route::get('/trademark/change-address/filing/{id?}' , 'changeAddressFiled')->name('task.changeAddressFiled');
+        Route::Post('/trademark/change-address/filing/status/{id?}' , 'changeAddressFiledStatus')->name('task.changeAddressFiledStatus');
+        Route::get('/trademark/change-address/inform-client/{id?}' , 'addressChanged')->name('task.addressChanged');
+        Route::Post('/trademark//inform-client/status/{id?}' , 'addressChangedStatus')->name('task.addressChangedStatus');
+        Route::get('/trademark/assignment/{id?}' , 'assignmentUserRegsiter')->name('task.assignmentUserRegsiter');
+        Route::Post('/trademark/assignment/status{id?}' , 'assignmentUserRegsiterStatus')->name('task.assignmentUserRegsiterStatus');
+        Route::get('/trademark/assignment/{id?}' , 'assignmentUserRegsiterPayment')->name('task.assignmentUserRegsiter');
+
+        
+
+        
+
+
+
+
 
 
 

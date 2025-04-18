@@ -75,15 +75,17 @@
 
                 <div class="w-full md:w-1/2">
                     <label for="mobileNumber" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mobile Number <strong class="text-[#f83434]">*</strong></label>
-                    <input type="number" name="mobileNumber" id="mobileNumber" value="{{ old('mobileNumber') ? old('mobileNumber') : $newUser->mobile }}" class="checkDuplicateMobile w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Mobile Number" required>
+                    <input type="number" name="mobileNumber" id="mobileNumber" value="{{ old('mobileNumber') ? old('mobileNumber') : $newUser->mobile }}" maxlength="10" class="checkDuplicateMobile w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Mobile Number" required>
                     <span class="mobile_exist_error text-[#df2727] text-[12px] hidden">Please try with another mobile number!</span>
+                    <span class="mobile_length_error text-[#df2727] text-[12px] hidden">Mobile number must be 10 digits long!</span>
+
                     @error('mobile')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="altMobile" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Alternate Mobile Number</label>
-                    <input type='number' name="altMobile" id="altMobile" value="{{ old('altMobile') ? old('altMobile') : $newUser->altNumber }}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Alternate Mobile Number" >
+                    <input type='number' name="altMobile" id="altMobile" value="{{ old('altMobile') ? old('altMobile') : $newUser->altNumber }}" maxlength="10" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Alternate Mobile Number" >
                     @error('altMobile')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -399,7 +401,9 @@
 </div>
 <script>
     $(document).on('keyup','.checkDuplicateMobile',function(){
-        if($(this).val().length >=10){
+        $('.mobile_length_error').addClass('hidden');
+
+        if($(this).val().length ==10){
             let id = $(this).data('id');
             let val = $(this).val();
             let e = $(this);
@@ -422,6 +426,9 @@
                     }
                 }
             });
+        }
+        if($(this).val().length >10){
+            $('.mobile_length_error').removeClass('hidden');
         }
         
     });

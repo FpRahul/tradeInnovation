@@ -41,8 +41,9 @@
                 </div> 
                 <div class="w-full md:w-1/2">
                     <label for="number" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mobile Number <strong class="text-[#f83434]">*</strong></label>
-                    <input type="text" name="number" id="number" value="{{ old('number') ? old('number') : $newAssociate->mobile}}" class="checkDuplicateMobile w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Number" required>
+                    <input type="number" name="number" id="number" value="{{ old('number') ? old('number') : $newAssociate->mobile}}" class="checkDuplicateMobile w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Number" required>
                     <span class="mobile_exist_error text-[#df2727] text-[12px] hidden">Please try with another mobile number!</span>
+                    <span class="mobile_length_error text-[#df2727] text-[12px] hidden">Mobile number must be 10 digits long!</span>
                     @error('number')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -51,7 +52,7 @@
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="alternatePhone" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Alternate Mobile Number</label>
-                    <input type="text" name="alternatePhone" value="{{ old('alternatePhone') ? old('alternatePhone') : $newAssociate->altNumber}}" id="alternatePhone" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Email">
+                    <input type="number" name="alternatePhone" value="{{ old('alternatePhone') ? old('alternatePhone') : $newAssociate->altNumber}}" id="alternatePhone" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Email">
                     @error('alternatePhone')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -138,8 +139,9 @@
     </div>
 </div>
 <script>
-     $(document).on('keyup','.checkDuplicateMobile',function(){
-        if($(this).val().length >=10){
+    $(document).on('keyup','.checkDuplicateMobile',function(){
+        $('.mobile_length_error').addClass('hidden');
+        if($(this).val().length == 10){
             let id = $(this).data('id');
             let val = $(this).val();
             let e = $(this);
@@ -162,8 +164,10 @@
                     }
                 }
             });
+        }   
+        if($(this).val().length >10){
+            $('.mobile_length_error').removeClass('hidden');
         }
-        
     });
     $(document).on('click','.sameAsCurrentAddress',function(){
         let address = $('.currentAddressDiv').find('#currentAddress').val();

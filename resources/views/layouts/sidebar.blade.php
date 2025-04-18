@@ -21,6 +21,7 @@
                         {{ $menuValue['menu']['name'] }}
                     </a>
                 </li> 
+                
             @elseif(isset($menuValue['subMenu']))
                 @php $activeSubMenu = ''; 
                     $activeSubMenuAction = 'hidden';
@@ -31,6 +32,7 @@
                     @endphp
                 @endif
                 <li class="item group has-submenu {{ $activeSubMenu }}">
+                       
                     <a href="javascript:void(0);"
                         class="button nav-link flex items-center justify-between text-[#13103A] font-[Inter] text-[14px] font-[400] leading-[16px] 
                             group-[.active]:bg-[#13103A] group-[.active]:text-[#ffffff] group-[.active]:shadow-[0px_0px_6px_2px_#00000036] p-[3px] rounded-[10px]">
@@ -49,9 +51,11 @@
                         </svg>
                     </a>
                     <ul class="accordian_body pl-[15px] mt-[15px] {{$activeSubMenuAction}}">
+                        
                         @foreach ($menuValue['subMenu'] as $subKey => $subMenu)
                             @if(!isset($menuValue['subSubMenu'][$subKey]))
                                 <li class="group {{ in_array(Route::currentRouteName(),$subMenuActions[$subKey]) ? 'active group-[.active]:bg-[#13103a0d] rounded-[8px]':'' }} ">
+                                   
                                     <a href="{{ route($subMenu['url']) }}" class="p-[10px] text-[#13103A] font-[Inter] text-[14px] font-[400] leading-[16px] flex items-center gap-[10px] group-[.activeSubMenu]:bg-[#13103A] group-[.activeSubMenu]:text-[#ffffff] group-[.activeSubMenu]:shadow-[0px_0px_6px_2px_#00000036] rounded-[10px] ">{{ $subMenu['name'] }}</a>
                                 </li>
                             @else

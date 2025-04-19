@@ -137,7 +137,7 @@
       <strong class="mt-5 onHide" block>Update Upcoming Actions</strong>
       <div class=" onHide flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2 ">
-            <label for="stage" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Satge</label>
+            <label for="stage" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
             @if($getStage->count() > 0)
             <input type="text" name="stage_id" id="stage_id" value="{{$getStage->title}}" class="  w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
             <input type="hidden" name="stage_id" id="SatgeID" value="{{$getStage->id}}">
@@ -177,7 +177,7 @@
       </div>
       <div class=" w-full md:w-1/2 onHide" id="deadLineDate">
          <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-            Dead line
+            Deadline
          </label>
          <div class="w-[100%] relative">
             <input

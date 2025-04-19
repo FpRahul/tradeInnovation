@@ -17,7 +17,7 @@
          <input type="hidden" name="checkValid" id="checkValid" value="">
          <div class="w-full md:w-1/2" id="verifiedDate">
             <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-               Informed on
+               Informed On
             </label>
             <div class="w-[100%] relative">
                <input
@@ -62,7 +62,7 @@
       <strong class="mt-5 block">Update Upcoming Actions</strong>
       <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2">
-            <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Satge</label>
+            <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
             @if($getStage->count() > 0)
             <input type="text" name="stage_id" id="stage_id" value="{{$getStage->title}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
             <input type="hidden" name="stage_id" value="{{$getStage->id}}">
@@ -105,7 +105,7 @@
       </div>
       <div class="w-full md:w-1/2" id="verifiedDate">
          <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-            Dead line
+            Deadline
          </label>
          <div class="w-[100%] relative">
             <input
@@ -130,14 +130,14 @@
       <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2">
             <label for="subject" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Subject<strong class="text-[#f83434]">*</strong></label>
-            <input type="text" name="subject" id="subject" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+            <input type="text" name="subject" id="subject" value="" placeholder="Enter your main subject" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
             @error('subject')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
          </div>
          <div class="w-full md:w-1/2">
-            <label for="Service" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Service<strong class="text-[#f83434]">*</strong></label>
-            <input type="text" id="serviceNameInput" value="{{$serviceName}}" disabled class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+            <label for="Service" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]"> Service<strong class="text-[#f83434]">*</strong></label>
+            <input type="text" id="serviceNameInput" value="{{$serviceName}}"  disabled class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
             <input type="hidden" name="service" value="{{$serviceName}}">
             @error('service')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
@@ -146,15 +146,15 @@
       </div>
       <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2">
-            <label for="subject" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Price<strong class="text-[#f83434]">*</strong></label>
-            <input type="text" name="service_price" id="service_price" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+            <label for="subject" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Service Price<strong class="text-[#f83434]">*</strong></label>
+            <input type="text" name="service_price" id="service_price" value="" placeholder="Enter your service price" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
             @error('service_price')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
          </div>
          <div class="w-full md:w-1/2">
             <label for="subject" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Govt Price<strong class="text-[#f83434]">*</strong> </label>
-            <input type="text" name="govt_price" id="govt_price" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+            <input type="text" name="govt_price" id="govt_price" value="" placeholder="Enter govt price" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
             @error('govt_price')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
@@ -162,7 +162,7 @@
       </div>
       <div class="w-full md:w-1/2 flex items-center gap-[10px]">
          <input type="checkbox" name="gst" id="gst" value="1" class="w-auto h-[20px] !outline-none">
-         <label for="govt_price" class="text-[14px] font-[400] leading-[16px] text-[#000000]">GST</label>
+         <label for="govt_price"  class="text-[14px] font-[400] leading-[16px] text-[#000000]">GST</label>
       </div>
       <div class="flex justify-end gap-[15px]">
          <a class="preview text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Preview</a>
@@ -383,7 +383,7 @@
             $('#mailGst').text("₹" + gstPrice.toFixed(2) + "(18%)");
             $("#mailTotal").text("₹" + overAllTotalWithGst.toFixed(2) )
          } else {
-            $('#mailGst').text("Not apply");
+            $('#mailGst').text("GST Not Applied");
             $("#mailTotal").text("₹" + overAllTotal.toFixed(2) )
          }
       }

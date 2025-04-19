@@ -286,8 +286,12 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('/trademark/expidet-process/inform-client/status/{id?}' , 'expidetProcessFileInformClientStatus')->name('task.expidetProcessFileInformClientStatus');
         Route::get('/trademark/ip-watch/{id?}' , 'ipWatch')->name('task.ipWatch');
         Route::post('/trademark/ip-watch/status/{id?}' , 'ipWatchStatus')->name('task.ipWatchStatus');
-        Route::get('/trademark/ip-watch/{id?}' , 'ipWatchPayment')->name('task.ipWatchPayment');
-        Route::Post('/trademark/ip-watch/status/{id?}' , 'ipWatchPaymentStatus')->name('task.ipWatchPaymentStatus');
+        Route::get('/trademark/ip-watch/payment/{id?}' , 'ipWatchPayment')->name('task.ipWatchPayment');
+        Route::Post('/trademar/ip-watch/payment/status/{id?}' , 'ipWatchPaymentStatus')->name('task.ipWatchPaymentStatus');
+        Route::get('/trademark/ip-watch/frequency/{id?}' , 'ipWatchFrequency')->name('task.ipWatchFrequency');
+        Route::Post('/trademark/ip-watch/frequency/status/{id?}' , 'ipWatchFrequencyStatus')->name('task.ipWatchFrequencyStatus');
+
+
 
 
 

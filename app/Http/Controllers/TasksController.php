@@ -9,6 +9,8 @@ use App\Models\LeadLog;
 use App\Models\User;
 use App\Models\Payment;
 use App\Models\Lead;
+use App\Models\IpWatch;
+
 use App\Models\Evidence;
 use App\Models\HearingDateDetails;
 use App\Models\LeadNotification;
@@ -17745,9 +17747,11 @@ class TasksController extends Controller
         }
     }
     public function ipWatch($id){
+       
         if ($id) {
             $notifyData = LeadNotification::where('task_id', $id)->update(['status' => 1]);
         }
+      
         $header_title_name = "IP Watch";
         $taskDetails = LeadTask::with(['user', 'lead', 'leadTaskDetails', 'services', 'subService', 'serviceSatge'])
             ->where('id', $id)
@@ -18459,6 +18463,168 @@ class TasksController extends Controller
             }
         }  
     }
+
+    public function ipWatchFrequency($id){
+        if ($id) {
+            $notifyData = LeadNotification::where('task_id', $id)->update(['status' => 1]);
+        }
+        $taskDetails = LeadTask::with(['user', 'lead', 'services', 'subService', 'leadTaskDetails', 'serviceSatge'])
+            ->where('id', $id)
+            ->first();
+
+        $applicationNumber = ServiceDetail::where('lead_id', $taskDetails->lead_id)
+            ->first();
+        $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
+        $stageId = $taskDetails->service_stage_id;
+        $getStage = ServiceStages::where('service_id', 1)->where('id', '=',34)->first();
+        $leadTaskdetials = LeadTaskDetail::find($id);
+        $header_title_name = $taskDetails->serviceSatge->title;
+        return view('tasks.tradeMark.ip_watch_frequency', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'applicationNumber'));
+    }
+
+    public function ipWatchFrequencyStatus(Request $request , $id){
+        $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
+        $reminder_date = Carbon::createFromFormat('d M Y', $request->input('reminder_date'))->format('Y-m-d');
+
+        $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
+        $existedLeaedTask = LeadTask::find($id);
+        $existedLeaedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
+        $newLeadtask = new LeadTask();
+        $newLeadTaskDeatails  = new LeadTaskDetail();
+        $newNotification = new LeadNotification();
+        $userName = Auth::user()->name;
+        $newServiceDetails = ServiceDetail::where('lead_id', $existedLeaedTask->lead_id)->first();
+        $newTaskTitle = ServiceStages::find($request->stage_id);
+        $formattedCreatedDate = $existedLeaedTask->created_at->format('d M Y');
+
+        $rule = [
+            'verified' => 'required',
+            'deadline' => 'required',
+        ];
+        $validator =  Validator::make($request->all(), $rule);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        $comment = "";
+        if($request->status == 1){
+            $comment =  "Weekly";
+        }else if($request->status == 2){
+            $comment =  "Monthly";
+        }else if($request->status == 3){
+            $comment =  "Quarterly";
+
+        }
+        if ($id) {
+            $newServiceDetails->application_number = $request->application_number ?? null;
+            $newServiceDetails->save();
+            $newLeadtask->user_id = $request->assignUser;
+            $newLeadtask->lead_id = $existedLeaedTask->lead_id;
+            $newLeadtask->service_detail_id = $existedLeaedTask->service_detail_id;
+            $newLeadtask->service_id = $existedLeaedTask->service_id;
+            $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
+            $newLeadtask->service_stage_id = $request->stage_id;
+            $newLeadtask->assign_by = Auth::id();
+            $newLeadtask->task_title = $newTaskTitle->title;
+            $existedLeaedTask->task_description = $request->description;
+            $existedLeaedTask->save();
+            if ($newLeadtask->save()) {
+                $existedLeaedTaskDetails->status = 1;
+                $existedLeaedTaskDetails->status_date = $verifiedDate;
+                $existedLeaedTaskDetails->reminderDate = $reminder_date;
+
+
+                if ($request->hasFile('attachment')) {
+                    $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
+                    if (!file_exists($folderPath)) {
+                        mkdir($folderPath, 0755, true);
+                    }
+                    $filePaths = [];
+                    foreach ($request->file('attachment') as $file) {
+                        if ($file->isValid()) {
+                            $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
+                            $file->move($folderPath, $fileName);
+                            $filePaths[] = $fileName;
+                        }
+                    }
+                    $existedLeaedTaskDetails->attachment = json_encode($filePaths);
+                }
+                if ($existedLeaedTaskDetails->save()) {
+                    $newLeadTaskDeatails->task_id = $newLeadtask->id;
+                    $newLeadTaskDeatails->dead_line = $deadlineDate;
+                    $newLeadTaskDeatails->status = 0;
+                    if ($newLeadTaskDeatails->save()) {
+                        $ipWatch = new IpWatch();
+                        $ipWatch->lead_id = $existedLeaedTask->lead_id;
+                        $ipWatch->task_id = $existedLeaedTask->id;
+                        $ipWatch->service_details_id = $existedLeaedTask->id;
+                        $ipWatch->service_id = $existedLeaedTask->id;
+                        $ipWatch->frequency_status = $request->status;
+                        if($ipWatch->save()){
+                        $newNotification->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+                        $newNotification->lead_id = $existedLeaedTask->lead_id;
+                        $newNotification->task_id = $newLeadtask->id;
+                        $newNotification->title = 'Task Assigned';
+                        $newNotification->description =  $userName . ' assigned you ' . $newTaskTitle->title . ' task';
+                        $newNotification->status = 0;
+                        if ($newNotification->save()) {
+                            $LeadLog =  new LeadLog();
+                            $LeadLog->user_id = $existedLeaedTask->user_id;
+                            $LeadLog->lead_id = $existedLeaedTask->lead_id;
+                            $LeadLog->task_id = $existedLeaedTask->id;
+                            $LeadLog->assign_by = Auth::id();
+                            $LeadLog->remark = 'IP Watch Frequency';
+                            $oldValue = [
+                                'status' => 'Pending',
+                                'Assigned On' => $formattedCreatedDate,
+                                'Assigned By' =>  $existedLeaedTask->userAssignBy->name,
+                            ];
+                            $newValue = [
+                                'status' => 'Completed',
+                                'Ferquecy Update On' => $verifiedDate,
+                                'Frequency' => $comment,
+                                'Assigned To' =>  $existedLeaedTask->user->name,
+                            ];
+                            $LeadLog->old_value = json_encode($oldValue);
+                            $LeadLog->new_value = json_encode($newValue);
+                            $LeadLog->description = "IP Watch Process successfully Updated";
+                            if ($LeadLog->save()) {
+                                $newassignlog = new leadLog();
+                                $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+                                $newassignlog->lead_id = $existedLeaedTask->lead_id;
+                                $newassignlog->task_id = $newLeadtask->id;
+                                $newassignlog->assign_by = Auth::id();
+                                $newassignlog->remark = 'Assign';
+
+                                $newassignlog->description =  "Lead assigned for next task";
+                                if ($newassignlog->save()) {
+                                    $id = $newLeadtask->id;
+                                    return redirect()->route('task.index')->with('success', 'Expidet process intimate successfully');
+                                } else {
+                                    return redirect()->back()->with('error', 'there is something wrong while updatng log');
+                                }
+                            } else {
+                                return redirect()->back()->with('error', 'there is something wrong while updatng log');
+                            }
+                        } else {
+                            return redirect()->back()->with('error', 'there is something wrong while updatng notification');
+                        }
+                    }else {
+                        return redirect()->back()->with('error', 'there is something wrong while updating IP Watch');
+
+                    }
+                    } else {
+                        return redirect()->back()->with('error', 'there is something wrong while updating new task details');
+                    }
+                } else {
+                    return redirect()->back()->with('error', 'there is something wrong while updating existed task details');
+                }
+            } else {
+                return redirect()->back()->with('error', 'there is something wrong while updating new task');
+            }
+        } else {
+            return redirect()->back()->with('error', 'no task found');
+        }
+    }
     public function followUp($id, $serviceId, $stageId)
     {
         
@@ -18590,41 +18756,36 @@ class TasksController extends Controller
             return redirect()->route('task.changeAddressFiled', ['id' => $id]);
         }else if ($id == $taskDetails->id && $serviceId == 1 && $stageId == 61) {
             return redirect()->route('task.addressChanged', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 1 && $stageId == 62) {
+        }else if ($id == $taskDetails->id && $serviceId == 1 && $stageId == 62) {
             return redirect()->route('task.assignmentUserRegsiter', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 1 && $stageId == 63) {
+        }else if ($id == $taskDetails->id && $serviceId == 1 && $stageId == 63) {
             return redirect()->route('task.assignmentUserRegsiterPayment', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 1 && $stageId == 64) {
+        }else if ($id == $taskDetails->id && $serviceId == 1 && $stageId == 64) {
             return redirect()->route('task.assignmentQueryForm', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 1 && $stageId == 65) {
+        }else if ($id == $taskDetails->id && $serviceId == 1 && $stageId == 65) {
             return redirect()->route('task.assignmentAffidavit', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 1 && $stageId == 66) {
+        }else if ($id == $taskDetails->id && $serviceId == 1 && $stageId == 66) {
             return redirect()->route('task.assignmentFileProcess', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 1 && $stageId == 67) {
+        }else if ($id == $taskDetails->id && $serviceId == 1 && $stageId == 67) {
             return redirect()->route('task.assignmentUpdateClient', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 1 && $stageId == 68) {
+        }else if ($id == $taskDetails->id && $serviceId == 1 && $stageId == 68) {
             return redirect()->route('task.assignmentIntimateClient', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 1 && $stageId == 69) {
+        }else if ($id == $taskDetails->id && $serviceId == 1 && $stageId == 69) {
             return redirect()->route('task.expidetProcess', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 1 && $stageId == 70) {
+        }else if ($id == $taskDetails->id && $serviceId == 1 && $stageId == 70) {
             return redirect()->route('task.expidetProcessPayment', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 1 && $stageId == 71) {
+        }else if ($id == $taskDetails->id && $serviceId == 1 && $stageId == 71) {
             return redirect()->route('task.expidetProcessFile', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 1 && $stageId == 72) {
+        }else if ($id == $taskDetails->id && $serviceId == 1 && $stageId == 72) {
             return redirect()->route('task.expidetProcessFileInformClient', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 1 && $stageId == 73) {
+        }else if ($id == $taskDetails->id && $serviceId == 1 && $stageId == 73) {
             return redirect()->route('task.ipWatch', ['id' => $id]);
-        }else if ($taskDetails && $serviceId == 1 && $stageId == 74) {
+        }else if ($id == $taskDetails->id && $serviceId == 1 && $stageId == 74) {
             return redirect()->route('task.ipWatchPayment', ['id' => $id]);
+        }else if ($id == $taskDetails->id && $serviceId == 1 && $stageId == 75) {
+            return redirect()->route('task.ipWatchFrequency', ['id' => $id]);
         }
         
-        
-        
-        
-        
-        
-
-
         // For Patent...............
         else if ($taskDetails && $serviceId == 2 && $stageId == 64) {
             return redirect()->route('task.patentSendQuotation', ['id' => $id]);

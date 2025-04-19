@@ -154,7 +154,13 @@ class ServicesController extends Controller
     }
 
     public function serviceStages(Request $request){
-        $allStages = ServiceStages::where('service_id',$request->serviceId)->get();
+        // $allStages = ServiceStages::where('service_id',$request->serviceId)->where('sub_service_id',$request->subServiceId)->get();
+        if($request->subServiceId == 1 || $request->subServiceId == 10){
+            $allStages = ServiceStages::where('service_id',$request->serviceId)->get();
+        }else if($request->subServiceId != 1 && $request->subServiceId != 10){
+            $allStages = ServiceStages::where('service_id',$request->serviceId)->where('sub_service_id',$request->subServiceId)->get();
+        }
+
         $options = '<option value="">Select Stage</option>';
         if($allStages && $allStages->isNotEmpty()){
             foreach($allStages as $key=>$val){

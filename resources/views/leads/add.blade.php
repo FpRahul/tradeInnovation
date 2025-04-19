@@ -118,6 +118,7 @@
                     <label for="mobilenumber" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mobile number</label>
                     <input type="number" data-id="{{$leadData->id}}" name="mobilenumber" id="mobilenumber" value="{{ old('mobilenumber') ? old('mobilenumber') : (!empty($leadData) ? $leadData->mobile_number : '')}}" class="checkDuplicateMobile w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                     <span class="mobile_exist_error text-[#df2727] text-[12px] hidden">This mobile number is already exists on user!</span>
+                    <span class="mobile_length_error text-[#df2727] text-[12px] hidden">Mobile number must be 10 digits long!</span>
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Email-Id</label>
@@ -140,8 +141,22 @@
                                         <div class="w-[calc(100%-75px)] ">
                                             <input type="hidden" name="lead_task_id" value="{{$serviceVal->id}}">
                                             <div class="w-full outline-[1px] outline-dashed outline-[#ccc] p-[10px] rounded-[5px] flex flex-wrap gap-[5px] lg:gap-[10px] xl:gap-[15px]">
-                                                
-                                                <div class="w-full  md:w-[32%] lg:w-[18%]">
+                                                <div class="w-full">
+                                                    <label for="client_type" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Client Type</label>
+                                                    <div class="flex flex-wrap gap-[20px] mt-[20px]">
+                                                        <div class="flex items-center gap-[10px]">
+                                                            <input type="radio" name="client_type" id="client_type" class="client_type" value="1" 
+                                                                @checked(old('client_type', $serviceVal->serviceDetails->client_status) == 1) checked>
+                                                            <label for="client_type" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Applicant</label>
+                                                        </div>
+                                                        <div class="flex items-center gap-[10px]">
+                                                            <input type="radio" name="client_type" id="client_type2" class="client_type" value="2" 
+                                                                @checked(old('client_type', $serviceVal->serviceDetails->client_status) == 2)>
+                                                            <label for="client_type2" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Opponent</label>
+                                                        </div>
+                                                    </div>                                                    
+                                                </div>
+                                                <div class="w-full  md:w-[32%] lg:w-[32%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Project Manager</label>
                                                     <select name="projectmanager" id="projectmanager" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                         <option value="">Project Manager</option>
@@ -153,7 +168,7 @@
                                                         @endforeach                            
                                                     </select>                                                
                                                 </div>
-                                                <div class="w-full  md:w-[32%] lg:w-[18%]">
+                                                <div class="w-full  md:w-[32%] lg:w-[32%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Service Name</label>
                                                     <select name="serviceid" class="lead_service_id setSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                         <option value="">Service Name</option>
@@ -167,7 +182,7 @@
                                                         @endif
                                                     </select>                                                    
                                                 </div>
-                                                <div class="relative w-full  md:w-[32%] lg:w-[18%]">
+                                                <div class="relative w-full  md:w-[32%] lg:w-[32%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Service Type</label>
                                                     <select name="subserviceid" class="getSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                         <option value="">Service Type</option>  
@@ -188,7 +203,7 @@
                                                         <span class="loader-1"> </span>   
                                                     </div>
                                                 </div>
-                                                <div class="w-full  md:w-[32%] lg:w-[18%]">
+                                                <div class="w-full  md:w-[32%] lg:w-[32%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Assign To Users</label>
                                                     <select name="assign" id="assign" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                         <option value="">Assign To Users</option>
@@ -201,7 +216,7 @@
                                                         @endforeach                            
                                                     </select>                                                    
                                                 </div>
-                                                <div class="w-full  md:w-[32%] lg:w-[18%] stageoftheservice">
+                                                <div class="w-full  md:w-[32%] lg:w-[32%] stageoftheservice">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Service Stage</label>
                                                     <select name="stage_id" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none serviceStagesOption" required>
                                                         <option value="">Select Stage</option>
@@ -219,7 +234,7 @@
                                                     </select>
                                                     
                                                 </div>
-                                                <div class="w-full  md:w-[32%] lg:w-[18%]">
+                                                <div class="w-full  md:w-[32%] lg:w-[32%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Dead Line</label>
                                                     <div class="w-[100%] relative">
                                                         <input 
@@ -232,21 +247,7 @@
                                                         />                                                        
                                                     </div>     
                                                 </div>
-                                                <div class="">
-                                                    <label for="client_type" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Client Type</label>
-                                                    <div class="flex flex-wrap gap-[20px] mt-[20px]">
-                                                        <div class="flex items-center gap-[10px]">
-                                                            <input type="radio" name="client_type" id="client_type" value="1" 
-                                                                @checked(old('client_type', $serviceVal->serviceDetails->client_status) == 1) checked>
-                                                            <label for="client_type" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Applicant</label>
-                                                        </div>
-                                                        <div class="flex items-center gap-[10px]">
-                                                            <input type="radio" name="client_type" id="client_type2" value="2" 
-                                                                @checked(old('client_type', $serviceVal->serviceDetails->client_status) == 2)>
-                                                            <label for="client_type2" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Opponent</label>
-                                                        </div>
-                                                    </div>                                                    
-                                                </div>
+                                                
                                                 {{-- start service details --}}
                                                 <div class="eachServiceDetails flex flex-wrap w-full gap-[15px] border-[1px] border-[#ccc] outline-[#ccc] p-[10px] rounded-[5px] {{ isset($serviceVal->service_id) && $serviceVal->service_id == 1 || $serviceVal->service_id == 2 ? '' : 'hidden' }}">
 
@@ -345,8 +346,20 @@
                                     <div class="w-[calc(100%-75px)] ">
                                         <input type="hidden" name="lead_task_id" value="0">
                                         <div class="w-full outline-[1px] outline-dashed outline-[#ccc] p-[10px] rounded-[5px] flex flex-wrap gap-[5px] lg:gap-[10px] xl:gap-[15px]">
-
-                                            <div class="w-full md:w-[32%] lg:w-[18%]">
+                                            <div class="w-full">
+                                                <label for="client_type" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Client Type</label>
+                                                <div class="flex flex-wrap gap-[20px] mt-[20px]">
+                                                    <div class="flex items-center gap-[10px]">
+                                                        <input type="radio" name="client_type" id="client_type" class="client_type" value="1" checked>
+                                                        <label for="client_type" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Applicant</label>
+                                                    </div>
+                                                    <div class="flex items-center gap-[10px]">
+                                                        <input type="radio" name="client_type" id="client_type2" class="client_type" value="2">
+                                                        <label for="client_type2" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Opponent</label>
+                                                    </div>
+                                                </div>
+                                            </div> 
+                                            <div class="w-full md:w-[32%] lg:w-[32%]">
                                                 <label class="block mb-[5px] text-[14px] font-[400]">Project Manager</label>
                                                 <select name="projectmanager" id="projectmanager" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                     <option value="">Project Manager</option>
@@ -358,7 +371,7 @@
                                                     @endforeach                            
                                                 </select>                                                
                                             </div>
-                                            <div class="w-full md:w-[32%] lg:w-[18%]">
+                                            <div class="w-full md:w-[32%] lg:w-[32%]">
                                                 <label class="block mb-[5px] text-[14px] font-[400]">Service Name</label>
                                                 <select name="serviceid" class="lead_service_id setSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                     <option value="">Service Name</option>
@@ -372,7 +385,7 @@
                                                     @endif
                                                 </select>                                                
                                             </div>
-                                            <div class="relative w-full  md:w-[32%] lg:w-[18%]">
+                                            <div class="relative w-full  md:w-[32%] lg:w-[32%]">
                                                 <label class="block mb-[5px] text-[14px] font-[400]">Service Type</label>
                                                 <select name="subserviceid" class=" getSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                     <option value="">Service Type</option>                                                
@@ -381,7 +394,7 @@
                                                     <span class="loader-1"> </span>   
                                                 </div>
                                             </div>
-                                            <div class="w-full  md:w-[32%] lg:w-[18%]">
+                                            <div class="w-full  md:w-[32%] lg:w-[32%]">
                                                 <label class="block mb-[5px] text-[14px] font-[400]">Assign To Users</label>
                                                 <select name="assign" id="assign" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                                                     <option value="">Assign To Users</option>
@@ -393,13 +406,13 @@
                                                     @endforeach                            
                                                 </select>                                                
                                             </div>
-                                            <div class="w-full  md:w-[32%] lg:w-[18%] stageoftheservice">
+                                            <div class="w-full  md:w-[32%] lg:w-[32%] stageoftheservice">
                                                 <label class="block mb-[5px] text-[14px] font-[400]">Service Stage</label>
                                                 <select name="stage_id" class=" w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none serviceStagesOption" required>
                                                     <option value="">Select Stage</option>                                                   
                                                 </select>
                                             </div>
-                                            <div class="w-full  md:w-[32%] lg:w-[18%]">  
+                                            <div class="w-full  md:w-[32%] lg:w-[32%]">  
                                                 <label class="block mb-[5px] text-[14px] font-[400]">Dead Line</label>                                                                      
                                                 <div class="w-[100%] relative">
                                                     
@@ -414,19 +427,7 @@
                                                     
                                                 </div>     
                                             </div>
-                                            <div class="">
-                                                <label for="client_type" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Client Type</label>
-                                                <div class="flex flex-wrap gap-[20px] mt-[20px]">
-                                                    <div class="flex items-center gap-[10px]">
-                                                        <input type="radio" name="client_type" id="client_type" value="1" checked>
-                                                        <label for="client_type" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Applicant</label>
-                                                    </div>
-                                                    <div class="flex items-center gap-[10px]">
-                                                        <input type="radio" name="client_type" id="client_type2" value="2">
-                                                        <label for="client_type2" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Opponent</label>
-                                                    </div>
-                                                </div>
-                                            </div>                                            
+                                                                                      
 
                                             {{-- start service details --}}
                                             <div class="eachServiceDetails flex flex-wrap w-full gap-[15px] border-[1px] border-[#ccc] outline-[#ccc] p-[10px] rounded-[5px] hidden">
@@ -780,6 +781,7 @@
     });
     $(document).on('change','.setSubService',function(){    
         var serviceId = $(this).val();
+        let clientType = $(this).parent().parent().find('input[name^="leadRepeater"][name$="[client_type]"]:checked').val();
         if(serviceId == 1 || serviceId == 2){
             $(this).parent().parent().find('.classrule').attr('required',true);
             $(this).parent().parent().find('.appliedfor').attr('required',true);
@@ -812,14 +814,65 @@
             },
             dataType:'json',
             data:{
-                serviceId:serviceId
+                serviceId:serviceId,
+                clientType:clientType
             },
             success:function(res){
                 e.parent().parent().find('.getSubService').html(res.data);
+                e.parent().parent().find('.serviceNameLoader').addClass('hidden');
             }
         });
 
         //get stages
+        // $.ajax({
+        //     method:'POST',
+        //     url:"{{ route('serviceStages')}}",
+        //     headers:{
+        //         'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        //     },
+        //     data:{
+        //         serviceId:serviceId
+        //     },
+        //     dataType:'json',
+        //     success:function(res){
+        //         e.parent().parent().find('.stageoftheservice').find('.serviceStagesOption').html(res.options);
+        //         e.parent().parent().find('.serviceNameLoader').addClass('hidden');
+
+        //     }
+        // });
+    });
+
+    $(document).on('click','.client_type',function(){
+        let clientType = $(this).val();
+        let serviceId = $(this).parent().parent().parent().parent().find('.lead_service_id').val();        
+        if(serviceId > 0){
+            $(this).parent().parent().parent().parent().find('.serviceNameLoader').removeClass('hidden');        
+            var e = $(this);
+            $.ajax({
+                method:'POST',
+                url:"{{ route('lead.subservice')}}",
+                headers:{
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                dataType:'json',
+                data:{
+                    serviceId:serviceId,
+                    clientType:clientType
+                },
+                success:function(res){
+                    e.parent().parent().parent().parent().find('.getSubService').html(res.data);
+                    e.parent().parent().parent().parent().find('.serviceNameLoader').addClass('hidden');
+                }
+            });
+        }else{
+            alert("You must select a service name!");
+        }
+    });
+
+    $(document).on('change','.getSubService',function(){
+        let subServiceId = $(this).val();
+        let serviceId = $(this).parent().parent().find('.lead_service_id').val();
+        var e = $(this);
         $.ajax({
             method:'POST',
             url:"{{ route('serviceStages')}}",
@@ -827,13 +880,12 @@
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
             data:{
-                serviceId:serviceId
+                serviceId:serviceId,
+                subServiceId:subServiceId
             },
             dataType:'json',
             success:function(res){
                 e.parent().parent().find('.stageoftheservice').find('.serviceStagesOption').html(res.options);
-                e.parent().parent().find('.serviceNameLoader').addClass('hidden');
-
             }
         });
     });
@@ -898,7 +950,9 @@
     }
 
     $(document).on('keyup','.checkDuplicateMobile',function(){
-        if($(this).val().length >=10){
+        $('.mobile_length_error').addClass('hidden');
+
+        if($(this).val().length == 10){
             let id = $(this).data('id');
             let val = $(this).val();
             let e = $(this);
@@ -921,6 +975,9 @@
                     }
                 }
             });
+        }
+        if($(this).val().length > 10){
+            $('.mobile_length_error').removeClass('hidden');
         }
         
     });

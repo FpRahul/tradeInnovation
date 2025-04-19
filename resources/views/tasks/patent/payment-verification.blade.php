@@ -142,7 +142,7 @@ $paymentData = $taskList->payment[0];
       <strong class=" hideOncredit mt-5 block">Update Upcoming Actions</strong>
       <div class=" hideOncredit flex flex-col md:flex-row gap-[20px]">
          <div class=" hideOncredit w-full md:w-1/2">
-            <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Satge</label>
+            <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
             @if(isset($getStage))
             <input type="text" name="stage_id" id="stage_id" value="{{$getStage->title}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
             <input type="hidden" name="stage_id" value="{{$getStage->id}}">
@@ -175,7 +175,7 @@ $paymentData = $taskList->payment[0];
       </div>
       <div class="w-full md:w-1/2 hideOncredit" id="deadLineDate">
          <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-            Documentation Dead line
+            Dead Line
          </label>
          <div class="w-[100%] relative">
             <input

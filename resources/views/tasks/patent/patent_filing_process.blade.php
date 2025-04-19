@@ -16,7 +16,7 @@
       <div class="flex flex-col md:flex-row gap-[20px]">
       <div class="w-full md:w-1/2" id="verifiedDate">
          <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-            filied on
+            Filed On
          </label>
          <div class="w-[100%] relative">
             <input
@@ -34,7 +34,7 @@
       </div>
       <div class="w-full md:w-1/2">
             <label for="applicant_name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Applicant Name</label>
-            <input type="text" name="applicant_name" id="applicant_name" value="" placeholder="enter applicant name" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            <input type="text" name="applicant_name" id="applicant_name" value="" placeholder="Enter Applicant Name" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
             @error('applicant_name')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
@@ -42,15 +42,15 @@
       </div>
       <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2">
-            <label for="inventor_name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">inventor's Name</label>
-            <input type="text" name="inventor_name" id="inventor_name" value="" placeholder="enter inventor name" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            <label for="inventor_name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Inventor's Name</label>
+            <input type="text" name="inventor_name" id="inventor_name" value="" placeholder="Enter Inventor Name" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
             @error('inventor_name')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
          </div>
          <div class="w-full md:w-1/2">
             <label for="title_of_invention" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Title Of Invention</label>
-            <input type="text" name="title_of_invention" id="title_of_invention" value="" placeholder="enter title of invention" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            <input type="text" name="title_of_invention" id="title_of_invention" value="" placeholder="Enter Title Of Invention" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
             @error('title_of_invention')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
@@ -59,14 +59,14 @@
       <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2">
                   <label for="category_invention" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Category Of Invention</label>
-                  <input type="text" name="category_invention" id="category_invention" value="" placeholder="enter category of invention"  class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                  <input type="text" name="category_invention" id="category_invention" value="" placeholder="Enter Category Of Invention"  class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                   @error('category_invention')
                   <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                   @enderror
             </div>
             <div class="w-full md:w-1/2">
                   <label for="type_of_application" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Title Of Application</label>
-                  <input type="text" name="type_of_application" id="type_of_application" value="" placeholder="enter title of application" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                  <input type="text" name="type_of_application" id="type_of_application" value="" placeholder="Enter Title Of Application" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                   @error('type_of_application')
                   <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                   @enderror
@@ -75,7 +75,7 @@
       <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2">
             <label for="application_number" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Application Number</label>
-            <input type="text" name="application_number" id="application_number" value="" placeholder="enter application number" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            <input type="text" name="application_number" id="application_number" value="" placeholder="Enter Application Number" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
             @error('application_number')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
@@ -106,7 +106,7 @@
       <strong class="mt-5 block">Update Upcoming Actions</strong>
       <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2">
-            <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Satge</label>
+            <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
             @if($getStage->count() > 0)
             <input type="text" name="stage_id" id="stage_id" value="{{$getStage->title}}" class="  w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
             <input type="hidden" name="stage_id" value="{{$getStage->id}}">
@@ -147,7 +147,7 @@
 
          <div class="w-full md:w-1/2" id="verifiedDate">
             <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-               Dead line
+               Dead Line
             </label>
             <div class="w-[100%] relative">
                <input

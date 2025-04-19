@@ -400,7 +400,13 @@ class LeadsController extends Controller
 
     public function getSubService(Request $request)
     {
-        $subService = SubService::where('serviceId', $request->serviceId)->get()->toArray();
+        if($request->clientType == 1){
+            $subService = SubService::where('serviceId', $request->serviceId)->get()->toArray();
+
+        }else if($request->clientType == 2){
+            $subService = SubService::where('serviceId', $request->serviceId)->where('client_type',$request->clientType)->get()->toArray();
+
+        }
         $options = '<option value="">Service Type</option>';
         foreach ($subService as $k => $v) {
             $options .= "

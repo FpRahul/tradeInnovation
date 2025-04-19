@@ -170,10 +170,17 @@
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">     
                             @if ($leadData->leadTask && !empty($leadData->leadTask))
                             {{getStageData($leadData->leadTask)}}
-                            @endif                           
+                            @else
+                            NA
+                            @endif                         
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
+                            @if ($leadData->leadTask && !empty($leadData->leadTask))
                             {{getScopeOfBusinessData($leadData->business_scope)}}
+                            @else
+                            NA
+                            @endif
+                            
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                             {{ date('d M Y H:i:A', strtotime($leadData->created_at) ) }}

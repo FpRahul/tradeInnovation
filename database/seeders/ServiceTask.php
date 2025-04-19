@@ -386,7 +386,7 @@ class ServiceTask extends Seeder
             [
                 'service_id' => '1',
                 'title' => 'Application Filed for Applicant Address Change',
-                'description' => 'The address change request has been successfully filed with the Trademark Registry',
+                'description' => 'Update the status of the address change filing process.',
                 'stage' => '14',
             ],
             [
@@ -399,8 +399,69 @@ class ServiceTask extends Seeder
             [
                 'service_id' => '1',
                 'title' => 'Assignment/Registered User',
-                'description' => 'Transfer ownership or rights of the trademark to another entity',
+                'description' => 'Updating client details and notifying about the transfer of trademark ownership to another entity.',
                 'stage' => '1',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Payment Confirmation (Assignment/Registered User)',
+                'description' => 'Confirming payment for trademark assignment and transferring ownership to another entity.',
+                'stage' => '12',
+            ],
+            //
+            [
+                'service_id' => '1',
+                'title' => 'Send Query Form (Assignment/Registered User)',
+                'description' => 'Query form sent to client to collect details',
+                'stage' => '12',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Execution of deeds and affidavits (Assignment/Registered User)',
+                'description' => 'Executing deeds and affidavits to transfer trademark ownership.',
+                'stage' => '12',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Application Filed For (Assignment/Registered User)',
+                'description' => 'Update the status of the filing process.',
+                'stage' => '12',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Client Updation (Assignment/Registered User)',
+                'description' => 'Updating client details after trademark ownership transfer to another entity.',
+                'stage' => '12',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Client Intimation After Filing (Assignment/Registered User)',
+                'description' =>'Notifying the client after the trademark assignment filing, confirming the ownership transfer.',
+                'stage' => '12',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Expedite process',
+                'description' => 'Fast-track your trademark for quicker processing and approval.',
+                'stage' => '1',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Payment Confirmation (Expedite process)',
+                'description' => 'Confirming payment for expedited trademark processing and approval.',
+                'stage' => '12',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Application Filed For (Expedite process)',
+                'description' => 'Update the status of the filing process.',
+                'stage' => '12',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Client Intimation After Filing (Expedite process)',
+                'description' => 'Notifying the client after the trademark Expedite process filing.',
+                'stage' => '12',
             ],
             [
                 'service_id' => '1',
@@ -408,6 +469,25 @@ class ServiceTask extends Seeder
                 'description' => 'Service to monitor if others are registering trademarks similar to yours',
                 'stage' => '1',
             ],
+            [
+                'service_id' => '1',
+                'title' => 'Payment Confirmation (IP Watch)',
+                'description' => 'Confirming payment for IP Watch.',
+                'stage' => '12',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'IP Watch Status Update',
+                'description' => 'Updating the client IP watch status and selected frequency (weekly/monthly/quarterly).',
+                'stage' => '12',
+            ],
+            [
+                'service_id' => '1',
+                'title' => 'Client Intimation (IP Watch)',
+                'description' => 'Notifying the client about their IP watch status and selected frequency.',
+                'stage' => '12',
+            ],
+            
             
             
             //patnet

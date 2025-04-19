@@ -262,6 +262,55 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('/trademark/change-address/payment/status/{id?}' , 'changeAddressPaymentStatus')->name('task.changeAddressPaymentStatus');
         Route::get('/trademark/change-address/query-form/{id?}' , 'changeAddressQueryForm')->name('task.changeAddressQueryForm');
         Route::Post('/trademark/change-address/query-form/status/{id?}' , 'changeAddressQueryFormStatus')->name('task.changeAddressQueryFormStatus');
+        Route::get('/trademark/change-address/filing/{id?}' , 'changeAddressFiled')->name('task.changeAddressFiled');
+        Route::Post('/trademark/change-address/filing/status/{id?}' , 'changeAddressFiledStatus')->name('task.changeAddressFiledStatus');
+        Route::get('/trademark/change-address/inform-client/{id?}' , 'addressChanged')->name('task.addressChanged');
+        Route::Post('/trademark//inform-client/status/{id?}' , 'addressChangedStatus')->name('task.addressChangedStatus');
+        Route::get('/trademark/assignment/{id?}' , 'assignmentUserRegsiter')->name('task.assignmentUserRegsiter');
+        Route::Post('/trademark/assignment/status/{id?}' , 'assignmentUserRegsiterStatus')->name('task.assignmentUserRegsiterStatus');
+        Route::get('/trademark/assignment/payment/{id?}' , 'assignmentUserRegsiterPayment')->name('task.assignmentUserRegsiterPayment');
+        Route::Post('/trademark/assignment/payment/status/{id?}' , 'assignmentUserRegsiterPaymentStatus')->name('task.assignmentUserRegsiterPaymentStatus');
+        Route::get('/trademark/assignment/query-form/{id?}' , 'assignmentQueryForm')->name('task.assignmentQueryForm');
+        Route::Post('/trademark/assignment/query-form/status{id?}' , 'assignmentQueryFormStatus')->name('task.assignmentQueryFormStatus');
+        Route::get('/trademark/assignment/affidavit-process/status/{id?}' , 'assignmentAffidavit')->name('task.assignmentAffidavit');
+        Route::Post('/trademark/assignment/affidavit-process/status{id?}' , 'assignmentAffidavitStatus')->name('task.assignmentAffidavitStatus');
+        Route::get('/trademark/assignment/file-process/{id?}' , 'assignmentFileProcess')->name('task.assignmentFileProcess');
+        Route::Post('/trademark/assignment/file-process/status/{id?}' , 'assignmentFileProcessStatus')->name('task.assignmentFileProcessStatus');
+        Route::get('/trademark/assignment/update-client/{id?}' , 'assignmentUpdateClient')->name('task.assignmentUpdateClient');
+        Route::Post('/trademark/assignment/update-client/status/{id?}' , 'assignmentUpdateClientStatus')->name('task.assignmentUpdateClientStatus');
+        Route::get('/trademark/assignment/inform-client/{id?}' , 'assignmentIntimateClient')->name('task.assignmentIntimateClient');
+        Route::Post('/trademark/assignment/inform-client/status/{id?}' , 'assignmentIntimateClientStatus')->name('task.assignmentIntimateClientStatus');
+        Route::get('/trademark/expidet-process/{id?}' , 'expidetProcess')->name('task.expidetProcess');
+        Route::Post('/trademark/expidet-process/status/{id?}' , 'expidetProcessStatus')->name('task.expidetProcessStatus');
+        Route::get('/trademark/expidet-process/payment/{id?}' , 'expidetProcessPayment')->name('task.expidetProcessPayment');
+        Route::Post('/trademark/expidet-process/payment/satus/{id?}' , 'expidetProcessPaymentStatus')->name('task.expidetProcessPaymentStatus');
+        Route::get('/trademark/expidet-process/file-process/{id?}' , 'expidetProcessFile')->name('task.expidetProcessFile');
+        Route::Post('/trademark/expidet-process/file-process/status/{id?}' , 'expidetProcessFileStatus')->name('task.expidetProcessFileStatus');
+        Route::get('/trademark/expidet-process/inform-client/{id?}' , 'expidetProcessFileInformClient')->name('task.expidetProcessFileInformClient');
+        Route::Post('/trademark/expidet-process/inform-client/status/{id?}' , 'expidetProcessFileInformClientStatus')->name('task.expidetProcessFileInformClientStatus');
+        Route::get('/trademark/ip-watch/{id?}' , 'ipWatch')->name('task.ipWatch');
+        Route::post('/trademark/ip-watch/status/{id?}' , 'ipWatchStatus')->name('task.ipWatchStatus');
+        Route::get('/trademark/ip-watch/{id?}' , 'ipWatchPayment')->name('task.ipWatchPayment');
+        Route::Post('/trademark/ip-watch/status/{id?}' , 'ipWatchPaymentStatus')->name('task.ipWatchPaymentStatus');
+
+
+
+
+
+        
+        
+
+
+
+
+
+        
+
+        
+
+
+
+
 
 
 

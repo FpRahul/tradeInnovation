@@ -14,25 +14,35 @@
       <input type="hidden" name="previous_task_id" id="previous_task_id" value="{{$previousTask->id}}">
       <strong class="mt-4 block"> Update Current Task</strong>
       <div class="flex flex-col md:flex-row gap-[20px]">
-      <div class="w-full md:w-1/2" id="verifiedDate">
-         <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-            Filed On
-         </label>
-         <div class="w-[100%] relative">
-            <input
-               type="text"
-               placeholder="Dead Line"
-               name="verified"
-               class="daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
-               value=""
-               id="verified"
-               autocomplete="off">
-            <div class="absolute right-[10px] top-[10px]">
-               <i class="ri-calendar-line"></i>
+         <div class="w-full md:w-1/2">
+            <label for="filing_type" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Filing Type</label>
+            <select name="filing_type" id="filing_type" class="filingTypeFilter !outline-none h-[45px] border border-[#0000001A] w-full rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]">
+               <option value="">-- Select Filing Type --</option>
+               <option value="national">National</option>
+               <option value="pct_international">PCT International</option>
+               <option value="pct_national_phase">PCT National Phase</option>
+            </select>
+               
+         </div>
+         <div class="w-full md:w-1/2" id="verifiedDate">
+            <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+               Filed On
+            </label>
+            <div class="w-[100%] relative">
+               <input
+                  type="text"
+                  placeholder="Filied On"
+                  name="verified"
+                  class="daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
+                  value=""
+                  id="verified"
+                  autocomplete="off">
+               <div class="absolute right-[10px] top-[10px]">
+                  <i class="ri-calendar-line"></i>
+               </div>
             </div>
          </div>
-      </div>
-      <div class="w-full md:w-1/2">
+         <div class="w-full md:w-1/2">
             <label for="applicant_name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Applicant Name</label>
             <input type="text" name="applicant_name" id="applicant_name" value="" placeholder="Enter Applicant Name" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
             @error('applicant_name')
@@ -95,6 +105,42 @@
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
       </div>
+      {{-- PCT START --}}      
+ 
+       <!-- PCT INTERNATIONAL SECTION -->
+      <div class="flex1 mb-[40px] hidden" id="pctInternationalFields" >
+         <div class="flex flex-col md:flex-row mb-[40px] gap-[20px]" > 
+            <div class="w-full md:w-1/2">
+               <label class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Receiving Office</label>
+               <input type="text" name="pct_receiving_office" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="e.g., IN">
+            </div>
+            <div class="w-full md:w-1/2">
+               <label class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">ISA (International Searching Authority)</label>
+               <input type="text" name="pct_isa" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="e.g., ISA/IN">
+            </div>         
+         </div>
+      </div>       
+       <!-- PCT NATIONAL PHASE SECTION -->
+      <div class="mb-[40px] hidden" id="pctNationalFields">   
+         <div class="flex flex-col md:flex-row mb-[40px] gap-[20px]" > 
+            <div class="w-full md:w-1/2">
+               <label class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Country of Entry</label>
+               <input type="text" name="entry_country" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="e.g., US, EP, JP">
+            </div>
+            <div class="w-full md:w-1/2">
+               <label class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">National Phase Entry Date</label>
+               <input type="date" name="entry_date" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            </div>
+            <div class="w-full md:w-1/2">
+               <label class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Translation Submitted?</label>
+               <select name="translation_status" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+               <option value="">-- Select --</option>
+               <option value="yes">Yes</option>
+               <option value="no">No</option>
+               </select>
+            </div>
+         </div>
+      </div>
       <div class="">
          <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
          <textarea type="text" name="description" id="description" class="w-full h-[80px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
@@ -102,7 +148,8 @@
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
       </div>
-
+     
+       {{-- PCT ENDS --}}
       <strong class="mt-5 block">Update Upcoming Actions</strong>
       <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2">
@@ -171,11 +218,11 @@
          </div>
       </div>
 
-<div class="flex justify-end gap-[15px]">
-   <a  id= "previewMail" class=" preview text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Preview</a>
-   <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
-</div>
-</form>
+      <div class="flex justify-end gap-[15px]">
+         <a  id= "previewMail" class=" preview text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Preview</a>
+         <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
+      </div>
+   </form>
 </div>
 
 <div id="assignUserModal" class="hidden fixed inset-0 z-50 bg-[rgba(0,0,0,0.6)] flex justify-center items-center">
@@ -296,6 +343,19 @@
    </table>
 </div>
 <script>
+   $(document).on('change','.filingTypeFilter',function(){
+      if($(this).val() == 'pct_international'){
+         $('#pctInternationalFields').removeClass('hidden');
+         $('#pctNationalFields').addClass('hidden');
+      }else if($(this).val() == 'pct_national_phase'){
+         $('#pctInternationalFields').addClass('hidden');
+         $('#pctNationalFields').removeClass('hidden');
+      }else if($(this).val() == 'national'){
+         $('#pctInternationalFields').addClass('hidden');
+         $('#pctNationalFields').addClass('hidden');
+      }
+   });
+
    $(".preview").off("click").on("click", function () {
       $("#assignUserModal").removeClass("hidden");
    });

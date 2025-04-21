@@ -134,8 +134,7 @@ class LeadsController extends Controller
         $clientList = User::where('role', 2)->where('status', 1)->get();
         $projectManagerList = User::where('role', 4)->where('status', 1)->get();
         $firmList = Firm::where('status', 1)->get();
-        if ($request->isMethod('POST')) {
-            
+        if ($request->isMethod('POST')) {            
             $scopeOfBusinessArray = $request->scopeofbusiness;
             if (in_array('other', $request->scopeofbusiness)) {
                 $scopeOfBusinessArray = array_diff($scopeOfBusinessArray, ['other']);
@@ -226,8 +225,12 @@ class LeadsController extends Controller
                         $service_detail_id = 0;
                         if(isset($serviceVal['classrule'])){
                             $serviceDetailData->lead_id = $leadData->id;
-                            $serviceDetailData->class_rule = implode(',',$serviceVal['classrule']);
-                            $serviceDetailData->applied_for = $serviceVal['appliedfor'];
+                            if (is_array($serviceVal['classrule'])) {
+                                $serviceDetailData->class_rule = implode(',', $serviceVal['classrule']);
+                            } else {
+                                $serviceDetailData->class_rule = $serviceVal['classrule'];
+                            }
+                                                        $serviceDetailData->applied_for = $serviceVal['appliedfor'];
                            
                             if (isset($serviceVal['serviceLogo']) && $serviceVal['serviceLogo'] instanceof \Illuminate\Http\UploadedFile) {
 

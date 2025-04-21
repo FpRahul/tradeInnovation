@@ -108,7 +108,7 @@
          
          <div class="w-full md:w-1/2" id="verifiedDate">
              <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-             Payment Dead line
+             Payment Dead Line
              </label>
              <div class="w-[100%] relative">
              <input
@@ -156,7 +156,7 @@
                 @enderror
             </div>
             <div class="w-full md:w-1/2">
-                <label for="subject" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Govt Price<strong class="text-[#f83434]">*</strong> </label>
+                <label for="subject" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Govt. Price<strong class="text-[#f83434]">*</strong> </label>
                 <input type="text" name="govt_price" id="govt_price" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                 @error('govt_price')
                 <span class="text-red-500 text-sm mt-1">{{ $message }}</span>

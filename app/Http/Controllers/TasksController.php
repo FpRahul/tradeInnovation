@@ -51,10 +51,10 @@ class TasksController extends Controller
         $header_title_name = "Tasks";
         $assignUser = auth()->user();
 
-        $taskDetails = LeadTask::with(['user', 'lead', 'leadTaskDetails', 'services', 'subService', 'serviceSatge'])->whereHas('lead', function ($q) {
+        $taskDetails = LeadTask::with(['user', 'lead', 'leadTaskDetails','serviceDetails','services', 'subService', 'serviceSatge'])->whereHas('lead', function ($q) {
             $q->where('status', 1);
         })->orderBy('created_at', 'desc');
-
+        // dd($taskDetails->get());
         if ($assignUser->role != 1) {
             $taskDetails = $taskDetails->where('user_id', $assignUser->id);
         }
@@ -23263,7 +23263,7 @@ class TasksController extends Controller
         $existedOpponentDetails = Evidence::where('lead_id', $existedLeaedTask->lead_id)
             ->orderBy('id', 'ASC')
             ->first();
-
+        dd($existedOpponentDetails);
         $formattedCreatedDate = $existedLeaedTask->created_at->format('d M Y');
         $userName = Auth::user()->name;
         $rule = [

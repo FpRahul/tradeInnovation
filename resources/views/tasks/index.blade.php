@@ -89,7 +89,7 @@
                     <thead>
                         <tr>
                             <th class="text-start w-[120px] bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
-                                Lead id
+                                Lead Id
                             </th>
                             <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                                 Clients Name
@@ -101,10 +101,13 @@
                                 Assigned User
                             </th>
                             <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
-                                Services
+                                Service
                             </th>
                             <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
-                                Services type
+                                Service Title
+                            </th>
+                            <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                                Service Type
                             </th>
                             <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                                 Deadline
@@ -161,11 +164,15 @@
                                 @else
                                 Not Available
                                 @endif
-
                             </td>
-
                             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-
+                                @if( $task->serviceDetails)
+                                    {{ $task->serviceDetails->applied_for }}                                
+                                @else
+                                    Not Available
+                                @endif
+                            </td>
+                            <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                                 @if( $task->subService)
                                 {{ $task->subService->subServiceName }}
                                 @else
@@ -175,7 +182,6 @@
                             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                                 @if($task->leadTaskDetails && $task->leadTaskDetails->dead_line)
                                 {{ \Carbon\Carbon::parse($task->leadTaskDetails->dead_line)->format('d M Y') }}
-
                                 @else
                                 Not Available
                                 @endif

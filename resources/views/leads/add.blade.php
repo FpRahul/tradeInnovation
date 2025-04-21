@@ -255,8 +255,8 @@
                                                     <div class="w-full md:w-[32%] lg:w-[32%]">
                                                         <label class="block mb-[5px] text-[14px] font-[400]">Risk Class</label>
                                                         <select name="classrule"
-                                                                class="classrule allform-select2-service w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
-                                                                 multiple>
+                                                                class="classrule w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                                >
                                                         
                                                             <option value="">Risk Class</option>
                                                             @php
@@ -435,8 +435,8 @@
                                                 <div class="w-full md:w-[32%] lg:w-[32%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Risk Class</label>
                                                     <select name="classrule" 
-                                                            class="classrule allform-select2-service w-full h-[55px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
-                                                             multiple>
+                                                            class="classrule w-full h-[55px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                            >
                                                         <option value="">Risk Class</option>
                                                         @for ($i=1;$i <= 45;$i++)
                                                         <option value="{{$i}}">{{$i}}</option>

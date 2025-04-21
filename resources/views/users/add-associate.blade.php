@@ -18,6 +18,39 @@
                     @enderror
                 </div>
                 <div class="w-full md:w-1/2">
+                    <label for="commission" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Commission</label>
+                    @php
+                        $commissionValue = $newAssociate->commission;
+                        $isPercentage = Str::contains($commissionValue, '%');
+                        $selectedSign = $isPercentage ? '%' : '₹';
+                        $numericCommission = (float) str_replace(['%', '₹'], '', $commissionValue);
+                    @endphp
+
+                    <div class="relative">
+                        <div class="absolute top-[0] left-[0] w-[80px] associateBx">
+                            <select name="commission_sign" class="associatePriceSelect">
+                                <option value="%" {{ $selectedSign == '%' ? 'selected' : '' }}>%</option>
+                                <option value="₹" {{ $selectedSign == '₹' ? 'selected' : '' }}>₹</option>
+                            </select>
+                        </div>
+                        <input 
+                            type="number" 
+                            name="commission" 
+                            id="commission" 
+                            value="{{ old('commission') ? old('commission') : $numericCommission }}" 
+                            class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] ps-[70px] rounded-[10px] !outline-none" 
+                            placeholder="Enter commission"
+                        >
+                    </div>
+
+                    @error('commission')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+                
+            </div>
+            <div class="flex flex-col md:flex-row gap-[20px]">
+                <div class="w-full md:w-1/2">
                     <label for="profession" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Profession <strong class="text-[#f83434]">*</strong></label>
                     <select name="profession" id="profession" class="allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                         @if (count($professionDataList) > 0)
@@ -30,15 +63,25 @@
                 @error('profession')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
-            </div>
-            <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
-                    <label for="firmName" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Firm Name <strong class="text-[#f83434]">*</strong></label>
-                    <input type="text" name="firmName" id="firmName" value="{{ old('firmName') ? old('firmName') : $newAssociate->companyName}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <label for="firmName" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Firm Name <strong class="text-[#f83434]">*</strong></label>   
+                    <select name="firmName" id="firmName" class="allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                        <option value="">firm Type</option>
+                        @if ($firmList && $firmList->isNotEmpty())
+                            @foreach ($firmList as $firmListData)
+                                <option value="{{ $firmListData->id }}" {{ $firmListData->id == $newAssociate->companyName ? 'selected' : '' }}>
+                                    {{ $firmListData->name }}
+                                </option>
+                            @endforeach                    
+                        @endif
+                    </select>
                     @error('firmName')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div> 
+                             
+            </div>
+            <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="number" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mobile Number <strong class="text-[#f83434]">*</strong></label>
                     <input type="number" name="number" id="number" value="{{ old('number') ? old('number') : $newAssociate->mobile}}" class="checkDuplicateMobile w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Number" required>
@@ -47,9 +90,7 @@
                     @error('number')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
-                </div>               
-            </div>
-            <div class="flex flex-col md:flex-row gap-[20px]">
+                </div> 
                 <div class="w-full md:w-1/2">
                     <label for="alternatePhone" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Alternate Mobile Number</label>
                     <input type="number" name="alternatePhone" value="{{ old('alternatePhone') ? old('alternatePhone') : $newAssociate->altNumber}}" id="alternatePhone" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Email">
@@ -57,16 +98,17 @@
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
+                
+                
+            </div>
+            <div class="flex flex-col md:flex-row gap-[20px]">   
                 <div class="w-full md:w-1/2">
                     <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Email-Id <strong class="text-[#f83434]">*</strong></label>
                     <input type="text" name="email" id="email" value="{{ old('email') ? old('email') : $newAssociate->email}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Email" required>
                     @error('email')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
-                </div>
-                
-            </div>
-            <div class="flex flex-col md:flex-row gap-[20px]">                
+                </div>             
                 <div class="w-full md:w-1/2">
                     <label for="alternateEmail" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Alternate Email-Id</label>
                     <input type="text" name="alternateEmail" value="{{  old('alternateEmail') ? old('alternateEmail') : $newAssociate->altEmail}}" id="alternateEmail" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Email">
@@ -80,22 +122,22 @@
                     <div class="shadow-lg p-[25px] rounded-[8px] border-[1px] border-[#ccc] currentAddressDiv">                        
                         <div class="mb-[10px]">
                             <label for="currentAddress" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Current Address <strong class="text-[#f83434]">*</strong></label>
-                            <textarea type="text" name="currentAddress" id="currentAddress" class="w-full h-[120px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Current Address" required>{{ old('currentAddress') ? old('currentAddress') : (!empty($newClientDetails->currentAddress) ? $newClientDetails->currentAddress:'') }}</textarea>
+                            <textarea type="text" name="currentAddress" id="currentAddress" class="w-full h-[120px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Current Address" required>{{ old('currentAddress') ? old('currentAddress') : (!empty($newAssociateDetails->currentAddress) ? $newAssociateDetails->currentAddress:'') }}</textarea>
                             @error('currentAddress')
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="mb-[10px]">
                             <label for="curr_city" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">City</label>
-                            <input type="text" name="curr_city" id="curr_city" value="{{ old('curr_city') ? old('curr_city') : (!empty($newClientDetails) ? $newClientDetails->curr_city : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                            <input type="text" name="curr_city" id="curr_city" value="{{ old('curr_city') ? old('curr_city') : (!empty($newAssociateDetails) ? $newAssociateDetails->curr_city : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
                         </div>
                         <div class="mb-[10px]">
                             <label for="curr_state" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">State</label>
-                            <input type="text" name="curr_state" id="curr_state" value="{{ old('curr_state') ? old('curr_state') : (!empty($newClientDetails) ? $newClientDetails->curr_state : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                            <input type="text" name="curr_state" id="curr_state" value="{{ old('curr_state') ? old('curr_state') : (!empty($newAssociateDetails) ? $newAssociateDetails->curr_state : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
                         </div>
                         <div class="mb-[10px]">
                             <label for="curr_zip" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Zip Code</label>
-                            <input type="text" name="curr_zip" id="curr_zip" value="{{ old('curr_zip') ? old('curr_zip') : (!empty($newClientDetails) ? $newClientDetails->curr_zip : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                            <input type="text" name="curr_zip" id="curr_zip" value="{{ old('curr_zip') ? old('curr_zip') : (!empty($newAssociateDetails) ? $newAssociateDetails->curr_zip : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
                         </div>                        
                     </div>
                 </div>
@@ -111,22 +153,22 @@
                                 <input type="checkbox" name="sameascurrentaddress" class="sameAsCurrentAddress"/>  
                                 <label>Same as current address</label>                          
                             </div> </label>
-                            <textarea R type="text" name="permanentAddress" id="permanentAddress" class="w-full h-[120px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Permanent Address" required>{{ old('permanentAddress') ? old('permanentAddress') : (!empty($newClientDetails->permanentAddress) ? $newClientDetails->permanentAddress :'') }}</textarea>
+                            <textarea R type="text" name="permanentAddress" id="permanentAddress" class="w-full h-[120px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Permanent Address" required>{{ old('permanentAddress') ? old('permanentAddress') : (!empty($newAssociateDetails->permanentAddress) ? $newAssociateDetails->permanentAddress :'') }}</textarea>
                             @error('permanentAddress')
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="mb-[10px]">
                             <label for="perma_city" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">City</label>
-                            <input type="text" name="perma_city" id="perma_city" value="{{ old('perma_city') ? old('perma_city') : (!empty($newClientDetails) ? $newClientDetails->perma_city : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                            <input type="text" name="perma_city" id="perma_city" value="{{ old('perma_city') ? old('perma_city') : (!empty($newAssociateDetails) ? $newAssociateDetails->perma_city : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
                         </div>
                         <div class="mb-[10px]">
                             <label for="perma_state" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">State</label>
-                            <input type="text" name="perma_state" id="perma_state" value="{{ old('perma_state') ? old('perma_state') : (!empty($newClientDetails) ? $newClientDetails->perma_state : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                            <input type="text" name="perma_state" id="perma_state" value="{{ old('perma_state') ? old('perma_state') : (!empty($newAssociateDetails) ? $newAssociateDetails->perma_state : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
                         </div>
                         <div class="mb-[10px]">
                             <label for="perma_zip" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Zip Code</label>
-                            <input type="text" name="perma_zip" id="perma_zip" value="{{ old('perma_zip') ? old('perma_zip') : (!empty($newClientDetails) ? $newClientDetails->perma_zip : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
+                            <input type="text" name="perma_zip" id="perma_zip" value="{{ old('perma_zip') ? old('perma_zip') : (!empty($newAssociateDetails) ? $newAssociateDetails->perma_zip : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" maxlength="255" >
                         </div> 
                                          
                     </div>

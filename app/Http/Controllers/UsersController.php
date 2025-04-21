@@ -12,6 +12,7 @@ use App\Models\UserExperience;
 use App\Models\Role;
 use App\View\Components\LogActivity;
 use App\Models\Log;
+use App\Models\Firm;
 use Illuminate\Support\Str;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -477,6 +478,7 @@ class UsersController extends Controller
     }
 
     public function addAssociate(Request $request, $id = null){
+
         $clientIP = \Request::ip();
         $userAgent = \Request::header('User-Agent');
         $operatingSystem = getOperatingSystem($userAgent);
@@ -503,10 +505,18 @@ class UsersController extends Controller
             $type = 'Associate';
             $uniqueUserId = $this->generateUniqueUserCode('A','=', 3);
         }
+        $firmList = Firm::where('status', 1)->get();
         if ($request->isMethod('POST')) {
             $credentials = $request->validate([
                 'email' =>  $email,
             ]);
+            if($request->commission > 0){
+                if($request->commission_sign == '%'){
+                    $newAssociate->commission = $request->commission.''.$request->commission_sign;
+                }else{
+                    $newAssociate->commission = $request->commission;
+                }               
+            }
             $newAssociate->name = $request->name;
             $newAssociate->Profession = $request->profession;
             $newAssociate->role = $request->role;
@@ -553,8 +563,9 @@ class UsersController extends Controller
                 return back()->with('error', 'Some error is occur.');
             }
         }
+        // dd($newAssociate);
         $header_title_name = 'User';
-        return view('users/add-associate', compact('newAssociate','newAssociateDetails', 'header_title_name', 'moduleName', 'professionDataList'));
+        return view('users/add-associate', compact('newAssociate','newAssociateDetails', 'header_title_name', 'moduleName', 'professionDataList','firmList'));
     }
 
     public function userStatus(Request $request){  

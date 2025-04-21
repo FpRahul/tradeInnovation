@@ -136,7 +136,7 @@
       </div>
       <div class=" onHoldHide w-full md:w-1/2" id="verifiedDate">
          <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-            Dead line
+            Dead Line
          </label>
          <div class="w-[100%] relative">
             <input

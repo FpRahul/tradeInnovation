@@ -335,6 +335,19 @@ button.swal-button:hover,button.swal-button:focus {
     width: 100%;
 }
 
+.associateBx {
+    width: 60px;
+    height: 100%;
+    display: flex;
+    align-items: stretch;
+}
+
+.associateBx select {
+    width: 100%;
+    padding: 0 10px;
+    border-radius: 10px 0 0 10px;
+}
+.associateBx select:hover, .associateBx select:focus { outline: none; box-shadow: none;}
 
 
 /* responsive */

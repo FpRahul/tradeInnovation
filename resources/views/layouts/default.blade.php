@@ -174,7 +174,17 @@
         $(document).ready(function() {
             $('.leadServiceRepeater').repeater({
                 initEmpty: false,
-                show: function() {
+                show: function() {                   
+                    $(this).find('#client_type').prop("checked",true);
+                    $(this).find('.getSubService').html('<option value="">Service Type</option>');
+                    $(this).find('.getpreviewlogo').html('<option value="">Select Stage</option>'); 
+                    $(this).find('.getpreviewlogo').attr('src', '/assets/images/noimage.png');
+                    // let $select = $('.classrule');
+                    // $select.html('<option value="" data-select2-id="select2-data-0-placeholder">Risk Class</option>');
+                    // for (let i = 1; i <= 45; i++) {
+                    //     $select.append(`<option value="${i}" data-select2-id="select2-data-${i + 1}-id${i}">${i}</option>`);
+                    // }
+
                     console.log($(this).html());
                     $(this).find('.daterangepicker-taskdeadline').daterangepicker({
                         singleDatePicker: true, 

@@ -62,6 +62,7 @@ class SubServices extends Seeder
                 'subServiceName' => 'Request for Expedite process',
                 'subServiceDescription' => 'Request for Expedite process'
             ],
+            
             [
                 'serviceId' => '1',
                 'client_type' => 1,

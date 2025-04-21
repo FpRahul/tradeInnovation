@@ -147,7 +147,6 @@ class ServiceTask extends Seeder
                 'title' => 'Opposition Status',
                 'sub_service_id'=> 5,
                 'description' => 'Update the opposition status.',
-               
                 'stage' => '0',
             ],
             [
@@ -155,7 +154,6 @@ class ServiceTask extends Seeder
                 'title' => 'Inform client and payment confirmation',
                 'sub_service_id'=> 5,
                 'description' => 'Inform client about the opposition and mark the payment status.',
-               
                 'stage' => '13',
             ],
             
@@ -215,11 +213,21 @@ class ServiceTask extends Seeder
                
                 'stage' => '13',
             ],
+
             [
                 'service_id' => '1',
                 'title' => 'Non compliance intimation to register',
                 'sub_service_id'=> 5,
                 'description' => 'Update Department for Non-Compliance Intimation register',
+               
+                'stage' => '13',
+            ],
+
+            [
+                'service_id' => '1',
+                'title' => 'Interlocutory Petition (Opposition)',
+                'sub_service_id'=> 5,
+                'description' => 'An interlocutory petition is filed to request the court in case of delayed submission',
                
                 'stage' => '13',
             ],
@@ -376,7 +384,7 @@ class ServiceTask extends Seeder
                 'service_id' => '1',
                 'title' => 'Interlocutory Petition (Rectification)',
                 'sub_service_id'=> 7,
-                'description' => 'Update Department for Non-Compliance Intimation register',
+                'description' => 'An interlocutory petition is filed to request the court in case of delayed submission',
                
                 'stage' => '13',
             ],

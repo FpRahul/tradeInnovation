@@ -184,7 +184,7 @@
            $("#SatgeID").val('{{ $onHideSatge->id }}') 
            $("#nextTitle").text(' Next stage will be: ' + '{{ $onHideSatge->title }}')
            $('.evidence_submit').addClass('hidden');
-           $("label[for='verified']").text("Verified On");
+           $("label[for='verified']").text(" Verified On");
             $('#showStage').text('Set a dead line for ' + '{{ $onHideSatge->title }}');
            
 

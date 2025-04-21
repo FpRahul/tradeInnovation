@@ -291,6 +291,9 @@
 
             <!-- Modal body -->
             <div class="p-[20px]">
+                @foreach ($taskDetails as $task)
+                    
+                @endforeach
                 <form method="POST" action="{{ route('task.hold') }}" class="space-y-[20px]">
                     @csrf
                     <div class="flex flex-col md:flex-row gap-[20px]">
@@ -319,7 +322,7 @@
 
                         <div class="w-full md:w-1/2" id="verifiedDate">
                             <label for="followUp" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-                                Follow-up Date
+                                Reminder Date
                             </label>                        
                             <div class="w-full">
                                 <div class="w-full relative">
@@ -348,7 +351,7 @@
                     </div>
 
                     <div class="">
-                        <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Reason</label>
+                        <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
                         <textarea type="text" name="description" id="description" class="w-full h-[155px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
                     </div>
 

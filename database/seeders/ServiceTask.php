@@ -391,7 +391,7 @@ class ServiceTask extends Seeder
             
             [
                 'service_id' => '1',
-                'title' => 'Awaited for Hearing (Opposition) and  Inform Client (Rectification)',
+                'title' => 'Awaited for Hearing and  Inform Client (Rectification)',
                 'sub_service_id'=> 7,
                 'description' => 'Add the court hearing date and inform the client about the scheduled session.',
                

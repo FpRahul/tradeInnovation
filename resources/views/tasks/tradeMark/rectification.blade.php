@@ -75,14 +75,14 @@
       <div class="flex flex-col md:flex-row gap-[20px] hidden hideOpposition">
          <div class="w-full md:w-1/2">
             <label for="opposition_number" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Opposition Number<strong class="text-[#f83434]">*</strong></label>
-            <input type="text" name="opposition_number" id="opposition_number" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            <input type="text" name="opposition_number" id="opposition_number" placeholder="Enter opposition number" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
             @error('opposition_number')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
          </div>
          <div class="w-full md:w-1/2">
             <label for="opponent_name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Opponent Name<strong class="text-[#f83434]">*</strong></label>
-            <input type="text" id="opponent_name" name="opponent_name"  class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            <input type="text" id="opponent_name" name="opponent_name" placeholder="Enter opponent name"  class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
             @error('opponent_name')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
@@ -92,14 +92,14 @@
       <div class="flex flex-col md:flex-row gap-[20px] hidden hideOpposition">
          <div class="w-full md:w-1/2">
             <label for="opponent_address" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Opponent Address<strong class="text-[#f83434]">*</strong></label>
-            <input type="text" name="opponent_address" id="opponent_address" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            <input type="text" name="opponent_address" id="opponent_address" placeholder="Enter opponent address" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
             @error('opponent_address')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
          </div>
          <div class="w-full md:w-1/2">
             <label for="advocate_name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Advocate Name<strong class="text-[#f83434]">*</strong> </label>
-            <input type="text" name="advocate_name" id="advocate_name" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            <input type="text" name="advocate_name" id="advocate_name" value="" placeholder="Enter advocate name" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
             @error('advocate_name')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
@@ -130,7 +130,7 @@
       <div class=" flex flex-col md:flex-row gap-[20px]">
 
          <div class="w-full md:w-1/2 ">
-            <label for="stage" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Satge</label>
+            <label for="stage" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
             @if($getStage->count() > 0)
             <input type="text" name="stage_id" id="stage_id" value="{{$onHideSatge->title}}" class="  w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
             <input type="hidden" name="stage_id" id = "SatgeID"  value="{{$onHideSatge->id}}">
@@ -171,7 +171,7 @@
       </div>
       <div class=" w-full md:w-1/2" id="deadLineDate">
          <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-            Dead line
+            Deadline
          </label>
          <div class="w-[100%] relative">
             <input

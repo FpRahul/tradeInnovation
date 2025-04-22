@@ -218,6 +218,9 @@
            $("#nextTitle").text(' Next stage will be: ' + '{{ $getStage->title }}')
            $('#showStage').text('Set a dead line for ' + '{{ $getStage->title }}');
            $('.evidence_submit').removeClass('hidden');
+          console.log($("#stage_id").val() , 
+          $("#SatgeID").val() );
+          
            
          } else if (opponent_evidence == 3) {
            $("#stage_id").val('{{ $onHideSatge->title }}'); 
@@ -226,7 +229,8 @@
            $('.evidence_submit').addClass('hidden');
            
             $('#showStage').text('Set a dead line for ' + '{{ $onHideSatge->title }}');
-           
+            console.log($("#stage_id").val() , 
+          $("#SatgeID").val() );
 
          }
       })

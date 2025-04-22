@@ -104,7 +104,7 @@
                                 Service
                             </th>
                             <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
-                                Service Title
+                                Applied For
                             </th>
                             <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                                 Service Type
@@ -205,6 +205,7 @@
                                 break;
                                 case 4:
                                 $status = 'Rejected';
+                                break;
                                 case 5:
                                 $status = 'On Hold';
                                 }

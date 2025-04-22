@@ -70,12 +70,12 @@
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
       </div>
-      <strong class= mt-5 block>Update Upcoming Actions</strong>
+      <strong class= "onhide mt-5" block>Update Upcoming Actions</strong>
 
-      <div class=" flex flex-col md:flex-row gap-[20px]">
+      <div class=" onhide flex flex-col md:flex-row gap-[20px]">
 
          <div class="w-full md:w-1/2 ">
-            <label for="stage" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Satge</label>
+            <label for="stage" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
             @if($getStage->count() > 0)
             <input type="text" name="stage_id" id="stage_id" value="{{$onHideSatge->title}}" class="  w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
             <input type="hidden" name="stage_id" id = "SatgeID"  value="{{$onHideSatge->id}}">
@@ -114,9 +114,9 @@
             @endif
          </div>
       </div>
-      <div class=" w-full md:w-1/2" id="deadLineDate">
+      <div class=" onhide w-full md:w-1/2" id="deadLineDate">
          <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-            Dead line
+            Deadline
          </label>
          <div class="w-[100%] relative">
             <input
@@ -184,13 +184,15 @@ $('.daterangepicker-taskdeadline').attr("placeholder", "DD/MM/YYYY");
 
            $('#showStage').text('Set a dead line for ' + '{{ $getStage->title }}');
            $('#nextTitle').text('Next stage will be: ' + '{{ $getStage->title }}');
-
+           $('.onhide').addClass('hidden');
 
          } else if (trademark_status == 0) {
            $("#stage_id").val('{{ $onHideSatge->title }}'); 
            $("#SatgeID").val('{{ $onHideSatge->id }}') 
             $('#nextTitle').text('Next stage will be: ' + '{{ $onHideSatge->title }}');
             $('#showStage').text('Set a dead line for ' + '{{ $onHideSatge->title }}');
+           $('.onhide').removeClass('hidden');
+
          }
 
       $("#trademark_status").on('change', function () {

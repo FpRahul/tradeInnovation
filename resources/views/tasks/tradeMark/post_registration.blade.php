@@ -74,7 +74,7 @@
 
             @endif
             <div class="w-full md:w-1/2">
-                <label for="stage_id" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Satge</label>
+                <label for="stage_id" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
                 <select name="stage_id" id="stage_id" class="Data allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]" required>
                     <option value="">Select stage</option>
                     @foreach ( $getStage as $stage )
@@ -117,7 +117,7 @@
          <div class=" flex flex-col md:flex-row gap-[20px]">
          <div class=" w-full md:w-1/2" id="deadLineDate">
             <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-               Dead line
+               Deadline
             </label>
             <div class="w-[100%] relative">
                <input

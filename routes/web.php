@@ -234,8 +234,8 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('/rectification/apllicant/evidemce-submission/status/{id?}' , 'rectifiactionApplicationEvidenceSubmissionStatus')->name('task.rectifiactionApplicationEvidenceSubmissionStatus');
         Route::get('/rectification/opponent/evidemce/re-submission/{id?}' , 'rectificationOpponentResubmisson')->name('task.rectificationOpponentResubmisson');
         Route::Post('/rectification/opponent/evidemce/re-submission/status/{id?}' , 'rectificationOpponentResubmissonStatus')->name('task.rectificationOpponentResubmissonStatus');
-        Route::get('/rectification/hearing/{id?}' , 'rectificationHearing')->name('task.rectificationHearing');
-        Route::Post('/rectification/hearing/status{id?}' , 'rectificationHearingStatus')->name('task.rectificationHearingStatus');
+        Route::get('/rectification-hearing/{id?}' , 'rectificationHearing')->name('task.rectificationHearing');
+        Route::Post('/rectification-hearing/status{id?}' , 'rectificationHearingStatus')->name('task.rectificationHearingStatus');
         Route::get('/rectification/client-approval/{id?}' , 'clientApprovalOnHearingRectification')->name('task.clientApprovalOnHearingRectification');
         Route::Post('/rectification/client-approval/status{id?}' , 'clientApprovalOnHearingRectificationStatus')->name('task.clientApprovalOnHearingRectificationStatus');
         Route::get('/rectification/proforma-invoice/{id?}' , 'clientInformExtraChargeOnHearingRectification')->name('task.clientInformExtraChargeOnHearingRectification');
@@ -296,6 +296,10 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('/trademar/ip-watch/payment/status/{id?}' , 'ipWatchPaymentStatus')->name('task.ipWatchPaymentStatus');
         Route::get('/trademark/ip-watch/frequency/{id?}' , 'ipWatchFrequency')->name('task.ipWatchFrequency');
         Route::Post('/trademark/ip-watch/frequency/status/{id?}' , 'ipWatchFrequencyStatus')->name('task.ipWatchFrequencyStatus');
+        Route::get('/rectification/non-complianc/{id?}' , 'rectificationNonCompliance')->name('task.rectificationNonCompliance');
+        Route::Post('/rectification/non-complianc/status/{id?}' , 'rectificationNonComplianceStatus')->name('task.rectificationNonComplianceStatus');
+        Route::get('/rectification/interlocutory-petition/{id?}' , 'rectificationInterlocutory')->name('task.rectificationInterlocutory');
+        Route::Post('/rectification/interlocutory-petition/status/{id?}' , 'rectificationInterlocutoryStatus')->name('task.rectificationInterlocutoryStatus');
 
 
 

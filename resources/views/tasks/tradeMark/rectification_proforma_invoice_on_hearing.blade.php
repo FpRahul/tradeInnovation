@@ -17,7 +17,7 @@
          <input type="hidden" name="checkValid" id="checkValid" value="">
          <div class="w-full md:w-1/2" id="verifiedDate">
             <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-               Informed on
+               Informed On
             </label>
             <div class="w-[100%] relative">
                <input

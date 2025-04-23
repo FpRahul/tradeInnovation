@@ -732,38 +732,53 @@ class LeadsController extends Controller
     public function oppositionDetails(Request $request)
     {
         $leadData = Lead::all();
+        $services = Service::all();
         $header_title_name = 'Opposition listing';
+        
         $requestParams = null; // Single value, not an array
         $commanData = collect();
-        if ($request->lead_id) {
-            $requestParams = $request->lead_id;
-            $commanData = Evidence::selectRaw('
-        lead_id,
-        service_detail_id,
-        MAX(opponent_name) as opponent_name,
-        MAX(opposition_number) as opposition_number,
-        MAX(opposition_date) as opposition_date,
-        MAX(subService_id) as subService_id
-    ')
-    ->where('lead_id', $request->lead_id)
-    ->groupBy('lead_id', 'service_detail_id')
-    ->with(['lead:id,lead_id,client_name', 'serviceDetail', 'subServiceID'])
-    ->get();
+        if ($request->lead_id && $request->service_id) {
+            $rule = [
+                'lead_id' => 'required',
+                'service_id' => 'required'
+             ];
+             
+             $validtor = Validator::make($request->all(), $rule);
+             if ($validtor->fails()) {
+                 return redirect()->back()->withErrors($validtor)->withInput();
+             }
+                $requestParams = $request->lead_id;
+                $commanData = Evidence::selectRaw('
+            lead_id,
+            service_detail_id,
+            service_id,
+           
+            MAX(opponent_name) as opponent_name,
+            MAX(opposition_number) as opposition_number,
+            MAX(opposition_date) as opposition_date,
+            MAX(subService_id) as subService_id
+        ')
+            ->where('lead_id', $request->lead_id)
+            ->where('service_id', $request->service_id)
+            ->groupBy('lead_id', 'service_detail_id','service_id')
+            ->with(['lead:id,lead_id,client_name', 'serviceDetail', 'subServiceID', 'service'])
+            ->get();
+
             // $commanData = Evidence::with(['lead:id,lead_id,client_name', 'serviceDetail' , 'subServiceID']) 
             // ->select('lead_id', 'opponent_name', 'opposition_number', 'opposition_date', 'service_detail_id', 'subService_id')
             // ->where('lead_id', $request->lead_id)
             // ->groupBy('lead_id', 'service_detail_id')
             // ->get();
-          
-            $data = Evidence::with('lead', 'serviceDetail')->where('lead_id', $request->lead_id)->get();
-            
-            return view('leads.opposition_listing', compact('header_title_name', 'data', 'leadData', 'requestParams' , 'commanData'));
+         
+            $data = Evidence::with('lead', 'serviceDetail','taskDetails')->where('lead_id', $request->lead_id)->where('service_id', $request->service_id)->get();
+           
+           
+            return view('leads.opposition_listing', compact('header_title_name', 'data', 'leadData','services', 'requestParams' , 'commanData'));
         } else {
             $data = Evidence::with('lead' , 'serviceDetail')->get();
             
         }
-       
-        return view('leads.opposition_listing', compact('header_title_name', 'data', 'leadData', 'requestParams', 'commanData'));
+        return view('leads.opposition_listing', compact('header_title_name', 'data', 'leadData','services', 'requestParams', 'commanData'));
 
     }
 }

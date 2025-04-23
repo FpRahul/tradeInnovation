@@ -17,7 +17,7 @@
          <input type="hidden" name="current_stage" value="{{$stage_id}}">
          <div class="w-full md:w-1/2" id="verifiedDate">
             <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-               informed on
+               Informed On
             </label>
             <div class="w-[100%] relative">
                <input
@@ -106,7 +106,7 @@
       </div>
       <div class="w-full md:w-1/2" id="verifiedDate">
          <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-            Dead line
+            Deadline
          </label>
          <div class="w-[100%] relative">
             <input
@@ -130,7 +130,7 @@
       <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2">
             <label for="subject" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Subject<strong class="text-[#f83434]">*</strong></label>
-            <input type="text" name="subject" id="subject" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+            <input type="text" name="subject" id="subject" value="" placeholder="Enter mail subject" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
             @error('subject')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
@@ -148,14 +148,14 @@
       <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2">
             <label for="subject" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Price<strong class="text-[#f83434]">*</strong></label>
-            <input type="text" name="service_price" id="service_price" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+            <input type="text" name="service_price" id="service_price" value="" placeholder="Enter service price" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
             @error('service_price')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
          </div>
          <div class="w-full md:w-1/2">
             <label for="subject" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Govt Price<strong class="text-[#f83434]">*</strong> </label>
-            <input type="text" name="govt_price" id="govt_price" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+            <input type="text" name="govt_price" id="govt_price" value="" placeholder="Enter govt price" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
             @error('govt_price')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror

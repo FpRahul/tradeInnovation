@@ -36,6 +36,14 @@ class Evidence extends Model
         return $this->belongsTo(SubService::class,'subService_id');
 
     }
+    public function service(){
+        return $this->belongsTo(Service::class,'service_id');
+
+    }
+    public function taskDetails()
+    {
+        return $this->belongsTo(LeadTaskDetail::class, 'task_id', 'task_id');
+    }
    
    
 

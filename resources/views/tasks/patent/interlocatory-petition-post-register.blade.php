@@ -9,9 +9,8 @@
    <x-client-task-details :taskID="$id" />
 </div>
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
-   <form action="{{route('task.patentInterlocatoryPetitionCounterSubmit',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
+   <form action="{{route('task.patentInterlocatoryPetitionPostRegisteredSubmit',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
-      <input type="hidden" name="previous_task_id" id="previous_task_id" value="{{$previousTask->id}}">
       <strong class="mt-4 block"> Update Current Task</strong>
       <div class="flex flex-col md:flex-row gap-[20px]">
          {{-- <div class="w-full md:w-1/2 flex items-center">

@@ -127,10 +127,7 @@
                <label class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Country of Entry</label>
                <input type="text" name="entry_country" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="e.g., US, EP, JP">
             </div>
-            <div class="w-full md:w-1/2">
-               <label class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">National Phase Entry Date</label>
-               <input type="date" name="entry_date" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
-            </div>
+            
             <div class="w-full md:w-1/2">
                <label class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Translation Submitted?</label>
                <select name="translation_status" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">

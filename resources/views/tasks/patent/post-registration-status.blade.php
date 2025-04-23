@@ -9,7 +9,7 @@
    <x-client-task-details :taskID="$id" />
 </div>
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
-   <form action="{{route('task.patentCounterStatementAwaitingHearingSubmit',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
+   <form action="{{route('task.patentPostRegistrationActionSubmit',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
       <strong class="mt-4 block"> Update Current Task</strong>
       <div class="flex flex-col md:flex-row gap-[20px]">
@@ -27,6 +27,7 @@
                   class="daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                   value=""
                   id="verified"
+                  required
                   autocomplete="off">
                <div class="absolute right-[10px] top-[10px]">
                   <i class="ri-calendar-line"></i>
@@ -57,16 +58,14 @@
          </div>
          <strong class=mt-5 block>Update Upcoming Actions</strong>
          <div class=" flex flex-col md:flex-row gap-[20px]">
-            <div class="w-full md:w-1/2 ">
-               <label for="stage" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
-               @if($getStage->count() > 0)
-               <input type="text" name="stage_id" id="stage_id" value="{{$getStage->title}}" class="  w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
+            {{-- <div class="w-full md:w-1/2 ">
+               <label for="stage" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Satge</label>
+               
+               <input type="text" name="stage_id" id="stage_id" value="{{$getStage->title}}" class="  w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                <input type="hidden" name="stage_id" id="SatgeID" value="{{$getStage->id}}">
-               @endif
-              <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-                        Next stage will be: {{$getStage->title}}
-                    </p> 
-            </div>
+               
+              
+            </div> --}}
 
             @if($taskDetails->count() > 0)
             @php
@@ -74,52 +73,51 @@
             @endphp
 
             @endif
+            <div class="w-full md:w-1/2">
+                <label for="stage_id" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
+                <select name="stage_id" id="stage_id" class="Data allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]" required>
+                    <option value="">Select stage</option>
+                    @foreach ( $getStage as $stage )
+                        
+                    @if($stage->count() > 0)
+                    <option value="{{ $stage->id }}" data-title="{{$stage->title}}">{{$stage->title}}</option>
+                    @endif
+                    @endforeach
+                    
+                    
+                </select>   
+                <p id="showStage" style="color: skyblue; font-size: 14px; font-weight: 500;">
+                    
+                </p> 
+             </div>
+            
 
-            <div class="w-full md:w-1/2" >
-               <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-                  Hearing Date
-               </label>
-               <div class="w-[100%] relative">
-                  <input
-                     type="text"
-                     placeholder="Dead Line"
-                     name="hearing_date"
-                     class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
-                     value=""
-                     id="hearing_date"
-                     autocomplete="off">
-                  <div class="absolute right-[10px] top-[10px]">
-                     <i class="ri-calendar-line"></i>
-                  </div>
-               </div>
+            <div class="w-full md:w-1/2">
+               <label for="assignUser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign User</label>
+               <select name="assignUser" id="assignUser" class="filterData assignUserData allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]" required>
+                  <option value="" disabled selected>Select a user</option>
+                  @if($users->count() > 0)
+                  <option value="" disabled selected>Select a user</option>
+                  @foreach ($users as $user)
+                  <option value="{{ $user->id }}" {{ !empty($selectedId) && $user->id == $selectedId ? 'selected' : '' }}>
+                     {{ $user->name }}
+                  </option>
+                  @endforeach
+                  @else 
+                  <option value="" disabled>No users available</option>
+                  @endif
+               </select>
+               @if($taskDetails->count() > 0)
+               <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+                  Current user assigned: {{$taskDetails->user->name}}.
+               </p>
+               @endif
             </div>
-
          </div>
          <div class=" flex flex-col md:flex-row gap-[20px]">
-         <div class="w-full md:w-1/2">
-            <label for="assignUser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign User</label>
-            <select name="assignUser" id="assignUser" class="filterData assignUserData allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]" required>
-               <option value="" disabled selected>Select a user</option>
-               @if($users->count() > 0)
-               <option value="" disabled selected>Select a user</option>
-               @foreach ($users as $user)
-               <option value="{{ $user->id }}" {{ !empty($selectedId) && $user->id == $selectedId ? 'selected' : '' }}>
-                  {{ $user->name }}
-               </option>
-               @endforeach
-               @else
-               <option value="" disabled>No users available</option>
-               @endif
-            </select>
-            @if($taskDetails->count() > 0)
-            <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-               Current user assigned: {{$taskDetails->user->name}}.
-            </p>
-            @endif
-         </div>
          <div class=" w-full md:w-1/2" id="deadLineDate">
             <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-               Dead Line
+               Deadline
             </label>
             <div class="w-[100%] relative">
                <input
@@ -129,13 +127,14 @@
                   id="deadline"
                   class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                   value=""
+                  required
                   autocomplete="off">
                <div class="absolute right-[10px] top-[10px]">
                   <i class="ri-calendar-line"></i>
                </div>
             </div>
-            <p id="showStage" style="color: skyblue; font-size: 14px; font-weight: 500;">
-               Set a dead line for {{ $getStage->title }}.
+            <p class="showStage" style="color: skyblue; font-size: 14px; font-weight: 500;">
+                
             </p>
          </div>
       </div>
@@ -178,7 +177,20 @@ $('.daterangepicker-taskdeadline').attr("placeholder", "DD/MM/YYYY");
     console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
  });
 
+    $("#stage_id").on('change' , function(){
+        var stageId = $(this).val();
+        var selectedTitle = $(this).find('option:selected').data('title');
+        if(selectedTitle){
 
+            $("#showStage").text("Next stage will be:" + selectedTitle)
+            $(".showStage").text("Set a dead line for:" + selectedTitle)
+        }else{
+            $("#showStage").text("")
+            $(".showStage").text("")
+        }
+
+        
+    })
       
    });
 </script>

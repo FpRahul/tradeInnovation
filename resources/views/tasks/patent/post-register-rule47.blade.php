@@ -9,11 +9,12 @@
    <x-client-task-details :taskID="$id" />
 </div>
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
-   <form action="{{route('task.patentoppositionEvidencerule45Submit',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
+   <form action="{{route('task.patentOpponentEvidenceRule47PostRegisteredSubmit',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
       <strong class="mt-4 block"> Update Current Task</strong>
-      <input type="hidden" name="client_status" id="client_status" value="{{$service_details->client_status}}">
+
       <div class="flex flex-col md:flex-row gap-[20px]">
+      <input type="hidden" name="client_status" id="client_status" value="{{$service_details->client_status}}">
          <input type="hidden" name="checkStatus" id="checkStatus" value="{{ $leadTaskdetials->status ?? "N/A" }}">
          <div class="w-full md:w-1/2">
             <label for="opponent_evidence" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
@@ -117,9 +118,9 @@
             <input type="text" name="stage_id" id="stage_id" value="{{$onHideSatge->title}}" class="  w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
             <input type="hidden" name="stage_id" id = "SatgeID"  value="{{$onHideSatge->id}}">
             @endif
-            <p id="nextTitle" style="color: skyblue; font-size: 14px; font-weight: 500;">
-               Next stage will be: {{$onHideSatge->title}}
-            </p> 
+             <p id="nextTitle" style="color: skyblue; font-size: 14px; font-weight: 500;">
+                        Next stage will be: {{$onHideSatge->title}}
+                    </p> 
          </div>
          
          @if($taskDetails->count() > 0)
@@ -153,7 +154,7 @@
       </div>
       <div class=" w-full md:w-1/2" id="deadLineDate">
          <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-            Dead Line
+            Dead line
          </label>
          <div class="w-[100%] relative">
             <input
@@ -164,7 +165,7 @@
                class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                value=""
 
-               autocomplete="off" required>
+               autocomplete="off">
             <div class="absolute right-[10px] top-[10px]">
                <i class="ri-calendar-line"></i>
             </div>
@@ -180,31 +181,10 @@
 </div>
 <script>
    $(document).ready(function() {
-   var client_status =  $("#client_status").val()
-   
-   if(client_status == 2){
-      $('label[for="evidenceDate"]').text('Evidence Submit On');
-      $("#opponent_evidence").on('change', function() {
-         var opponent_evidence = $(this).val();
-         if (opponent_evidence == 1) {
-           
-           $("#stage_id").val('{{ $getStage->title }}') 
-           $("#SatgeID").val('{{ $getStage->id }}') 
-           $("#nextTitle").text(' Next stage will be: ' + '{{ $getStage->title }}')
-           $('#showStage').text('Set a dead line for ' + '{{ $getStage->title }}');
-           $('.evidence_submit').removeClass('hidden');
-           
-         } else if (opponent_evidence == 3) {
-           $("#stage_id").val('{{ $onHideSatge->title }}'); 
-           $("#SatgeID").val('{{ $onHideSatge->id }}') 
-           $("#nextTitle").text(' Next stage will be: ' + '{{ $onHideSatge->title }}')
-           $('.evidence_submit').addClass('hidden');
-           
-            $('#showStage').text('Set a dead line for ' + '{{ $onHideSatge->title }}');
-         }
-      })
-   }else if(client_status == 1){
+     var client_status =  $("#client_status").val()
+     if(client_status == 1){
       $('label[for="evidenceDate"]').text('Evidence Recevied On');
+
       $("#opponent_evidence").on('change', function() {
          var opponent_evidence = $(this).val();
          if (opponent_evidence == 1) {
@@ -222,9 +202,35 @@
            $('.evidence_submit').addClass('hidden');
            
             $('#showStage').text('Set a dead line for ' + '{{ $onHideSatge->title }}');
+           
+
          }
       })
-   }
+     }else if(client_status == 2){
+      $("#opponent_evidence").on('change', function() {
+         $('label[for="evidenceDate"]').text('Evidence Submit On');
+
+         var opponent_evidence = $(this).val();
+         if (opponent_evidence == 1) {
+           
+           $("#stage_id").val('{{ $getStage->title }}') 
+           $("#SatgeID").val('{{ $getStage->id }}') 
+           $("#nextTitle").text(' Next stage will be: ' + '{{ $getStage->title }}')
+           $('#showStage').text('Set a dead line for ' + '{{ $getStage->title }}');
+           $('.evidence_submit').removeClass('hidden');
+           
+         } else if (opponent_evidence == 3) {
+           $("#stage_id").val('{{ $onHideSatge->title }}'); 
+           $("#SatgeID").val('{{ $onHideSatge->id }}') 
+           $("#nextTitle").text(' Next stage will be: ' + '{{ $onHideSatge->title }}')
+           $('.evidence_submit').addClass('hidden');
+           
+            $('#showStage').text('Set a dead line for ' + '{{ $onHideSatge->title }}');
+           
+
+         }
+      })
+     }
       $('.daterangepicker-verified').attr("placeholder", "DD/MM/YYYY"); // Set placeholder
 
         $('.daterangepicker-verified').daterangepicker({
@@ -257,7 +263,7 @@
          });
 
      
-     
+      
      var status =  $("#checkStatus").val();
       if(status == 0){
          $('.descriptionHidden').removeClass('hidden');

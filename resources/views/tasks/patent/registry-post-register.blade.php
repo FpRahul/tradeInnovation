@@ -9,9 +9,8 @@
    <x-client-task-details :taskID="$id" />
 </div>
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
-   <form action="{{route('task.patentInterlocatoryPetitionCounterSubmit',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
+   <form action="{{route('task.patentPatentRegistryPostRegisterSubmit',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
-      <input type="hidden" name="previous_task_id" id="previous_task_id" value="{{$previousTask->id}}">
       <strong class="mt-4 block"> Update Current Task</strong>
       <div class="flex flex-col md:flex-row gap-[20px]">
          {{-- <div class="w-full md:w-1/2 flex items-center">
@@ -21,16 +20,10 @@
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
       </div> --}}
-      <div class="w-full md:w-1/2">
-        <label for="status" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]"></label>
-        <select name="status" id="status" class="statusData allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]" required>
-           <option value="yes" data-title="{{$getStage->title}}" data-id="{{$getStage->id}}" selected>Received</option>
-           <option value="no" data-title="{{$nextStage->title}}" data-id="{{ $nextStage->id }}">Not Received</option>
-        </select>        
-     </div>
+      
       <div class="w-full md:w-1/2" id="verifiedDate">
         <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-            Verified On
+            Noticed Date
         </label>
         <div class="w-[100%] relative">
             <input
@@ -40,12 +33,13 @@
                 class="daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                 value=""
                 id="verified"
-                autocomplete="off" required>
+                autocomplete="off">
             <div class="absolute right-[10px] top-[10px]">
                 <i class="ri-calendar-line"></i>
             </div>
         </div>
       </div>
+     
       <div class="flex justify-start flex-wrap w-[100%] md:w-[49%]">
          <label class="block w-full text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload</label>
          <label for="attachment" class="flex items-center gap-[10px] w-full text-[13px] font-[500] leading-[15px] text-[#666666] tracking-[0.01em] bg-[#fff] border-dashed border-[1px] border-[#ccc] rounded-[6px] py-[6px] px-[10px] cursor-pointer">
@@ -132,7 +126,7 @@
       </div>
       <p style="color: skyblue; font-size: 14px; font-weight: 500;">
          @if($getStage)
-         Set a dead line for: <span class="stage_title">{{$getStage->title}}</span> 
+         Set a dead line for: {{$getStage->title}}
          @endif
       </p>
    </div>
@@ -144,15 +138,7 @@
 </form>
 </div>
 <script>
-    $(document).on('change','.statusData',function(){
-        let selectedOption = $(this).find('option:selected');
-        let stageId = selectedOption.attr('data-id');
-        let stageTitle = selectedOption.attr('data-title');
-        var updateStage = $(this).parent().parent().parent();
-        updateStage.find('.stage_text').val(stageTitle);
-        updateStage.find('.stage_id').val(stageId);
-        updateStage.find('.stage_title').text(stageTitle);
-    });
+   
 
     $(document).ready(function() {
       $('.daterangepicker-verified').attr("placeholder", "DD/MM/YYYY"); // Set placeholder

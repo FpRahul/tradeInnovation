@@ -108,6 +108,12 @@ class SubServices extends Seeder
             [
                 'serviceId' => '2',
                 'client_type' => 1,
+                'subServiceName' => 'Applicant Address Change',
+                'subServiceDescription' => 'Applicant Adress Change'
+            ],
+            [
+                'serviceId' => '2',
+                'client_type' => 1,
                 'subServiceName' => 'PCT Filing',
                 'subServiceDescription' => 'PCT Filing'
             ],

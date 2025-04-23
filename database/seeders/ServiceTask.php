@@ -934,8 +934,285 @@ class ServiceTask extends Seeder
                 'service_id' => '2',
                 'title' => 'Post Registration Action',
                 'sub_service_id'=> 0,
-                'description' => 'Includes actions like renewal, opposition, or amendments after the patent is granted.',
+                'description' => 'Manage tasks such as Renewal, Applicant Address change, Assignment/Registered User, Rectification, or IP Watch',
                 'stage' => '0',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Post Grant Opposition',
+                'sub_service_id'=> 14,
+                'description' => 'Respond to opposition or challenge raised against a registered patent.',
+                'stage' => '1',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Client Intimation for Additional Charges (Post Grant Opposition)',
+                'sub_service_id'=>14,
+                'description' => 'Notify the client regarding additional charges required to proceed with the Post Grant Opposition',
+               
+                'stage' => '14',
+            ],
+            
+            [
+                'service_id' => '2',
+                'title' => 'Payment confirmation on (Post Grant Opposition)',
+                'sub_service_id'=>14,
+                'description' => 'Confirm receipt of payment from the client for the Post Grant Opposition process',
+               
+                'stage' => '14',
+            ],
+            
+            [
+                'service_id' => '2',
+                'title' => 'Notice date (Post Grant Opposition)',
+                'sub_service_id'=> 14,
+                'description' => 'A notice has been received from the patent Registry',
+               
+                'stage' => '14',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Counter statement (Post Grant Opposition)',
+                'sub_service_id'=> 14,
+                'description' => 'Add the counter statment on the received oppostion.',
+               
+                'stage' => '14',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Patent Registry Sent Notice to Opponent (Post Grant Opposition)',
+                'sub_service_id'=> 14,
+                'description' => 'Update the date and status when the patent registry sent the notice to the opponent.',
+               
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Opponent Evidence Submission status (Under rule 45) (Post Grant Opposition)',
+                'sub_service_id'=> 14,
+                'description' => 'Updates the status of the opponent evidence submission under rule 45.',
+               
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Applicant Evidence Submission status (Under rule 46) (Post Grant Opposition)',
+                'sub_service_id'=> 14,
+                'description' => 'Updates the status of the applicant evidence submission under rule 46.',
+               
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Opponent Evidence Submission status (Under rule 47) (Post Grant Opposition)',
+                'sub_service_id'=> 14,
+                'description' => 'Updates the status of the Opponent evidence submission under rule 47.',
+               
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Non compliance intimation to register (Post Grant Opposition)',
+                'sub_service_id'=> 14,
+                'description' => 'Update Department for Non-Compliance Intimation register',
+               
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Interlocutory Petition (Post Grant Opposition)',
+                'sub_service_id'=> 14,
+                'description' => 'An interlocutory petition is filed to request the court in case of delayed submission',
+               
+                'stage' => '13',
+            ],
+            
+            [
+                'service_id' => '2',
+                'title' => 'Awaited for Hearing and  Inform Client (Post Grant Opposition)',
+                'sub_service_id'=> 14,
+                'description' => 'Add the court hearing date and inform the client about the scheduled session.',
+               
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Client Decision on Hearing (Post Grant Opposition)',
+                'sub_service_id'=> 14,
+                'description' => 'Client decision on whether to proceed with the hearing process.',
+               
+                'stage' => '13',
+            ],
+
+            [
+                'service_id' => '2',
+                'title' => 'Notifying client of hearing extra charge (Post Grant Opposition)',
+                'sub_service_id'=> 14,
+                'description' => 'Client is informed about the additional charge for the hearing process.',
+               
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Update the hearing charge status (Post Grant Opposition)',
+                'sub_service_id'=> 14,
+                'description' => 'Providing an update on the latest status of the hearing charge and any changes.',
+               
+                'stage' => '13',
+            ],
+
+            [
+                'service_id' => '2',
+                'title' => ' Hearing (Post Grant Opposition)',
+                'sub_service_id'=> 14,
+                'description' => 'Update the hearing status / or next hearing date',
+               
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Written submission (Post Grant Opposition)',
+                'sub_service_id'=> 14,
+                'description' => 'Submit the signed agreement to the registrar for official registration and approval.',
+               
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Patent Status (Post Grant Opposition)',
+                'sub_service_id'=> 14,
+                'description' => 'Update the patent status',
+               
+                'stage' => '13',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Patent Renewal',
+                'sub_service_id'=> 11,
+                'description' => 'Notify the client to proceed with their patent renewal process',               
+                'stage' => '1',
+            ],            
+            [
+                'service_id' => '2',
+                'title' => 'Payment Confirmation (Renewal)',
+                'sub_service_id'=> 11,
+                'description' => 'Waiting for client payment confirmation',
+               
+                'stage' => '14',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Renewal Filed',
+                'sub_service_id'=> 11,
+                'description' => 'Filing the patent renewal with the registry',
+               
+                'stage' => '14',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Client Intimation After Filing (Renewal)',
+                'sub_service_id'=> 11,
+                'description' => 'Client has been informed about the successful filing of the renewal application',
+               
+                'stage' => '14',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Applicant Address change',
+                'sub_service_id'=> 16,
+                'description' => 'Update the applicant address for a registered patent with the patent Registry',
+               
+                'stage' => '1',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Payment Confirmation (Applicant Address change)',
+                'sub_service_id'=> 16,
+                'description' => 'Waiting for client payment confirmation',
+               
+                'stage' => '14',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'send a query form (Applicant Address change)',
+                'sub_service_id'=> 16,
+                'description' => 'Query form sent to client to collect details for address change request',
+               
+                'stage' => '14',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Application Filed for Applicant Address Change',
+                'sub_service_id'=> 16,
+                'description' => 'Update the status of the address change filing process.',
+               
+                'stage' => '14',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Client Intimation After Filing Applicant Address Change',
+                'sub_service_id'=> 16,
+                'description' => 'Client has been informed about the successful filing of the address change application',
+               
+                'stage' => '14',
+            ],
+            
+            [
+                'service_id' => '2',
+                'title' => 'Assignment/Registered User',
+                'sub_service_id'=> 15,
+                'description' => 'Updating client details and notifying about the transfer of patent ownership to another entity.',
+               
+                'stage' => '1',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Payment Confirmation (Assignment/Registered User)',
+                'sub_service_id'=> 15,
+                'description' => 'Confirming payment for patent assignment and transferring ownership to another entity.',
+               
+                'stage' => '12',
+            ],
+            //
+            [
+                'service_id' => '2',
+                'title' => 'Send Query Form (Assignment/Registered User)',
+                'sub_service_id'=> 15,
+                'description' => 'Query form sent to client to collect details',
+               
+                'stage' => '12',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Execution of deeds and affidavits (Assignment/Registered User)',
+                'sub_service_id'=> 15,
+                'description' => 'Executing deeds and affidavits to transfer patent ownership.',
+               
+                'stage' => '12',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Application Filed For (Assignment/Registered User)',
+                'sub_service_id'=> 15,
+                'description' => 'Update the status of the filing process.',
+               
+                'stage' => '12',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Client Updation (Assignment/Registered User)',
+                'sub_service_id'=> 15,
+                'description' => 'Updating client details after patent ownership transfer to another entity.',
+               
+                'stage' => '12',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Client Intimation After Filing (Assignment/Registered User)',
+                'sub_service_id'=> 15,
+                'description' =>'Notifying the client after the patent assignment filing, confirming the ownership transfer.',
+               
+                'stage' => '12',
             ],
         ]);
     }

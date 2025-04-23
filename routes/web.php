@@ -451,6 +451,55 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
 
         Route::get('/patent/counter-statement-hearing/{id?}','patentCounterStatementHearing')->name('task.patentCounterStatementHearing');
         Route::Post('/patent/counter-statement-hearing-submit/{id?}','patentCounterStatementHearingSubmit')->name('task.patentCounterStatementHearingSubmit');
+
+
+        // Post Grant Register
+        
+        Route::get('/patent/post-grant-opposition/{id?}','patentPostGrantOpposition')->name('task.patentPostGrantOpposition');
+        Route::Post('/patent/post-grant-opposition-submit/{id?}','patentPostGrantOppositionSubmit')->name('task.patentPostGrantOppositionSubmit');
+
+        Route::get('/patent/registered-post-registered/{id?}','patentregisteredPostRegistered')->name('task.patentStatusPostRegister');
+        Route::Post('/patent/registered-post-registered-submit/{id?}','patentregisteredPostRegisteredSubmit')->name('task.patentStatusPostRegisterSubmit');
+
+        
+        Route::get('/patent/client-intimation-post-register/{id?}','patentClientIntimationPostRegistered')->name('task.patentClientIntimationPostRegister');
+        Route::Post('/patent/client-intimation-post-register-submit/{id?}','patentClientIntimationPostRegisteredSubmit')->name('task.patentClientIntimationPostRegisterSubmit');
+       
+        Route::get('/patent/payment-confirmation-post-register/{id?}','patentPaymentConfirmationPostRegistered')->name('task.patentPaymentConfirmationPostRegister');
+        Route::Post('/patent/payment-confirmation-post-register-submit/{id?}','patentPaymentConfirmationPostRegisteredSubmit')->name('task.patentPaymentConfirmationPostRegisterSubmit');
+   
+        Route::get('/patent/notice-date-post-register/{id?}','patentnoticeDatePostRegistered')->name('task.patentNoticeDatePostRegister');
+        Route::Post('/patent/notice-date-post-register-submit/{id?}','patentnoticeDatePostRegisteredSubmit')->name('task.patentNoticeDatePostRegisterSubmit');
+   
+        Route::get('/patent/non-compilance-post-register/{id?}','patentOppositionNonCompliancePostRegister')->name('task.patentNonCompliancePostRegister');
+        Route::Post('/patent/non-compilance-post-register-submit/{id?}','patentOppositionNonCompliancePostRegisterSubmit')->name('task.patentNonCompliancePostRegisterSubmit');
+       
+        Route::get('/patent/interlocatory-petition-post-register/{id?}','patentInterlocatoryPetitionPostRegister')->name('task.patentInterlocatoryPetitionPostRegistered');
+        Route::Post('/patent/interlocatory-petition-post-register-submit/{id?}','patentInterlocatoryPetitionPostRegisterSubmit')->name('task.patentInterlocatoryPetitionPostRegisteredSubmit');
+        
+        Route::get('/patent/counter-statement-post-registration/{id?}','patentCounterStatementPostRegister')->name('task.patentCounterStatementPostRegister');
+        Route::Post('/patent/opposition-counter-statement-post-registration-submit/{id?}','patentCounterStatementPostRegisterSubmit')->name('task.patentCounterStatementPostRegisterSubmit');
+        
+        Route::get('/patent/registry-post-register/{id?}','patentRegistryPostRegister')->name('task.patentPatentRegistryPostRegister');
+        Route::Post('/patent/registry-post-register-submit/{id?}','patentRegistryPostRegisterSubmit')->name('task.patentPatentRegistryPostRegisterSubmit');
+      
+        Route::get('/patent/post-register-rule45/{id?}','patentRule45PostRegister')->name('task.patentOpponentEvidenceRule45PostRegistered');
+        Route::Post('/patent/post-register-rule45-submit/{id?}','patentRule45PostRegisterSubmit')->name('task.patentOpponentEvidenceRule45PostRegisteredSubmit');
+
+        Route::get('/patent/post-register-rule46/{id?}','patentRule46PostRegister')->name('task.patentApplicantEvidenceRule46PostRegistered');
+        Route::Post('/patent/post-register-rule46-submit/{id?}','patentRule46PostRegisterSubmit')->name('task.patentApplicantEvidenceRule46PostRegisteredSubmit');
+        
+        Route::get('/patent/post-register-rule47/{id?}','patentRule47PostRegister')->name('task.patentOpponentEvidenceRule47PostRegistered');
+        Route::Post('/patent/post-register-rule47-submit/{id?}','patentRule47PostRegisterSubmit')->name('task.patentOpponentEvidenceRule47PostRegisteredSubmit');
+      
+        Route::get('/patent/await-hearing-post-register/{id?}','patentawaitHearingPostRegister')->name('task.patentAwaitHearingPostRegistration');
+        Route::Post('/patent/await-hearing-post-register-submit/{id?}','patentawaitHearingPostRegisterSubmit')->name('task.patentAwaitHearingPostRegistrationSubmit');
+       
+       
+    
+      
+
+
     });
     //Services Routes
     Route::prefix('services')->controller(ServicesController::class)->group(function () {

@@ -228,12 +228,12 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('/rectification/counter-statement/status{id?}' , 'rectificationCounterStatementStatus')->name('task.rectificationCounterStatementStatus');
         Route::get('/rectification/notice-sent/{id?}' , 'rectificationNoticeSent')->name('task.rectificationNoticeSent');
         Route::Post('/rectification/notice-sent/{id?}' , 'rectificationNoticeSentStatus')->name('task.rectificationNoticeSentStatus');
-        Route::get('/rectification/opponent/evidemce-submission/{id?}' , 'rectificationOpponentEvidenceSubmission')->name('task.rectificationOpponentEvidenceSubmission');
+        Route::get('/rectification/opponent/evidence-submission/{id?}' , 'rectificationOpponentEvidenceSubmission')->name('task.rectificationOpponentEvidenceSubmission');
         Route::Post('/rectification/opponent/evidemce-submission/status/{id?}' , 'rectificationOpponentEvidenceSubmissionStatus')->name('task.rectificationOpponentEvidenceSubmissionStatus');
-        Route::get('/rectification/apllicant/evidemce-submission/{id?}' , 'rectifiactionApplicationEvidenceSubmission')->name('task.rectifiactionApplicationEvidenceSubmission');
-        Route::Post('/rectification/apllicant/evidemce-submission/status/{id?}' , 'rectifiactionApplicationEvidenceSubmissionStatus')->name('task.rectifiactionApplicationEvidenceSubmissionStatus');
-        Route::get('/rectification/opponent/evidemce/re-submission/{id?}' , 'rectificationOpponentResubmisson')->name('task.rectificationOpponentResubmisson');
-        Route::Post('/rectification/opponent/evidemce/re-submission/status/{id?}' , 'rectificationOpponentResubmissonStatus')->name('task.rectificationOpponentResubmissonStatus');
+        Route::get('/rectification/apllicant/evidence-submission/{id?}' , 'rectifiactionApplicationEvidenceSubmission')->name('task.rectifiactionApplicationEvidenceSubmission');
+        Route::Post('/rectification/apllicant/evidence-submission/status/{id?}' , 'rectifiactionApplicationEvidenceSubmissionStatus')->name('task.rectifiactionApplicationEvidenceSubmissionStatus');
+        Route::get('/rectification/opponent/evidence/re-submission/{id?}' , 'rectificationOpponentResubmisson')->name('task.rectificationOpponentResubmisson');
+        Route::Post('/rectification/opponent/evidence/re-submission/status/{id?}' , 'rectificationOpponentResubmissonStatus')->name('task.rectificationOpponentResubmissonStatus');
         Route::get('/rectification-hearing/{id?}' , 'rectificationHearing')->name('task.rectificationHearing');
         Route::Post('/rectification-hearing/status{id?}' , 'rectificationHearingStatus')->name('task.rectificationHearingStatus');
         Route::get('/rectification/client-approval/{id?}' , 'clientApprovalOnHearingRectification')->name('task.clientApprovalOnHearingRectification');

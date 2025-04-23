@@ -248,11 +248,16 @@
                                             @endif
                                             
                                             @if(in_array('task.hold',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                            @if($task->leadTaskDetails->status != 1 && $task->leadTaskDetails->status != 4)
                                             <a href="#" class="hold-on-pop block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-taskId="{{$task->leadTaskDetails->task_id }}" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal">Hold</a>
                                             @endif
+                                            @endif
                                             @if(in_array('task.reject',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                            @if($task->leadTaskDetails->status != 1 && $task->leadTaskDetails->status != 4)
                                             <button class="reject-on-pop block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-taskId="{{$task->leadTaskDetails->task_id }}" >Rejected</button>
                                             @endif
+                                            @endif
+
                                         </div>
                                     </div>
                                 </div>

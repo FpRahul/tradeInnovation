@@ -17,21 +17,57 @@
             <div class="flex items-center gap-[12px] w-full">
                 <form id="filterForm" action="{{ route('lead.oppositionDetails') }}" class="w-full" method="GET">
                     <div class="flex items-end gap-[15px] w-full">
+                        {{-- Lead ID Field --}}
                         <div class="w-[60%] md:w-[40%]">
-                            <label class="flex text-[18px] text-[#000] mb-[8px]">Lead ID<strong class="text-[#f83434]">*</strong></label>
-                            <select name="lead_id" id="lead_id" class="allform-filter-select2 !outline-none h-[50px] border border-[#0000001A] w-full md:w-[120px] rounded-[12px] p-[12px] text-[16px] font-[400] leading-[18px] text-[#13103A] ">
-                                <option value="">Select Lead ID</option>
+                            <label class="flex text-[18px] text-[#000] mb-[8px]">
+                                Lead ID <strong class="text-[#f83434]">*</strong>
+                            </label>
+
+                            <select name="lead_id" id="lead_id"
+                                class="allform-filter-select2 !outline-none h-[50px] border border-[#0000001A] w-full md:w-[120px] rounded-[12px] p-[12px] text-[16px] font-[400] leading-[18px] text-[#13103A]">
+                                <option value="">Select Lead</option>
                                 @forelse($leadData as $leadDetails)
-                                    <option value="{{ $leadDetails->id }}" 
-                                        @if(isset($requestParams) && $requestParams == $leadDetails->id) selected @endif>
+                                    <option value="{{ $leadDetails->id }}"
+                                        @if(old('lead_id', $request->lead_id ?? '') == $leadDetails->id) selected @endif>
                                         {{ $leadDetails->lead_id }} - {{ $leadDetails->client_name }}
                                     </option>
                                 @empty
                                     <option value="" disabled>No leads available</option>
                                 @endforelse
                             </select>
+                            <div class="leadEror"></div>
+                            {{-- Correctly placed error --}}
+                            @error('lead_id')
+                                <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>
+                            @enderror
                         </div>
-                        <button class=" text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[15px] px-[30px]">Filter</button>
+
+                        {{-- Service ID Field --}}
+                        <div class="w-[60%] md:w-[40%]">
+                            <label class="flex text-[18px] text-[#000] mb-[8px]">
+                                Services <strong class="text-[#f83434]">*</strong>
+                            </label>
+
+                            <select name="service_id" id="service_id"
+                                class="allform-filter-select2 !outline-none h-[50px] border border-[#0000001A] w-full md:w-[120px] rounded-[12px] p-[12px] text-[16px] font-[400] leading-[18px] text-[#13103A]">
+                                <option value="">Select Service</option>
+                                @forelse($services as $servicesDetails)
+                                    <option value="{{ $servicesDetails->id }}"
+                                        @if(old('service_id', $request->service_id ?? '') == $servicesDetails->id) selected @endif>
+                                        {{ $servicesDetails->serviceName }}
+                                    </option>
+                                @empty
+                                    <option value="" disabled>No services available</option>
+                                @endforelse
+                            </select>
+                            <div class="serviceError"></div>
+                            {{-- Correctly placed error --}}
+                            @error('service_id')
+                                <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <button id="submitForm" class=" text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[15px] px-[30px]">Filter</button>
                         <a href="{{ route('lead.oppositionDetails') }}" id="resetButton" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[15px] px-[30px]">
                             Reset
                         </a>
@@ -76,7 +112,13 @@
                     </strong>
                 </li>
                 <li>
-                    <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Service Type</span>
+                    <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1" id="date">Service</span>
+                    <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize"> 
+                        {{ $opposition_details->service->serviceName ??'N/A' }}
+                    </strong>
+                </li>
+                <li>
+                    <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Sub Service</span>
                     <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#ff3232] capitalize"> 
                         {{ $opposition_details->subServiceID->subServiceName ?? "N/A" }}
                     </strong>
@@ -109,6 +151,9 @@
                                 Remark
                             </th>
                             <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                                Applied For
+                            </th>
+                            <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                                 Evidence Received On
                             </th>
                             <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
@@ -117,6 +162,7 @@
                             <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                                 Reason
                             </th>
+                            
                             <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                                 Attachment
                             </th>
@@ -136,6 +182,9 @@
                                         {{ $opposition_details->remark ?? "N/A" }}
                                     </td>
                                     <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
+                                        {{ $opposition_details->serviceDetail->applied_for ?? "N/A" }}
+                                    </td>
+                                    <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                                         {{ $opposition_details->evidence_received ? \Carbon\Carbon::parse($opposition_details->evidence_received)->format('d M Y') : 'N/A' }}
 
                                     </td>
@@ -146,6 +195,7 @@
                                     <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                                         {{ $opposition_details->reason ?? 'N/A'  }}
                                     </td>
+                                    
                                     <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                                         @php
                                             $attachments = json_decode($opposition_details->attachment, true); // Decode JSON to array
@@ -214,7 +264,26 @@
             });
         });
     });
-  
+        // var leadId = $('#lead_id').val();
+        // var serviceId = $('#service_id').val(); 
+
+        // if (!leadId && !serviceId) {
+        //     $('.leadError').text('Please select Lead');
+        //     $('.serviceError').text('Please select Service');
+        //     $('#submitForm').prop('disabled', true);
+        // } else if (!leadId) {
+        //     $('.leadError').text('Please select Lead');
+        //     $('.serviceError').text('');
+        //     $('#submitForm').prop('disabled', true);
+        // } else if (!serviceId) {
+        //     $('.serviceError').text('Please select Service');
+        //     $('.leadError').text('');
+        //     $('#submitForm').prop('disabled', true);
+        // } else {
+        //     $('.leadError').text('');
+        //     $('.serviceError').text('');
+        //     $('#submitForm').prop('disabled', false);
+        // }
     })
 </script>
 @stop

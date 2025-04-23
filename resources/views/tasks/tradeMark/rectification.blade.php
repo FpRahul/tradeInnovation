@@ -19,8 +19,8 @@
             <label for="publish_opposition" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
             <select name="publish_opposition" id="publish_opposition" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                <option value="" disabled selected>Select status</option>
-               <option value="0"> rectification Filed</option>
-               <option value="1"> rectification Not Filed </option>
+               <option value="0"> Rectification Filed</option>
+               <option value="1"> Rectification Not Filed </option>
             </select>
             <div class="showWarning" style="color: red;font-size: 14px; font-weight: 500;"></div>
             @error('publish_opposition')
@@ -73,16 +73,21 @@
       
       <strong class ="mt-[20px] block hidden hideOpposition" >Opposition Details</strong>
       <div class="flex flex-col md:flex-row gap-[20px] hidden hideOpposition">
+         @php
+         $placeholderNumberText = ($service_details->client_status == 1) ? 'Enter opponent number' : 'Enter applicant number';
+         $placeholderNameText = ($service_details->client_status == 1) ? 'Enter opponent name' : 'Enter applicant name';
+         $placeholderAddressText = ($service_details->client_status == 1) ? 'Enter opponent address' : 'Enter applicant address';
+     @endphp
          <div class="w-full md:w-1/2">
             <label for="opposition_number" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Opposition Number<strong class="text-[#f83434]">*</strong></label>
-            <input type="text" name="opposition_number" id="opposition_number" placeholder="Enter opposition number" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            <input type="text" name="opposition_number" id="opposition_number" placeholder="{{ $placeholderNumberText }}" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
             @error('opposition_number')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
          </div>
          <div class="w-full md:w-1/2">
             <label for="opponent_name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Opponent Name<strong class="text-[#f83434]">*</strong></label>
-            <input type="text" id="opponent_name" name="opponent_name" placeholder="Enter opponent name"  class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            <input type="text" id="opponent_name" name="opponent_name" placeholder="{{ $placeholderNameText }}"  class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
             @error('opponent_name')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror
@@ -92,7 +97,7 @@
       <div class="flex flex-col md:flex-row gap-[20px] hidden hideOpposition">
          <div class="w-full md:w-1/2">
             <label for="opponent_address" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Opponent Address<strong class="text-[#f83434]">*</strong></label>
-            <input type="text" name="opponent_address" id="opponent_address" placeholder="Enter opponent address" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            <input type="text" name="opponent_address" id="opponent_address" placeholder="{{ $placeholderAddressText }}" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
             @error('opponent_address')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
             @enderror

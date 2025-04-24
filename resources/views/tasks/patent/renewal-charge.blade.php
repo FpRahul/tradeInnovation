@@ -5,27 +5,24 @@
       display: none;
    }
 </style>
-@php 
-$paymentData = $taskList->payment[0];
-@endphp
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px]">
-   <x-client-task-details :taskID="$taskId" />
+   <x-client-task-details :taskID="$id" />
 </div>
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
-   <form action="{{route('task.paymentStatus',['id'=>$taskId]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
+   <form action="{{route('task.patentPaymentConfirmationRenewalSubmit',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
-      <div class="flex justify-between">
-         <strong class="m-0 block"> Update Current Task</strong>
-        @if ($paymentData->submitted_amount == 0)
+      <strong class="mt-4 block"> Update Current Task</strong>
+      <input type="hidden" name="service_details_id" id="service_details_id" value="{{ $service_details->id }}">
+      <input type="hidden" name="paymentId" value="{{ $paymentId }}">
+      @if ($payamentDetails->submitted_amount == 0)
          <div class="flex items-ceter gap-[8px]">                            
             <input type="checkbox" name="negocheck" class="negocheck openModalProf" id="negocheck"/>  
             <label for="negocheck">is Negotiate</label>                          
-         </div>
+         </div>    
         @endif
-      </div>
-      
-      <input type="hidden" name="paymentId" value="{{ $paymentData->id }}">      
-      <input type="hidden" name="checkStatus" id="checkStatus" value="{{$taskList->leadTaskDetails->status}}">
+      @foreach ($taskDetails as $task )
+      <input type="hidden" name="checkStatus" id="checkStatus" value="{{$task->leadTaskDetails->status}}">
+      @endforeach
       @if ($firstPaymentId)
       <input type="hidden" name="firstPaymentId" id="firstPaymentId" value="{{$firstPaymentId->id}}">
       @endif
@@ -34,9 +31,9 @@ $paymentData = $taskList->payment[0];
             <label for="payment" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Payment status</label>
             <select name="payment" id="payment" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                <option value="" disabled selected>Select status</option>
-               <option value="1">Paid</option>
-               <option value="2">Partial Payment</option>
-               <option value="3">On Credit </option>
+               <option value="1" {{ old('payment') == '1' ? 'selected' : '' }}>Paid</option>
+               <option value="2" {{ old('payment') == '2' ? 'selected' : '' }}>Partial Payment</option>
+               <option value="3" {{ old('payment') == '3' ? 'selected' : '' }}>On Credit</option>
             </select>
             @error('payment')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
@@ -53,11 +50,11 @@ $paymentData = $taskList->payment[0];
                   type="text"
                   placeholder="Dead Line"
                   name="paymentDeadline"
-                  class="daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none bg-transparent z-10 relative"
+                  class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                   value=""
                   id="paymentDeadline"
                   autocomplete="off">
-               <div class="absolute right-[10px] top-[10px] z-0">
+               <div class="absolute right-[10px] top-[10px]">
                   <i class="ri-calendar-line"></i>
                </div>
             </div>
@@ -72,43 +69,41 @@ $paymentData = $taskList->payment[0];
                   type="text"
                   placeholder="Dead Line"
                   name="verified"
-                  class="daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none bg-transparent z-10 relative"
+                  class="daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                   value=""
                   id="verified"
                   autocomplete="off">
-               <div class="absolute right-[10px] top-[10px] z-0">
+               <div class="absolute right-[10px] top-[10px]">
                   <i class="ri-calendar-line"></i>
                </div>
             </div>
-         </div>
-
-         <div class=" old_service_price w-full md:w-1/2">
-            <label for="oldServicePrice" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Standard Service Price</label>            
-            <input type="text" name="old_service_price" id="old_service_price" value="{{$paymentData->old_service_price ?? $paymentData->service_price}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>          
          </div>
       </div>
       <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="  w-full md:w-1/2 hidden total_amount ">
             <label for="amount" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Total Amount (inc GST & Govt. fees)</label>
-            @if($paymentData->count() > 0)
-            <input type="text" name="total_price" id="total_price" value="{{$paymentData->total}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
-            <input type="hidden" name="total_price" value="{{$paymentData->total}}">
+            @if($payamentDetails->count() > 0)
+            <input type="text" name="total_price" id="total_price" value="{{$payamentDetails->total}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
+            <input type="hidden" name="total_price" value="{{$payamentDetails->total}}">
             @endif
-            <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-                        Total: {{$paymentData->total}}
+            <p style="color: skyblue; font-taskdeadlinesize: 14px; font-weight: 500;">
+                        Total: {{$payamentDetails->total}}
                     </p>
          </div>
          <div class="  w-full md:w-1/2 hidden partialPayment">
             <label for="amount" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Paid Partial Amount</label>
-            <input type="text" name="partial_payment" id="partial_payment" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
-            <p class="paymentInfo " id="hidePaymentInfo" style="color: skyblue; font-size: 14px; font-weight: 500;">
-               Pending Amount: {{$paymentData->pending_amount}}
+            <input type="text" name="partial_payment" id="partial_payment" value="" required class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            <p class="paymentInfo " id="hidePaymentInfo" style="color: skyblue; font-size: 14px; font-weight: 500;" >
+               Pending Amount: {{$payamentDetails->total}}
             </p>
+
             <div class=" hidden PartialPaymentError " style="color: red;font-size: 14px; font-weight: 500;"></div>
+            @error('partial_payment')
+            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+            @enderror
 
          </div>
-         <div class="flex flex-col
-          justify-start flex-wrap w-[100%] md:w-[49%]">
+         <div class="flex flex-col justify-start flex-wrap w-[100%] md:w-[49%]">
             <label class="block w-full text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload</label>
 
             <label for="attachment" class="flex items-center gap-[10px] w-full text-[13px] font-[500] leading-[15px] text-[#666666] tracking-[0.01em] bg-[#fff] border-dashed border-[1px] border-[#ccc] rounded-[6px] py-[6px] px-[10px] cursor-pointer">
@@ -119,20 +114,25 @@ $paymentData = $taskList->payment[0];
             </label>
             <input type="file" id="attachment" name="attachment[]" multiple style="display: none;" />
             <div id="file-list" class="mt-2"></div>
+            
          </div>
          @error('attachment.*')
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
       </div>
-      @if($taskList->count() > 0)
+      @if($taskDetails->count() > 0)
+      @foreach ($taskDetails as $task )
       @php
-      $selectedId = $taskList->user->id;
+      $selectedId = $task->user->id;
       @endphp
+      @endforeach
       @endif
       <div class="">
          <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
-         @if($taskList->count() > 0)
-         <textarea type="text" name="description" id="description" class="w-full h-[80px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">{{$taskList->task_description}}</textarea>
+         @if($taskDetails->count() > 0)
+         @foreach ( $taskDetails as $task )
+         <textarea type="text" name="description" id="description" class="w-full h-[80px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">{{$task->task_description}}</textarea>
+         @endforeach
          @endif
          @error('description')
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
@@ -143,18 +143,21 @@ $paymentData = $taskList->payment[0];
       <div class=" hideOncredit flex flex-col md:flex-row gap-[20px]">
          <div class=" hideOncredit w-full md:w-1/2">
             <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
-            @if(isset($getStage))
+            @if($getStage->count() > 0)
             <input type="text" name="stage_id" id="stage_id" value="{{$getStage->title}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
             <input type="hidden" name="stage_id" value="{{$getStage->id}}">
             @endif
+            <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+                        Next stage will be: {{$getStage->title}}
+                    </p> 
          </div>
          <div class="w-full md:w-1/2">
             <label for="assignUser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign User</label>
             <select name="assignUser" id="assignUser" class="filterData assignUserData allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]">
                <option value="" disabled selected>Select a user</option>
-               @if($userList->count() > 0)
+               @if($users->count() > 0)
                <option value="" disabled selected>Select a user</option>
-               @foreach ($userList as $user)
+               @foreach ($users as $user)
                <option value="{{ $user->id }}" {{ !empty($selectedId) && $user->id == $selectedId ? 'selected' : '' }}>
                   {{ $user->name }}
                </option>
@@ -163,11 +166,12 @@ $paymentData = $taskList->payment[0];
                <option value="" disabled>No users available</option>
                @endif
             </select>
-            @if($taskList->count() > 0)
+            @if($taskDetails->count() > 0)
+            @foreach ($taskDetails as $user )
             <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-               Current user assigned: {{$taskList->user->name}}.
+               Current user assigned: {{$user->user->name}}.
             </p>
-           
+            @endforeach
             @endif
          </div>
 
@@ -175,7 +179,7 @@ $paymentData = $taskList->payment[0];
       </div>
       <div class="w-full md:w-1/2 hideOncredit" id="deadLineDate">
          <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-            Documentation Dead Line
+            Documentation Dead line
          </label>
          <div class="w-[100%] relative">
             <input
@@ -183,11 +187,11 @@ $paymentData = $taskList->payment[0];
                placeholder="Dead Line"
                name="deadline"
                id="deadline"
-               class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none bg-transparent z-10 relative"
+               class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                value=""
 
                autocomplete="off">
-            <div class="absolute right-[10px] top-[10px] z-0">
+            <div class="absolute right-[10px] top-[10px]">
                <i class="ri-calendar-line"></i>
             </div>
          </div>
@@ -219,9 +223,9 @@ $paymentData = $taskList->payment[0];
            </div>
            <!-- Modal body -->
            <div class="p-[20px]">
-               <form method="POST" action={{ route('task.negotiatePrice',['id'=>$taskId])}} class="space-y-[20px]">
+               <form method="POST" action={{ route('task.negotiatePrice',['id'=>$taskDetailsId])}} class="space-y-[20px]">
                    @csrf
-                   <span>Original Service Price {{$paymentData->service_price}}</span>
+                   <span>Origin Service Price {{$payamentDetails->service_price}}</span>
                   <div class="flex flex-col md:flex-row gap-[20px]">                     
                      <div class="w-full">
                         <label for="name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Negotiated Price</label>
@@ -238,7 +242,98 @@ $paymentData = $taskList->payment[0];
    </div>
 </div>
 <script>
-   $(document).on('click','.openModalProf',function(){
+   $(document).ready(function() {
+      $('.daterangepicker-verified').attr("placeholder", "DD/MM/YYYY"); // Set placeholder
+
+        $('.daterangepicker-verified').daterangepicker({
+            singleDatePicker: true,
+            autoUpdateInput: false,
+            opens: 'right',
+            locale: {
+                format: 'DD MMM YYYY'
+            },
+            minDate: null,
+            maxDate: moment().endOf('day'),
+        }).on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('DD MMM YYYY')); 
+            console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+        });
+
+        $('.daterangepicker-taskdeadline').attr("placeholder", "DD/MM/YYYY"); 
+
+         $('.daterangepicker-taskdeadline').daterangepicker({
+            singleDatePicker: true,
+            autoUpdateInput: false, 
+            opens: 'right',
+            locale: {
+               format: 'DD MMM YYYY'
+            },
+            minDate: moment().startOf('day'),
+         }).on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('DD MMM YYYY')); 
+            console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+         });
+
+      $("#payment").on("change", function() {
+         var changedValue = $(this).val();
+         var yes = $("#paymentInfo").val("");
+         if (changedValue == 3) {
+            $("#verifiedDate label").text("Verified On");
+            $("#paymentReminder").removeClass("hidden");
+            $(".partialPayment").removeClass("hidden");
+            $("#partial_payment").prop('disabled', true);
+            $(".partialPayment").addClass("hidden");
+            $(".total_amount").addClass("hidden");
+            $(".paymentInfo").text("Pending amount : {{$payamentDetails->pending_amount  }}");
+         } else if (changedValue == 2) {
+           
+            $("#verifiedDate label").text("Paid On");
+            $("#paymentReminder").removeClass("hidden");
+            $(".partialPayment").removeClass("hidden");
+            $(".total_amount").removeClass("hidden");
+            $("#partial_payment").prop('disabled', false);
+            $(".paymentInfo").text("Pending amount : {{$payamentDetails->pending_amount  }}");
+         } else if(changedValue == 1){
+            
+            $("#partial_payment").prop('disabled', true);
+            $(".partialPayment").addClass("hidden");
+            $("#paymentReminder").addClass("hidden");
+            $(".total_amount").addClass("hidden");
+            
+            $(".paymentInfo").text("All amount are clear");
+            $("#verifiedDate label").text("Paid On");
+         }
+      });
+
+      var status = $("#checkStatus").val();
+      if (status == 3) {
+         $(".hideOncredit").addClass('hidden');
+      }
+    $("#partial_payment").on("input", function () {
+            var total_price = parseFloat({{ $payamentDetails->pending_amount ?? 0 }}) || 0;
+            var partial_payment = parseFloat($(this).val()) || 0;
+
+            if (partial_payment > total_price) {
+                  $(".PartialPaymentError").removeClass("hidden").text("The partial payment cannot be more than the total due.");
+                  $("#hidePaymentInfo").addClass("hidden");
+                 
+                  $("#submitDisabled").prop("disabled", true);
+            } else {
+                  $(".PartialPaymentError").addClass("hidden").text("");
+                 
+                  $("#hidePaymentInfo").removeClass("hidden");
+                  $("#submitDisabled").prop('disabled', false)
+
+            }
+            if(partial_payment == total_price){
+               $("#paymentReminder").addClass("hidden");
+            }else{
+               $("#paymentReminder").removeClass("hidden");
+            }
+         
+      });
+
+      $(document).on('click','.openModalProf',function(){
       if($(this).is(':checked')){
          $('#assignUserModal').removeClass('hidden');
       }      
@@ -248,111 +343,6 @@ $paymentData = $taskList->payment[0];
       window.location.reload();
    });
 
-   $(document).ready(function() {
-      $('.daterangepicker-verified').daterangepicker({
-         singleDatePicker: true,
-         opens: 'right',
-         locale: {
-            format: 'DD MMM YYYY'
-         },
-         minDate: moment().startOf('day'),
-      }).on('apply.daterangepicker', function(ev, picker) {
-         console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
-      });
-
-      $('.daterangepicker-taskdeadline').daterangepicker({
-         singleDatePicker: true,
-         opens: 'right',
-         locale: {
-            format: 'DD MMM YYYY'
-         },
-         minDate: moment().startOf('day'),
-
-      }).on('apply.daterangepicker', function(ev, picker) {
-         console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
-      });
-
-      $("#payment").on("change", function() {
-         var changedValue = $(this).val();
-         var yes = $("#paymentInfo").val("");
-         if (changedValue == 3) {
-
-            $("#verifiedDate label").text("Verified On");
-            $("#paymentReminder").removeClass("hidden");
-            $(".partialPayment").removeClass("hidden");
-            $("#partial_payment").prop('disabled', true);
-            $(".partialPayment").addClass("hidden");
-            $(".total_amount").addClass("hidden");
-            $(".paymentInfo").text("Pending amount : {{$paymentData->pending_amount  }}");
-
-            
-
-         } else if (changedValue == 2) {
-            yes = $("#partial_payment").val("0.00");
-            $("#verifiedDate label").text("Verified On");
-            $("#paymentReminder").removeClass("hidden");
-            $(".partialPayment").removeClass("hidden");
-            $(".total_amount").removeClass("hidden");
-            $("#partial_payment").prop('disabled', false);
-            $(".paymentInfo").text("Pending amount : {{$paymentData->pending_amount  }}");
-         } else if(changedValue == 1){
-            yes = $("#partial_payment").val("{{$paymentData->total  }}");
-            $("#partial_payment").prop('disabled', true);
-            $(".partialPayment").addClass("hidden");
-            $("#paymentReminder").addClass("hidden");
-            $(".total_amount").addClass("hidden");
-
-            $(".paymentInfo").text("All amount are clear");
-            $("#verifiedDate label").text("Paid On");
-
-
-            
-            
-
-         }
-      });
-
-      var status = $("#checkStatus").val();
-      if (status == 3) {
-         $(".hideOncredit").addClass('hidden');
-
-
-      }
-      $("#partial_payment").on("input", function () {
-         var total_price = parseFloat({{ $paymentData->pending_amount ?? 0 }}) || 0;
-         var partial_payment = parseFloat($(this).val()) || 0;
-
-         if (partial_payment > total_price) {
-               $(".PartialPaymentError").removeClass("hidden").text("The partial payment cannot be more than the total due.");
-               $("#hidePaymentInfo").addClass("hidden");
-               $("#submitDisabled").prop("disabled", true);
-         } else {
-               $(".PartialPaymentError").addClass("hidden").text("");
-               $("#hidePaymentInfo").removeClass("hidden");
-               $("#submitDisabled").prop('disabled', false)
-         }
-         
-      });
    });
-</script>
-
-
-
-<script>
-    const checkbox = document.getElementById('openModalCheckbox');
-    const modal = document.getElementById('myModal');
-
-    checkbox.addEventListener('change', () => {
-        if (checkbox.checked) {
-            modal.style.display = 'flex';
-        } else {
-            modal.style.display = 'none';
-        }
-    });
-
-    function closeModal() {
-        modal.style.display = 'none';
-        checkbox.checked = false;
-    }
 </script>
 @stop

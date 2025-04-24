@@ -362,6 +362,9 @@ class UsersController extends Controller
         if ($id > 0) {
             $newClient = User::find($id);
             $newClientDetails = UserDetail::where('userId', $id)->first();
+            if(!isset($newClientDetails)){
+                $newClientDetails = new UserDetail();
+            }
             $hashedPassword = $newClient->password;
             $email = "required|email";
             $moduleName = "Update";
@@ -405,9 +408,8 @@ class UsersController extends Controller
             $newClient->companyName = $request->companyname;
             $newClient->password = $hashedPassword;
             $newClient->uni_user_id=$uniqueUserId;
-
             if ($newClient->save()) {               
-                $newClientDetails->userId = 8;
+                $newClientDetails->userId = $newClient->id;
                 $newClientDetails->incorporationType = $request->incorporationtype;
                 $newClientDetails->registered = $request->registered;
                 $newClientDetails->msmem = $request->msmem;

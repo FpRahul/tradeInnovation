@@ -934,7 +934,7 @@ class ServiceTask extends Seeder
                 'service_id' => '2',
                 'title' => 'Post Registration Action',
                 'sub_service_id'=> 0,
-                'description' => 'Manage tasks such as Renewal, Applicant Address change, Assignment/Registered User, Rectification, or IP Watch',
+                'description' => 'Manage tasks such as Post Grant Opposition, Renewal, Applicant Address change, Assignment/Registered User.',
                 'stage' => '0',
             ],
             [

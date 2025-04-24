@@ -116,7 +116,7 @@
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="mobilenumber" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mobile number</label>
-                    <input type="number" data-id="{{$leadData->id}}" name="mobilenumber" id="mobilenumber" value="{{ old('mobilenumber') ? old('mobilenumber') : (!empty($leadData) ? $leadData->mobile_number : '')}}" class="checkDuplicateMobile w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <input type="text" data-id="{{$leadData->id}}" name="mobilenumber" id="mobilenumber" value="{{ old('mobilenumber') ? old('mobilenumber') : (!empty($leadData) ? $leadData->mobile_number : '')}}" class="checkDuplicateMobile w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                     <span class="mobile_exist_error text-[#df2727] text-[12px] hidden">This mobile number is already exists on user!</span>
                     <span class="mobile_length_error text-[#df2727] text-[12px] hidden">Mobile number must be 10 digits long!</span>
                 </div>
@@ -137,7 +137,7 @@
                             @if ($LeadTask && $LeadTask->isNotEmpty())
                                 @foreach ($LeadTask as $serviceKey => $serviceVal)
                               
-                                    <div data-repeater-item class="flex flex-wrap items-end gap-[20px]">
+                                    <div data-repeater-item class="repeater-item flex flex-wrap items-end gap-[20px]">
                                         <div class="w-[calc(100%-75px)] ">
                                             <input type="hidden" name="lead_task_id" value="{{$serviceVal->id}}">
                                             <div class="w-full outline-[1px] outline-dashed outline-[#ccc] p-[10px] rounded-[5px] flex flex-wrap gap-[5px] lg:gap-[10px] xl:gap-[15px]">
@@ -162,7 +162,11 @@
                                                         <option value="">Project Manager</option>
                                                         @foreach ($projectManagerList as $projectManagerListData)
                                                             <option value="{{ $projectManagerListData->id }}" 
-                                                                @selected(old('projectmanager',$serviceVal->project_manager_id) == $projectManagerListData->id)>
+                                                                @selected(
+                                                                    old('projectmanager', $serviceVal->project_manager_id) == $projectManagerListData->id ||
+                                                                    ($authDetails->role == 4 && $authDetails->id == $projectManagerListData->id)
+                                                                )
+                                                            >
                                                                 {{ $projectManagerListData->name }}
                                                             </option>
                                                         @endforeach                            
@@ -282,13 +286,12 @@
                                                             class="appliedfor w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
                                                             >                                                
                                                     </div>
-                                                    <div class="w-full md:w-[32%] lg:w-[32%]">
+                                                    <div class="applicationNumberHide w-full md:w-[32%] lg:w-[32%] {{$serviceVal->subservice_id == 1 || $serviceVal->subservice_id == 10 ? 'hidden':''}}">
                                                         <label class="block mb-[5px] text-[14px] font-[400]">Application Number</label>
                                                         <input type="text" name="applicationNumber" 
                                                             value="{{ isset($serviceVal->serviceDetails) ? $serviceVal->serviceDetails->application_number : '' }}" 
                                                             class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
-                                                            > 
-                                                                                                
+                                                            >                                                                                                 
                                                     </div>
                                                     <div class="w-full md:w-[32%] lg:w-[32%]">
                                                         @php
@@ -342,7 +345,7 @@
                                 @endforeach 
                             @else
                            
-                                <div data-repeater-item class="flex flex-wrap items-end gap-[20px]">
+                                <div data-repeater-item class="repeater-item flex flex-wrap items-end gap-[20px]">
                                     <div class="w-[calc(100%-75px)] ">
                                         <input type="hidden" name="lead_task_id" value="0">
                                         <div class="w-full outline-[1px] outline-dashed outline-[#ccc] p-[10px] rounded-[5px] flex flex-wrap gap-[5px] lg:gap-[10px] xl:gap-[15px]">
@@ -365,7 +368,10 @@
                                                     <option value="">Project Manager</option>
                                                     @foreach ($projectManagerList as $projectManagerListData)
                                                         <option value="{{ $projectManagerListData->id }}" 
-                                                            @selected(old('projectmanager') == $projectManagerListData->id)>
+                                                            @selected(
+                                                            ($authDetails->role == 4 && $authDetails->id == $projectManagerListData->id) ||
+                                                            old('projectmanager') == $projectManagerListData->id
+                                                        )>                                                            
                                                             {{ $projectManagerListData->name }}
                                                         </option>
                                                     @endforeach                            
@@ -447,7 +453,7 @@
                                                     <label class="appliedForText block mb-[5px] text-[14px] font-[400]">Trademark Applied For</label>
                                                     <input type="text" name="appliedfor" id="appliedfor" value="" class="appliedfor w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" >                                                
                                                 </div>      
-                                                <div class="w-full md:w-[32%] lg:w-[32%]">
+                                                <div class="applicationNumberHide w-full md:w-[32%] lg:w-[32%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Application Number</label>
                                                     <input type="text" name="applicationNumber" 
                                                         value="" 
@@ -871,6 +877,11 @@
 
     $(document).on('change','.getSubService',function(){
         let subServiceId = $(this).val();
+        if(subServiceId == 1 || subServiceId == 10){
+            $(this).parent().parent().find('.applicationNumberHide').addClass('hidden');
+        }else{
+            $(this).parent().parent().find('.applicationNumberHide').removeClass('hidden');
+        }
         let serviceId = $(this).parent().parent().find('.lead_service_id').val();
         var e = $(this);
         $.ajax({
@@ -949,37 +960,38 @@
         
     }
 
-    $(document).on('keyup','.checkDuplicateMobile',function(){
+    $(document).on('keyup', '.checkDuplicateMobile', function (e) {
+        let cleanVal = $(this).val().replace(/\D/g, '');
+        if (cleanVal.length > 10) {
+            cleanVal = cleanVal.substring(0, 10);
+        }
+        $(this).val(cleanVal);
         $('.mobile_length_error').addClass('hidden');
-
-        if($(this).val().length == 10){
+        if (cleanVal.length === 10) {
             let id = $(this).data('id');
-            let val = $(this).val();
-            let e = $(this);
+            let val = cleanVal;
+            let element = $(this);
+
             $.ajax({
-                method:'POST',
-                url:"{{ route('user.checkDuplicate')}}",
-                headers:{
-                    'X-CSRF-TOKEN':'{{csrf_token()}}'
+                method: 'POST',
+                url: "{{ route('user.checkDuplicate') }}",
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
-                data:{
-                    id:id,
-                    val:val
+                data: {
+                    id: id,
+                    val: val
                 },
-                success:function(res){
-                    if(res.exists){
-                        e.val('');
+                success: function (res) {
+                    if (res.exists) {
+                        element.val('');
                         $('.mobile_exist_error').removeClass('hidden');
-                    }else{
+                    } else {
                         $('.mobile_exist_error').addClass('hidden');
                     }
                 }
             });
         }
-        if($(this).val().length > 10){
-            $('.mobile_length_error').removeClass('hidden');
-        }
-        
     });
 
     $(document).on('change', '.scopeOfBusinessSelect', function () {

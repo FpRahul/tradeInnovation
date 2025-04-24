@@ -12,7 +12,7 @@ $paymentData = $taskList->payment[0];
    <x-client-task-details :taskID="$taskId" />
 </div>
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
-   <form action="{{route('task.paymentStatus',['id'=>$taskId]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
+   <form action="{{route('task.patentUpdateHearingChargeStatusPostRegisterSubmit',['id'=>$taskId]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
       <div class="flex justify-between">
          <strong class="m-0 block"> Update Current Task</strong>
@@ -104,7 +104,7 @@ $paymentData = $taskList->payment[0];
             <p class="paymentInfo " id="hidePaymentInfo" style="color: skyblue; font-size: 14px; font-weight: 500;">
                Pending Amount: {{$paymentData->pending_amount}}
             </p>
-            <div class=" hidden PartialPaymentError " style="color: red;font-size: 14px; font-weight: 500;"></div>
+            {{-- <div class=" hidden PartialPaymentError " style="color: red;font-size: 14px; font-weight: 500;"></div> --}}
 
          </div>
          <div class="flex flex-col
@@ -175,7 +175,7 @@ $paymentData = $taskList->payment[0];
       </div>
       <div class="w-full md:w-1/2 hideOncredit" id="deadLineDate">
          <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-            Documentation Dead Line
+            Dead Line
          </label>
          <div class="w-[100%] relative">
             <input
@@ -318,21 +318,22 @@ $paymentData = $taskList->payment[0];
 
 
       }
-      $("#partial_payment").on("input", function () {
-         var total_price = parseFloat({{ $paymentData->pending_amount ?? 0 }}) || 0;
-         var partial_payment = parseFloat($(this).val()) || 0;
-
-         if (partial_payment > total_price) {
-               $(".PartialPaymentError").removeClass("hidden").text("The partial payment cannot be more than the total due.");
-               $("#hidePaymentInfo").addClass("hidden");
-               $("#submitDisabled").prop("disabled", true);
-         } else {
-               $(".PartialPaymentError").addClass("hidden").text("");
-               $("#hidePaymentInfo").removeClass("hidden");
-               $("#submitDisabled").prop('disabled', false)
-         }
-         
-      });
+      // $("#partial_payment").on("input", function () {
+      //          var total_price = parseFloat({{ $payamentDetails->pending_amount ?? 0 }}) || 0;
+      //          var partial_payment = parseFloat($(this).val()) || 0;
+   
+      //          if (partial_payment > total_price) {
+      //                $(".PartialPaymentError").removeClass("hidden").text("The partial payment cannot be more than the total due.");
+      //                $("#hidePaymentInfo").addClass("hidden");
+      //                $("#submitDisabled").prop("disabled", true);
+      //          } else {
+      //                $(".PartialPaymentError").addClass("hidden").text("");
+      //                $("#hidePaymentInfo").removeClass("hidden");
+      //                $("#submitDisabled").prop('disabled', false)
+   
+      //          }
+            
+      //    });
    });
 </script>
 

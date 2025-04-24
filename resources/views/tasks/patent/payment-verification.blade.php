@@ -104,6 +104,7 @@ $paymentData = $taskList->payment[0];
             <p class="paymentInfo " id="hidePaymentInfo" style="color: skyblue; font-size: 14px; font-weight: 500;">
                Pending Amount: {{$paymentData->pending_amount}}
             </p>
+            <div class=" hidden PartialPaymentError " style="color: red;font-size: 14px; font-weight: 500;"></div>
             {{-- <div class=" hidden PartialPaymentError " style="color: red;font-size: 14px; font-weight: 500;"></div> --}}
 
          </div>
@@ -289,7 +290,7 @@ $paymentData = $taskList->payment[0];
 
          } else if (changedValue == 2) {
             yes = $("#partial_payment").val("0.00");
-            $("#verifiedDate label").text("Verified On");
+            $("#verifiedDate label").text("Paid On");
             $("#paymentReminder").removeClass("hidden");
             $(".partialPayment").removeClass("hidden");
             $(".total_amount").removeClass("hidden");
@@ -318,22 +319,21 @@ $paymentData = $taskList->payment[0];
 
 
       }
-      // $("#partial_payment").on("input", function () {
-      //          var total_price = parseFloat({{ $payamentDetails->pending_amount ?? 0 }}) || 0;
-      //          var partial_payment = parseFloat($(this).val()) || 0;
-   
-      //          if (partial_payment > total_price) {
-      //                $(".PartialPaymentError").removeClass("hidden").text("The partial payment cannot be more than the total due.");
-      //                $("#hidePaymentInfo").addClass("hidden");
-      //                $("#submitDisabled").prop("disabled", true);
-      //          } else {
-      //                $(".PartialPaymentError").addClass("hidden").text("");
-      //                $("#hidePaymentInfo").removeClass("hidden");
-      //                $("#submitDisabled").prop('disabled', false)
-   
-      //          }
-            
-      //    });
+      $("#partial_payment").on("input", function () {
+         var total_price = parseFloat({{ $paymentData->pending_amount ?? 0 }}) || 0;
+         var partial_payment = parseFloat($(this).val()) || 0;
+
+         if (partial_payment > total_price) {
+               $(".PartialPaymentError").removeClass("hidden").text("The partial payment cannot be more than the total due.");
+               $("#hidePaymentInfo").addClass("hidden");
+               $("#submitDisabled").prop("disabled", true);
+         } else {
+               $(".PartialPaymentError").addClass("hidden").text("");
+               $("#hidePaymentInfo").removeClass("hidden");
+               $("#submitDisabled").prop('disabled', false)
+         }
+         
+      });
    });
 </script>
 

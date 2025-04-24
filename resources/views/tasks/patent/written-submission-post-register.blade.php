@@ -9,27 +9,14 @@
    <x-client-task-details :taskID="$id" />
 </div>
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
-   <form action="{{route('task.patentStatusPostRegisterSubmit',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
+   <form action="{{route('task.patentWrittenSubmissionPostRegisteredSubmit',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
       <strong class="mt-4 block"> Update Current Task</strong>
-
       <div class="flex flex-col md:flex-row gap-[20px]">
          <input type="hidden" name="checkValid" id="checkValid" value="">
-         <div class="w-full md:w-1/2">
-            <label for="patent_status" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
-            <select name="patent_status" id="patent_status" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
-               <option value="" disabled selected>Select status</option>
-               <option value="0"> Registered</option>
-               <option value="1"> Refused </option>
-            </select>
-            <div class="showWarning" style="color: red;font-size: 14px; font-weight: 500;"></div>
-            @error('patent_status')
-            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
-            @enderror
-         </div>
          <div class="w-full md:w-1/2" id="verifiedDate">
             <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-               Registered On
+            Written Submission On
             </label>
             <div class="w-[100%] relative">
                <input
@@ -45,27 +32,7 @@
                </div>
             </div>
          </div>
-         <div class="w-full md:w-1/2 reminder_date">
-            <label for="verified" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-               Reminder Date
-            </label>
-            <div class="w-[100%] relative">
-               <input
-                  type="text"
-                  placeholder="Reminder Date"
-                  name="reminder_date"
-                  class="daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
-                  value=""
-                  id="reminder"
-                  autocomplete="off">
-               <div class="absolute right-[10px] top-[10px]">
-                  <i class="ri-calendar-line"></i>
-               </div>
-            </div>
-         </div>
-      </div>
-      <div class="w-full flex gap-[20px]">
-         <div class="flex justify-start flex-wrap w-full md:w-1/2 ">
+         <div class="flex justify-start flex-wrap w-[100%] md:w-[49%]">
             <label class="block w-full text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Upload</label>
             <label for="attachment" class="flex items-center gap-[10px] w-full text-[13px] font-[500] leading-[15px] text-[#666666] tracking-[0.01em] bg-[#fff] border-dashed border-[1px] border-[#ccc] rounded-[6px] py-[6px] px-[10px] cursor-pointer">
                <svg width="22" height="28" viewBox="0 0 22 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -79,36 +46,32 @@
          @error('attachment.*')
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
-         
       </div>
-      <div class="">
-         <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
-         <textarea type="text" name="description" id="description" class="w-full h-[80px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
-         @error('description')
-         <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
-         @enderror
-      </div>
-      <div class="upcoming_task_hide hidden">
-         <strong class= mt-5 block>Update Upcoming Actions</strong>
-
+     
+         <div class="">
+            <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
+            <textarea type="text" name="description" id="description" class="w-full h-[80px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
+            @error('description')
+            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+            @enderror
+         </div>
+         <strong class=mt-5 block>Update Upcoming Actions</strong>
          <div class=" flex flex-col md:flex-row gap-[20px]">
-
             <div class="w-full md:w-1/2 ">
-               <label for="stage" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
+               <label for="stage" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Satge</label>
                @if($getStage->count() > 0)
                <input type="text" name="stage_id" id="stage_id" value="{{$getStage->title}}" class="  w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
-               <input type="hidden" name="stage_id" id = "SatgeID"  value="{{$getStage->id}}">
+               <input type="hidden" name="stage_id" id="SatgeID" value="{{$getStage->id}}">
                @endif
-               <p id="nextTitle" style="color: skyblue; font-size: 14px; font-weight: 500;">
-                  Next stage will be: {{$getStage->title}}
-               </p> 
+              <p style="color: skyblue; font-size: 14px; font-weight: 500;">
+                        Next stage will be: {{$getStage->title}}
+                    </p> 
             </div>
-            
+
             @if($taskDetails->count() > 0)
             @php
             $selectedId = $taskDetails->user->id;
             @endphp
-
             @endif
 
             <div class="w-full md:w-1/2">
@@ -135,7 +98,7 @@
          </div>
          <div class=" w-full md:w-1/2" id="deadLineDate">
             <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-               Dead Line
+               Dead line
             </label>
             <div class="w-[100%] relative">
                <input
@@ -145,25 +108,25 @@
                   id="deadline"
                   class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                   value=""
-
                   autocomplete="off">
                <div class="absolute right-[10px] top-[10px]">
                   <i class="ri-calendar-line"></i>
                </div>
             </div>
             <p id="showStage" style="color: skyblue; font-size: 14px; font-weight: 500;">
-               Set a dead line for {{ $getStage->title }}.
+               Set a dead line for: {{ $getStage->title }}.
             </p>
          </div>
-      </div>
-      <div class="flex justify-end gap-[15px]">
-         <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
-      </div>
+         <div class="flex justify-end gap-[15px]">
+
+            <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
+         </div>
    </form>
 </div>
+
 <script>
    $(document).ready(function() {
-      $('.daterangepicker-verified').attr("placeholder", "DD/MM/YYYY"); // Set placeholder
+            $('.daterangepicker-verified').attr("placeholder", "DD/MM/YYYY"); // Set placeholder
 
       $('.daterangepicker-verified').daterangepicker({
          singleDatePicker: true,
@@ -192,24 +155,8 @@
       }).on('apply.daterangepicker', function(ev, picker) {
          $(this).val(picker.startDate.format('DD MMM YYYY')); 
          console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
-      });     
-      $("#patent_status").on('change', function() {
-         var patent_status = $(this).val();
-         if (patent_status == 0) {   
-            $('.reminder_date').removeClass('hidden');
-            $('.upcoming_task_hide').removeClass('hidden');
-            $("#stage_id").val('{{ $getStage->title }}') 
-            $("#SatgeID").val('{{ $getStage->id }}') 
-            $('#showStage').text('Set a dead line for ' + '{{ $getStage->title }}');
-            $('#nextTitle').text('Next stage will be: ' + '{{ $getStage->title }}');
-            $("#verifiedDate label").text("Registered On");
-         } else if (patent_status == 1) {
-            $('.upcoming_task_hide').addClass('hidden');
-            $("#verifiedDate label").text("Refused On");
-            $('.reminder_date').addClass('hidden');
-
-         }
-      })
+               });
+        
    });
 </script>
 @stop

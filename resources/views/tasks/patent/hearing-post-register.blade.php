@@ -9,7 +9,7 @@
    <x-client-task-details :taskID="$id" />
 </div>
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
-   <form action="{{route('task.patentHearingSubmit',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
+   <form action="{{route('task.patentHearingPostRegisterSubmit',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
       <strong class="mt-4 block"> Update Current Task</strong>
 
@@ -57,7 +57,7 @@
                   class="daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                   value=""
                   id="verified"
-                  autocomplete="off" required>
+                  autocomplete="off">
                <div class="absolute right-[10px] top-[10px]">
                   <i class="ri-calendar-line"></i>
                </div>

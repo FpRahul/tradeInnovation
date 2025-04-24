@@ -319,8 +319,10 @@ class LeadsController extends Controller
                 return redirect()->route("leads.index", ['tab' => 1])->withSuccess($successMsg);
             }
         }
+        $authDetails = auth()->user();
+        // dd($authDetails);
         $header_title_name = 'Lead';
-        return view('leads/add', compact('header_title_name', 'firmList', 'sourceList', 'serviceList', 'projectManagerList', 'userList', 'clientList', 'leadData', 'leadAttachment', 'LeadTask', 'scopeOfBussinessList'));
+        return view('leads/add', compact('header_title_name', 'firmList', 'sourceList', 'serviceList', 'projectManagerList', 'userList', 'clientList', 'leadData', 'leadAttachment', 'LeadTask', 'scopeOfBussinessList','authDetails'));
     }
 
     public function leadFetch(Request $request)
@@ -498,17 +500,17 @@ class LeadsController extends Controller
     public function deleteRepeaterLead(Request $request)
     {
         $leadTask = LeadTask::find($request->id);
-        if ($leadTask->delete()) {
+    
+        if ($leadTask && $leadTask->delete()) {
             $leadTaskDetails = LeadTaskDetail::where('task_id', $request->id);
-            if ($leadTaskDetails->delete()) {
-                echo "1";
-            } else {
-                return redirect()->back()->withError('Some error is occur while deleting lead service!');
-            }
-        } else {
-            return redirect()->back()->withError('Some error is occur while deleting lead service!');
+            $leadTaskDetails->delete(); // optional to check result if needed
+    
+            return response()->json(1);
         }
+    
+        return response()->json(['error' => 'Some error occurred while deleting lead service!'], 500);
     }
+    
 
     public function deleteAttachmentRepeaterLead(Request $request)
     {

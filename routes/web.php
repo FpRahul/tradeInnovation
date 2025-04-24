@@ -494,12 +494,35 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
       
         Route::get('/patent/await-hearing-post-register/{id?}','patentawaitHearingPostRegister')->name('task.patentAwaitHearingPostRegistration');
         Route::Post('/patent/await-hearing-post-register-submit/{id?}','patentawaitHearingPostRegisterSubmit')->name('task.patentAwaitHearingPostRegistrationSubmit');
+        
+        Route::get('/patent/client-decision-post-register/{id?}','patentClientDecisionPostRegister')->name('task.patentClientDecisionPostRegistration');
+        Route::post('/patent/client-decision-post-register-submit/{id?}','patentClientDecisionPostRegisterSubmit')->name('task.patentClientDecisionPostRegistrationSubmit');
        
+        Route::get('/patent/notify-extra-charge-post-register/{id?}','patentNotifyExtraChargePostRegister')->name('task.patentNotifyClientForExtraChargePostRegister');
+        Route::post('patent/notify-extra-charge-post-register-submit/{id}','patentNotifyExtraChargePostRegisterSubmit')->name('task.patentNotifyClientForExtraChargePostRegisterSubmit');
        
-    
-      
+        Route::get('/patent/hearing-charge-status-post-register/{id?}','patentHearingChargeStatusPostStatus')->name('task.patentUpdateHearingChargeStatusPostRegister');
+        Route::post('/patent/hearing-charge-status-post-register/{id}','patentHearingChargeStatusPostStatusSubmit')->name('task.patentUpdateHearingChargeStatusPostRegisterSubmit');
 
+        Route::get('/patent/hearing-post-register/{id?}','patentHearingPostRegister')->name('task.patentHearingPostRegister');
+        Route::Post('/patent/hearing-post-register-submit/{id?}','patentHearingPostRegisterSubmit')->name('task.patentHearingPostRegisterSubmit');
 
+        Route::get('/patent/written-submission-post-register/{id?}','patentWrittenSubmissionPostRegister')->name('task.patentWrittenSubmissionPostRegistered');
+        Route::Post('/patent/written-submission-post-register-submit/{id?}','patentWrittenSubmissionPostRegisterSubmit')->name('task.patentWrittenSubmissionPostRegisteredSubmit');
+
+        Route::get('/patent/renewal/{id?}' , 'patentRenewal')->name('task.patentRenewal');
+        Route::Post('/patent/renewal-submit/{id?}' , 'patentRenewalSubmit')->name('task.patentRenewalSubmit');       
+
+        Route::get('/patent/renewal-client-approval/{id?}' , 'patentRenewalPaymentConfirmation')->name('task.patentPaymentConfirmationRenewal');
+        Route::Post('/patent/renewal-client-approval-submit/{id?}' , 'patentRenewalPaymentConfirmationSubmit')->name('task.patentPaymentConfirmationRenewalSubmit');
+        
+        Route::get('/patent/renewal-filed/{id?}' , 'patentRenewalFiled')->name('task.patentRenewalFiled');
+        Route::Post('/patent/renewal-filed-submit/{id?}' , 'patentRenewalFiledSubmit')->name('task.patentRenewalFiledSubmit');
+       
+        Route::get('/patent/renewal-inform-client/{id?}' , 'informClientRenwalApprovedPostRegistration')->name('task.patentClientIntimationRenewal');
+        Route::Post('/patent/renewal-inform-client-submit/{id?}' , 'informClientRenwalApprovedPostRegistrationSubmit')->name('task.patentClientIntimationRenewalSubmit');
+
+     
     });
     //Services Routes
     Route::prefix('services')->controller(ServicesController::class)->group(function () {

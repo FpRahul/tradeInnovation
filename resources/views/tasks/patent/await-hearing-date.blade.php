@@ -27,7 +27,7 @@
                   class="daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                   value=""
                   id="verified"
-                  autocomplete="off">
+                  autocomplete="off" required>
                <div class="absolute right-[10px] top-[10px]">
                   <i class="ri-calendar-line"></i>
                </div>
@@ -87,7 +87,7 @@
                      class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                      value=""
                      id="hearing_date"
-                     autocomplete="off">
+                     autocomplete="off" required>
                   <div class="absolute right-[10px] top-[10px]">
                      <i class="ri-calendar-line"></i>
                   </div>
@@ -129,7 +129,7 @@
                   id="deadline"
                   class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                   value=""
-                  autocomplete="off">
+                  autocomplete="off" required>
                <div class="absolute right-[10px] top-[10px]">
                   <i class="ri-calendar-line"></i>
                </div>

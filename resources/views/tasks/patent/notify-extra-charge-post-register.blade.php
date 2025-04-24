@@ -10,7 +10,7 @@
 </div>
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
    <strong>Update Current Task</strong>
-    <form action="{{route('task.sendQuotation',['id'=>$taskId]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
+    <form action="{{route('task.patentNotifyClientForExtraChargePostRegisterSubmit',['id'=>$taskId]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
         @csrf
         <div class="flex flex-col md:flex-row gap-[20px]">
             <input type="hidden" name="checkValid" id="checkValid" value="">
@@ -108,7 +108,7 @@
          
          <div class="w-full md:w-1/2" id="verifiedDate">
              <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-             Payment Dead Line
+             Payment Dead line
              </label>
              <div class="w-[100%] relative">
              <input
@@ -156,7 +156,7 @@
                 @enderror
             </div>
             <div class="w-full md:w-1/2">
-                <label for="subject" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Govt. Price<strong class="text-[#f83434]">*</strong> </label>
+                <label for="subject" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Govt Price<strong class="text-[#f83434]">*</strong> </label>
                 <input type="text" name="govt_price" id="govt_price" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                 @error('govt_price')
                 <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
@@ -237,64 +237,32 @@
             </div>
 
             <div class="pb-[40px]">
-               <table class="w-[100%] border-[1px] border-[#f2f2f2]" >
-               
-                  <tr>
-                     <td>
-                        <table class="w-full">
-                           <tr>
-                              <th class="px-[10px] py-[10px] text-[13px] font-[600] border-b-[1px] border-b-[#f2f2f2]  border-r-[1px] border-r-[#f2f2f2]">Current Service</th>
-                              <th class="px-[10px] py-[10px] text-[13px] font-[600] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">Current Sub-Service</th>
+            <table class="w-[100%] border-[1px] border-[#f2f2f2]" >
+              
+               <tr>
+                  <td>
+                     <table class="w-full">
+                        <tr>
+                           <th class="px-[10px] py-[10px] text-[13px] font-[600] border-b-[1px] border-b-[#f2f2f2]  border-r-[1px] border-r-[#f2f2f2]">Current Service</th>
+                           <th class="px-[10px] py-[10px] text-[13px] font-[600] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">Current Sub-Service</th>
+                          
                            
-                              
-                           </tr>
-                           @if(!empty($taskDetails))
-                              @foreach ($taskDetails as $serK => $serV)                              
-                                 <tr>
-                                    <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$serV->services->serviceName}}</td>
-                                    <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$serV->subService->subServiceName}}</td>
-                                    
-                                 </tr>    
-                              @endforeach
-                           @endif                    
-                        </table>
-                     </td>
-                  </tr>
-               </table>
+                        </tr>
+                        @if(!empty($taskDetails))
+                           @foreach ($taskDetails as $serK => $serV)                              
+                              <tr>
+                                 <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$serV->services->serviceName}}</td>
+                                 <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$serV->subService->subServiceName}}</td>
+                                 
+                              </tr>    
+                           @endforeach
+                        @endif                    
+                     </table>
+                  </td>
+               </tr>
+            </table>
             </div>
 
-             <h2 class="text-[#000] text-[17px] font-[600] mb-[15px] text-[center]">Account Details</h2>
-            
-            <div class="mb-8 flex flex-col gap-[5px] border-[1px] border-[#f2f2f2] p-[20px]">
-               <div class="mb-[5px] flex gap-[15px]">
-                  <label class="min-w-[130px] text-[15px] text-[#000] font-[600]">Holder Name :</label>
-                  <p class="text-[15px] text-[#000] font-[400]">{{ $taskDetails[0]->lead->LeadFirm->acc_holder_name}}</p>
-              </div>
-              <div class="mb-[5px] flex gap-[15px]">
-                  <label class="min-w-[130px] text-[15px] text-[#000] font-[600]">Account Number :</label>
-                  <p class="text-[15px] text-[#000] font-[400]">{{ $taskDetails[0]->lead->LeadFirm->account_number}}</p>
-              </div>
-               <div class="mb-[5px] flex gap-[15px]">
-                  <label class="min-w-[130px] text-[15px] text-[#000] font-[600]">IFSC Code :</label>
-                  <p class="text-[15px] text-[#000] font-[400]">{{ $taskDetails[0]->lead->LeadFirm->ifsc_code}}</p>
-               </div>
-               <div class="mb-[5px] flex gap-[15px]">
-                  <label class="min-w-[130px] text-[15px] text-[#000] font-[600]">Bank Name :</label>
-                  <p class="text-[15px] text-[#000] font-[400]">{{ $taskDetails[0]->lead->LeadFirm->bank_name}}</p>
-               </div>
-               <div class="mb-[5px] flex gap-[15px]">
-                  <label class="min-w-[130px] text-[15px] text-[#000] font-[600]">Branch :</label>
-                  <p class="text-[15px] text-[#000] font-[400]">{{ $taskDetails[0]->lead->LeadFirm->branch_name}}</p>
-               </div>    
-               <div class="mb-[5px] flex gap-[15px]">
-                  <label class="min-w-[130px] text-[15px] text-[#000] font-[600]">Swift Code :</label>
-                  <p class="text-[15px] text-[#000] font-[400]">{{ $taskDetails[0]->lead->LeadFirm->swift_code}}</p>
-               </div>
-               <div class="mb-[5px] flex gap-[15px]">
-                  <label class="min-w-[130px] text-[15px] text-[#000] font-[600]">UPI :</label>
-                  <p class="text-[15px] text-[#000] font-[400]">{{ $taskDetails[0]->lead->LeadFirm->upi_id}}</p>
-               </div>                 
-            </div>
          </div>
             <table width="100%" border="0" cellspacing="0" cellpadding="10" style="border-collapse: collapse; border: 1px solid #ddd; background-color: #fafafa;">
                <tr>

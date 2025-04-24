@@ -120,7 +120,7 @@
                      class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none bg-transparent z-10 relative"
                      value=""
 
-                     autocomplete="off">
+                     autocomplete="off" required>
                   <div class="absolute right-[10px] top-[10px] z-0">
                      <i class="ri-calendar-line"></i>
                   </div>

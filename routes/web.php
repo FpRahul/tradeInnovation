@@ -150,18 +150,19 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::post('/payment-status/{id}','paymentStatus')->name('task.paymentStatus');
         Route::get('documentation/{id}','documentation')->name('task.documentation');
         Route::Post('documentation-status/{id}','documenStatus')->name('task.documenStatus');
-        Route::Post('unhold','unHoldTask')->name('task.unHoldTask');
-        Route::Post('hold-task','holdtask')->name('task.hold');
+        Route::Post('unhold','unHoldTask')->name('task.unHoldTask'); // not in middlerware
+        Route::Post('hold-task','holdtask')->name('task.hold'); // not in middlerware
 
-        Route::Post('reject-task','rejecttask')->name('task.reject');
-        Route::get('document-draft/{id}', "DocumentDraft")->name('task.DocumentDraft');
-        Route::post('document-draft/status/{id}', "DocumentDraftStatus")->name('task.DocumentDraftStatus');
+        Route::Post('reject-task','rejecttask')->name('task.reject'); // not in middlerware
+
+        Route::get('document-draft/{id}', "DocumentDraft")->name('task.DocumentDraft');// not in middlerware
+        Route::post('document-draft/status/{id}', "DocumentDraftStatus")->name('task.DocumentDraftStatus');// not in middlerware
         Route::get('client-approval/{id}','clientApproval')->name('task.clientApproval');
         Route::post('client-approval/status/{id}','clientApprovalStatus')->name('task.clientApprovalStatus');
         Route::get('draft-application/{id}','draftApplication')->name('task.draftApplication');
         Route::post('draft-application/status/{id}','draftApplicationStatus')->name('task.draftApplicationStatus');
         Route::get('formality-check/{id}','formalityCheck')->name('task.formalityCheck');
-        Route::post('formality-check/status/{id}','formalityCheckStatus')->name('task.formalityCheckStatus');
+        Route::post('formality-check/status/{id}','formalityCheckStatus')->name('task.formalityCheckStatus'); // here midller ware stop
         Route::get('initial-examination/{id}','initialExamination')->name('task.initialExamination');
         Route::post('initial-examination/status/{id}','initialExaminationStatus')->name('task.initialExaminationStatus');
         Route::get('government-portal/{id}','replyAdded')->name('task.replyAdded');
@@ -189,7 +190,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('opposition/evidence-submission/{id}', 'opponentEvidenceSubmission')->name('task.opponentEvidenceSubmission');
         Route::Post('opposition/evidence-submission/status/{id}', 'opponentEvidenceSubmissionStatus')->name('task.opponentEvidenceSubmissionStatus');
         Route::get('applicant/evidence-submission/{id}', 'applicantEvidenceSubmission')->name('task.applicantEvidenceSubmission');
-        Route::Post('applicant/evidence-submission/status/{id}', 'applicantEvidenceSubmissionStatus')->name('task.applicantEvidenceSubmissionStatus');
+        Route::Post('applicant/evidence-submission/status/{id}', 'applicantEvidenceSubmissionStatus')->name('task.applicantEvidenceSubmissionStatus');//
         // Route::Post('opposition/hearing/{id}', 'oppositionHearing')->name('task.oppositionHearing');
         Route::get('/opposition-notice/received {id?}','oppositionNoticeDate')->name('task.oppositionNoticeDate');
         Route::Post('/opposition-notice/received /status{id?}','oppositionNoticeDateStatus')->name('task.oppositionNoticeDateStatus');
@@ -216,7 +217,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('/trademark/status/{id?}','trademarkStatus')->name('task.trademarkStatus');
         Route::get('/trademark/post-registration/{id?}','postRegistration')->name('task.postRegistration');
         Route::Post('/trademark/post-registration/status/{id?}','postRegistrationStatus')->name('task.postRegistrationStatus');
-        Route::get('/rectification/{id?}','rectification')->name('task.rectification');
+        Route::get('/rectification/{id?}','rectification')->name('task.rectification');// 2
         Route::Post('/rectification/status/{id?}','rectificationStatus')->name('task.rectificationStatus');
         Route::get('/rectification/inform-client/{id?}' , 'informClientRectification')->name('task.informClientRectification');
         Route::Post('/rectification/inform-client/status/{id?}' , 'informClientRectificationStatus')->name('task.informClientRectificationStatus');
@@ -247,7 +248,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/rectification/written-submission/{id?}' , 'rectficationWrittenSubmission')->name('task.rectficationWrittenSubmission');
         Route::Post('/rectification/written-submission/status/{id?}' , 'rectficationWrittenSubmissionStatus')->name('task.rectficationWrittenSubmissionStatus');
         Route::get('/rectification/trademark/{id?}' , 'rectificationTrademark')->name('task.rectificationTrademark');
-        Route::Post('/rectification/trademark-status/{id?}' , 'rectificationTrademarkStatus')->name('task.rectificationTrademarkStatus');
+        Route::Post('/rectification/trademark-status/{id?}' , 'rectificationTrademarkStatus')->name('task.rectificationTrademarkStatus');//3
         Route::get('/trademark/renewal/{id?}' , 'trademarkRenewal')->name('task.trademarkRenewal');
         Route::Post('/trademark/renewal/status/{id?}' , 'trademarkRenewalStatus')->name('task.trademarkRenewalStatus');
         Route::get('/trademark/renewal/client-approval/{id?}' , 'clientApprovalOnRenewal')->name('task.clientApprovalOnRenewal');
@@ -281,7 +282,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/trademark/assignment/update-client/{id?}' , 'assignmentUpdateClient')->name('task.assignmentUpdateClient');
         Route::Post('/trademark/assignment/update-client/status/{id?}' , 'assignmentUpdateClientStatus')->name('task.assignmentUpdateClientStatus');
         Route::get('/trademark/assignment/inform-client/{id?}' , 'assignmentIntimateClient')->name('task.assignmentIntimateClient');
-        Route::Post('/trademark/assignment/inform-client/status/{id?}' , 'assignmentIntimateClientStatus')->name('task.assignmentIntimateClientStatus');
+        Route::Post('/trademark/assignment/inform-client/status/{id?}' , 'assignmentIntimateClientStatus')->name('task.assignmentIntimateClientStatus');// 4
         Route::get('/trademark/expidet-process/{id?}' , 'expidetProcess')->name('task.expidetProcess');
         Route::Post('/trademark/expidet-process/status/{id?}' , 'expidetProcessStatus')->name('task.expidetProcessStatus');
         Route::get('/trademark/expidet-process/payment/{id?}' , 'expidetProcessPayment')->name('task.expidetProcessPayment');
@@ -312,50 +313,6 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
 
 
 
-
-
-        
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
-
-
-
-
-
-
-
-        
-        
-
-        
-
-        
-        
-
-
-
-
-        
-
-
-
-        
-
-        
         // For patent..........     
         // For payment verification.........
         Route::get('/patent/send-quotation/{id?}','patentSendQuotation')->name('task.patentSendQuotation');
@@ -494,6 +451,43 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
       
         Route::get('/patent/await-hearing-post-register/{id?}','patentawaitHearingPostRegister')->name('task.patentAwaitHearingPostRegistration');
         Route::Post('/patent/await-hearing-post-register-submit/{id?}','patentawaitHearingPostRegisterSubmit')->name('task.patentAwaitHearingPostRegistrationSubmit');
+        Route::get('/patent/assignment/{id?}','patentAssignmentRegisteredUser')->name('task.patentAssignmentRegisteredUser');
+        Route::Post('/patent/assignment/status/{id?}','patentAssignmentRegisteredUserStatus')->name('task.patentAssignmentRegisteredUserStatus');
+        Route::get('/patent/assignment/payment/{id?}','patentAssignmentPayemnt')->name('task.patentAssignmentPayemnt');
+        Route::Post('/patent/assignment/payment/status{id?}','patentAssignmentPayemntStatus')->name('task.patentAssignmentPayemntStatus');
+        Route::get('/patent/assignment/query-form/{id?}','patentAssignmentQueryForm')->name('task.patentAssignmentQueryForm');
+        Route::Post('/patent/assignment/query-form/status/{id?}','patentAssignmentQueryFormStatus')->name('task.patentAssignmentQueryFormStatus');
+        Route::get('/patent/assignment/affidavit/{id?}','patentAssignmentAffidavit')->name('task.patentAssignmentAffidavit');
+        Route::Post('/patent/assignment/affidavit/status/{id?}','patentAssignmentAffidavitStatus')->name('task.patentAssignmentAffidavitStatus');
+        Route::get('/patent/assignment/filing-process/{id?}','patentAssignmentFilingProcess')->name('task.patentAssignmentFilingProcess');
+        Route::Post('/patent/assignment/filing-process/status/{id?}','patentAssignmentFilingProcessStatus')->name('task.patentAssignmentFilingProcessStatus');
+        Route::get('/patent/assignment/client-update/{id?}','patentAssignmentUpdateClientDetails')->name('task.patentAssignmentUpdateClientDetails');
+        Route::Post('/patent/assignment/client-update/status/{id?}','patentAssignmentUpdateClientDetailsStatus')->name('task.patentAssignmentUpdateClientDetailsStatus');
+        Route::get('/patent/assignment/client-intimate/{id?}','patentAssignmentInitmateClient')->name('task.patentAssignmentInitmateClient');
+        Route::Post('/patent/assignment/client-intimate/status/{id?}','patentAssignmentInitmateClientStatus')->name('task.patentAssignmentInitmateClientStatus');
+        Route::get('/patent/address/{id?}','patentAddress')->name('task.patentAddress');
+        Route::Post('/patent/address/status/{id?}','patentAddressStatus')->name('task.patentAddressStatus');
+        Route::get('/patent/address/payment/{id?}','patentAddressPayment')->name('task.patentAddressPayment');
+        Route::Post('/patent/address/payment/status/{id?}','patentAddressPaymentStatus')->name('task.patentAddressPaymentStatus');
+        Route::get('/patent/address/query-form/{id?}','patentAddressQueryForm')->name('task.patentAddressQueryForm');
+        Route::Post('/patent/address/query-form/status/{id?}','patentAddressQueryFormStatus')->name('task.patentAddressQueryFormStatus');
+        Route::get('/patent/address/filing-process/{id?}','patentAddressFilingProcess')->name('task.patentAddressFilingProcess');
+        Route::Post('/patent/address/filing-process/status/{id?}','patentAddressFilingProcessStatus')->name('task.patentAddressFilingProcessStatus');
+        Route::get('/patent/address/client-intimate/{id?}','patentClientIntimationAddressChange')->name('task.patentClientIntimationAddressChange');
+        Route::Post('/patent/address/client-intimate/status/{id?}','patentClientIntimationAddressChangeStatus')->name('task.patentClientIntimationAddressChangeStatus');
+        
+        
+
+        
+
+
+        
+        
+
+
+        
+
+
        
        
     

@@ -23345,7 +23345,7 @@ class TasksController extends Controller
             ->orderBy('id', 'asc')
             ->first();
         $stageId = $taskDetails->service_stage_id;
-        $getStage = ServiceStages::where('service_id', 2)->where('id', '>', $stageId)->first(); // change to patent status
+        $getStage = ServiceStages::where('service_id', 2)->where('id', '=', 116)->first(); // change to patent status 116
         $leadTaskdetials = LeadTaskDetail::find($id);
         $header_title_name = $taskDetails->serviceSatge->title;
         return view('tasks.patent.opposition-written-submission', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'applicationNumber'));

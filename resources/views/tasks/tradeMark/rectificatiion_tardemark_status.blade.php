@@ -63,16 +63,16 @@
          @enderror
          <div class="onhide w-full md:w-1/2" id="reminder_date">
             <label for="reminder_date" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-               Reminder Date
+               Renewal Reminder Date
             </label>
             <div class="w-[100%] relative">
                <input
                   type="text"
                   placeholder="Dead Line"
-                  name="reminder_date"
+                  name="Reminder_date"
                   class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                   value=""
-                  id="reminder_date"
+                  id="Reminder_date"
                   autocomplete="off">
                <div class="absolute right-[10px] top-[10px]">
                   <i class="ri-calendar-line"></i>

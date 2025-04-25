@@ -129,7 +129,7 @@
       <strong class="mt-4 block">Quotation Template</strong>
       <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2">
-            <label for="subject" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Subject<strong class="text-[#f83434]">*</strong></label>
+            <label for="subject" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">MailSubject<strong class="text-[#f83434]">*</strong></label>
             <input type="text" name="subject" id="subject" value="" placeholder="Enter mail subject" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
             @error('subject')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>

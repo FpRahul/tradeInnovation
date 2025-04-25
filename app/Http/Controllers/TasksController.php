@@ -8495,7 +8495,11 @@ class TasksController extends Controller
         if($request->deadline){
 
             $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
+        }if($request->Reminder_date){
+
+            $Reminder_date = Carbon::createFromFormat('d M Y', $request->input('Reminder_date'))->format('Y-m-d');
         }
+
         $existedLeaedTask = LeadTask::find($id);
         $existedLeaedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
         $newLeadtask = new LeadTask();
@@ -8539,6 +8543,7 @@ class TasksController extends Controller
             if ($newLeadtask->save()) {
                 $existedLeaedTaskDetails->status = 1;
                 $existedLeaedTaskDetails->status_date = $verifiedDate;
+                $existedLeaedTaskDetails->reminderDate = $Reminder_date;
                 $existedLeaedTaskDetails->comment = $comment;
                 if ($request->hasFile('attachment')) {
                     $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
@@ -8559,9 +8564,9 @@ class TasksController extends Controller
                     $newLeadTaskDeatails->task_id = $newLeadtask->id;
                     if($request->trademark_status == 1){
 
-                        $newLeadTaskDeatails->dead_line = $deadlineDate;
-                    }else if($request->trademark_status == 0){
                         $newLeadTaskDeatails->dead_line = null;
+                    }else if($request->trademark_status == 0){
+                        $newLeadTaskDeatails->dead_line = $deadlineDate;
 
                     }
                     $newLeadTaskDeatails->status = 0;

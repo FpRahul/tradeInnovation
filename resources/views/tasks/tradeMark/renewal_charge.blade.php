@@ -11,15 +11,17 @@
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
    <form action="{{route('task.renewalPaymentConfirmationStatus',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
-      <strong class="mt-4 block"> Update Current Task</strong>
       <input type="hidden" name="service_details_id" id="service_details_id" value="{{ $service_details->id }}">
       <input type="hidden" name="paymentId" value="{{ $paymentId }}">
-      @if ($payamentDetails->submitted_amount == 0)
+      <div class="flex justify-between">
+         <strong class="m-0 block"> Update Current Task</strong>
+        @if ($payamentDetails->submitted_amount == 0)
          <div class="flex items-ceter gap-[8px]">                            
             <input type="checkbox" name="negocheck" class="negocheck openModalProf" id="negocheck"/>  
             <label for="negocheck">is Negotiate</label>                          
-         </div>    
+         </div>
         @endif
+      </div>
       @foreach ($taskDetails as $task )
       <input type="hidden" name="checkStatus" id="checkStatus" value="{{$task->leadTaskDetails->status}}">
       @endforeach
@@ -43,7 +45,7 @@
          <!--  -->
          <div class="w-full md:w-1/2 hidden" id="paymentReminder">
             <label for="paymentDeadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-               Payment Deadline
+               Next Payment Deadline
             </label>
             <div class="w-[100%] relative">
                <input
@@ -77,6 +79,10 @@
                   <i class="ri-calendar-line"></i>
                </div>
             </div>
+         </div>
+         <div class="  w-full md:w-1/2">
+            <label for="amount" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Standard Service Price</label>
+            <input type="text" disabled name="standard_price" id="standard_price" value="{{$payamentDetails->old_service_price ?? $payamentDetails->service_price}}" required class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
          </div>
       </div>
       <div class="flex flex-col md:flex-row gap-[20px]">
@@ -142,7 +148,7 @@
       <strong class=" hideOncredit mt-5 block">Update Upcoming Actions</strong>
       <div class=" hideOncredit flex flex-col md:flex-row gap-[20px]">
          <div class=" hideOncredit w-full md:w-1/2">
-            <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Satge</label>
+            <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
             @if($getStage->count() > 0)
             <input type="text" name="stage_id" id="stage_id" value="{{$getStage->title}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
             <input type="hidden" name="stage_id" value="{{$getStage->id}}">
@@ -179,7 +185,7 @@
       </div>
       <div class="w-full md:w-1/2 hideOncredit" id="deadLineDate">
          <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-            Documentation Dead line
+            Deadline
          </label>
          <div class="w-[100%] relative">
             <input

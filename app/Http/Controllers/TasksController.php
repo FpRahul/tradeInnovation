@@ -10434,7 +10434,7 @@ class TasksController extends Controller
     }
 
     $onHideSatge = ServiceStages::where('service_id', 1)
-        ->where('id', 44)
+        ->where('id', 45)
         ->first();
 
     $header_title_name = $taskDetails->serviceSatge->title ?? 'Default Title';
@@ -13391,216 +13391,217 @@ class TasksController extends Controller
         return view('tasks.tradeMark.rectificatiion_tardemark_status', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'onHideSatge'));
     }
     public function rectificationTrademarkStatus(Request $request , $id){
+       if($request->verified){
+
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
-        if($request->deadline){
+    }
+    if($request->deadline){
 
-            $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
-        } if($request->reminder_date){
+        $deadlineDate = Carbon::createFromFormat('d M Y', $request->input('deadline'))->format('Y-m-d');
+    }if($request->Reminder_date){
 
-            $reminder_date = Carbon::createFromFormat('d M Y', $request->input('reminder_date'))->format('Y-m-d');
-        }
+        $Reminder_date = Carbon::createFromFormat('d M Y', $request->input('Reminder_date'))->format('Y-m-d');
+    }
+
+    $existedLeaedTask = LeadTask::find($id);
+    $existedLeaedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
+    $newLeadtask = new LeadTask();
+    $newLeadTaskDeatails  = new LeadTaskDetail();
+    $newNotification = new LeadNotification();
+    $newTaskStageId = $existedLeaedTask->service_stage_id + 1;
+    $newTaskTitle = ServiceStages::find($newTaskStageId);
+    $userName = Auth::user()->name;
+    $formattedCreatedDate = $existedLeaedTask->created_at->format('d M Y');
+    $comment = '';
+    if ($request->trademark_status == 0) {
+        $comment = 'Trademark Registered';
+    } else if ($request->trademark_status == 1) {
+        $comment = 'Trademark Refused';
+    }
+    $rule = [
+        'trademark_status' => 'required',
+        'verified' => 'required',
+        'assignUser' => 'required',
         
-        $existedLeaedTask = LeadTask::find($id);
-        $existedLeaedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
-        $newLeadtask = new LeadTask();
-        $newLeadTaskDeatails  = new LeadTaskDetail();
-        $newNotification = new LeadNotification();
-        $newTaskStageId = $existedLeaedTask->service_stage_id + 1;
-        $newTaskTitle = ServiceStages::find($newTaskStageId);
-        $userName = Auth::user()->name;
-        $formattedCreatedDate = $existedLeaedTask->created_at->format('d M Y');
-        $comment = '';
-        if ($request->trademark_status == 0) {
-            $comment = 'Trademark Registered';
-        } else if ($request->trademark_status == 1) {
-            $comment = 'Trademark Refused';
-        }
-        $rule = [
-            'trademark_status' => 'required',
-            'verified' => 'required',
-            'assignUser' => 'required',
-            
-        ];
-        $validator = Validator::make($request->all(), $rule);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-        if ($id) {
-            if($request->trademark_status == 0){
+    ];
+    $validator = Validator::make($request->all(), $rule);
+    if ($validator->fails()) {
+        return redirect()->back()->withErrors($validator)->withInput();
+    }
+    if ($id) {
+        if($request->trademark_status == 0){
 
-            
-                $newLeadtask->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
-                $newLeadtask->lead_id = $existedLeaedTask->lead_id;
-                $newLeadtask->service_detail_id = $existedLeaedTask->service_detail_id;
-                $newLeadtask->service_id = $existedLeaedTask->service_id;
-                $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
-                $newLeadtask->service_stage_id = $request->stage_id;
-                $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
-                $newLeadtask->assign_by = Auth::id();
-                $newLeadtask->task_title = $newTaskTitle->title;
-                $existedLeaedTask->task_description = $request->description;
-                $existedLeaedTask->save();
-                if ($newLeadtask->save()) {
-                    $existedLeaedTaskDetails->status = 1;
-                    $existedLeaedTaskDetails->status_date = $verifiedDate;
-                    $existedLeaedTaskDetails->reminderDate = $reminder_date;
-
-                    $existedLeaedTaskDetails->comment = $comment;
-                    if ($request->hasFile('attachment')) {
-                        $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
-                        if (!file_exists($folderPath)) {
-                            mkdir($folderPath, 0755, true);
-                        }
-                        $filePaths = [];
-                        foreach ($request->file('attachment') as $file) {
-                            if ($file->isValid()) {
-                                $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
-                                $file->move($folderPath, $fileName);
-                                $filePaths[] = $fileName;
-                            }
-                            $filePaths = [];
-                            foreach ($request->file('attachment') as $file) {
-                                if ($file->isValid()) {
-                                    $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
-                                    $file->move($folderPath, $fileName);
-                                    $filePaths[] = $fileName;
-                                }
-                            }
-                            $existedLeaedTaskDetails->attachment = json_encode($filePaths);
-                        }
-                        if ($existedLeaedTaskDetails->save()) {
-                            $newLeadTaskDeatails->task_id = $newLeadtask->id;
-                            $newLeadTaskDeatails->dead_line = $deadlineDate;
-                            $newLeadTaskDeatails->status = 0;
-                            if ($newLeadTaskDeatails->save()) {
-                                $newNotification->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
-                                $newNotification->lead_id = $existedLeaedTask->lead_id;
-                                $newNotification->task_id = $newLeadtask->id;
-                                $newNotification->title = 'Task Assigned';
-                                $newNotification->description =  $userName . ' assigned you ' . $newTaskTitle->title . ' task';
-                                $newNotification->status = 0;
-                                if ($newNotification->save()) {
-                                    $LeadLog =  new LeadLog();
-                                    $LeadLog->user_id = $existedLeaedTask->user_id;
-                                    $LeadLog->lead_id = $existedLeaedTask->lead_id;
-                                    $LeadLog->task_id = $existedLeaedTask->id;
-                                    $LeadLog->assign_by = Auth::id();
-
-
-                                    if ($request->trademark_status == 0) {
-                                        $LeadLog->remark = 'Register';
-                                        $oldValue = [
-                                            'status' => 'Pending',
-                                            'Assigned On' => $formattedCreatedDate,
-                                            'Assigned By' =>  $existedLeaedTask->userAssignBy->name,
-                                        ];
-                                        $newValue = [
-                                            'status' => 'Completed as register',
-                                            'Verified On' => $request->verified,
-                                            'Assigned To' =>  $existedLeaedTask->user->name,
-                                        ];
-                                        $LeadLog->old_value = json_encode($oldValue);
-                                        $LeadLog->new_value = json_encode($newValue);
-                                        $LeadLog->description = " Trademark status marked as register";
-                                    } else if ($request->trademark_status == 1) {
-                                        $LeadLog->remark = 'refused';
-                                        $oldValue = [
-                                            'status' => 'Pending',
-                                            'Assigned On' => $formattedCreatedDate,
-                                            'Assigned By' =>  $existedLeaedTask->userAssignBy->name,
-                                        ];
-                                        $newValue = [
-                                            'status' => 'Completed as refused',
-                                            'Verified On' => $request->verified,
-                                            'Assigned To' =>  $existedLeaedTask->user->name,
-                                        ];
-                                        $LeadLog->old_value = json_encode($oldValue);
-                                        $LeadLog->new_value = json_encode($newValue);
-                                        $LeadLog->description = " Trademark status marked as refused";
-                                    }
-                                    if ($LeadLog->save()) {
-                                        $newassignlog = new leadLog();
-                                        $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
-                                        $newassignlog->lead_id = $existedLeaedTask->lead_id;
-                                        $newassignlog->task_id = $newLeadtask->id;
-                                        $newassignlog->assign_by = Auth::id();
-                                        $newassignlog->remark = "Assign";
-
-                                        $newassignlog->description =  "Lead assigned for next task";
-                                        if ($newassignlog->save()) {
-                                            $id = $newLeadtask->id;
-                                            return redirect()->route('task.index')->with('success', 'Trademark status completed');
-                                        }
-                                    } else {
-                                        return redirect()->back()->with('error', 'there is something wrong during upadate logs');
-                                    }
-                                } else {
-                                    return redirect()->back()->with('error', 'there is something wrong during notification logs');
-                                }
-                            } else {
-                                return redirect()->back()->with('error', 'there is something wrong during update  new task details');
-                            }
-                        } else {
-                            return redirect()->back()->with('error', 'there is something wrong during update  existed task details');
-                        }
-                    } else {
-                        return redirect()->back()->with('error', 'there is something wrong during update  new task');
+        
+        $newLeadtask->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+        $newLeadtask->lead_id = $existedLeaedTask->lead_id;
+        $newLeadtask->service_detail_id = $existedLeaedTask->service_detail_id;
+        $newLeadtask->service_id = $existedLeaedTask->service_id;
+        $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
+        $newLeadtask->service_stage_id = $request->stage_id;
+        $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
+        $newLeadtask->assign_by = Auth::id();
+        $newLeadtask->task_title = $newTaskTitle->title;
+        $existedLeaedTask->task_description = $request->description;
+        $existedLeaedTask->save();
+        if ($newLeadtask->save()) {
+            $existedLeaedTaskDetails->status = 1;
+            $existedLeaedTaskDetails->status_date = $verifiedDate;
+            $existedLeaedTaskDetails->reminderDate = $Reminder_date;
+            $existedLeaedTaskDetails->comment = $comment;
+            if ($request->hasFile('attachment')) {
+                $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
+                if (!file_exists($folderPath)) {
+                    mkdir($folderPath, 0755, true);
+                }
+                $filePaths = [];
+                foreach ($request->file('attachment') as $file) {
+                    if ($file->isValid()) {
+                        $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
+                        $file->move($folderPath, $fileName);
+                        $filePaths[] = $fileName;
                     }
                 }
-            } else if($request->trademark_status == 1){
-                $existedLeaedTask->task_description = $request->description;
-                $existedLeaedTask->save();
-                $existedLeaedTaskDetails->status = 4;
-                $existedLeaedTaskDetails->status_date = $verifiedDate;
-                $existedLeaedTaskDetails->comment = $comment;
-                
-                    if ($request->hasFile('attachment')) {
-                        $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
-                        if (!file_exists($folderPath)) {
-                            mkdir($folderPath, 0755, true);
-                        }
-                        $filePaths = [];
-                        foreach ($request->file('attachment') as $file) {
-                            if ($file->isValid()) {
-                                $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
-                                $file->move($folderPath, $fileName);
-                                $filePaths[] = $fileName;
-                            }
-                        }
-                        $existedLeaedTaskDetails->attachment = json_encode($filePaths);
-                    }
-                    if($existedLeaedTaskDetails->save()){
+                $existedLeaedTaskDetails->attachment = json_encode($filePaths);
+            }
+            if ($existedLeaedTaskDetails->save()) {
+                $newLeadTaskDeatails->task_id = $newLeadtask->id;
+                if($request->trademark_status == 1){
+
+                    $newLeadTaskDeatails->dead_line = null;
+                }else if($request->trademark_status == 0){
+                    $newLeadTaskDeatails->dead_line = $deadlineDate;
+
+                }
+                $newLeadTaskDeatails->status = 0;
+                if ($newLeadTaskDeatails->save()) {
+                    $newNotification->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+                    $newNotification->lead_id = $existedLeaedTask->lead_id;
+                    $newNotification->task_id = $newLeadtask->id;
+                    $newNotification->title = 'Task Assigned';
+                    $newNotification->description =  $userName . ' assigned you ' . $newTaskTitle->title . ' task';
+                    $newNotification->status = 0;
+                    if ($newNotification->save()) {
                         $LeadLog =  new LeadLog();
                         $LeadLog->user_id = $existedLeaedTask->user_id;
                         $LeadLog->lead_id = $existedLeaedTask->lead_id;
                         $LeadLog->task_id = $existedLeaedTask->id;
                         $LeadLog->assign_by = Auth::id();
-                        $LeadLog->remark = 'Refused';
-                        $oldValue = [
-                            'status' => 'Pending',
-                            'Assigned On' => $formattedCreatedDate,
-                            'Assigned By' =>  $existedLeaedTask->userAssignBy->name,
-                        ];
-                        $newValue = [
-                            'status' => 'Completed as refused',
-                            'Refused On' => $verifiedDate,
-                            'Assigned To' =>  $existedLeaedTask->user->name,
-                        ];
-                        $LeadLog->old_value = json_encode($oldValue);
-                        $LeadLog->new_value = json_encode($newValue);
-                        $LeadLog->description = " Trademark status marked as refused";
-                        if($LeadLog->save()){
-                            return redirect()->route('task.index')->with('success', 'Trademark status completed');
-                        }else{
+                        if ($request->trademark_status == 0) {
+                            $LeadLog->remark = 'Register';
+                            $oldValue = [
+                                'status' => 'Pending',
+                                'Assigned On' => $formattedCreatedDate,
+                                'Assigned By' =>  $existedLeaedTask->userAssignBy->name,
+                            ];
+                            $newValue = [
+                                'status' => 'Completed as register',
+                                'Verified On' => $verifiedDate,
+                                'Assigned To' =>  $existedLeaedTask->user->name,
+                                'Renewal Reminder Date' => $Reminder_date,
+                            ];
+                            $LeadLog->old_value = json_encode($oldValue);
+                            $LeadLog->new_value = json_encode($newValue);
+                            $LeadLog->description = " Trademark status marked as register";
+                        } else if ($request->trademark_status == 1) {
+                            $LeadLog->remark = 'Refused';
+                            $oldValue = [
+                                'status' => 'Pending',
+                                'Assigned On' => $formattedCreatedDate,
+                                'Assigned By' =>  $existedLeaedTask->userAssignBy->name,
+                            ];
+                            $newValue = [
+                                'status' => 'Completed as refused',
+                                'Verified On' => $verifiedDate,
+                                'Assigned To' =>  $existedLeaedTask->user->name,
+                            ];
+                            $LeadLog->old_value = json_encode($oldValue);
+                            $LeadLog->new_value = json_encode($newValue);
+                            $LeadLog->description = "Rectification Trademark status marked as refused";
+                        }
+                        if ($LeadLog->save()) {
+                            $newassignlog = new leadLog();
+                            $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
+                            $newassignlog->lead_id = $existedLeaedTask->lead_id;
+                            $newassignlog->task_id = $newLeadtask->id;
+                            $newassignlog->assign_by = Auth::id();
+                            $newassignlog->remark = "Assign";
+
+                            $newassignlog->description =  "Lead assigned for next task";
+                            if ($newassignlog->save()) {
+                                $id = $newLeadtask->id;
+                                return redirect()->route('task.index')->with('success', 'Trademark status completed');
+                            }
+                        } else {
                             return redirect()->back()->with('error', 'there is something wrong during upadate logs');
                         }
-                    }else{
-                        return redirect()->back()->with('error', 'there is something wrong during update  existed task details');
+                    } else {
+                        return redirect()->back()->with('error', 'there is something wrong during notification logs');
                     }
+                } else {
+                    return redirect()->back()->with('error', 'there is something wrong during update  new task details');
+                }
+            } else {
+                return redirect()->back()->with('error', 'there is something wrong during update  existed task details');
             }
-        }else {
-            return redirect()->back()->with('erroe', "no task found");
+        } else {
+            return redirect()->back()->with('error', 'there is something wrong during update  new task');
         }
+    }else if($request->trademark_status == 1){
+        $existedLeaedTask->task_description = $request->description;
+        $existedLeaedTask->save();
+        $existedLeaedTaskDetails->status = 4;
+        $existedLeaedTaskDetails->status_date = $verifiedDate;
+        $existedLeaedTaskDetails->comment = $comment;
+        
+            if ($request->hasFile('attachment')) {
+                $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
+                if (!file_exists($folderPath)) {
+                    mkdir($folderPath, 0755, true);
+                }
+                $filePaths = [];
+                foreach ($request->file('attachment') as $file) {
+                    if ($file->isValid()) {
+                        $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
+                        $file->move($folderPath, $fileName);
+                        $filePaths[] = $fileName;
+                    }
+                }
+                $existedLeaedTaskDetails->attachment = json_encode($filePaths);
+            }
+            if($existedLeaedTaskDetails->save()){
+                $LeadLog =  new LeadLog();
+                $LeadLog->user_id = $existedLeaedTask->user_id;
+                $LeadLog->lead_id = $existedLeaedTask->lead_id;
+                $LeadLog->task_id = $existedLeaedTask->id;
+                $LeadLog->assign_by = Auth::id();
+                $LeadLog->remark = 'Refused';
+                $oldValue = [
+                    'status' => 'Pending',
+                    'Assigned On' => $formattedCreatedDate,
+                    'Assigned By' =>  $existedLeaedTask->userAssignBy->name,
+                ];
+                $newValue = [
+                    'status' => 'Completed as refused',
+                    'Refused On' => $verifiedDate,
+                    'Assigned To' =>  $existedLeaedTask->user->name,
+                ];
+                $LeadLog->old_value = json_encode($oldValue);
+                $LeadLog->new_value = json_encode($newValue);
+                $LeadLog->description = " Rectification Trademark status marked as refused";
+                if($LeadLog->save()){
+                    return redirect()->route('task.index')->with('success', 'Trademark status completed');
+                }else{
+                    return redirect()->back()->with('error', 'there is something wrong during upadate logs');
+                }
+            }else{
+                return redirect()->back()->with('error', 'there is something wrong during update  existed task details');
+            }
+       
+        
+    }
+    } else {
+        return redirect()->back()->with('error', "no task found");
+    }
     }
 
     public function trademarkRenewal($id){
@@ -15662,7 +15663,7 @@ class TasksController extends Controller
                 // );
                 if ($existedLeaedTaskDetails->save()) {
                     $newLeadTaskDeatails->task_id = $newLeadtask->id;
-                    $newLeadTaskDeatails->dead_line = null;
+                    $newLeadTaskDeatails->dead_line = $deadlineDate;
                     $newLeadTaskDeatails->status = 0;
                     if ($newLeadTaskDeatails->save()) {
                         $newNotification->user_id = $request->assignUser ?? $existedLeaedTask->user_id;

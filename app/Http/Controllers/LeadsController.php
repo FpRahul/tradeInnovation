@@ -447,27 +447,13 @@ class LeadsController extends Controller
         if ($request->logID > 0) {
             $logID = $request->logID;
             $leadLogs = LeadLog::with('leadTask', 'lead', 'leadTask.user', 'leadTask.leadTaskDetails', 'leadTask.serviceSatge')->where('id', $request->logID)->first();
-            // $allLeadData = [];
-            // foreach ($leadLogs as $lead) {
-            //     $data = [
-            //         'client_name' => $lead->lead->client_name,
-            //         'lead_id' => $lead->lead->lead_id,
-            //         'stage' => $lead->leadTask->serviceSatge->title,
-            //         'assignTo' => $lead->leadTask->user->name,
-            //         'status' => $lead->leadTask->leadTaskDetails->status,
-            //         'deadLine' => $lead->leadTask->leadTaskDetails->dead_line,
-            //         'verifiedOn' => $lead->leadTask->leadTaskDetails->status_date,
-            //         'remark' => $lead->leadTask->task_description,
-            //         'logDescription' => $lead->description,
-            //         'services' => []
-            //     ];
-
-            //     $data['services'][] = $lead->leadTask->services->serviceName;
-
-
-            //     $allLeadData[] = $data;
-            // }
-            return response()->json(['data' => $leadLogs, 'status' => 200]);
+            // Accessing the description from leadTask
+            $description = null;
+            if ($leadLogs && $leadLogs->leadTask) {
+                $description = $leadLogs->leadTask->task_description;
+            }
+            
+            return response()->json(['data' => $leadLogs, 'status' => 200 , 'task_description' => $description]);
         } else {
             return response()->json(['data' => 0, 'status' => 400]);
         }

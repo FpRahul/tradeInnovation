@@ -84,14 +84,8 @@ class SubServices extends Seeder
             [
                 'serviceId' => '2',
                 'client_type' => 2,
-                'subServiceName' => 'opposition',
+                'subServiceName' => 'Opposition',
                 'subServiceDescription' => 'Modification'
-            ],
-            [
-                'serviceId' => '2',
-                'client_type' => 1,
-                'subServiceName' => 'Assignment/License',
-                'subServiceDescription' => 'Assignment/License'
             ],
             [
                 'serviceId' => '2',

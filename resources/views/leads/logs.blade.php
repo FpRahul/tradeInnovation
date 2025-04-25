@@ -320,6 +320,8 @@
         data: { logID: logID },
         headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
         success: function (response) {
+                 console.log(response);
+                 
             if (!response.data || !response.data.remark) {
                 console.error("Missing remark in response.");
                 return;
@@ -332,7 +334,11 @@
                 return;
             }
           
-
+            if (response.task_description) {
+                $("#remark").val(response.task_description);
+            } else {
+                $("#remark").val(""); // Clear if no description found
+            }
             let oldValue = {};
             let newValue = {};
 

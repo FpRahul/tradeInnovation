@@ -516,6 +516,25 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/patent/renewal-inform-client/{id?}' , 'informClientRenwalApprovedPostRegistration')->name('task.patentClientIntimationRenewal');
         Route::Post('/patent/renewal-inform-client-submit/{id?}' , 'informClientRenwalApprovedPostRegistrationSubmit')->name('task.patentClientIntimationRenewalSubmit');
 
+        Route::get('/patent/inventor-certificate/{id?}' , 'patentInventorCertificate')->name('task.patentInventorCertificate');
+        Route::Post('/patent/inventor-certificate-submit/{id?}' , 'patentInventorCertificateSubmit')->name('task.patentInventorCertificateSubmit');
+
+        Route::get('/patent/inventor-certificate-payment/{id?}' , 'patentInCertiPayment')->name('task.patentInCertiPayment');
+        Route::Post('/patent/inventor-certificate-payment-submit/{id?}' , 'patentInCertiPaymentSubmit')->name('task.patentInCertiPaymentSubmit');
+        
+        Route::get('/patent/inventor-certificate-filed/{id?}' , 'patentInCertiFiled')->name('task.patentInCertiFiled');
+        Route::Post('/patent/inventor-certificate-filed-filed-submit/{id?}' , 'patentInCertiFiledSubmit')->name('task.patentInCertiFiledSubmit');
+
+        Route::get('/patent/inventor-certificate-inform-client/{id?}' , 'informClientRenwalApprovedPostRegistration')->name('task.patentInCertiIntimation');
+        Route::Post('/patent/inventor-certificate-inform-client-submit/{id?}' , 'informClientRenwalApprovedPostRegistrationSubmit')->name('task.patentInCertiIntimationSubmit');
+
+
+        Route::get('/patent/revocation/{id?}' , 'patentRevocation')->name('task.patentRevocation');
+        Route::Post('/patent/revocation-submit/{id?}' , 'patentRevocationSubmit')->name('task.patentRevocationSubmit');
+
+        Route::get('/patent/restoration/{id?}' , 'patentRestoration')->name('task.patentRestoration');
+        Route::Post('/patent/restoration-submit/{id?}' , 'patentRestorationSubmit')->name('task.patentRestorationSubmit');
+
      
     });
     //Services Routes

@@ -1210,10 +1210,53 @@ class ServiceTask extends Seeder
                 'service_id' => '2',
                 'title' => 'Client Intimation After Filing (Assignment/Registered User)',
                 'sub_service_id'=> 14,
-                'description' =>'Notifying the client after the patent assignment filing, confirming the ownership transfer.',
-               
+                'description' =>'Notifying the client after the patent assignment filing, confirming the ownership transfer.',               
                 'stage' => '12',
             ],
+            // inventor certificate..........
+            [
+                'service_id' => '2',
+                'title' => 'Inventor Certificate',
+                'sub_service_id' => 0,
+                'description' => 'Issuing a certificate recognizing the inventor’s contribution, typically requested after the grant of a patent.',
+                'stage' => '1',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Payment verification (Inventor Certificate)',
+                'sub_service_id' => 0,
+                'description' => 'Verifying the payment received from the client for the issuance of the Inventor Certificate.',
+                'stage' => '14',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Filed necessary document (Inventor Certificate)',
+                'sub_service_id' => 0,
+                'description' => 'Submitting the required documents with the authority to process the issuance of the Inventor Certificate.',
+                'stage' => '14',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Intimate to client (Inventor Certificate)',
+                'sub_service_id' => 0,
+                'description' => 'Informing the client about the successful issuance and availability of the Inventor Certificate.',
+                'stage' => '14',
+            ],            
+            [
+                'service_id' => '2',
+                'title' => 'Revocation',
+                'sub_service_id' => 0,
+                'description' => 'Initiating the process to cancel or revoke an existing patent through legal proceedings or by request.',
+                'stage' => '1',
+            ],
+            [
+                'service_id' => '2',
+                'title' => 'Restoration',
+                'sub_service_id' => 0,
+                'description' => 'Applying for the restoration of a lapsed patent due to non-payment of renewal fees within the prescribed time limit.',
+                'stage' => '1',
+            ],
+            
         ]);
     }
 }

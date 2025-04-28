@@ -9,7 +9,7 @@
    <x-client-task-details :taskID="$id" />
 </div>
 <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white px-[15px] md:px-[30px] py-[20px] rounded-[20px] mt-[20px] overflow-hidden ">
-   <form action="{{route('task.patentPaymentConfirmationRenewalSubmit',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
+   <form action="{{route('task.patentInCertiPaymentSubmit',['id'=>$id]) }}" method="POST" class="space-y-[20px]" enctype="multipart/form-data">
       @csrf
       <strong class="mt-4 block"> Update Current Task</strong>
       <input type="hidden" name="service_details_id" id="service_details_id" value="{{ $service_details->id }}">
@@ -72,7 +72,7 @@
                   class="daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                   value=""
                   id="verified"
-                  autocomplete="off">
+                  autocomplete="off" required>
                <div class="absolute right-[10px] top-[10px]">
                   <i class="ri-calendar-line"></i>
                </div>
@@ -183,7 +183,7 @@
       </div>
       <div class="w-full md:w-1/2 hideOncredit" id="deadLineDate">
          <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
-            Documentation Dead line
+            Dead line
          </label>
          <div class="w-[100%] relative">
             <input
@@ -194,7 +194,7 @@
                class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                value=""
 
-               autocomplete="off">
+               autocomplete="off" required>
             <div class="absolute right-[10px] top-[10px]">
                <i class="ri-calendar-line"></i>
             </div>

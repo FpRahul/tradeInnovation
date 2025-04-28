@@ -63,22 +63,25 @@
       <strong class="mt-5 block">Update Upcoming Actions</strong>
       <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2">
-            <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
-            @if($getStage->count() > 0)
-            <input type="text" name="stage_id" id="stage_id" value="{{$getStage->title}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
-            <input type="hidden" name="stage_id" value="{{$getStage->id}}">
-            @endif
-            <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-               Next stage will be: {{$getStage->title}}
+            <label for="stage_id" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
+            <select name="stage_id" id="stage_id" class="filterData assignUserData allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]">
+                @if($getStage->count() > 0)
+                <option value="" disabled selected>Select a user</option>
+                @foreach ($getStage as $stages)
+                <option value="{{ $stages->id }}">
+                    {{ $stages->title }}
+                </option>
+                @endforeach
+                @else
+                <option value="" disabled>No users available</option>
+                @endif
+            </select>
+            <p  class="infoStage" style="  color: skyblue; font-size: 14px; font-weight: 500;">
             </p>
-         </div>
-         @if($taskDetails->count() > 0)
-         @foreach ($taskDetails as $user )
-         @php
-         $selectedId = $user->user->id;
-         @endphp
-         @endforeach
-         @endif
+            @error('assignUser')
+            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+            @enderror
+        </div>
          <div class="w-full md:w-1/2">
 
             <label for="assignUser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign User</label>
@@ -98,7 +101,7 @@
             @if($taskDetails->count() > 0)
             @foreach ($taskDetails as $user )
             <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-               Current user assigned: {{$user->user->name}}.
+               Current User Assigned: {{$user->user->name}}.
             </p>
             @endforeach
             @endif
@@ -122,8 +125,7 @@
                <i class="ri-calendar-line"></i>
             </div>
          </div>
-         <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-            Set a dead line for payment.
+         <p class="infoUser" style="color: skyblue; font-size: 14px; font-weight: 500;">
          </p>
       </div>
       <strong class="mt-4 block">Quotation Template</strong>
@@ -401,6 +403,15 @@
             $('#assignUserModal').addClass('hidden');
          }
       });
+
+      $("#stage_id").on('change', function () {
+            var selectedText = $("#stage_id option:selected").text();
+            var val = $("#stage_id option:selected").val(); 
+            $(".infoStage").text("Next Stage Will Be: " + selectedText);
+            $(".infoUser").text("Set A Dead Line For: " + selectedText);
+
+            
+        });
    });
 </script>
 @stop

@@ -13,11 +13,15 @@
       @csrf
       <input type="hidden" name="paymentId" value="{{ $paymentId }}">
       @foreach ($taskDetails as $task )
+      @php
+         $status = $task->leadTaskDetails->status;
+      @endphp
+      
       <input type="hidden" name="checkStatus" id="checkStatus" value="{{$task->leadTaskDetails->status}}">
       @endforeach
       <div class="flex justify-between">
          <strong class="m-0 block"> Update Current Task</strong>
-        @if ($payamentDetails->submitted_amount == 0)
+        @if ($payamentDetails->submitted_amount == 0 && $status != 1 )
          <div class="flex items-ceter gap-[8px]">                            
             <input type="checkbox" name="negocheck" class="negocheck openModalProf" id="negocheck"/>  
             <label for="negocheck">is Negotiate</label>                          
@@ -31,7 +35,7 @@
       <div class="flex flex-col md:flex-row gap-[20px]">
          <div class="w-full md:w-1/2">
             <label for="payment" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Payment status</label>
-            <select name="payment" id="payment" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            <select name="payment" id="payment" required class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                <option value="" disabled selected>Select status</option>
                <option value="1" {{ old('payment') == '1' ? 'selected' : '' }}>Paid</option>
                <option value="2" {{ old('payment') == '2' ? 'selected' : '' }}>Partial Payment</option>
@@ -73,6 +77,7 @@
                   name="verified"
                   class="daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                   value=""
+                  required
                   id="verified"
                   autocomplete="off">
                <div class="absolute right-[10px] top-[10px]">
@@ -98,7 +103,7 @@
          </div>
          <div class="  w-full md:w-1/2 hidden partialPayment">
             <label for="amount" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Paid Partial Amount</label>
-            <input type="text" name="partial_payment" id="partial_payment" value="" required class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            <input type="text" name="partial_payment" id="partial_payment" value=""  class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
             <p class="paymentInfo " id="hidePaymentInfo" style="color: skyblue; font-size: 14px; font-weight: 500;" >
                Pending Amount: {{$payamentDetails->total}}
             </p>
@@ -147,19 +152,29 @@
 
       <strong class=" hideOncredit mt-5 block">Update Upcoming Actions</strong>
       <div class=" hideOncredit flex flex-col md:flex-row gap-[20px]">
-         <div class=" hideOncredit w-full md:w-1/2">
-            <label for="email" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
-            @if($getStage->count() > 0)
-            <input type="text" name="stage_id" id="stage_id" value="{{$getStage->title}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
-            <input type="hidden" name="stage_id" value="{{$getStage->id}}">
-            @endif
-            <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-                        Next stage will be: {{$getStage->title}}
-                    </p> 
-         </div>
+         <div class="w-full md:w-1/2">
+            <label for="stage_id" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
+            <select name="stage_id"  id="stage_id" class="filterData assignUserData allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]">
+                @if($getStage->count() > 0)
+                <option value="" disabled selected>Select a user</option>
+                @foreach ($getStage as $stages)
+                <option value="{{ $stages->id }}">
+                    {{ $stages->title }}
+                </option>
+                @endforeach
+                @else
+                <option value="" disabled>No users available</option>
+                @endif
+            </select>
+            <p  class="infoStage" style="  color: skyblue; font-size: 14px; font-weight: 500;">
+            </p>
+            @error('assignUser')
+            <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+            @enderror
+        </div>
          <div class="w-full md:w-1/2">
             <label for="assignUser" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Assign User</label>
-            <select name="assignUser" id="assignUser" class="filterData assignUserData allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]">
+            <select  name="assignUser"  id="assignUser" class="filterData assignUserData allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]">
                <option value="" disabled selected>Select a user</option>
                @if($users->count() > 0)
                <option value="" disabled selected>Select a user</option>
@@ -192,17 +207,17 @@
                type="text"
                placeholder="Dead Line"
                name="deadline"
+               
                id="deadline"
                class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                value=""
-
                autocomplete="off">
             <div class="absolute right-[10px] top-[10px]">
                <i class="ri-calendar-line"></i>
             </div>
          </div>
-         <p style="color: skyblue; font-size: 14px; font-weight: 500;">
-            Set a dead line for: {{$getStage->title}}.
+         <p class="infoUser" style="color: skyblue; font-size: 14px; font-weight: 500;">
+            
          </p>
       </div>
 
@@ -335,11 +350,35 @@
       if($(this).is(':checked')){
          $('#assignUserModal').removeClass('hidden');
       }      
-   });
+      });
 
-   $(document).on('click','.closeModel',function(){
-      window.location.reload();
-   });
+      $(document).on('click','.closeModel',function(){
+         window.location.reload();
+      });
+
+      $("#payment").on('change' , function (){
+         var val = $(this).val();
+         if(val == 2){
+            $("#paymentDeadline").prop('required', true)
+            $("#partial_payment").prop('required', true)
+
+         }else if(val == 1){
+            $("#paymentDeadline").prop('required', false)
+            $("#partial_payment").prop('required', false)
+
+         }else if(val == 3){
+            $("#paymentDeadline").prop('required', true)
+            $("#partial_payment").prop('required', false)
+
+         }
+      })
+      $("#stage_id").on('change', function () {
+            var selectedText = $("#stage_id option:selected").text();
+            var val = $("#stage_id option:selected").val(); 
+            $(".infoStage").text("Next Stage Will Be: " + selectedText);
+            $(".infoUser").text("Set A Dead Line For: " + selectedText);
+        });
+       
 
    });
 </script>

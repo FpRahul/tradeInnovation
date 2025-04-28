@@ -16,7 +16,7 @@
          <input type="hidden" name="checkValid" id="checkValid" value="">
          <div class="w-full md:w-1/2">
             <label for="document" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
-            <select name="document" id="document" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            <select name="document"  required id="document" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                <option value="" disabled selected>Select status</option>
                <option value="1">Document Verified</option>
                <option value="2">Document Not Verified </option>
@@ -37,6 +37,7 @@
                   name="verified"
                   class="daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                   value=""
+                  required
                   id="verified"
                   autocomplete="off">
                <div class="absolute right-[10px] top-[10px]">
@@ -61,7 +62,7 @@
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
 
-         <div class=" reminderDate hidden w-full md:w-1/2" id="verifiedDate">
+         <div class=" reminderDate hidden w-full md:w-1/2" >
             <label for="deadline" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
                Reminder Date
             </label>
@@ -70,7 +71,7 @@
                   type="text"
                   placeholder="Dead Line"
                   name="reminder_date"
-                  id="deadline"
+                  id="reminder_date"
                   class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                   value=""
                   autocomplete="off">
@@ -86,7 +87,7 @@
       </div>
       <div class="">
          <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
-         <textarea type="text" name="description" id="description" class="w-full h-[80px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"></textarea>
+         <textarea type="text" name="description" id="description" class="w-full h-[80px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">{{ $taskDetails->task_description }}</textarea>
          @error('description')
          <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
          @enderror
@@ -146,7 +147,6 @@
                id="deadline"
                class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                value=""
-
                autocomplete="off">
             <div class="absolute right-[10px] top-[10px]">
                <i class="ri-calendar-line"></i>
@@ -210,12 +210,15 @@
             $(".showWarning").text('You are going to hold the Document verification')
             $(".reminderDate").removeClass('hidden')
             $('label[for="verified"]').text('Hold On');
+            $('#reminder_date').prop('required', true)
 
          } else if (documentStatus == 1) {
             $(".onHoldHide").removeClass('hidden');
             $(".showWarning").text('')
             $(".reminderDate").addClass('hidden')
             $('label[for="verified"]').text('Verified On');
+            $('#reminder_date').prop('required', false)
+
 
 
 

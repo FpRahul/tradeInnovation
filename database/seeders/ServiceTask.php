@@ -1230,18 +1230,12 @@ class ServiceTask extends Seeder
             ],
             [
                 'service_id' => '2',
-                'title' => 'Filed necessary document (Inventor Certificate)',
+                'title' => 'Filed necessary document (Inventor Certificate) and intimated the client',
                 'sub_service_id' => 0,
-                'description' => 'Submitting the required documents with the authority to process the issuance of the Inventor Certificate.',
+                'description' => 'Submitted the required documents to the authority for processing the issuance of the Inventor Certificate and intimated the client regarding the same.',
                 'stage' => '14',
             ],
-            [
-                'service_id' => '2',
-                'title' => 'Intimate to client (Inventor Certificate)',
-                'sub_service_id' => 0,
-                'description' => 'Informing the client about the successful issuance and availability of the Inventor Certificate.',
-                'stage' => '14',
-            ],            
+                                  
             [
                 'service_id' => '2',
                 'title' => 'Revocation',

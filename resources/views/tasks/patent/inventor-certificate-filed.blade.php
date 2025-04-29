@@ -16,14 +16,14 @@
             <input type="hidden" name="inventor_id" value="{{$taskDetails->serviceDetails->id ?? 0}}"/>
             <div class="w-full md:w-1/2 ">
                 <label for="application_number" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Application Number<strong class="text-[#f83434]"></strong></label>
-                <input type="text" name="application_number" required placeholder="Application Number" id="application_number" value="{{$taskDetails->serviceDetails->application_number ?? ''}}" required class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                <input type="text" name="application_number" required placeholder="Application Number" id="application_number" value="{{$taskDetails->serviceDetails->application_number ?? ''}}" required class="application_number w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                 @error('application_number')
                 <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                 @enderror
             </div>
             <div class="w-full md:w-1/2 ">
                 <label for="patent_title" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Patent Title<strong class="text-[#f83434]"></strong></label>
-                <input type="text" name="patent_title" required placeholder="Patent Title" id="patent_title" value="{{$taskDetails->serviceDetails->applied_for ?? ''}}" required class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                <input type="text" name="patent_title" required placeholder="Patent Title" id="patent_title" value="{{$taskDetails->serviceDetails->applied_for ?? ''}}" required class="patent_title w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" >
                 @error('patent_title')
                 <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                 @enderror
@@ -32,7 +32,7 @@
         <div class="flex flex-col md:flex-row gap-[20px]">
             <div class="w-full md:w-1/2 ">
                 <label for="inventor_name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Inventor Name<strong class="text-[#f83434]"></strong></label>
-                <input type="text" name="inventor_name" required placeholder="Inventor Name" id="inventor_name" value="{{$taskDetails->serviceDetails->inventor_name ?? ''}}" required class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                <input type="text" name="inventor_name" required placeholder="Inventor Name" id="inventor_name" value="{{$taskDetails->serviceDetails->inventor_name ?? ''}}"  class="inventor_name w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" >
                 @error('inventor_name')
                 <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                 @enderror
@@ -49,10 +49,10 @@
                     type="text"
                     placeholder="Patent Grant"
                     name="patent_grant"
-                    class="daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
-                    value=""
+                    class="patent_grant_date daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
+                    value="{{$taskDetails->serviceDetails->grant_date ?? ''}}"
                     id="patent_grant"
-                    autocomplete="off">
+                    autocomplete="off" required>
                 <div class="absolute right-[10px] top-[10px]">
                     <i class="ri-calendar-line"></i>
                 </div>
@@ -67,10 +67,10 @@
                     type="text"
                     placeholder="Certificate Issued Date"
                     name="certificate_issued"
-                    class="daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
-                    value=""
+                    class="certificate_issued_date daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
+                    value="{{$taskDetails->serviceDetails->certificate_issued_date ?? ''}}"
                     id="certificate_issued"
-                    autocomplete="off">
+                    autocomplete="off" required>
                 <div class="absolute right-[10px] top-[10px]">
                     <i class="ri-calendar-line"></i>
                 </div>
@@ -80,7 +80,7 @@
         <div class="flex flex-col md:flex-row gap-[20px]">
             <div class="w-full md:w-1/2 ">
                 <label for="applicant_assignee_name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Applicant/Assignee Name<strong class="text-[#f83434]"></strong></label>
-                <input type="text" name="applicant_assignee_name" required placeholder="Applicant/Assignee Name" id="applicant_assignee_name" value="{{$taskDetails->serviceDetails->applicant_name ?? ''}}" required class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                <input type="text" name="applicant_assignee_name" required placeholder="Applicant/Assignee Name" id="applicant_assignee_name" value="{{$taskDetails->serviceDetails->applicant_name ?? ''}}"  class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                 @error('applicant_assignee_name')
                 <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                 @enderror
@@ -97,7 +97,7 @@
                     class="daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                     value=""
                     id="verified"
-                    autocomplete="off">
+                    autocomplete="off" required>
                 <div class="absolute right-[10px] top-[10px]">
                     <i class="ri-calendar-line"></i>
                 </div>
@@ -107,7 +107,7 @@
         <div class="flex flex-col md:flex-row gap-[20px]">
             <div class="w-full md:w-1/2 ">
                 <label for="mail_subject" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Mail Subject<strong class="text-[#f83434]"></strong></label>
-                <input type="text" name="mail_subject" required placeholder="Enter mail subject" id="mail_subject" value="" required class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+                <input type="text" name="mail_subject" required placeholder="Enter mail subject" id="mail_subject" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                 @error('mail_subject')
                 <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                 @enderror
@@ -211,209 +211,211 @@
    </form>
 </div>
 <div id="assignUserModal" class="hidden fixed inset-0 z-50 bg-[rgba(0,0,0,0.6)] flex justify-center items-center">
-   <!-- Modal content: Only the table -->
-   <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); overflow: hidden;">
-      <tr>
-         <td style="background: url('assets/images/login-bg.jpg') center/cover no-repeat; padding: 10px 10px 0; text-align: center;">
-            <img src="{{asset('assets/images/logo.png')}}" alt="Your Logo" style="max-width: 200px; margin-bottom: 10px;">
-            {{-- <h1 style="color: #ffffff; font-size: 26px; margin: 0; font-weight: bold;">Welcome to Our Platform!</h1> --}}
-         </td>
-      </tr>
-      <tr>
-         <td style="padding: 15px 15px; text-align: left;">
-            <p style="font-size: 16px; line-height: 1.8; margin: 0 0 10px; color: #555;">
-              Hello <strong>{{ $taskDetails->lead->client_name }}</strong> 
-            </p>
-            <p style="font-size: 16px; line-height: 1.8; margin: 0 0 20px; color: #555;">
-               
-                Thank you for confirming your details and documents. Your patent renewal application has been filed, and the filing process is now complete.
-            </p>
+   <div class="bg-white rounded-xl shadow-xl w-[750px] max-w-full p-8">
+      <!-- Header -->
+      <div class="text-center border-b pb-4 mb-6">
+         <img src="{{ asset('assets/images/logo.png') }}" alt="Your Logo" class="mx-auto max-w-[200px] mb-3">
+         <h1 class="text-2xl font-bold text-[#1c194d]">Certificate of Patent Renewal Filing</h1>
+         <p class="text-sm text-gray-600 italic">We proudly certify the successful filing and renewal of the following patent</p>
+      </div>
 
-            {{-- Task Invoice --}}
-            <div class="pb-[25px]">
-            <h2 class="text-[#000] text-[17px] font-[600] mb-[15px] text-[center]">Client Details</h2>
-            <div class="mb-8">
-               <table class="w-[100%] border-[1px] border-[#f2f2f2]" >
-                  <tr>
-                     <td class="">
-                        <table class="w-full">
-                           <tr>
-                              <th class="px-[10px] py-[10px] text-[13px] font-[600] text-[#000] border-b-[1px] border-b-[#f2f2f2]  border-r-[1px] border-r-[#f2f2f2]">
-                                 Name:
-                              </th>
+      <!-- Main Description -->
+      <div class="mb-6">
+         <p class="text-[16px] text-gray-700 leading-7">
+            This certificate is awarded to <strong>{{ $taskDetails->lead->client_name }}</strong> from 
+            <strong>{{ $taskDetails->lead->company_name }}</strong> for the successful renewal of the patent mentioned below.
+         </p>
+      </div>
 
-                              <th class="px-[10px] py-[10px] text-[13px] font-[600] text-[#000] border-b-[1px] border-b-[#f2f2f2]  border-r-[1px] border-r-[#f2f2f2]">
-                                 Mobile:
-                              </th>
-
-                              <th class="px-[10px] py-[10px] text-[13px] font-[600] text-[#000] border-b-[1px] border-b-[#f2f2f2]  border-r-[1px] border-r-[#f2f2f2]">
-                                 Email:
-                              </th>
-
-                              <th class="px-[10px] py-[10px] text-[13px] font-[600] text-[#000] border-b-[1px] border-b-[#f2f2f2] ">
-                                 Company Name:
-                              </th>
-                           </tr>
-                          
-                           @if(!@empty($taskDetails))
-                                  
-                           <tr>
-                              <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{ $taskDetails->lead->client_name }}</td>
-                              <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{ $taskDetails->lead->mobile_number }}</td>
-                              <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{ $taskDetails->lead->email }}</td>
-                              <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2]">{{ $taskDetails->lead->company_name }}</td>
-                           </tr>
-                           @endif
-                         
-                           
-                        </table>
-                     </td>
-                     
-                  </tr>
-               </table>
-            </div>
-
-            <div class="pb-[40px]">
-            <table class="w-[100%] border-[1px] border-[#f2f2f2]" >
-              
-               <tr>
-                  <td>
-                     <table class="w-full">
-                        <tr>
-                           <th class="px-[10px] py-[10px] text-[13px] font-[600] border-b-[1px] border-b-[#f2f2f2]  border-r-[1px] border-r-[#f2f2f2]">Current Service</th>
-                           <th class="px-[10px] py-[10px] text-[13px] font-[600] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">Patent Name</th>
-                           <th class="px-[10px] py-[10px] text-[13px] font-[600] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]" >Application No.</th>
-
-                        </tr>
-                                                  
-                        @if(!empty($taskDetails))
-                        
-                           
-                           <tr>
-                              <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$taskDetails->services->serviceName}}</td>
-                              <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#000] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]">{{$taskDetails->serviceDetails->applied_for}}</td>
-                              <td class="px-[10px] py-[10px] text-[12px] font-[400] text-[#f02929] border-b-[1px] border-b-[#f2f2f2] border-r-[1px] border-r-[#f2f2f2]" id="appNumber">{{ $taskDetails->serviceDetails->application_number }}</td>
-                             
-                           </tr>
-                       
-                        @endif          
-                     </table>
-                  </td>
+      <!-- Patent Information Table -->
+      <div class="mb-8">
+         <h2 class="text-[17px] font-semibold text-[#1c194d] mb-4">Patent Details</h2>
+         <table class="w-full border border-gray-300 text-sm text-left">
+            <tbody>
+               <tr class="bg-gray-100">
+                  <th class="border border-gray-300 px-4 py-2">Patent Title</th>
+                  <td class="border border-gray-300 px-4 py-2 certificate_patent_title">{{ $taskDetails->serviceDetails->applied_for }}</td>
                </tr>
-            </table>
-            </div>
-            <h4>Attachments</h4>
-            <div id="modal-file-preview" class="flex gap-4 flex-wrap p-4"></div>
+               <tr>
+                  <th class="border border-gray-300 px-4 py-2">Application Number</th>
+                  <td class="border border-gray-300 px-4 py-2 text-[#f02929] font-semibold" id="appNumber">{{ $taskDetails->serviceDetails->application_number }}</td>
+               </tr>
+               <tr class="bg-gray-100">
+                  <th class="border border-gray-300 px-4 py-2">Patent Grant Date</th>
+                  <td class="border border-gray-300 px-4 py-2 patent_grant_certificate_date">{{ $taskDetails->serviceDetails->grant_date ?? 'N/A' }}</td>
+               </tr>
+               <tr>
+                  <th class="border border-gray-300 px-4 py-2">Current Service</th>
+                  <td class="border border-gray-300 px-4 py-2">{{ $taskDetails->services->serviceName }}</td>
+               </tr>
+               <tr class="bg-gray-100">
+                  <th class="border border-gray-300 px-4 py-2">Inventor Name</th>
+                  <td class="border border-gray-300 px-4 py-2 certificate_inventor_name">{{ $taskDetails->serviceDetails->inventor_name ?? $taskDetails->lead->client_name }}</td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
 
-         </div>
-           
-            <p style="font-size: 16px; text-align: center; line-height: 1.2; margin: 35px 0 0; color: #555;">
-               Thank you for choosing us! <br>
-            </p>
-            <p style="text-align: center; margin: 15px 0 0;">
-               Best regards,<br>
-               The Support Team
-            </p>
-         </td>
-      </tr>
-      <!-- Footer Section -->
-      <tr>
-         <td style="background-color: #1c194d; text-align: center; padding: 15px; font-size: 12px; color: #ffffff;">
-            © 2025 Your Company Name. All rights reserved.
-            <a href="https://yourcompany.com" style="color: #fff; text-decoration: none;">Visit Our Website</a>
-         </td>
-      </tr>
-   </table>
+      <!-- Client Information Table -->
+      <div class="mb-8">
+         <h2 class="text-[17px] font-semibold text-[#1c194d] mb-4">Client Details</h2>
+         <table class="w-full border border-gray-300 text-sm text-left">
+            <thead>
+               <tr class="bg-gray-100">
+                  <th class="border border-gray-300 px-4 py-2">Name</th>
+                  <th class="border border-gray-300 px-4 py-2">Mobile</th>
+                  <th class="border border-gray-300 px-4 py-2">Email</th>
+                  <th class="border border-gray-300 px-4 py-2">Company</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr>
+                  <td class="border border-gray-300 px-4 py-2">{{ $taskDetails->lead->client_name }}</td>
+                  <td class="border border-gray-300 px-4 py-2">{{ $taskDetails->lead->mobile_number }}</td>
+                  <td class="border border-gray-300 px-4 py-2">{{ $taskDetails->lead->email }}</td>
+                  <td class="border border-gray-300 px-4 py-2">{{ $taskDetails->lead->company_name }}</td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+
+      <!-- Attachments Section -->
+      <div class="mb-8">
+         <h3 class="text-[16px] font-semibold mb-2">Attachments</h3>
+         <div id="modal-file-preview" class="flex gap-3 flex-wrap p-2 border border-gray-200 rounded-lg bg-gray-50"></div>
+      </div>
+
+      <!-- Certificate Footer -->
+      <div class="text-center text-gray-700 text-[16px] leading-6 mb-8">
+         <p>We thank you for your association and trust in our services.</p>
+         <p>For further assistance, contact our support team anytime.</p>
+      </div>
+
+      <!-- Date & Authority -->
+      <div class="text-right text-sm text-gray-600">
+         <p>Patent Certificate Issued Date: <strong class="patent_certificate_issued_date">{{ \Carbon\Carbon::now()->format('d M, Y') }}</strong></p>
+         <p class="mt-1">Authorized By: <strong>Your Company Name</strong></p>
+      </div>
+
+      <!-- Footer -->
+      <div class="mt-6 text-center text-white bg-[#1c194d] py-3 rounded-lg text-sm">
+         © 2025 Your Company Name — All Rights Reserved
+      </div>
+   </div>
 </div>
+
+
 <script>
    $(document).ready(function() {
       $('.daterangepicker-verified').attr("placeholder", "DD/MM/YYYY"); // Set placeholder
 
-        $('.daterangepicker-verified').daterangepicker({
-            singleDatePicker: true,
-            autoUpdateInput: false,
-            opens: 'right',
-            locale: {
-                format: 'DD MMM YYYY'
-            },
-            minDate: null,
-            maxDate: moment().endOf('day'),
-        }).on('apply.daterangepicker', function(ev, picker) {
-            $(this).val(picker.startDate.format('DD MMM YYYY')); 
-            console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
-        });
-
-        $('.daterangepicker-taskdeadline').attr("placeholder", "DD/MM/YYYY"); 
-
-         $('.daterangepicker-taskdeadline').daterangepicker({
-            singleDatePicker: true,
-            autoUpdateInput: false, 
-            opens: 'right',
-            locale: {
+      $('.daterangepicker-verified').daterangepicker({
+         singleDatePicker: true,
+         autoUpdateInput: false,
+         opens: 'right',
+         locale: {
                format: 'DD MMM YYYY'
-            },
-            minDate: moment().startOf('day'),
-         }).on('apply.daterangepicker', function(ev, picker) {
-            $(this).val(picker.startDate.format('DD MMM YYYY')); 
-            console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
-         });
+         },
+         minDate: null,
+         maxDate: moment().endOf('day'),
+      }).on('apply.daterangepicker', function(ev, picker) {
+         $(this).val(picker.startDate.format('DD MMM YYYY')); 
+         console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+      });
+
+      $('.daterangepicker-taskdeadline').attr("placeholder", "DD/MM/YYYY"); 
+
+            $('.daterangepicker-taskdeadline').daterangepicker({
+               singleDatePicker: true,
+               autoUpdateInput: false, 
+               opens: 'right',
+               locale: {
+                  format: 'DD MMM YYYY'
+               },
+               minDate: moment().startOf('day'),
+            }).on('apply.daterangepicker', function(ev, picker) {
+               $(this).val(picker.startDate.format('DD MMM YYYY')); 
+               console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+            });
 
       $(".preview").off("click").on("click", function () {
          $("#assignUserModal").removeClass("hidden");
       });
+
       $('#assignUserModal').on('click', function(e) {
          if ($(e.target).is('#assignUserModal')) {
             $('#assignUserModal').addClass('hidden');
          }
       });
-   $("#application_number").on("input", function () {
-      let inputVal = $(this).val();
-      $("#appNumber").text(inputVal ? inputVal : "Not Available");
-   });  
 
+      $("#application_number").on("input", function () {
+         let inputVal = $(this).val();
+         $("#appNumber").text(inputVal ? inputVal : "Not Available");
+      });  
 
-   $('#assignUserModal').on('click', function(e) {
-      if ($(e.target).is('#assignUserModal')) {
+      $('.patent_grant_date').on('apply.daterangepicker',function(){
+         let patentGrantDate = $(this).val();
+         $('.patent_grant_certificate_date').text(patentGrantDate);
+      });
 
-         $('#assignUserModal').addClass('hidden');
-      }
-   });
-   $("#attachment").on("change", function () {
-      let files = this.files;
-      let fileList = $("#file-list");
-      let previewList = $("#modal-file-preview"); // Ensure this div exists inside your modal
+      $('.certificate_issued_date').on('apply.daterangepicker',function(){
+         let certificate_issued_date = $(this).val();
+         $('.patent_certificate_issued_date').text(certificate_issued_date);
+      });
 
-      fileList.empty();
-      previewList.empty();
+      $('#assignUserModal').on('click', function(e) {
+         if ($(e.target).is('#assignUserModal')) {
 
-      if (files.length > 0) {
-         $.each(files, function (index, file) {
-               let fileType = file.type;
-               let reader = new FileReader();
+            $('#assignUserModal').addClass('hidden');
+         }
+      });
 
-               // Append file name to the form file list
-               fileList.append(`<p class="text-[#000] text-sm">${file.name}</p>`);
+      $("#attachment").on("change", function () {
+         let files = this.files;
+         let fileList = $("#file-list");
+         let previewList = $("#modal-file-preview"); // Ensure this div exists inside your modal
 
-               // Create a preview in the modal
-               reader.onload = function (e) {
-                  let previewElement = "";
-                  
-                  if (fileType.startsWith("image")) {
-                     previewElement = `<img src="${e.target.result}" class="w-24 h-24 object-cover rounded-lg border" alt="Preview">`;
-                  } else {
-                     previewElement = `<p class="text-sm text-gray-700">${file.name}</p>`;
-                  }
+         fileList.empty();
+         previewList.empty();
 
-                  previewList.append(previewElement);
-               };
+         if (files.length > 0) {
+            $.each(files, function (index, file) {
+                  let fileType = file.type;
+                  let reader = new FileReader();
 
-               reader.readAsDataURL(file);
-         });
+                  // Append file name to the form file list
+                  fileList.append(`<p class="text-[#000] text-sm">${file.name}</p>`);
 
-         // Show modal when files are selected
-         
-      }
-   });
+                  // Create a preview in the modal
+                  reader.onload = function (e) {
+                     let previewElement = "";
+                     
+                     if (fileType.startsWith("image")) {
+                        previewElement = `<img src="${e.target.result}" class="w-24 h-24 object-cover rounded-lg border" alt="Preview">`;
+                     } else {
+                        previewElement = `<p class="text-sm text-gray-700">${file.name}</p>`;
+                     }
+
+                     previewList.append(previewElement);
+                  };
+
+                  reader.readAsDataURL(file);
+            });
+
+            // Show modal when files are selected
+            
+         }
+      });
+
+      $(".inventor_name").on("input", function () {
+         let inputVal = $(this).val();
+         $(".certificate_inventor_name").text(inputVal ? inputVal : "Not Available");
+      });  
+
+      $(".patent_title").on("input", function () {
+         let inputVal = $(this).val();
+         $(".certificate_patent_title").text(inputVal ? inputVal : "Not Available");
+      });
    });
 </script>
 @stop

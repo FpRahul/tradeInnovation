@@ -523,18 +523,16 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('/patent/inventor-certificate-payment-submit/{id?}' , 'patentInCertiPaymentSubmit')->name('task.patentInCertiPaymentSubmit');
         
         Route::get('/patent/inventor-certificate-filed/{id?}' , 'patentInCertiFiled')->name('task.patentInCertiFiled');
-        Route::Post('/patent/inventor-certificate-filed-filed-submit/{id?}' , 'patentInCertiFiledSubmit')->name('task.patentInCertiFiledSubmit');
+        Route::Post('/patent/inventor-certificate-filed-submit/{id?}' , 'patentInCertiFiledSubmit')->name('task.patentInCertiFiledSubmit');       
 
-        Route::get('/patent/inventor-certificate-inform-client/{id?}' , 'informClientRenwalApprovedPostRegistration')->name('task.patentInCertiIntimation');
-        Route::Post('/patent/inventor-certificate-inform-client-submit/{id?}' , 'informClientRenwalApprovedPostRegistrationSubmit')->name('task.patentInCertiIntimationSubmit');
-
-
+      
         Route::get('/patent/revocation/{id?}' , 'patentRevocation')->name('task.patentRevocation');
         Route::Post('/patent/revocation-submit/{id?}' , 'patentRevocationSubmit')->name('task.patentRevocationSubmit');
 
         Route::get('/patent/restoration/{id?}' , 'patentRestoration')->name('task.patentRestoration');
         Route::Post('/patent/restoration-submit/{id?}' , 'patentRestorationSubmit')->name('task.patentRestorationSubmit');
 
+       
      
     });
     //Services Routes

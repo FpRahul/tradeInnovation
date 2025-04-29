@@ -210,7 +210,13 @@
         const response = await fetch('/chart-data');
         const data = await response.json();
 
-        const ctx = document.getElementById('roundedLineChart').getContext('2d');
+        const canvas = document.getElementById('roundedLineChart');
+        if (!canvas) {
+            console.log("Canvas element not found!");
+            return false;
+        }
+
+        const ctx = canvas.getContext('2d');
         const myChart = new Chart(ctx, {
             type: 'bar',
             data: {
@@ -233,7 +239,8 @@
         });
     }
 
-    fetchChartData();
+    // Run after DOM is loaded
+    window.addEventListener('DOMContentLoaded', fetchChartData);
 
    
 </script>

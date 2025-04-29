@@ -22,12 +22,50 @@
                             <div class="w-full md:w-5/12">
                                 <label for="leadId" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Lead ID</label>
                                 <select name="leadId" id="leadId" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
-                                    <option value="">Select Lead ID</option>
+                                    <option value="">Select Client Name</option>
                                     @if(!$DistinctleadId->isEmpty())
-                                    @foreach ($DistinctleadId as $leadID)
-                                    <option value="{{ $leadID->lead->lead_id }}" @if($leadID->lead->lead_id == $leadParam) selected @endif>{{ $leadID->lead->lead_id }}</option>
-                                    @endforeach
+                                        @foreach ($DistinctleadId as $leadID)
+                                            <option value="{{ $leadID->lead_id }}" @if($leadID->lead_id == $leadParam) selected @endif>
+                                                {{ $leadID->lead->client_name }} - {{ $leadID->lead->mobile_number }}
+                                            </option>
+                                        @endforeach
                                     @endif
+                                </select>
+                            </div>
+                            {{-- service --}}
+                            <div class="w-full md:w-5/12">
+                                <label for="service_id" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Services</label>
+                                <select name="service_id" id="service_id" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
+                                    <option value="">Select Service</option>
+                                    <!-- Options will be appended dynamically via jQuery -->
+                                </select>
+                            </div>
+                            {{-- sub service --}}
+                            <div class="w-full md:w-5/12">
+                                <label for="subService_id" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Sub Services</label>
+                                <select name="subService_id" id="subService_id" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
+                                    <option value="">Select Sub Service</option>
+                                    {{-- @if(!$sub_service->isEmpty())
+                                    @foreach ($sub_service as $service_details) 
+                                        <option value="{{ $service_details->id }}" data-service-id="{{ $service_details->serviceId }}">
+                                            {{ $service_details->subServiceName }}
+                                        </option>
+                                    @endforeach
+                                @endif --}}
+                                </select>
+                            </div>
+                            {{-- aplied for --}}
+                            <div class="w-full md:w-5/12">
+                                <label for="applied_for" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Applied For</label>
+                                <select name="applied_for" id="applied_for" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
+                                    <option value="">Applied For</option>
+                                    {{-- @if(!$applied_for->isEmpty())
+                                    @foreach ($applied_for as $applied_for_details) 
+                                        <option value="{{ $applied_for_details->id }}" >
+                                            {{ $applied_for_details->applied_for }}
+                                        </option>
+                                    @endforeach
+                                @endif --}}
                                 </select>
                             </div>
 
@@ -481,6 +519,100 @@ $('.daterangepicker-verified').val('');
                          if(response.status == 200){
                             window.location.reload();
                          }
+                }
+            })
+        })
+        // const $subServiceSelect = $('#subService_id');
+        // const $allSubOptions = $subServiceSelect.find('option');
+        // $('#service_id').on('change', function () {
+        //     const selectedServiceId = $(this).val();
+        //     $subServiceSelect.select2('destroy');
+        //     $subServiceSelect.empty().append('<option value="">Select Sub Service</option>');
+        //     $allSubOptions.each(function () {
+        //         const $option = $(this);
+        //         const serviceId = $option.data('service-id');
+        //         if (!serviceId || serviceId == selectedServiceId) {
+        //             $subServiceSelect.append($option.clone());
+        //         }
+        //     });
+        //     $subServiceSelect.select2();
+        // });
+
+        $("#leadId").on('change' , function (){
+            var leadId = $(this).val();
+            $.ajax({
+                url: "{{ route('task.getServiceAcctoLead')  }}",
+                method: "POST",
+                data: {leadId: leadId},
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')  // Assuming you're using Laravel
+                },
+                success: function (response){
+                    $('#service_id').empty().append('<option value="">Select Service</option>');
+        
+                    if (response.status === 200 && response.serviceName.length > 0) {
+                        
+                        response.serviceName.forEach(function (service) {
+                            $('#service_id').append(`<option value="${service.id}">${service.serviceName}</option>`);
+                        });
+                    }
+                         
+                }
+            })
+        })
+
+        $("#service_id").on('change' , function (){
+            var service_id = $(this).val();
+            var lead_id = $('#leadId').val(); 
+            $.ajax({
+                url: "{{ route('task.getSubServiceAccToService')  }}",
+                method: "POST",
+                data: {service_id: service_id,
+                    lead_id:lead_id
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 
+                },
+                success: function (response){
+                    $('#subService_id').empty().append('<option value="">Select Sub Service</option>');
+                            
+                    if (response.status == 200 && response.serviceName.length > 0) {
+                        console.log(response);
+                        
+                        response.serviceName.forEach(function (service) {
+                            $('#subService_id').append(`<option value="${service.id}">${service.subServiceName}</option>`);
+                        });
+                    } 
+                }
+            })
+        })
+        $("#subService_id").on('change' , function (){
+            var service_id = $("#service_id").val();
+            var lead_id = $('#leadId').val(); 
+            var subService_id = $(this).val();
+
+            $.ajax({
+                url: "{{ route('task.getAppliedFor')  }}",
+                method: "POST",
+                data: {service_id: service_id,
+                    lead_id:lead_id,
+                    subService_id:subService_id
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 
+                },
+                success: function (response){
+                    console.log(response);
+                    
+                    // $('#subService_id').empty().append('<option value="">Select Sub Service</option>');
+                            
+                    // if (response.status == 200 && response.serviceName.length > 0) {
+                    //     console.log(response);
+                        
+                    //     response.serviceName.forEach(function (service) {
+                    //         $('#subService_id').append(`<option value="${service.id}">${service.subServiceName}</option>`);
+                    //     });
+                    // } 
                 }
             })
         })

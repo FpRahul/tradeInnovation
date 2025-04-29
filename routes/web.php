@@ -136,7 +136,9 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     //Tasks Routes
     Route::prefix('tasks')->controller(TasksController::class)->group(function () {
         Route::match(['POST','GET'],'/negotiate-price/{id}', 'negotiatePrice')->name('task.negotiatePrice');
-
+        Route::Post('get-service', 'getServiceAcctoLead')->name('task.getServiceAcctoLead');
+        Route::Post('get-sub-service', 'getSubServiceAccToService')->name('task.getSubServiceAccToService');
+        Route::Post('get-apply-for', 'getAppliedFor')->name('task.getAppliedFor');
         Route::get('/{request_type?}', 'index')->name('task.index');
         Route::get('/logs', 'logs')->name('task.log');
         Route::get('/details/{id}', 'detail')->name('task.detail');

@@ -10,13 +10,14 @@ use App\Models\User;
 use App\Models\Payment;
 use App\Models\Lead;
 use App\Models\IpWatch;
-
+use App\Models\Service;
 use App\Models\Evidence;
 use App\Models\HearingDateDetails;
 use App\Models\LeadNotification;
 use App\Jobs\SendClientWelcomeEmail;
 use App\Models\ServiceStages;
 use App\Models\ServiceDetail;
+use App\Models\SubService;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -30,6 +31,41 @@ use App\Jobs\CommanDraftSend;
 class TasksController extends Controller
 {
     private $viewPath = "tasks.";
+
+    public function getServiceAcctoLead(Request  $request){
+        $leadID = $request->leadId;
+        $data = LeadTask::select('service_id')->where('lead_id', $leadID)
+        ->groupBy('service_id')
+        ->get(); 
+        $service_id = $data->pluck('service_id');
+      
+        $serviceName = Service::whereIn('id', $service_id)->get();
+      
+        if (!$data->isEmpty()) {
+            return response()->json(['data' => $data,'serviceName' => $serviceName , 'status' => 200], 200);
+        } else {
+            return response()->json(['data' => [], 'status' => 200], 200);
+        }
+        
+    }
+    public function getSubServiceAccToService(Request $request){
+        $lead_id = $request->lead_id;
+        $service_id = $request->service_id;
+        $data = LeadTask::select('subservice_id')->where('lead_id', $lead_id)->where('service_id' , $service_id)
+        ->groupBy('subservice_id')
+        ->get(); 
+      $subservice_id =  $data->pluck('subservice_id');
+      $subservice_name = SubService::whereIn('id', $subservice_id)->get();
+      if (!$data->isEmpty()) {
+        return response()->json(['data' => $data,'serviceName' => $subservice_name , 'status' => 200], 200);
+    } else {
+        return response()->json(['data' => [], 'status' => 200], 200);
+    }
+    }
+
+    public function getAppliedFor(Request $request){
+        dd($request->all());
+    }
     public function index(Request $request, $request_type = null)
     {
 
@@ -38,10 +74,14 @@ class TasksController extends Controller
         $userParam = $request->user;
 
         $DistinctleadId = LeadTask::with('lead')
-            ->select('lead_id')
-            ->distinct()
-            ->get();
+        ->select('lead_id')
+        ->groupBy('lead_id')
+        ->get();
         $users =  User::get();
+        // $services = Service::get();
+        // $sub_service = SubService::get();
+        // $applied_for = ServiceDetail::get();
+
 
         if ($request->id && $request->NotifyId) {
             $baseNotifyId = base64_decode($request->NotifyId);
@@ -136,7 +176,11 @@ class TasksController extends Controller
                 'users' => $users,
                 'leadParam' => $leadParam,
                 'statusParam' => $statusParam,
-                'userParam' => $userParam
+                'userParam' => $userParam,
+                // 'services' => $services,
+                // 'sub_service' => $sub_service,
+                // 'applied_for' => $applied_for
+
             ]);
         } else {
             $trData = view($this->viewPath . 'task_fillter_data_listing', compact('taskDetails', 'searchKey'))->render();

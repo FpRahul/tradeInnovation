@@ -239,11 +239,13 @@ class LeadsController extends Controller
                                 $image_name->move(public_path('uploads/leads/' . $leadData->id), $imageName);
                                 $serviceDetailData->service_logo = $imageName;
                             }
+
                             $serviceDetailData->filing_mode = $serviceVal['filingmode'];
                             $serviceDetailData->filing_date = date('Y-m-d',strtotime($serviceVal['filingdate']));
                             $serviceDetailData->applicant_name = $request->clientname;
                             $serviceDetailData->application_number = $serviceVal['applicationNumber'];
                             $serviceDetailData->service_id = $serviceVal['serviceid'];
+                            $serviceDetailData->sub_service_id = $serviceVal['subserviceid'];
                             $serviceDetailData->client_status = $serviceVal['client_type'];
                             $serviceDetailData->save();
                             $service_detail_id = $serviceDetailData->id;
@@ -275,6 +277,7 @@ class LeadsController extends Controller
                                 $LeadLog->user_id = $serviceVal['assign'];
                                 $LeadLog->lead_id =  $leadData->id;
                                 $LeadLog->task_id = $leadTaskData->id;
+                                $LeadLog->service_detail_id = $serviceDetailData->id;
                                 $LeadLog->assign_by = auth()->user()->id;
                                 $LeadLog->description = 'Lead added in the system';
                                 $LeadLog->status = 0;
@@ -283,6 +286,7 @@ class LeadsController extends Controller
                                 $LeadLog->user_id = $serviceVal['assign'];
                                 $LeadLog->lead_id =  $leadData->id;
                                 $LeadLog->task_id = $leadTaskData->id;
+                                $LeadLog->service_detail_id = $serviceDetailData->id;
                                 $LeadLog->assign_by = auth()->user()->id;
                                 $LeadLog->description = 'Lead assigned to the user';
                                 $LeadLog->status = 0;

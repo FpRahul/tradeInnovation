@@ -17,7 +17,7 @@
          <input type="hidden" name="checkValid" id="checkValid" value="">
          <div class="w-full md:w-1/2 hideDropdown">
             <label for="publish_opposition" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
-            <select name="publish_opposition" id="publish_opposition" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
+            <select name="publish_opposition" id="publish_opposition" class="publish_opposition w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
                <option value="" disabled selected>Select status</option>
                <option value="0"> Opposition Filed</option>
                <option value="1"> Opposition Not Filed </option>
@@ -115,7 +115,7 @@
                type="text"
                placeholder="Dead Line"
                name="opposition_date"
-               class="daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
+               class="opposition_date daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                value=""
                id="opposition_date"
                autocomplete="off">
@@ -182,7 +182,7 @@
                class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                value=""
 
-               autocomplete="off">
+               autocomplete="off" required>
             <div class="absolute right-[10px] top-[10px]">
                <i class="ri-calendar-line"></i>
             </div>
@@ -199,8 +199,7 @@
 <script>
    $(document).ready(function() {
       
-      var client_status = $("#client_status").val()
-      
+      var client_status = $("#client_status").val();      
       if(client_status == 2){
          $('label[for="opposition_number"]').text('Applicant Number');
          $('label[for="opponent_name"]').text('Applicant Name');
@@ -210,10 +209,10 @@
          $('.hideDropdown').addClass('hidden');
          $('.hideOpposition').removeClass('hidden');
          $("#stage_id").val('{{ $getStage->title }}') 
-           $("#SatgeID").val('{{ $getStage->id }}') 
-           $('.hideOpposition').removeClass('hidden');
-           $('#showStage').text('Set a dead line for: ' + '{{ $getStage->title }}');
-           $('#nextTitle').text('Next stage will be: ' + '{{ $getStage->title }}');
+         $("#SatgeID").val('{{ $getStage->id }}') 
+         $('.hideOpposition').removeClass('hidden');
+         $('#showStage').text('Set a dead line for: ' + '{{ $getStage->title }}');
+         $('#nextTitle').text('Next stage will be: ' + '{{ $getStage->title }}');
       }else if(client_status == 1){
          $('label[for="opposition_number"]').text('Opposition Number');
          $('label[for="opponent_name"]').text('Opponent Name');
@@ -243,39 +242,45 @@
       
       $('.daterangepicker-verified').attr("placeholder", "DD/MM/YYYY"); // Set placeholder
 
-         $('.daterangepicker-verified').daterangepicker({
-            singleDatePicker: true,
-            autoUpdateInput: false,
-            opens: 'right',
-            locale: {
-               format: 'DD MMM YYYY'
-            },
-            minDate: null,
-            maxDate: moment().endOf('day'),
-         }).on('apply.daterangepicker', function(ev, picker) {
-            $(this).val(picker.startDate.format('DD MMM YYYY')); 
-            console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
-         });
+      $('.daterangepicker-verified').daterangepicker({
+         singleDatePicker: true,
+         autoUpdateInput: false,
+         opens: 'right',
+         locale: {
+            format: 'DD MMM YYYY'
+         },
+         minDate: null,
+         maxDate: moment().endOf('day'),
+      }).on('apply.daterangepicker', function(ev, picker) {
+         $(this).val(picker.startDate.format('DD MMM YYYY')); 
+         console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+      });
 
-         $('.daterangepicker-taskdeadline').attr("placeholder", "DD/MM/YYYY"); 
+      $('.daterangepicker-taskdeadline').attr("placeholder", "DD/MM/YYYY"); 
 
-         $('.daterangepicker-taskdeadline').daterangepicker({
-            singleDatePicker: true,
-            autoUpdateInput: false, 
-            opens: 'right',
-            locale: {
-               format: 'DD MMM YYYY'
-            },
-            minDate: moment().startOf('day'),
-         }).on('apply.daterangepicker', function(ev, picker) {
-            $(this).val(picker.startDate.format('DD MMM YYYY')); 
-            console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
-         });
-     
-    
-
+      $('.daterangepicker-taskdeadline').daterangepicker({
+         singleDatePicker: true,
+         autoUpdateInput: false, 
+         opens: 'right',
+         locale: {
+            format: 'DD MMM YYYY'
+         },
+         minDate: moment().startOf('day'),
+      }).on('apply.daterangepicker', function(ev, picker) {
+         $(this).val(picker.startDate.format('DD MMM YYYY')); 
+         console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+      }); 
       
 
+   });
+
+   $(document).on('change','.publish_opposition',function(){
+      if($(this).val() == 1){
+         $(this).parent().parent().parent().find('.opposition_date').attr('required',false);  
+      }else if($(this).val() == 0){
+         $(this).parent().parent().parent().find('.opposition_date').attr('required',true);
+      }
+      
    });
 </script>
 @stop

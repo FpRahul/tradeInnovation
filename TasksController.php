@@ -23739,8 +23739,8 @@ class TasksController extends Controller
         $leadTaskdetials = LeadTaskDetail::find($id);
 
         if ($leadTaskdetials && $leadTaskdetials->status == 3) {
-            $getStage = ServiceStages::where('service_id', 2)
-                ->where('id', 107)
+            $getStage = ServiceStages::where('service_id', 1)
+                ->where('id', 25)
                 ->first();
         }
 
@@ -23841,7 +23841,7 @@ class TasksController extends Controller
                                     'Counter Statement Date' => $request->verified,
                                     'Assigned To' =>  $existedLeaedTask->user->name,
                                 ];
-                            } else if ($request->Counter_statement == 2) {
+                            } else if ($request->Counter_statement == 1) {
                                 $LeadLog->remark = 'Counter Statement Not Filied';
                                 $oldValue = [
                                     'status' => 'Pending',
@@ -24405,7 +24405,6 @@ class TasksController extends Controller
             return redirect()->back()->with('erroe', "no task found");
         }
     }
-    
     public function patentOppositionRule46($id)
     {
         if ($id) {
@@ -25567,88 +25566,6 @@ class TasksController extends Controller
     
     }
 
-    public function patentInterlocatoryPetitionCounterSubmit(Request $request,$id){
-        $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verify'))->format('Y-m-d');
-        $existedLeaedTask = LeadTask::find($id);
-        $existedLeaedTaskDetails = LeadTaskDetail::where('task_id', $id)->first();
-        $newLeadtask = new LeadTask();
-        $newLeadTaskDeatails  = new LeadTaskDetail();
-        $newNotification = new LeadNotification();
-        $userName = Auth::user()->name;
-        $newTaskTitle = ServiceStages::find($request->stage_id);
-        $formattedCreatedDate = $existedLeaedTask->created_at->format('d M Y');
-
-        $rule = [
-            'verify' => 'required',
-            
-        ];
-        $validator =  Validator::make($request->all(), $rule);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-        if ($id) {
-            $existedLeaedTask->task_description = $existedLeaedTask->task_description . ' ' . $request->description;
-            $existedLeaedTask->save();
-        
-                $existedLeaedTaskDetails->status = 1;
-                $existedLeaedTaskDetails->status_date = $verifiedDate;
-                $existedLeaedTaskDetails->comment = "Interlocutory petition filed for counter statement";
-                
-                if ($request->hasFile('attachment')) {
-                    $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
-                    if (!file_exists($folderPath)) {
-                        mkdir($folderPath, 0755, true);
-                    }
-                    $filePaths = [];
-                    $existingAttachments = json_decode($existedLeaedTaskDetails->attachment, true) ?? [];
-                    foreach ($request->file('attachment') as $file) {
-                        if ($file->isValid()) {
-                            $fileName = rand(100000, 999999) . '.' . $file->getClientOriginalExtension();
-                            $file->move($folderPath, $fileName);
-                            $filePaths[] = $fileName;
-                        }
-                    }
-                    $updatedAttachments = array_merge($existingAttachments, $filePaths);
-                    $existedLeaedTaskDetails->attachment = json_encode($updatedAttachments);
-                }
-                
-                if ($existedLeaedTaskDetails->save()) {
-                    $LeadLog =  new LeadLog();
-                    $LeadLog->user_id = $existedLeaedTask->user_id;
-                    $LeadLog->lead_id = $existedLeaedTask->lead_id;
-                    $LeadLog->task_id = $existedLeaedTask->id;
-                    $LeadLog->assign_by = Auth::id();
-                    $LeadLog->remark = 'Interlocutory petition for counter statement';
-                    $oldValue = [
-                        'status' => 'Pending',
-                        'Assigned On' => $formattedCreatedDate,
-                        'Assigned By' =>  $existedLeaedTask->userAssignBy->name,
-                    ];
-                    $newValue = [
-                        'status' => 'Completed',
-                        'Interlocutory petition On' => $verifiedDate,
-                        'Assigned To' =>  $existedLeaedTask->user->name,
-                    ];
-                    $LeadLog->old_value = json_encode($oldValue);
-                    $LeadLog->new_value = json_encode($newValue);
-                    $LeadLog->description = "Interlocutory petition file successfully";
-                    if ($LeadLog->save()) {
-                            // $id = $newLeadtask->id;
-                            return redirect()->route('task.index')->with('success', 'Interlocutory petition Status updated');
-                        
-                    } else {
-                        return redirect()->back()->with('error', 'there is something wrong while updatng log');
-                    }
-                        
-                    
-                } else {
-                    return redirect()->back()->with('error', 'there is something wrong while updating existed task details');
-                }
-            
-        } else {
-            return redirect()->back()->with('error', 'no task found');
-        }
-    }
    
     public function patentPostRegistrationAction($id){
         if ($id) {

@@ -77,7 +77,7 @@
                   type="text"
                   placeholder="Dead Line"
                   name="reminder_date"
-                  class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
+                  class="reminderDate daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                   value=""
                   id="reminder_date"
                   autocomplete="off">
@@ -98,7 +98,7 @@
                   type="text"
                   placeholder="Dead Line"
                   name="hearing_date"
-                  class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
+                  class="nextHearingDate daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                   value=""
                   id="hearing_date"
                   autocomplete="off">
@@ -246,6 +246,8 @@ $('.daterangepicker-taskdeadline').attr("placeholder", "DD/MM/YYYY");
             $(".hearingDate").addClass('hidden');
             $(".showWarning").text('');
             $('.dateChangeText').text('Accepted On');
+            $('.reminderDate').attr('required', false);
+            $('.nextHearingDate').attr('required', false);
          }
          else if (show_case_hearing == 2) {
             $(".onHide").addClass('hidden');
@@ -253,7 +255,8 @@ $('.daterangepicker-taskdeadline').attr("placeholder", "DD/MM/YYYY");
             $(".hearingDate").removeClass('hidden');
             $(".showWarning").text('You are going to hold the task');
             $('.dateChangeText').text('Adjournment On');
-
+            $('.reminderDate').attr('required', true);
+            $('.nextHearingDate').attr('required', true);
          
          }else if(show_case_hearing == 3){
             $(".onHide").addClass('hidden');
@@ -261,6 +264,8 @@ $('.daterangepicker-taskdeadline').attr("placeholder", "DD/MM/YYYY");
             $(".hearingDate").addClass('hidden');
             $(".showWarning").text('');
             $('.dateChangeText').text('Rejected On');
+            $('.reminderDate').attr('required', false);
+            $('.nextHearingDate').attr('required', false);
 
          }else if(show_case_hearing == 4){
             $(".onHide").addClass('hidden');
@@ -268,7 +273,8 @@ $('.daterangepicker-taskdeadline').attr("placeholder", "DD/MM/YYYY");
             $(".hearingDate").removeClass('hidden');
             $(".showWarning").text('You are going to hold the task');
             $('.dateChangeText').text('Amendment On');
-
+            $('.reminderDate').attr('required', true);
+            $('.nextHearingDate').attr('required', true);
          }
       })
    });

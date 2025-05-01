@@ -132,7 +132,7 @@ class User extends Authenticatable
    
     public function leadTasks()
     {
-        return $this->hasMany(LeadTask::class);
+        return $this->hasMany(LeadTask::class , 'user_id');
     }
 
     // public function assignLead(){

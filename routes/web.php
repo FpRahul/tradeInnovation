@@ -98,6 +98,15 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::match(['POST','GET'],'/add-role/{id?}', 'addRole')->name('settings.addrole');
         Route::get('assign-menu','viewMenu')->name('setting.viewMenu');
         Route::post('get-menu','getMenu')->name('setting.getMenu');
+        Route::match(['POST', 'GET'], 'scope-of-business' , 'scopeOfBusiness')->name('setting.scopeOfBusiness');
+        Route::Post('scope-of-business/add' , 'scopeOfBusinessAdd')->name('setting.scopeOfBusinessAdd');
+        Route::Post('scope-of-business/update' , 'scopeOfBusinessUpdate')->name('setting.scopeOfBusinessUpdate');
+        Route::match(['POST','GET'],'scope-of-business-status/{id?}' , 'scopeOfBusinessStatus')->name('setting.scopeOfBusinessStatus');
+
+
+     
+
+
          //stages controller
         Route::prefix('stages')->controller(StagesController::class)->group(function (){
           Route::get('/', 'index')->name('stages.index');

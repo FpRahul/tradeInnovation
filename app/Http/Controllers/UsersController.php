@@ -320,13 +320,32 @@ class UsersController extends Controller
     }
 
     public function clients(Request $request){
-        $clientData = User::with('userdetail')->where('role', 2)->where('archive', 1);
+        $clientData = User::with('userdetail')
+        ->where('role', 2)
+        ->where('archive', 1)
+        ->get(); 
+         
+
+        $clientData = User::with('leadTasks')
+        ->where('role', 5)
+        ->where('archive', 1)
+        ->get(); 
+        foreach($clientData as $data){
+            dd($data);
+        }
+        
+        $clientFilter = User::with('userdetail')->where('role', 2)->where('archive', 1)->get();
+        $user_id = $request->user_id;
         $scopeKey = $request->input('scope') ?? '';
-        $scopeOfBussinessList = CategoryOption::where('status', 1)->where('type', 4)->get();
         $searchKey = $request->input('key') ?? '';
         $requestType = $request->input('requestType') ?? '';
-
+        $scopeKey = $request->input('scope');
+        if (!empty($user_id)) {
+            $clientData->where('id', $user_id);
+        }
+        $selectedParm = $request->user_id;
         if (!empty($searchKey) || !empty($scopeKey)) {
+            dd($searchKey);
             $clientData->where(function ($query) use ($searchKey) {
                 $query->where('name', 'LIKE', '%' . $searchKey . '%')
                 ->orWhere('mobile', 'LIKE', '%' . $searchKey . '%')
@@ -335,13 +354,14 @@ class UsersController extends Controller
                 $q->where('business_scope', 'LIKE', '%' . $scopeKey . '%'); // AND condition remains
             });
         }
+        // dd($clientData->name);
         
-        $clientData = $clientData->latest()->paginate(env("PAGINATION_COUNT"));
+        // $clientData = $clientData->latest()->paginate(env("PAGINATION_COUNT"));
 
         if (empty($requestType)) {
             $header_title_name = 'User';
             
-            return view('users/client-listing', compact('clientData', 'header_title_name', 'searchKey','scopeOfBussinessList','scopeKey'));
+            return view('users/client-listing', compact('clientData','selectedParm','clientFilter', 'header_title_name', 'searchKey','scopeKey'));
         } else {
             $trData = view('users/client-page-search-data', compact('clientData', 'searchKey','scopeKey'))->render();
             $dataArray = [

@@ -50,7 +50,8 @@
                     placeholder="Patent Grant"
                     name="patent_grant"
                     class="patent_grant_date daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
-                    value="{{$taskDetails->serviceDetails->grant_date ?? ''}}"
+                    value="{{ isset($taskDetails->serviceDetails->grant_date) ? \Carbon\Carbon::parse($taskDetails->serviceDetails->grant_date)->format('d M Y') : '' }}"
+
                     id="patent_grant"
                     autocomplete="off" required>
                 <div class="absolute right-[10px] top-[10px]">
@@ -68,7 +69,7 @@
                     placeholder="Certificate Issued Date"
                     name="certificate_issued"
                     class="certificate_issued_date daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
-                    value="{{$taskDetails->serviceDetails->certificate_issued_date ?? ''}}"
+                    value="{{ isset($taskDetails->serviceDetails->certificate_issued_date) ? \Carbon\Carbon::parse($taskDetails->serviceDetails->certificate_issued_date)->format('d M Y') : '' }}"
                     id="certificate_issued"
                     autocomplete="off" required>
                 <div class="absolute right-[10px] top-[10px]">

@@ -1234,22 +1234,35 @@ class ServiceTask extends Seeder
                 'sub_service_id' => 0,
                 'description' => 'Submitted the required documents to the authority for processing the issuance of the Inventor Certificate and intimated the client regarding the same.',
                 'stage' => '14',
-            ],
-                                  
+            ],                                  
             [
                 'service_id' => '2',
                 'title' => 'Revocation',
                 'sub_service_id' => 0,
-                'description' => 'Initiating the process to cancel or revoke an existing patent through legal proceedings or by request.',
+                'description' => 'Sending a quotation to the client regarding the revocation process, including estimated costs and timelines.',
                 'stage' => '1',
             ],
             [
                 'service_id' => '2',
-                'title' => 'Restoration',
+                'title' => 'Payment verification (Revocation)',
                 'sub_service_id' => 0,
-                'description' => 'Applying for the restoration of a lapsed patent due to non-payment of renewal fees within the prescribed time limit.',
-                'stage' => '1',
+                'description' => 'Verifying the payment received from the client for initiating the revocation process.',
+                'stage' => '14',
             ],
+            [
+                'service_id' => '2',
+                'title' => 'Intimate to client (Revocation)',
+                'sub_service_id' => 0,
+                'description' => 'Notifying the client about the progress or updates related to their patent revocation process.',
+                'stage' => '14',
+            ],            
+            // [
+            //     'service_id' => '2',
+            //     'title' => 'Restoration',
+            //     'sub_service_id' => 0,
+            //     'description' => 'Applying for the restoration of a lapsed patent due to non-payment of renewal fees within the prescribed time limit.',
+            //     'stage' => '1',
+            // ],
             
         ]);
     }

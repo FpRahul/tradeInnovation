@@ -523,9 +523,17 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('/patent/inventor-certificate-payment-submit/{id?}' , 'patentInCertiPaymentSubmit')->name('task.patentInCertiPaymentSubmit');
         
         Route::get('/patent/inventor-certificate-filed/{id?}' , 'patentInCertiFiled')->name('task.patentInCertiFiled');
-        Route::Post('/patent/inventor-certificate-filed-submit/{id?}' , 'patentInCertiFiledSubmit')->name('task.patentInCertiFiledSubmit');       
+        Route::Post('/patent/inventor-certificate-filed-submit/{id?}' , 'patentInCertiFiledSubmit')->name('task.patentInCertiFiledSubmit'); 
+
+        Route::get('/patent/send-quotation-revocation/{id?}' , 'patentQuotationRevocation')->name('task.patentQuotationRevocation');
+        Route::Post('/patent/send-quotation-revocation-submit/{id?}' , 'patentQuotationRevocationSubmit')->name('task.patentQuotationRevocationSubmit');  
+
+        Route::get('/patent/payment-verification-revocation/{id?}' , 'patentPaymentRevocation')->name('task.patentPaymentRevocation');
+        Route::Post('/patent/payment-verification-revocation-submit/{id?}' , 'patentPaymentRevocationSubmit')->name('task.patentPaymentRevocationSubmit');
+
 
       
+
         Route::get('/patent/revocation/{id?}' , 'patentRevocation')->name('task.patentRevocation');
         Route::Post('/patent/revocation-submit/{id?}' , 'patentRevocationSubmit')->name('task.patentRevocationSubmit');
 

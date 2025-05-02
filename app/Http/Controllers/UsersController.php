@@ -330,9 +330,19 @@ class UsersController extends Controller
         ->where('role', 5)
         ->where('archive', 1)
         ->get(); 
-        foreach($clientData as $data){
-            dd($data);
+        $taskAssignments = [];
+        
+        foreach($clientData as $user){
+            foreach($user->leadTasks as $task){
+
+                $taskAssignments[] = [
+                    'user_name' => $user->name,
+                    'task_id' => $task->id,
+                ];
+            }
+        
         }
+        dd($taskAssignments);
         
         $clientFilter = User::with('userdetail')->where('role', 2)->where('archive', 1)->get();
         $user_id = $request->user_id;

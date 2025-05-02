@@ -26,11 +26,11 @@
                 <form class="w-full flex flex-wrap lg:flex-nowrap gap-[10px]"  method="GET">
                     <div class="w-[100%] md:w-[20%]">
                         <label>Scope Of Business</label>
-                        <select name="scope"  class="scopeData allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
+                        <select name="user_id"  class="scopeData allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
                             <option value="">Select Scope</option>
-                            @if (!empty($scopeOfBussinessList))
-                                @foreach ($scopeOfBussinessList as $scopeOfBussinessListVal)      
-                                    <option value="{{ $scopeOfBussinessListVal['id']}}" @selected($scopeOfBussinessListVal['id'] == $scopeKey)>{{ $scopeOfBussinessListVal['name']}}</option>
+                            @if (!empty($clientFilter))
+                                @foreach ($clientFilter as $clientDataListVal)      
+                                    <option value="{{ $clientDataListVal->id}}" @if($clientDataListVal->id == $selectedParm) selected @endif>{{ $clientDataListVal->name}} - {{ $clientDataListVal->mobile}} </option>
                                 @endforeach                      
                             @endif                    
                         </select>
@@ -142,7 +142,7 @@
                 </tbody>
             </table>
             <div class="py-[15px] px-[20px]">
-                {{ $clientData->appends(['key' => $searchKey])->links() }}
+                {{-- {{ $clientData->appends(['key' => $searchKey])->links() }} --}}
             </div>
         </div>
         

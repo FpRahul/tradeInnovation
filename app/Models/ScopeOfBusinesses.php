@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class ScopeOfBusinesses extends Model
+{
+    // use HasFactory;
+
+    protected $table = 'scope_of_businesses';
+
+    protected $fillable = [
+        'title',
+        'status',
+    ];
+}

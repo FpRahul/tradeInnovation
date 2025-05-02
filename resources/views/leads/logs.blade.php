@@ -187,12 +187,10 @@
                                 @endphp
                                 @if ($log->status == 0 && $log->leadAttch)
                                     @php
-                                        
                                         $allAttachments = $log->leadAttch->document ? (array) $log->leadAttch->document : [];
                                     @endphp
                                 @elseif($log->status == 1 && isset($log->leadTask->leadTaskDetails) && $log->leadTask->leadTaskDetails->attachment)
                                     @php 
-                                       
                                         $allAttachments = json_decode($log->leadTask->leadTaskDetails->attachment, true); 
                                     @endphp
                                 @endif

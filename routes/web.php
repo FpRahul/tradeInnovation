@@ -102,7 +102,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::Post('scope-of-business/add' , 'scopeOfBusinessAdd')->name('setting.scopeOfBusinessAdd');
         Route::Post('scope-of-business/update' , 'scopeOfBusinessUpdate')->name('setting.scopeOfBusinessUpdate');
         Route::match(['POST','GET'],'scope-of-business-status/{id?}' , 'scopeOfBusinessStatus')->name('setting.scopeOfBusinessStatus');
-
+        
 
      
 

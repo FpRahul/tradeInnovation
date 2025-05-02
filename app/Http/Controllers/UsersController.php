@@ -6,10 +6,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\LeadTask;
 use App\Models\UserDetail;
 use App\Models\CategoryOption;
 use App\Models\UserExperience;
 use App\Models\Role;
+use App\Models\Service;
+
 use App\View\Components\LogActivity;
 use App\Models\Log;
 use App\Models\Firm;
@@ -320,29 +323,12 @@ class UsersController extends Controller
     }
 
     public function clients(Request $request){
-        $clientData = User::with('userdetail')
+        $clientData = User::with('userdetail', 'leads.leadTasks.services')
         ->where('role', 2)
-        ->where('archive', 1)
-        ->get(); 
+        ->where('archive', 1);
          
-
-        $clientData = User::with('leadTasks')
-        ->where('role', 5)
-        ->where('archive', 1)
-        ->get(); 
-        $taskAssignments = [];
+        $services = Service::get();
         
-        foreach($clientData as $user){
-            foreach($user->leadTasks as $task){
-
-                $taskAssignments[] = [
-                    'user_name' => $user->name,
-                    'task_id' => $task->id,
-                ];
-            }
-        
-        }
-        dd($taskAssignments);
         
         $clientFilter = User::with('userdetail')->where('role', 2)->where('archive', 1)->get();
         $user_id = $request->user_id;
@@ -351,11 +337,23 @@ class UsersController extends Controller
         $requestType = $request->input('requestType') ?? '';
         $scopeKey = $request->input('scope');
         if (!empty($user_id)) {
-            $clientData->where('id', $user_id);
+            $clientData =  $clientData->where('id', $user_id);
+        }
+        if (!empty(request()->input('service_id'))) {
+            $clientData = $clientData->whereHas('leads.leadTasks', function ($q) {
+                $q->where('service_id', request()->input('service_id'));
+            });
+        }
+        if (!empty($user_id) && !empty($service_id) ) {
+            $clientData = $clientData->where('id', $user_id)
+            ->whereHas('leads.leadTasks', function ($q) {
+                $q->where('service_id', request()->input('service_id'));
+        });
+            
         }
         $selectedParm = $request->user_id;
-        if (!empty($searchKey) || !empty($scopeKey)) {
-            dd($searchKey);
+        $selectedServiceParm = $request->service_id;
+        if (! empty($searchKey) || !empty($scopeKey)) {
             $clientData->where(function ($query) use ($searchKey) {
                 $query->where('name', 'LIKE', '%' . $searchKey . '%')
                 ->orWhere('mobile', 'LIKE', '%' . $searchKey . '%')
@@ -364,14 +362,29 @@ class UsersController extends Controller
                 $q->where('business_scope', 'LIKE', '%' . $scopeKey . '%'); // AND condition remains
             });
         }
-        // dd($clientData->name);
+        $clientData = $clientData->latest()->paginate(env("PAGINATION_COUNT"));
+        $lead_id = [];
+        foreach ($clientData as $data) {
+             foreach ($data->leads as $lead) {
+                 $lead_id[]= $lead->id;
+             }
+         }
+         
+         $services_details = Leadtask::with('services')
+         ->select('service_id')
+         ->whereIn('lead_id', $lead_id)
+         ->groupBy('service_id')
+         ->get();
+         
+         $service_names = $services_details->pluck('services.serviceName')->filter()->unique()->values();
+         $scopeOfBussinessList = CategoryOption::where('status', 1)->where('type', 4)->get();
+         
         
-        // $clientData = $clientData->latest()->paginate(env("PAGINATION_COUNT"));
-
+        
         if (empty($requestType)) {
             $header_title_name = 'User';
             
-            return view('users/client-listing', compact('clientData','selectedParm','clientFilter', 'header_title_name', 'searchKey','scopeKey'));
+            return view('users/client-listing', compact('clientData','selectedParm','clientFilter','selectedServiceParm', 'header_title_name', 'searchKey','scopeKey' , 'service_names','scopeOfBussinessList','services'));
         } else {
             $trData = view('users/client-page-search-data', compact('clientData', 'searchKey','scopeKey'))->render();
             $dataArray = [

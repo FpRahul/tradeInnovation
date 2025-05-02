@@ -729,7 +729,7 @@ class TasksController extends Controller
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         if ($request->paymentDeadline) {
 
-            $paymentDeadlineDate = Carbon::createFromFormat('d M Y', $request->input('paymentDeadline'))->format('Y-m-d');
+            $paymentDeadlineDate = Carbon::createFromFormat('d M Y H:i', $request->input('paymentDeadline'))->format('Y-m-d H:i:s');
         }
         if ($request->deadline) {
 
@@ -34299,7 +34299,6 @@ class TasksController extends Controller
                     'title' => 'dead line reminder',
                     'description' => 'apki plan ki vaidhata jald hi samapt hojye gi kirpya jaldi recharge krein',
                     'task_id' => $followDate->task_id,
-
                     'status' => 0,
                 ]);
 

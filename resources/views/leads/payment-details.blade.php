@@ -85,7 +85,7 @@
                         <div class="w-full lg:w-5/12">
                             <label class="flex text-[15px] text-[#000] mb-[5px]">Date Range</label>
                             <div class="w-[100%] relative">
-                                <input type="text" placeholder="Start Date" name="dateRange" id="dateRange" class="daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[12px] md:text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" value="">
+                                <input type="text" placeholder="DD/MM/YYYY - DD/MM/YYYY" name="dateRange" id="dateRange" class="daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[12px] md:text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" value="">
                                 {{-- <i class="ri-calendar-line absolute right-[8px] top-[9px]"></i> --}}
                             </div>
                         </div>
@@ -316,20 +316,24 @@ $(document).ready(function(){
               }
            })
        })
-       var startDate = moment().subtract(7, 'days');
-        var endDate = moment();
-
-        $('.daterangepicker-item').daterangepicker({
+        $('#dateRange').daterangepicker({
             opens: 'right',
-            startDate: startDate,
-            endDate: endDate,
+            autoUpdateInput: false,  // Prevents automatic input update
             locale: {
-                format: 'DD MMM YYYY'
-            }
-        }, function(start, end, label) {
-            console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+                format: 'DD/MM/YYYY'
+            },
+            minDate: null,
+            maxDate: moment().endOf('day'), // Optionally, limit to today's date
+        }).on('apply.daterangepicker', function(ev, picker) {
+            // When dates are selected, update the input field with the chosen range
+            $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+            console.log("A new date range selection was made: " + picker.startDate.format('YYYY-MM-DD') + ' to ' + picker.endDate.format('YYYY-MM-DD'));
         });
-        
+
+        // Optionally, handle clearing the date range
+        $('#dateRange').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');  // Clear the input when canceled
+        });
 
         
 

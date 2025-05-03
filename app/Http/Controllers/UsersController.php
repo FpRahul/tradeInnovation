@@ -331,6 +331,7 @@ class UsersController extends Controller
         $services = Service::get();
         
         
+        
         $clientFilter = User::with('userdetail')->where('role', 2)->where('archive', 1)->get();
         $user_id = $request->user_id;
         $scopeKey = $request->input('scope') ?? '';

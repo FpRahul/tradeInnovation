@@ -161,11 +161,16 @@
                                                 </a>
                                                 @endif
                                                 @if(in_array('leadLogs.index',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
-                                                    <a href="{{ route('leadLogs.index', ['lead_id' => $clientDetails->leads->first()->id]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Timeline</a>
+                                                @if($clientDetails->leads->first())
+                                                <a href="{{ route('leadLogs.index', ['lead_id' => $clientDetails->leads->first()->id]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Timeline</a>
+                                                @endif
                                                 @endif
                                                 @if(in_array('lead.paymentStatus',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                                @if($clientDetails->leads->first())
                                                     <a href="{{ route('lead.paymentStatus', ['lead_id' => $clientDetails->leads->first()->id]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Payment</a>
                                                 @endif
+                                                @endif
+
                                             </div>
                                         </div>
                                     </div>

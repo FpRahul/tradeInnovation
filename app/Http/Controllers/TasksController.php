@@ -1381,7 +1381,7 @@ class TasksController extends Controller
 
                 $existedLeaedTask->task_description = $request->description;
                 $existedLeaedTask->save();
-                dd($existedLeaedTask->save());
+               
                 $existedLeaedTaskDetails->status = $request->document;
                 $existedLeaedTaskDetails->status_date = $verifiedDate;
                 $existedLeaedTaskDetails->reminderDate = $reminder_date;
@@ -1471,6 +1471,8 @@ class TasksController extends Controller
                     $existedLeaedTaskDetails->status = $request->document;
                     $existedLeaedTaskDetails->status_date = $verifiedDate;
                     $existedLeaedTaskDetails->reminderDate = Null;
+                    $existedLeaedTaskDetails->Comment = "Completed";
+
 
                     if ($request->hasFile('attachment')) {
                         $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
@@ -3438,6 +3440,8 @@ class TasksController extends Controller
             if ($newLeadtask->save()) {
                 $existedLeaedTaskDetails->status = 1;
                 $existedLeaedTaskDetails->status_date = $verifiedDate;
+                $existedLeaedTaskDetails->reminderDate = $hearingDate;
+
                 if ($request->hasFile('attachment')) {
                     $folderPath = public_path('uploads/leads/' . $existedLeaedTask->lead_id);
                     if (!file_exists($folderPath)) {
@@ -36061,31 +36065,57 @@ class TasksController extends Controller
         }
         return $type . $newNumber;
     }
-
     public function sendNotification()
     {
+        $now = Carbon::now();
 
-        $followUpDate = LeadTaskDetail::with('leadTask')->where('status', 3)
-            ->orderBy('id', 'desc')
-            ->get();
-        foreach ($followUpDate as $followDate) {
-            $currentDate = Carbon::now();
-            $deadlineDate = Carbon::parse($followDate->reminderDate);
-            if ($currentDate->diffInDays($deadlineDate) <= 2) {
-                LeadNotification::create([
-                    'user_id' => $followDate->leadTask->user_id,
-                    'lead_id' =>  $followDate->leadTask->lead_id,
-                    'title' => 'dead line reminder',
-                    'description' => 'apki plan ki vaidhata jald hi samapt hojye gi kirpya jaldi recharge krein',
-                    'task_id' => $followDate->task_id,
-                    'status' => 0,
-                ]);
-
-                dd('New notification created for task_id ' . $followDate->task_id);
+        $followUpTasks = LeadTaskDetail::with('leadTask')
+        ->where('status', '!=', 1)
+        ->where(function ($query) use ($now) {
+            $query->whereNotNull('reminderDate')
+                ->where('reminderDate', '>=', $now->toDateTimeString());
+        })->orWhere(function ($query) use ($now) {
+            $query->whereNull('reminderDate')
+                ->whereDate('dead_line', '>', $now->toDateString());
+        })
+        ->orderBy('id', 'desc')
+        ->get();
+             $currentDateTime = Carbon::now();
+             if ($followUpTasks->count() > 0) {
+                foreach ($followUpTasks as $task) {
+                    $reminderDate = $task->reminderDate;
+                    $deadlineDate = $task->dead_line;
+            
+                    if ($reminderDate && strtotime($reminderDate) > time()) {
+                        $title = 'Reminder Alert';
+                        $description = 'Aapke task ke liye reminder set kiya gaya hai.';
+                    } else {
+                        $title = 'Deadline Alert';
+                        $description = 'Aapki plan ki vaidhata jald samapt hone wali hai. Kripya jaldi recharge karein.';
+                    }
+            
+                    $leadId = $task->leadTask->lead_id ?? null;
+            
+                    if ($leadId) {
+                        LeadNotification::create([
+                            'user_id'     => $task->task_id,
+                            'lead_id'     => $leadId,
+                            'title'       => $title,
+                            'description' => $description,
+                            'task_id'     => $task->task_id,
+                            'status'      => 0,
+                        ]);
+                    }
+                }
+            
+                return response()->json(['message' => 'Notifications sent.']);
             }
-            // foreach ($followDate->leadNotifications as $deadLineDate) {
-            //     
-            // }
-        }
+            
+
+    return response()->json(['message' => 'No valid tasks found.']);
+            
+      
+    
     }
+    
 }

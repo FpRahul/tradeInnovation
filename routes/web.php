@@ -560,9 +560,16 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::match(['POST','GET'],'/changestatus/{id?}','serviceStatus')->name('service.status');
         Route::post('/deleterepeater', 'deleteRepeaterSubserv')->name('subservice.deleterepeater');
         Route::post('/serviceStages', 'serviceStages')->name('serviceStages');
-
     });
     
-    
 });
+
+
+
+Route::prefix('jobs')->name('jobs.')->group(function () {
+    Route::get('/send-notifications',[TasksController::class, 'sendNotification']);
+});
+
+
+
 

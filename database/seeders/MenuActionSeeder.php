@@ -48,10 +48,12 @@ class MenuActionSeeder extends Seeder
             array('id' => '33','menuId' => '17','actionName' => 'Reject Task','route' => 'task.reject','created_at' => NULL,'updated_at' => NULL),
             array('id' => '34','menuId' => '18','actionName' => 'Add / Edit','route' => 'partner.add','created_at' => NULL,'updated_at' => NULL),
             array('id' => '35','menuId' => '18','actionName' => 'Update Status','route' => 'partner.status','created_at' => NULL,'updated_at' => NULL),
-            array('id' => '36','menuId' => '19','actionName' => 'Add / Edit','route' => 'firm.add','created_at' => NULL,'updated_at' => NULL),
-            array('id' => '37','menuId' => '19','actionName' => 'Update Status','route' => 'firm.status','created_at' => NULL,'updated_at' => NULL),
-            array('id' => '38','menuId' => '15','actionName' => 'Invoice','route' => 'lead.invoice','created_at' => NULL,'updated_at' => NULL),
-            array('id' => '39','menuId' => '20','actionName' => 'Payment','route' => 'lead.paymentStatus','created_at' => NULL,'updated_at' => NULL),
+            array('id' => '36','menuId' => '19','actionName' => 'Add / Edit','route' => 'bussinessScope.add','created_at' => NULL,'updated_at' => NULL),
+            array('id' => '37','menuId' => '19','actionName' => 'Update Status','route' => 'bussinessScope.status','created_at' => NULL,'updated_at' => NULL),
+            array('id' => '38','menuId' => '20','actionName' => 'Add / Edit','route' => 'firm.add','created_at' => NULL,'updated_at' => NULL),
+            array('id' => '39','menuId' => '20','actionName' => 'Update Status','route' => 'firm.status','created_at' => NULL,'updated_at' => NULL),
+            array('id' => '40','menuId' => '15','actionName' => 'Invoice','route' => 'lead.invoice','created_at' => NULL,'updated_at' => NULL),
+            array('id' => '41','menuId' => '21','actionName' => 'Payment','route' => 'lead.paymentStatus','created_at' => NULL,'updated_at' => NULL),
           ));
     }
 }

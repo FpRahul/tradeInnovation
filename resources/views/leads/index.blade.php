@@ -29,6 +29,17 @@
                 <form class="w-full flex flex-wrap lg:flex-nowrap gap-[10px]"  method="GET">
                     <input name="tab" type="hidden" class="leadtabbing" value="{{$allRequestData->tab}}">
                     <div class="w-[100%] md:w-[40%]">
+                        <label>Client Name</label>
+                        <select name="clientName"  class="clientNameData allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
+                            <option value="">Select Client Name</option>
+                            @if (!empty($clientList))
+                                @foreach ($clientList as $clientNameVal)      
+                                    <option value="{{ $clientNameVal->id}}" @selected($clientNameVal->id == $clientKey)>{{ $clientNameVal->name}} ( {{$clientNameVal->mobile}} )</option>
+                                @endforeach                      
+                            @endif                    
+                        </select>
+                    </div>
+                    <div class="w-[100%] md:w-[40%]">
                         <label>Source</label>
                         <select name="source"  class="sourceData allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
                             <option value="">Select Source</option>
@@ -98,6 +109,9 @@
                 <thead>
                     <tr>
                         <th class="text-start w-[120px] bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
+                           SR NO.
+                        </th>
+                        <th class="text-start w-[120px] bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
                             Lead id
                         </th>
                         <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
@@ -128,6 +142,9 @@
                     @if ($leadList && $leadList->isNotEmpty())
                        @foreach ($leadList as $leadKey => $leadData)
                        <tr>
+                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px] pl-[25px]">
+                            {{$loop->index+1}}
+                        </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px] pl-[25px]">
                             #{{$leadData->lead_id}}
                         </td>
@@ -196,12 +213,11 @@
                                 <div class="dropdown_menus absolute right-0 z-10 mt-2 w-[100px] origin-top-right rounded-md bg-white shadow-md ring-1 ring-black/5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                                     <div class="text-start" role="none">
                                         @if(in_array('leads.add',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
-                                            @if ($leadData->status)
-                                            <a data-id="{{$leadData->id}}" class="lead_edit block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-modal-target="editLeadModal" data-modal-toggle="editLeadModal" type="button">Edit</a>
+                                            @if (auth()->user()->role==1)
+                                                <a href="{{ route('leads.add',['id'=>$leadData->id])}}" class=" block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" type="button">Edit</a>
                                             @else
-                                            <a href="{{ route('leads.add',['id'=>$leadData->id])}}" class=" block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" type="button">Edit</a>
-                                            @endif
-                                            
+                                                <a data-id="{{$leadData->id}}" class="lead_edit block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-modal-target="editLeadModal" data-modal-toggle="editLeadModal" type="button">Edit</a>
+                                            @endif                                           
                                         @endif
                                         {{-- <a href="javascript:void(0)" data-id="{{$leadData->id}}" class="lead_assign_to_user block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal" type="button">Assign</a> --}}
                                         @if(in_array('leads.archive',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
@@ -233,7 +249,7 @@
             </table>
         </div>
         <div id="dynamic-pagination" class="py-[15px] px-[20px]">
-            {{ $leadList->appends(['key' => $searchKey,'source'=>$sourceKey,'service'=>$serviceKey,'status'=>$statusKey])->links() }}
+            {{ $leadList->appends(['key' => $searchKey,'clientName'=>$clientKey,'source'=>$sourceKey,'service'=>$serviceKey,'status'=>$statusKey])->links() }}
         </div>
     </div>
 </div>
@@ -415,6 +431,7 @@
     $(document).on('keyup','#search',function(){
         let val = $(this).val();
         let source = $(this).parent().parent().find('.sourceData').val();
+        let clientName = $(this).parent().parent().find('.clientNameData').val();
         let service = $(this).parent().parent().find('.serviceData').val();
         let status = $(this).parent().parent().find('.statusData').val();
         let tab = $(this).parent().parent().find('.leadtabbing').val();
@@ -424,7 +441,7 @@
             headers:{
                 'X-CSRF-TOKEN':'{{ csrf_token()}}'
             },
-            url:`{{ route('leads.index')}}?source=${source}&service=${service}&status=${status}&key=${val}&tab=${tab}&requestType=ajax`,
+            url:`{{ route('leads.index')}}?source=${source}&clientName=${clientName}&service=${service}&status=${status}&key=${val}&tab=${tab}&requestType=ajax`,
             success:function(res){
                 $('#search_table_data').html(res.trData);
             }

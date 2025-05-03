@@ -52,11 +52,12 @@ class LeadsController extends Controller
         }
 
         $sourceKey = $request->input('source') ?? '';
+        $clientKey = $request->input('clientName') ?? '';
         $serviceKey = $request->input('service') ?? '';
         $statusKey = $request->input('status') ?? '';
         $searchKey = $request->input('key') ?? '';
         $requestType = $request->input('requestType') ?? '';
-        if ($sourceKey != '' || $serviceKey != '' || $statusKey != '' || $searchKey != '') {
+        if ($clientKey != '' || $sourceKey != '' || $serviceKey != '' || $statusKey != '' || $searchKey != '') {
 
             $leadList->when(!empty($request->source), function ($q) use ($request) {
                 $q->where('source', $request->source);
@@ -71,8 +72,13 @@ class LeadsController extends Controller
                 })
                 ->when(!empty($request->key), function ($q) use ($request) {
                     $q->where('client_name', 'LIKE', '%' . $request->key . '%');
-                });
+                })
+                ->when(!empty($request->clientName), function ($q) use ($request) {
+                    $q->where('client_id', $request->clientName);
+                })
+                ;
         }
+        // dd($leadList->get());
         $leadList = $leadList->latest()->paginate(env("PAGINATION_COUNT"));
         if (empty($requestType)) {
             $sourceList = Lead::where('user_id', auth()->user()->id)
@@ -87,10 +93,11 @@ class LeadsController extends Controller
                 ->get()
                 ->pluck('service_id');
             $userList = User::where('role', '>=', 5)->get();
+            $clientList = User::where('role', 2)->latest()->get();
             $header_title_name = 'Leads';
-            return view('leads/index', compact('allRequestData', 'header_title_name', 'leadList', 'sourceList', 'serviceList', 'userList', 'sourceKey', 'serviceKey', 'statusKey', 'searchKey'));
+            return view('leads/index', compact('allRequestData', 'header_title_name', 'leadList', 'sourceList', 'serviceList', 'userList','clientList','clientKey', 'sourceKey', 'serviceKey', 'statusKey', 'searchKey'));
         } else {
-            $trData = view('leads/lead-page-filter-data', compact('allRequestData', 'leadList', 'sourceKey', 'serviceKey', 'statusKey', 'searchKey'))->render();
+            $trData = view('leads/lead-page-filter-data', compact('allRequestData', 'leadList', 'sourceKey','clientKey', 'serviceKey', 'statusKey', 'searchKey'))->render();
             $dataArray = [
                 'trData' => $trData,
                 'source' => $request->source,
@@ -102,17 +109,16 @@ class LeadsController extends Controller
     }
 
     public function add(Request $request, $id = null)
-    {
-        if ($id > 0) {
-            
+    {       
+        if ($id > 0) {            
             $leadData = Lead::where('id', $id)->first();
-            if ($leadData) {
-                if ($leadData->status == 1) {
-                    return redirect()->back()->with('error', 'Authorized error!');
-                }
-            } else {
-                return redirect()->route('leads.index')->with('error', 'Authorized error!');
-            }
+            // if ($leadData) {
+            //     if ($leadData->status == 1) {
+            //         return redirect()->back()->with('error', 'Authorized error!');
+            //     }
+            // } else {
+            //     return redirect()->route('leads.index')->with('error', 'Authorized error!');
+            // }
             $leadOldData = Lead::where('id', $id)->first();
             $leadAttachment = LeadAttachment::where('lead_id', $id)->get();
             $LeadTask = LeadTask::with('leadTaskDetails','serviceDetails')->where('lead_id', $id)->get();
@@ -134,19 +140,23 @@ class LeadsController extends Controller
         $clientList = User::where('role', 2)->where('status', 1)->get();
         $projectManagerList = User::where('role', 4)->where('status', 1)->get();
         $firmList = Firm::where('status', 1)->get();
-        if ($request->isMethod('POST')) {            
+        if ($request->isMethod('POST')) { 
+                     
             $scopeOfBusinessArray = $request->scopeofbusiness;
             if (in_array('other', $request->scopeofbusiness)) {
                 $scopeOfBusinessArray = array_diff($scopeOfBusinessArray, ['other']);
-                $categoryData = new CategoryOption();
-                $categoryData->authId = Auth::id();
-                $categoryData->type = 4;
-                $categoryData->name = $request->otherscopeofbusiness;
-                $categoryData->status = 1;
-                if ($categoryData->save()) {
-                    $scopeOfBusinessArray[] = $categoryData->id;
-                }
+                if(!empty($request->otherscopeofbusiness)){                    
+                    $categoryData = new CategoryOption();
+                    $categoryData->authId = Auth::id();
+                    $categoryData->type = 4;
+                    $categoryData->name = $request->otherscopeofbusiness;
+                    $categoryData->status = 1;
+                    if ($categoryData->save()) {
+                        $scopeOfBusinessArray[] = $categoryData->id;
+                    }
+                }               
             }
+            
             $credentials = $request->validate([
                 'email' => $email,
             ]);
@@ -230,7 +240,7 @@ class LeadsController extends Controller
                             } else {
                                 $serviceDetailData->class_rule = $serviceVal['classrule'];
                             }
-                                                        $serviceDetailData->applied_for = $serviceVal['appliedfor'];
+                                $serviceDetailData->applied_for = $serviceVal['appliedfor'];
                            
                             if (isset($serviceVal['serviceLogo']) && $serviceVal['serviceLogo'] instanceof \Illuminate\Http\UploadedFile) {
 
@@ -331,14 +341,19 @@ class LeadsController extends Controller
 
     public function leadFetch(Request $request)
     {
-        $leadData = Lead::with(['leadTasks', 'leadAttachments'])->find($request->id);
+        $leadData = Lead::with(['leadTasks','leadTasks.leadTaskDetails', 'leadAttachments'])->find($request->id);
         $serviceDataArray = [];
+        // dd($leadData->leadTasks);
         foreach ($leadData->leadTasks as $dataKey => $dataVal) {
-            $userData = User::find($dataVal->user_id);
-            $serviceData = Service::find($dataVal->service_id);
-            $serviceDataArray['users'][] = $userData->name;
-            $serviceDataArray['services'][] = $serviceData->serviceName;
+            if($dataVal->leadTaskDetails->status == 0){
+                $userData = User::find($dataVal->user_id);
+                $serviceData = Service::find($dataVal->service_id);
+                $serviceDataArray['users'][] = $userData->name;
+                $serviceDataArray['services'][] = $serviceData->serviceName;
+            }           
         }
+        
+
         $serviceData = '';
         foreach ($serviceDataArray['users'] as $index => $user) {
             $service = $serviceDataArray['services'][$index] ?? 'No Service';

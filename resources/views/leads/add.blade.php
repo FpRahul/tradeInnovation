@@ -136,212 +136,213 @@
                         <div data-repeater-list="leadRepeater" class="flex flex-col gap-[20px]">  
                             @if ($LeadTask && $LeadTask->isNotEmpty())
                                 @foreach ($LeadTask as $serviceKey => $serviceVal)
-                              
-                                    <div data-repeater-item class="repeater-item flex flex-wrap items-end gap-[20px]">
-                                        <div class="w-[calc(100%-75px)] ">
-                                            <input type="hidden" name="lead_task_id" value="{{$serviceVal->id}}">
-                                            <div class="w-full outline-[1px] outline-dashed outline-[#ccc] p-[10px] rounded-[5px] flex flex-wrap gap-[5px] lg:gap-[10px] xl:gap-[15px]">
-                                                <div class="w-full">
-                                                    <label for="client_type" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Client Type</label>
-                                                    <div class="flex flex-wrap gap-[20px] mt-[20px]">
-                                                        <div class="flex items-center gap-[10px]">
-                                                            <input type="radio" name="client_type" id="client_type" class="client_type" value="1" 
-                                                                @checked(old('client_type', $serviceVal->serviceDetails->client_status) == 1) checked>
-                                                            <label for="client_type" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Applicant</label>
-                                                        </div>
-                                                        <div class="flex items-center gap-[10px]">
-                                                            <input type="radio" name="client_type" id="client_type2" class="client_type" value="2" 
-                                                                @checked(old('client_type', $serviceVal->serviceDetails->client_status) == 2)>
-                                                            <label for="client_type2" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Opponent</label>
-                                                        </div>
-                                                    </div>                                                    
-                                                </div>
-                                                <div class="w-full  md:w-[32%] lg:w-[32%]">
-                                                    <label class="block mb-[5px] text-[14px] font-[400]">Project Manager</label>
-                                                    <select name="projectmanager" id="projectmanager" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
-                                                        <option value="">Project Manager</option>
-                                                        @foreach ($projectManagerList as $projectManagerListData)
-                                                            <option value="{{ $projectManagerListData->id }}" 
-                                                                @selected(
-                                                                    old('projectmanager', $serviceVal->project_manager_id) == $projectManagerListData->id ||
-                                                                    ($authDetails->role == 4 && $authDetails->id == $projectManagerListData->id)
-                                                                )
-                                                            >
-                                                                {{ $projectManagerListData->name }}
-                                                            </option>
-                                                        @endforeach                            
-                                                    </select>                                                
-                                                </div>
-                                                <div class="w-full  md:w-[32%] lg:w-[32%]">
-                                                    <label class="block mb-[5px] text-[14px] font-[400]">Service Name</label>
-                                                    <select name="serviceid" class="lead_service_id setSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
-                                                        <option value="">Service Name</option>
-                                                        @if (count($serviceList) > 0)
-                                                            @foreach ($serviceList as $serviceListData)
-                                                                <option value="{{ $serviceListData->id }}" 
-                                                                    @selected(old('serviceid', $serviceVal->service_id) == $serviceListData->id)>
-                                                                    {{ $serviceListData->serviceName }}
-                                                                </option>
-                                                            @endforeach  
-                                                        @endif
-                                                    </select>                                                    
-                                                </div>
-                                                <div class="relative w-full  md:w-[32%] lg:w-[32%]">
-                                                    <label class="block mb-[5px] text-[14px] font-[400]">Service Type</label>
-                                                    <select name="subserviceid" class="getSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
-                                                        <option value="">Service Type</option>  
-                                                        @if ($serviceVal->subservice_id)                                                           
-                                                            @php 
-                                                                $subServiceData = getSubService($serviceVal->service_id);
-                                                            @endphp                                                      
-                                                            @foreach ($subServiceData as $subServiceDataKey => $subServiceDataVal)                                                                
-                                                                <option value="{{ $subServiceDataVal->id }}" 
-                                                                    @selected(old('subserviceid', $serviceVal->subservice_id) == $subServiceDataVal->id)>
-                                                                    {{ $subServiceDataVal->subServiceName }}
-                                                                </option>                                                                
-                                                            @endforeach    
-                                                        @endif                                              
-                                                    </select>
-                                                    
-                                                    <div class="loader serviceNameLoader flex items-center justify-center bg-[#ffffffa8] h-[45px] absolute top-[26px] left-[0] right-[0] m-auto hidden">
-                                                        <span class="loader-1"> </span>   
+                                    @if ($serviceVal->leadTaskDetails->status == 0)
+                                        <div data-repeater-item class="repeater-item flex flex-wrap items-end gap-[20px]">
+                                            <div class="w-[calc(100%-75px)] ">
+                                                <input type="hidden" name="lead_task_id" value="{{$serviceVal->id}}">
+                                                <div class="w-full outline-[1px] outline-dashed outline-[#ccc] p-[10px] rounded-[5px] flex flex-wrap gap-[5px] lg:gap-[10px] xl:gap-[15px]">
+                                                    <div class="w-full">
+                                                        <label for="client_type" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Client Type</label>
+                                                        <div class="flex flex-wrap gap-[20px] mt-[20px]">
+                                                            <div class="flex items-center gap-[10px]">
+                                                                <input type="radio" name="client_type" id="client_type" class="client_type" value="1" 
+                                                                    @checked(old('client_type', $serviceVal->serviceDetails->client_status) == 1) checked>
+                                                                <label for="client_type" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Applicant</label>
+                                                            </div>
+                                                            <div class="flex items-center gap-[10px]">
+                                                                <input type="radio" name="client_type" id="client_type2" class="client_type" value="2" 
+                                                                    @checked(old('client_type', $serviceVal->serviceDetails->client_status) == 2)>
+                                                                <label for="client_type2" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Opponent</label>
+                                                            </div>
+                                                        </div>                                                    
                                                     </div>
-                                                </div>
-                                                <div class="w-full  md:w-[32%] lg:w-[32%]">
-                                                    <label class="block mb-[5px] text-[14px] font-[400]">Assign To Users</label>
-                                                    <select name="assign" id="assign" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
-                                                        <option value="">Assign To Users</option>
-                                                        @foreach ($userList as $userListData)
-                                                            <option 
-                                                                value="{{ $userListData->id }}" 
-                                                                @selected(old('assign', $serviceVal->user_id) == $userListData->id)>
-                                                                {{ $userListData->name }}
-                                                            </option>
-                                                        @endforeach                            
-                                                    </select>                                                    
-                                                </div>
-                                                <div class="w-full  md:w-[32%] lg:w-[32%] stageoftheservice">
-                                                    <label class="block mb-[5px] text-[14px] font-[400]">Service Stage</label>
-                                                    <select name="stage_id" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none serviceStagesOption" required>
-                                                        <option value="">Select Stage</option>
-                                                        @php
-                                                            $allStagesData = ServiceStages::where('service_id', $serviceVal->service_id)->get();
-                                                        @endphp
-                                                        @if ($allStagesData && $allStagesData->isNotEmpty())
-                                                            @foreach ($allStagesData as $stageVal)
-                                                                <option value="{{ $stageVal['id'] }}" 
-                                                                    @selected(old('stage_id', $serviceVal->service_stage_id) == $stageVal['id'])>
-                                                                    {{ $stageVal['title'] }}
-                                                                </option>
-                                                            @endforeach
-                                                        @endif
-                                                    </select>
-                                                    
-                                                </div>
-                                                <div class="w-full  md:w-[32%] lg:w-[32%]">
-                                                    <label class="block mb-[5px] text-[14px] font-[400]">Dead Line</label>
-                                                    <div class="w-[100%] relative">
-                                                        <input 
-                                                            type="text"
-                                                            placeholder="Dead Line" 
-                                                            name="taskdeadline" 
-                                                            class="daterangepicker-taskdeadline daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
-                                                            value="{{ old('taskdeadline', !empty($serviceVal->leadTaskDetails) ? date('d M Y', strtotime($serviceVal->leadTaskDetails->dead_line)) : '') }}" 
-                                                            autocomplete="off"
-                                                        />                                                        
-                                                    </div>     
-                                                </div>
-                                                
-                                                {{-- start service details --}}
-                                                <div class="eachServiceDetails flex flex-wrap w-full gap-[15px] border-[1px] border-[#ccc] outline-[#ccc] p-[10px] rounded-[5px] {{ isset($serviceVal->service_id) && $serviceVal->service_id == 1 || $serviceVal->service_id == 2 ? '' : 'hidden' }}">
-
-                                                    <h2 class="w-full text-[22px] leading-[25px] mb-[5px] font-[600]">Details</h2>
-                                                    <div class="w-full md:w-[32%] lg:w-[32%]">
-                                                        <label class="block mb-[5px] text-[14px] font-[400]">Risk Class</label>
-                                                        <select name="classrule"
-                                                                class="classrule w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                    <div class="w-full  md:w-[32%] lg:w-[32%]">
+                                                        <label class="block mb-[5px] text-[14px] font-[400]">Project Manager</label>
+                                                        <select name="projectmanager" id="projectmanager" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                            <option value="">Project Manager</option>
+                                                            @foreach ($projectManagerList as $projectManagerListData)
+                                                                <option value="{{ $projectManagerListData->id }}" 
+                                                                    @selected(
+                                                                        old('projectmanager', $serviceVal->project_manager_id) == $projectManagerListData->id ||
+                                                                        ($authDetails->role == 4 && $authDetails->id == $projectManagerListData->id)
+                                                                    )
                                                                 >
-                                                        
-                                                            <option value="">Risk Class</option>
-                                                            @php
-                                                                $selectedValues = explode(',', old('classrule', $serviceVal->serviceDetails->class_rule ?? ''));
-                                                            @endphp
-                                                        
-                                                            @for ($i = 1; $i <= 45; $i++)
-                                                                <option value="{{$i}}" @if(in_array($i, $selectedValues)) selected @endif>{{$i}}</option>
-                                                            @endfor                         
-                                                        </select>
-                                                                                                
-                                                    </div>                                                
-                                                    <div class="w-full md:w-[32%] lg:w-[32%]">
-                                                        <label class="appliedForText block mb-[5px] text-[14px] font-[400]">
-                                                            @if ($serviceVal->service_id == 1)
-                                                            Trademark Applied For
-                                                            @elseif ($serviceVal->service_id == 2)
-                                                            Patent Applied For
+                                                                    {{ $projectManagerListData->name }}
+                                                                </option>
+                                                            @endforeach                            
+                                                        </select>                                                
+                                                    </div>
+                                                    <div class="w-full  md:w-[32%] lg:w-[32%]">
+                                                        <label class="block mb-[5px] text-[14px] font-[400]">Service Name</label>
+                                                        <select name="serviceid" class="lead_service_id setSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                            <option value="">Service Name</option>
+                                                            @if (count($serviceList) > 0)
+                                                                @foreach ($serviceList as $serviceListData)
+                                                                    <option value="{{ $serviceListData->id }}" 
+                                                                        @selected(old('serviceid', $serviceVal->service_id) == $serviceListData->id)>
+                                                                        {{ $serviceListData->serviceName }}
+                                                                    </option>
+                                                                @endforeach  
                                                             @endif
-                                                            </label>
-                                                        <input type="text" name="appliedfor" 
-                                                            value="{{ isset($serviceVal->serviceDetails) ? $serviceVal->serviceDetails->applied_for : '' }}" 
-                                                            class="appliedfor w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
-                                                            >                                                
+                                                        </select>                                                    
                                                     </div>
-                                                    <div class="applicationNumberHide w-full md:w-[32%] lg:w-[32%] {{$serviceVal->subservice_id == 1 || $serviceVal->subservice_id == 10 ? 'hidden':''}}">
-                                                        <label class="block mb-[5px] text-[14px] font-[400]">Application Number</label>
-                                                        <input type="text" name="applicationNumber" 
-                                                            value="{{ isset($serviceVal->serviceDetails) ? $serviceVal->serviceDetails->application_number : '' }}" 
-                                                            class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
-                                                            >                                                                                                 
+                                                    <div class="relative w-full  md:w-[32%] lg:w-[32%]">
+                                                        <label class="block mb-[5px] text-[14px] font-[400]">Service Type</label>
+                                                        <select name="subserviceid" class="getSubService w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                            <option value="">Service Type</option>  
+                                                            @if ($serviceVal->subservice_id)                                                           
+                                                                @php 
+                                                                    $subServiceData = getSubService($serviceVal->service_id);
+                                                                @endphp                                                      
+                                                                @foreach ($subServiceData as $subServiceDataKey => $subServiceDataVal)                                                                
+                                                                    <option value="{{ $subServiceDataVal->id }}" 
+                                                                        @selected(old('subserviceid', $serviceVal->subservice_id) == $subServiceDataVal->id)>
+                                                                        {{ $subServiceDataVal->subServiceName }}
+                                                                    </option>                                                                
+                                                                @endforeach    
+                                                            @endif                                              
+                                                        </select>
+                                                        
+                                                        <div class="loader serviceNameLoader flex items-center justify-center bg-[#ffffffa8] h-[45px] absolute top-[26px] left-[0] right-[0] m-auto hidden">
+                                                            <span class="loader-1"> </span>   
+                                                        </div>
                                                     </div>
-                                                    <div class="w-full md:w-[32%] lg:w-[32%]">
-                                                        @php
-                                                            $logoPath = !empty($serviceVal->serviceDetails->service_logo) ? 'uploads/leads/'.$leadData->id.'/'.$serviceVal->serviceDetails->service_logo : 'assets/images/noimage.png';
-                                                        @endphp
-                                                    
-                                                            <label class="block mb-[5px] text-[14px] font-[400]">Logo</label>
-                                                            <div class="flex w-full items-center gap-[5px]">
-                                                                <img src="{{ asset($logoPath)}}" class="getpreviewlogo w-[30px] h-[30px] max-w-[30px] max-h-[30px] object-cover border-[1px] border-[#999] rounded-[5px]" />   
-                                                                <div class="relative prviewServ">
-                                                                    <input class="previewServiceLogo  max-w-[80%] text-[14px] p-[8px]" type="file" name="serviceLogo" >                                                            
-                                                                </div>       
-                                                            </div>                                                         
-                                                        <div class="logoErrorMsg text-[12px] italic font-[400] text-[#e70e0e]"></div>                                             
+                                                    <div class="w-full  md:w-[32%] lg:w-[32%]">
+                                                        <label class="block mb-[5px] text-[14px] font-[400]">Assign To Users</label>
+                                                        <select name="assign" id="assign" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                                                            <option value="">Assign To Users</option>
+                                                            @foreach ($userList as $userListData)
+                                                                <option 
+                                                                    value="{{ $userListData->id }}" 
+                                                                    @selected(old('assign', $serviceVal->user_id) == $userListData->id)>
+                                                                    {{ $userListData->name }}
+                                                                </option>
+                                                            @endforeach                            
+                                                        </select>                                                    
                                                     </div>
-                                                    <div class="w-full md:w-[32%] lg:w-[32%]">
-                                                        <label class="block mb-[5px] text-[14px] font-[400]">Filing Mode</label>
-                                                        <input type="text" name="filingmode" 
-                                                            value="{{ isset($serviceVal->serviceDetails) ? $serviceVal->serviceDetails->filing_mode : '' }}" 
-                                                            class="filingmode w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
-                                                            > 
-                                                                                                
-                                                    </div>   
-                                                    <div class="w-full  md:w-[32%] lg:w-[32%]">  
-                                                        <label class="block mb-[5px] text-[14px] font-[400]">Filing Date</label>                                                                      
-                                                        <div class="w-[100%] relative">                                                            
+                                                    <div class="w-full  md:w-[32%] lg:w-[32%] stageoftheservice">
+                                                        <label class="block mb-[5px] text-[14px] font-[400]">Service Stage</label>
+                                                        <select name="stage_id" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none serviceStagesOption" required>
+                                                            <option value="">Select Stage</option>
+                                                            @php
+                                                                $allStagesData = ServiceStages::where('service_id', $serviceVal->service_id)->get();
+                                                            @endphp
+                                                            @if ($allStagesData && $allStagesData->isNotEmpty())
+                                                                @foreach ($allStagesData as $stageVal)
+                                                                    <option value="{{ $stageVal['id'] }}" 
+                                                                        @selected(old('stage_id', $serviceVal->service_stage_id) == $stageVal['id'])>
+                                                                        {{ $stageVal['title'] }}
+                                                                    </option>
+                                                                @endforeach
+                                                            @endif
+                                                        </select>
+                                                        
+                                                    </div>
+                                                    <div class="w-full  md:w-[32%] lg:w-[32%]">
+                                                        <label class="block mb-[5px] text-[14px] font-[400]">Dead Line</label>
+                                                        <div class="w-[100%] relative">
                                                             <input 
-                                                                type="text" 
-                                                                placeholder="Filing Date" 
-                                                                name="filingdate" 
-                                                                class="filingdate daterangepicker-taskdeadline daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
-                                                                value="{{ old('taskdeadline', $serviceVal->serviceDetails->filing_date ?? '') }}"
+                                                                type="text"
+                                                                placeholder="Dead Line" 
+                                                                name="taskdeadline" 
+                                                                class="daterangepicker-taskdeadline daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
+                                                                value="{{ old('taskdeadline', !empty($serviceVal->leadTaskDetails) ? date('d M Y', strtotime($serviceVal->leadTaskDetails->dead_line)) : '') }}" 
                                                                 autocomplete="off"
-                                                            >                                                            
+                                                            />                                                        
                                                         </div>     
                                                     </div>
-                                                   
+                                                    
+                                                    {{-- start service details --}}
+                                                    <div class="eachServiceDetails flex flex-wrap w-full gap-[15px] border-[1px] border-[#ccc] outline-[#ccc] p-[10px] rounded-[5px] {{ isset($serviceVal->service_id) && $serviceVal->service_id == 1 || $serviceVal->service_id == 2 ? '' : 'hidden' }}">
+
+                                                        <h2 class="w-full text-[22px] leading-[25px] mb-[5px] font-[600]">Details</h2>
+                                                        <div class="w-full md:w-[32%] lg:w-[32%]">
+                                                            <label class="block mb-[5px] text-[14px] font-[400]">Risk Class</label>
+                                                            <select name="classrule"
+                                                                    class="classrule w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                                    >
+                                                            
+                                                                <option value="">Risk Class</option>
+                                                                @php
+                                                                    $selectedValues = explode(',', old('classrule', $serviceVal->serviceDetails->class_rule ?? ''));
+                                                                @endphp
+                                                            
+                                                                @for ($i = 1; $i <= 45; $i++)
+                                                                    <option value="{{$i}}" @if(in_array($i, $selectedValues)) selected @endif>{{$i}}</option>
+                                                                @endfor                         
+                                                            </select>
+                                                                                                    
+                                                        </div>                                                
+                                                        <div class="w-full md:w-[32%] lg:w-[32%]">
+                                                            <label class="appliedForText block mb-[5px] text-[14px] font-[400]">
+                                                                @if ($serviceVal->service_id == 1)
+                                                                Trademark Applied For
+                                                                @elseif ($serviceVal->service_id == 2)
+                                                                Patent Applied For
+                                                                @endif
+                                                                </label>
+                                                            <input type="text" name="appliedfor" 
+                                                                value="{{ isset($serviceVal->serviceDetails) ? $serviceVal->serviceDetails->applied_for : '' }}" 
+                                                                class="appliedfor w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                                >                                                
+                                                        </div>
+                                                        <div class="applicationNumberHide w-full md:w-[32%] lg:w-[32%] {{$serviceVal->subservice_id == 1 || $serviceVal->subservice_id == 10 ? 'hidden':''}}">
+                                                            <label class="block mb-[5px] text-[14px] font-[400]">Application Number</label>
+                                                            <input type="text" name="applicationNumber" 
+                                                                value="{{ isset($serviceVal->serviceDetails) ? $serviceVal->serviceDetails->application_number : '' }}" 
+                                                                class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                                >                                                                                                 
+                                                        </div>
+                                                        <div class="w-full md:w-[32%] lg:w-[32%]">
+                                                            @php
+                                                                $logoPath = !empty($serviceVal->serviceDetails->service_logo) ? 'uploads/leads/'.$leadData->id.'/'.$serviceVal->serviceDetails->service_logo : 'assets/images/noimage.png';
+                                                            @endphp
+                                                        
+                                                                <label class="block mb-[5px] text-[14px] font-[400]">Logo</label>
+                                                                <div class="flex w-full items-center gap-[5px]">
+                                                                    <img src="{{ asset($logoPath)}}" class="getpreviewlogo w-[30px] h-[30px] max-w-[30px] max-h-[30px] object-cover border-[1px] border-[#999] rounded-[5px]" />   
+                                                                    <div class="relative prviewServ">
+                                                                        <input class="previewServiceLogo  max-w-[80%] text-[14px] p-[8px]" type="file" name="serviceLogo" >                                                            
+                                                                    </div>       
+                                                                </div>                                                         
+                                                            <div class="logoErrorMsg text-[12px] italic font-[400] text-[#e70e0e]"></div>                                             
+                                                        </div>
+                                                        <div class="w-full md:w-[32%] lg:w-[32%]">
+                                                            <label class="block mb-[5px] text-[14px] font-[400]">Filing Mode</label>
+                                                            <input type="text" name="filingmode" 
+                                                                value="{{ isset($serviceVal->serviceDetails) ? $serviceVal->serviceDetails->filing_mode : '' }}" 
+                                                                class="filingmode w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                                > 
+                                                                                                    
+                                                        </div>   
+                                                        <div class="w-full  md:w-[32%] lg:w-[32%]">  
+                                                            <label class="block mb-[5px] text-[14px] font-[400]">Filing Date</label>                                                                      
+                                                            <div class="w-[100%] relative">                                                            
+                                                                <input 
+                                                                    type="text" 
+                                                                    placeholder="Filing Date" 
+                                                                    name="filingdate" 
+                                                                    class="filingdate daterangepicker-taskdeadline daterangepicker-item w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none" 
+                                                                    value="{{ old('taskdeadline', $serviceVal->serviceDetails->filing_date ?? '') }}"
+                                                                    autocomplete="off"
+                                                                >                                                            
+                                                            </div>     
+                                                        </div>
+                                                    
+                                                    </div>
+                                                    {{-- end service details --}}
                                                 </div>
-                                                {{-- end service details --}}
+                                            </div>
+                                            <div class="w-[55px]">
+                                                <span data-repeater-delete data-id="{{$serviceVal->id}}" class="deleteLeadRepeaterRow w-full h-[45px] flex items-center justify-center border-[1px] border-[#0000001A] rounded-[10px] text-center">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                    <svg class="mx-auto" width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M2.616 16C2.15533 16 1.771 15.846 1.463 15.538C1.155 15.23 1.00067 14.8453 1 14.384V2H0V1H4V0.230003H10V1H14V2H13V14.385C13 14.845 12.846 15.2293 12.538 15.538C12.23 15.8467 11.8453 16.0007 11.384 16H2.616ZM4.808 13H5.808V4H4.808V13ZM8.192 13H9.192V4H8.192V13Z" fill="#FF0000" />
+                                                    </svg>
+                                                </span>
                                             </div>
                                         </div>
-                                        <div class="w-[55px]">
-                                            <span data-repeater-delete data-id="{{$serviceVal->id}}" class="deleteLeadRepeaterRow w-full h-[45px] flex items-center justify-center border-[1px] border-[#0000001A] rounded-[10px] text-center">
-                                                <span class="glyphicon glyphicon-remove"></span>
-                                                <svg class="mx-auto" width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M2.616 16C2.15533 16 1.771 15.846 1.463 15.538C1.155 15.23 1.00067 14.8453 1 14.384V2H0V1H4V0.230003H10V1H14V2H13V14.385C13 14.845 12.846 15.2293 12.538 15.538C12.23 15.8467 11.8453 16.0007 11.384 16H2.616ZM4.808 13H5.808V4H4.808V13ZM8.192 13H9.192V4H8.192V13Z" fill="#FF0000" />
-                                                </svg>
-                                            </span>
-                                        </div>
-                                    </div>
+                                    @endif
                                 @endforeach 
                             @else
                            

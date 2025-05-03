@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Jobs\SendClientWelcomeEmail;
 use App\Jobs\SentForgetPasswordmail;
 use App\Models\Partner;
+use App\Models\ScopeOfBusinesses;
 use Carbon\Carbon;
 
 
@@ -342,7 +343,7 @@ class UsersController extends Controller
             }
         
         }
-        dd($taskAssignments);
+        // dd($taskAssignments);
         
         $clientFilter = User::with('userdetail')->where('role', 2)->where('archive', 1)->get();
         $user_id = $request->user_id;
@@ -1170,6 +1171,97 @@ class UsersController extends Controller
                 'user_id' => auth()->user()->id,
                 'title' => 'Update Partner Status',
                 'description' => auth()->user()->name . ' has ' . $logAct .' status of '. $partnerData->name . ' #' . $partnerData->id ,
+                'created_at' => date('Y-m-d H:i:s'),
+                'ip_address' => $clientIP,
+                'operating_system' => $operatingSystem
+            ];
+            $logActivity = new LogActivity($logActivity);
+            $logActivity->log();
+            return redirect()->back()->with('success', 'Status is successfully updated!');
+        } else {
+            return redirect()->back()->with('error', 'Some error is occur!');
+        }
+    }
+
+    public function scopeOfBusiness(Request $request){
+        
+        $categoryData = CategoryOption::where('type', 4);
+        $searchKey = $request->input('key') ?? '';
+        $requestType = $request->input('requestType') ?? '';
+        if($searchKey){
+            $categoryData->where(function($q) use($searchKey){
+                $q->where('name', 'LIKE', "%{$searchKey}%");
+            });
+        }
+        
+        $categoryData = $categoryData->orderBy('id','DESC')->paginate(env("PAGINATION_COUNT"));
+        if(empty($requestType)){
+            $header_title_name = 'User';
+            return view('users.business-scope', compact('header_title_name', 'categoryData','searchKey'));
+        }else{
+            $trData = view('users/business-scope-table', compact('categoryData', 'searchKey'))->render();
+            $dataArray = [
+                'trData' => $trData,
+            ];
+            return response()->json($dataArray);
+        }
+
+    }
+
+    public function addScopeBusiness(Request $request){
+        $clientIP = \Request::ip();        
+        $userAgent = \Request::header('User-Agent');
+        $operatingSystem = getOperatingSystem($userAgent);
+        if($request->bussinessScope_id > 0){
+            $businessScope = CategoryOption::find($request->bussinessScope_id);
+            $logAct = "Updated";
+          }else{
+              $businessScope = new CategoryOption();
+              $logAct = "Added";
+          }
+        if($request->isMethod('POST')){            
+            $businessScope->name = $request->name;
+            $businessScope->type = $request->type;
+            if($businessScope->save()){
+                $logActivity[] = [
+                    'user_id' => auth()->user()->id,
+                    'title' => 'Add/Edit Partner',
+                    'description' => auth()->user()->name . ' has ' . $logAct . ' the user ' . $businessScope->name . ' #' . $businessScope->id,                    
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'ip_address' => $clientIP,
+                    'operating_system' => $operatingSystem
+                ];
+                $logActivity = new LogActivity($logActivity);
+                $logActivity->log();
+                if($request->bussinessScope_id > 0){
+                    return redirect()->back()->with('success','Successfully Updated!');
+                }else{
+                    return redirect()->back()->with('success','Successfully Inserted!');
+                }
+                
+            }else{
+                return redirect()->back()->with('error','Some error is occur!');
+            }
+        }
+        return view('users.scope-of-business', compact('businessScope'));
+    }
+
+    public function scopeOfBusinessStatus(Request $request,$id){
+        $clientIP = \Request::ip();
+        $userAgent = \Request::header('User-Agent');
+        $operatingSystem = getOperatingSystem($userAgent);
+        $logAct = 'changed the incorporation status';
+        $categoryData = CategoryOption::find($id);
+        if (!$categoryData) {
+            return redirect()->back()->with('error', 'Category not found!');
+        }
+        $categoryData->status = $categoryData->status == 1 ? 0 : 1;
+        
+        if ($categoryData->save()) {
+            $logActivity[] = [
+                'user_id' => auth()->user()->id,
+                'title' => 'Update Category Status',
+                'description' => auth()->user()->name . ' has ' . $logAct . ' of the category ' . $categoryData->name . ' (' . $categoryData->id . ')',
                 'created_at' => date('Y-m-d H:i:s'),
                 'ip_address' => $clientIP,
                 'operating_system' => $operatingSystem

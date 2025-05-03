@@ -80,6 +80,10 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::match(['POST', 'GET'], '/add-partner/{id?}', 'addPartner')->name('partner.add');
         Route::get('/partner-status/{id}','partnerStatus')->name('partner.status');
 
+
+        Route::match(['POST', 'GET'], '/business-scope' , 'scopeOfBusiness')->name('bussinessScope.index');
+        Route::match(['POST', 'GET'], '/add-business-scope/{id?}', 'addScopeBusiness')->name('bussinessScope.add');
+        Route::get('/business-scope-status/{id}','scopeOfBusinessStatus')->name('bussinessScope.status');
         // Route::get('/category-status/{id?}', 'categoryStatus')->name('users.category.status');
         // Route::get('/category-delete/{id?}', 'categoryDelete')->name('users.category.delete');
 
@@ -98,14 +102,6 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::match(['POST','GET'],'/add-role/{id?}', 'addRole')->name('settings.addrole');
         Route::get('assign-menu','viewMenu')->name('setting.viewMenu');
         Route::post('get-menu','getMenu')->name('setting.getMenu');
-        Route::match(['POST', 'GET'], 'scope-of-business' , 'scopeOfBusiness')->name('setting.scopeOfBusiness');
-        Route::Post('scope-of-business/add' , 'scopeOfBusinessAdd')->name('setting.scopeOfBusinessAdd');
-        Route::Post('scope-of-business/update' , 'scopeOfBusinessUpdate')->name('setting.scopeOfBusinessUpdate');
-        Route::match(['POST','GET'],'scope-of-business-status/{id?}' , 'scopeOfBusinessStatus')->name('setting.scopeOfBusinessStatus');
-
-
-     
-
 
          //stages controller
         Route::prefix('stages')->controller(StagesController::class)->group(function (){

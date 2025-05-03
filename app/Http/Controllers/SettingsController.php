@@ -3,7 +3,6 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\RoleMenu; 
 use App\Models\Menu;
-use App\Models\ScopeOfBusinesses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -218,78 +217,5 @@ class SettingsController extends Controller
             return response()->json(['message' => 'error' ,  'status' => 400]);
         }
     }
-    public function scopeOfBusiness(Request $request){
-        $data = ScopeOfBusinesses::where('id','>',0);
-        $searchKey = $request->input('key') ?? '';
-        $requestType = $request->input('requestType') ?? '';
-        if($searchKey){
-            $data->where(function($q) use($searchKey){
-                $q->where('title', 'LIKE', "%{$searchKey}%");
-            });
-        }
-        
-        
-        $data = $data->paginate(env("PAGINATION_COUNT"));
-        if(empty($requestType)){
-            $header_title_name = 'Scope Of Business';
-            return view('settings.scope_of_business', compact('header_title_name', 'data','searchKey'));
-        }else{
-            $trData = view('settings/scope_of_business_table', compact('data', 'searchKey'))->render();
-            $dataArray = [
-                'trData' => $trData,
-            ];
-            return response()->json($dataArray);
-        }
-        return view('settings.scope_of_business', compact('header_title_name' , 'data'));
-    }
-
-    public function scopeOfBusinessAdd(Request $request ){
-        $name = $request->name;
-        if($name){
-            $addScope  = new ScopeOfBusinesses();
-            $addScope->title = $name;
-            if($addScope->save()){
-                return redirect()->route('setting.scopeOfBusiness')->with('success','scope of business added successfully.');
-            }else{
-                return redirect()->route('setting.scopeOfBusiness')->with('error','There is something wrong');
-            }
-        }else {
-            return redirect()->route('setting.scopeOfBusiness')->with('error','please enter scope of business');
-
-        }
-    }
-
-    public function scopeOfBusinessUpdate(Request $request){
-        $id = $request->scope_of_business_id;
-        $title = $request->scope_of_business_name;
-        $existedScopeOfBusiness = ScopeOfBusinesses::find($id);
-        if($existedScopeOfBusiness){
-            $existedScopeOfBusiness->title = $title;
-            if($existedScopeOfBusiness->save()){
-                return redirect()->route('setting.scopeOfBusiness')->with('success','scope of business updated successfully.');
-            }else{
-                return redirect()->route('setting.scopeOfBusiness')->with('error','There is something wrong');
-            }
-        }else {
-            return redirect()->route('setting.scopeOfBusiness')->with('error','Scope of business not found');
-        }
-    }
-    public function scopeOfBusinessStatus(Request $request,$id){
-        $existedScopeOfBusiness = ScopeOfBusinesses::find($id);
-        $status = $existedScopeOfBusiness->status;
-        if($status == 1){
-            $existedScopeOfBusiness->status = 0;
-
-        }else if($status == 0){
-            $existedScopeOfBusiness->status = 1;
-
-        }
-        if($existedScopeOfBusiness->save()){
-            return redirect()->route('setting.scopeOfBusiness')->with('success','scope of business status change successfully.');
-
-        }else{
-            return redirect()->route('setting.scopeOfBusiness')->with('error','There is something wrong');
-
-        }
-    }
+   
 }

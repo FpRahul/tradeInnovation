@@ -99,7 +99,6 @@
                     
                     @if ($clientData->count())                    
                         @foreach ($clientData as $clientDetails)
-
                             <tr>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
                                     {{$loop->index+1 }}
@@ -161,10 +160,14 @@
                                                 </a>
                                                 @endif
                                                 @if(in_array('leadLogs.index',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
-                                                    <a href="{{ route('leadLogs.index', ['lead_id' => $clientDetails->leads->first()->id]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Timeline</a>
+                                                @if($clientDetails->leads->first())
+                                                <a href="{{ route('leadLogs.index', ['lead_id' => $clientDetails->leads->first()->id]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Timeline</a>
+                                                @endif
                                                 @endif
                                                 @if(in_array('lead.paymentStatus',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                                @if($clientDetails->leads->first())
                                                     <a href="{{ route('lead.paymentStatus', ['lead_id' => $clientDetails->leads->first()->id]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Payment</a>
+                                                @endif
                                                 @endif
                                             </div>
                                         </div>
@@ -177,7 +180,7 @@
                         @endforeach
                     @else
                         <tr>
-                            <td colspan="5" class="text-center text-red-500">No Record Found!</td>
+                            <td colspan="8" class="text-center text-red-500">No Record Found!</td>
                         </tr>
                     @endif
                 </tbody>
@@ -193,7 +196,6 @@
     $(document).on('keyup', '.search', function() {
         var key = $(this).val();
         let scope = $(this).parent().parent().find('.scopeData').val();
-        console.log(scope);
         $.ajax({
             method: 'POST',
             url: `{{ route('client.listing')}}?key=${key}&scope=${scope}&requestType=ajax`,
@@ -202,7 +204,6 @@
             },
             dataType: 'json',
             success: function(res) {
-                console.log(res);
                 $('#search_table_data').html(res.trData);
 
             }

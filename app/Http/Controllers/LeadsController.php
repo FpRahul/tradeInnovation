@@ -695,8 +695,6 @@ class LeadsController extends Controller
 
     public function paymentStatus(Request $request)
     {
-
-
         $header_title_name = 'Payment Status';
         $lead = Lead::all();
         $payment_details = Payment::with('lead', 'leadTask.services', 'leadTask.serviceSatge')->where('reference_id', 0);
@@ -706,19 +704,34 @@ class LeadsController extends Controller
                 $payment_details = $payment_details->where('lead_id', $request->leadId);
             }
             if (!empty($request->input('dateRange'))) {
-
+                
                 $dateRange = $request->dateRange;
 
                 if (strpos($dateRange, ' - ') !== false) {
                     $dateParts = explode(" - ", $dateRange);
 
                     if (count($dateParts) == 2) {
-                        $startDate = date('Y-m-d', strtotime($dateParts[0]));
-                        $endDate = date('Y-m-d', strtotime($dateParts[1]));
-
-                        $payment_details = $payment_details->whereDate('created_at', '>=', $startDate)
-                            ->whereDate('created_at', '<=', $endDate);
+                        // Split the date range into start and end dates
+                        $startDate = trim($dateParts[0]);
+                        $endDate = trim($dateParts[1]);
+                    
+                        // Convert the date format from d/m/Y to Y-m-d
+                        $startDateArray = explode('/', $startDate);
+                        $endDateArray = explode('/', $endDate);
+                    
+                        // Ensure the format is correct
+                        if (count($startDateArray) == 3 && count($endDateArray) == 3) {
+                            $startDate = $startDateArray[2] . '-' . $startDateArray[1] . '-' . $startDateArray[0];
+                            $endDate = $endDateArray[2] . '-' . $endDateArray[1] . '-' . $endDateArray[0];
+                            $payment_details = $payment_details->whereDate('created_at', '>=', $startDate)
+                                                               ->whereDate('created_at', '<=', $endDate);
+                        } else {
+                            echo "Invalid date format!";
+                            dd($dateParts);
+                        }
                     }
+                    
+                    
                 }
             }
         }

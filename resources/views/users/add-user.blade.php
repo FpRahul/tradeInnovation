@@ -101,8 +101,8 @@
                     @enderror
                 </div>
                 <div class="w-full md:w-1/3">
-                    <label for="password" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Password <span class="text-[12px] italic font-[400] text-[#5e5e5e]">(If required you can change the password)</span> </label>
-                    <input type="text" minlength="8" name="password" id="password" value="" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Password">
+                    <label for="password" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Password <span class="text-[12px] italic font-[400] text-[#5e5e5e]">(If required, you can change the password. Please use an 8-digit password only.)</span> </label>
+                    <input type="text" name="password" id="password" value="" class="mobile_number_validation w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Password">
                     @error('password')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -544,6 +544,14 @@
                 initializeDatePicker($(this));
             }
         });
+    });
+
+    $(document).on('keyup', '.mobile_number_validation', function (e) {
+        let cleanVal = $(this).val();
+        if (cleanVal.length > 8) {
+            cleanVal = cleanVal.substring(0, 8);
+        }
+        $(this).val(cleanVal);       
     });
     
 </script>

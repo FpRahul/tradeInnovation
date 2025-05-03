@@ -452,6 +452,8 @@ class LeadsController extends Controller
     {
         $header_title_name = 'Lead logs';
         $leadData = lead::all();
+        $service = Service::all();
+        $subService = 
         $requestParams = $request->all();
         $leadLogs = LeadLog::with('leadTask', 'leadTask.leadTaskDetails', 'leadTask.serviceSatge')->get();
         if ($request->lead_id > 0) {

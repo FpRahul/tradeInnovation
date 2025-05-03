@@ -25,12 +25,23 @@
             <div class="flex gap-[10px] w-full">
                 <form class="w-full flex flex-wrap lg:flex-nowrap gap-[10px]"  method="GET">
                     <div class="w-[100%] md:w-[20%]">
-                        <label>Scope Of Business</label>
+                        <label>Client Name</label>
                         <select name="user_id"  class="scopeData allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
                             <option value="">Select Scope</option>
                             @if (!empty($clientFilter))
                                 @foreach ($clientFilter as $clientDataListVal)      
                                     <option value="{{ $clientDataListVal->id}}" @if($clientDataListVal->id == $selectedParm) selected @endif>{{ $clientDataListVal->name}} - {{ $clientDataListVal->mobile}} </option>
+                                @endforeach                      
+                            @endif                    
+                        </select>
+                    </div>
+                    <div class="w-[100%] md:w-[20%]">
+                        <label>Services</label>
+                        <select name="service_id"  class="scopeData allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
+                            <option value="">Select Scope</option>
+                            @if (!empty($services))
+                                @foreach ($services as $servicesDetails)      
+                                    <option value="{{ $servicesDetails->id}}" @if($servicesDetails->id == $selectedServiceParm) selected @endif>{{ $servicesDetails->serviceName}} </option>
                                 @endforeach                      
                             @endif                    
                         </select>
@@ -56,7 +67,7 @@
                 <thead>
                     <tr>
                         <th width="20%" class="text-start w-[200px] bg-[#D9D9D933] text-[12px] md:text-[14px] whitespace-nowrap font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
-                            Sr No.
+                            SR.NO
                         </th>
                         <th width="20%" class="text-start w-[200px] bg-[#D9D9D933] text-[12px] md:text-[14px] whitespace-nowrap font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
                             ID
@@ -68,7 +79,10 @@
                             Mobile number
                         </th>
                         <th width="20%" class="text-start bg-[#D9D9D933] text-[12px] md:text-[14px] whitespace-nowrap font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
-                            Scope of business
+                            Services
+                        </th>
+                        <th width="20%" class="text-start bg-[#D9D9D933] text-[12px] md:text-[14px] whitespace-nowrap font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                            Scope Of Business
                         </th>
                         <th width="20%" class="text-start bg-[#D9D9D933] text-[12px] md:text-[14px] whitespace-nowrap font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                             Status
@@ -88,7 +102,7 @@
 
                             <tr>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
-                                    {{$loop->index+1}}
+                                    {{$loop->index+1 }}
                                 </td>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
                                     #{{$clientDetails->uni_user_id ?? 0}}
@@ -98,6 +112,22 @@
                                 </td>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                                     {{$clientDetails->mobile}}
+                                </td>
+                                <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                                    @php
+                                        $services = [];
+                                
+                                        foreach ($clientDetails->leads as $lead) {
+                                            foreach ($lead->leadTasks as $task) {
+                                                if (!empty($task->services?->serviceName)) {
+                                                    $services[] = $task->services->serviceName;
+                                                }
+                                            }
+                                        }
+                                        $uniqueServices = array_unique($services);
+                                    @endphp
+                                
+                                    {{ count($uniqueServices) ? implode(', ', $uniqueServices) : 'N/A' }}
                                 </td>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                                     {{ isset($clientDetails->userdetail) ? getScopeOfBusinessData($clientDetails->userdetail->business_scope) : 'N/A' }}
@@ -129,6 +159,12 @@
                                                 <a href="{{ route('client.status', ['id' => $clientDetails->id, 'val' => $clientDetails->status]) }}" class="client_status block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">
                                                     {{ $clientDetails->status ? 'Inactive' : 'Active' }}
                                                 </a>
+                                                @endif
+                                                @if(in_array('leadLogs.index',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                                    <a href="{{ route('leadLogs.index', ['lead_id' => $clientDetails->leads->first()->id]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Timeline</a>
+                                                @endif
+                                                @if(in_array('lead.paymentStatus',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                                    <a href="{{ route('lead.paymentStatus', ['lead_id' => $clientDetails->leads->first()->id]) }}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Payment</a>
                                                 @endif
                                             </div>
                                         </div>

@@ -134,6 +134,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(LeadTask::class , 'user_id');
     }
+    public function leads()
+    {
+        return $this->hasMany(Lead::class, 'client_id', 'id');
+    }
 
     // public function assignLead(){
     //     return $this->hasMany(LeadAssign::class,'user_id','id');

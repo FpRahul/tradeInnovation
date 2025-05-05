@@ -388,7 +388,7 @@ class UsersController extends Controller
             
             return view('users/client-listing', compact('clientData','selectedParm','clientFilter','selectedServiceParm', 'header_title_name', 'searchKey','scopeKey' , 'service_names','scopeOfBussinessList','services'));
         } else {
-            $trData = view('users/client-page-search-data', compact('clientData', 'searchKey','scopeKey'))->render();
+            $trData = view('users/client-page-search-data', compact('clientData', 'searchKey','scopeKey', 'service_names'))->render();
             $dataArray = [
                 'trData' => $trData,
             ];

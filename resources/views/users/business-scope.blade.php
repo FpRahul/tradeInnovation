@@ -32,6 +32,9 @@
             <table width="100%" cellpadding="0" cellspacing="0" class="min-w-[700px]">
                 <thead>
                     <tr>
+                        <th width="20%" class="text-start w-[200px] bg-[#D9D9D933] text-[12px] md:text-[14px] whitespace-nowrap font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
+                            SR.NO
+                        </th>
                         <th width="33%" class="text-start w-[200px] bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
                             name
                         </th>
@@ -50,6 +53,9 @@
                         @foreach ($categoryData as $newCategorylist)
 
                             <tr>
+                                <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
+                                    {{$loop->index+1}}
+                                </td>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
                                     {{$newCategorylist->name}}
                                 </td>
@@ -72,7 +78,7 @@
                                         <div class="dropdown_menus absolute right-0 z-10 mt-2 w-[100px] origin-top-right rounded-md bg-white shadow-md ring-1 ring-black/5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
                                             <div class="text-start" role="none">
                                                 @if(in_array('bussinessScope.add',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
-                                                    <a href="javascript:void(0)" type="button" data-btn-name="edit" data-name="{{$newCategorylist->name}}" data-id="{{$newCategorylist->id}}" class="openModalScopeBusiness block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal">Edit</a>
+                                                    <a href="javascript:void(0)" type="button" data-btn-name="edit" data-name="{{$newCategorylist->name}}" data-id="{{$newCategorylist->id}}"  class="openModalScopeBusiness block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal">Edit</a>
                                                 @endif
                                                 @if(in_array('bussinessScope.status',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
                                                     <a href="{{ route('bussinessScope.status',['id'=>$newCategorylist->id,'val' => $newCategorylist->status])}}" class="client_status block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">

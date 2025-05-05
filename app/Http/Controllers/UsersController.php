@@ -326,18 +326,15 @@ class UsersController extends Controller
     public function clients(Request $request){
         $clientData = User::with('userdetail', 'leads.leadTasks.services')
         ->where('role', 2)
-        ->where('archive', 1);
-         
-        $services = Service::get();
+        ->where('archive', 1);         
+        $services = Service::get();       
         
-        
-        
-        $clientFilter = User::with('userdetail')->where('role', 2)->where('archive', 1)->get();
+        $clientFilter = User::with('userdetail')->where('role', 2)->where('archive', 1)->latest()->get();
         $user_id = $request->user_id;
         $scopeKey = $request->input('scope') ?? '';
         $searchKey = $request->input('key') ?? '';
         $requestType = $request->input('requestType') ?? '';
-        $scopeKey = $request->input('scope');
+        // $scopeKey = $request->input('scope');
         if (!empty($user_id)) {
             $clientData =  $clientData->where('id', $user_id);
         }
@@ -350,20 +347,19 @@ class UsersController extends Controller
             $clientData = $clientData->where('id', $user_id)
             ->whereHas('leads.leadTasks', function ($q) {
                 $q->where('service_id', request()->input('service_id'));
-        });
-            
+            });            
         }
         $selectedParm = $request->user_id;
         $selectedServiceParm = $request->service_id;
-        if (! empty($searchKey) || !empty($scopeKey)) {
+        if ( !empty($searchKey) || !empty($scopeKey)) {
             $clientData->where(function ($query) use ($searchKey) {
                 $query->where('name', 'LIKE', '%' . $searchKey . '%')
                 ->orWhere('mobile', 'LIKE', '%' . $searchKey . '%')
                 ->orWhere('uni_user_id', 'LIKE', '%' . $searchKey . '%');
-            })->whereHas('userdetail', function ($q) use ($scopeKey) {
-                $q->where('business_scope', 'LIKE', '%' . $scopeKey . '%'); // AND condition remains
-            });
+            });   
+            // dd($clientData->toSql());     
         }
+       
         $clientData = $clientData->latest()->paginate(env("PAGINATION_COUNT"));
         $lead_id = [];
         foreach ($clientData as $data) {
@@ -379,13 +375,11 @@ class UsersController extends Controller
          ->get();
          
          $service_names = $services_details->pluck('services.serviceName')->filter()->unique()->values();
-         $scopeOfBussinessList = CategoryOption::where('status', 1)->where('type', 4)->get();
-         
+         $scopeOfBussinessList = CategoryOption::where('status', 1)->where('type', 4)->get();        
         
         
         if (empty($requestType)) {
-            $header_title_name = 'User';
-            
+            $header_title_name = 'User';            
             return view('users/client-listing', compact('clientData','selectedParm','clientFilter','selectedServiceParm', 'header_title_name', 'searchKey','scopeKey' , 'service_names','scopeOfBussinessList','services'));
         } else {
             $trData = view('users/client-page-search-data', compact('clientData', 'searchKey','scopeKey', 'service_names'))->render();

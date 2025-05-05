@@ -69,9 +69,9 @@
                     <div class="w-full flex items-end flex-wrap lg:flex-nowrap gap-[20px]">
                         <!-- Lead ID Select (Increased width to 5/12) -->
                         <div class="w-full lg:w-5/12">
-                            <label for="leadId" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Lead ID</label>
+                            <label for="leadId" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Client Name</label>
                             <select name="leadId" id="leadId" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
-                                <option value="">Select Lead ID</option>
+                                <option value="">Select Client Name</option>
                                 @if ($lead->count()> 0)
                                 @foreach ( $lead as $data)
                                 <option value="{{ $data->id }}" @if($data->id == $selectedLead) selected @endif>{{ $data->lead_id }} - {{ $data->client_name }}</option>

@@ -453,14 +453,29 @@ class LeadsController extends Controller
         $header_title_name = 'Lead logs';
         $leadData = lead::all();
         $service = Service::all();
-        $subService = 
+        $selectServiceID = $request->service_id;
         $requestParams = $request->all();
         $leadLogs = LeadLog::with('leadTask', 'leadTask.leadTaskDetails', 'leadTask.serviceSatge')->get();
-        if ($request->lead_id > 0) {
+         if($request->service_id > 0 && $request->lead_id > 0){
+
+            $leadLogs = LeadLog::with([
+                'leadAttch', 
+                'leadTask', 
+                'leadTask.leadTaskDetails', 
+                'leadTask.serviceSatge'
+            ])
+            ->where('lead_id', $request->lead_id)
+            ->whereHas('leadTask', function($query) use ($request) {
+                $query->where('service_id', $request->service_id);
+            })
+            ->orderBy('id', 'desc')
+            ->get();
+        }
+       else if ($request->lead_id > 0) {
            
             $leadLogs = LeadLog::with('leadAttch', 'leadTask', 'leadTask.leadTaskDetails', 'leadTask.serviceSatge')->where('lead_id', $request->lead_id)->orderBy('id', 'desc')->get();
-        }
-        return view('leads.logs', compact('leadData', 'leadLogs', 'header_title_name', 'requestParams'));
+        } 
+        return view('leads.logs', compact('leadData', 'leadLogs', 'header_title_name', 'requestParams', 'service' , 'selectServiceID'));
     }
 
     public function getLogs(Request $request)
@@ -698,10 +713,10 @@ class LeadsController extends Controller
         $header_title_name = 'Payment Status';
         $lead = Lead::all();
         $payment_details = Payment::with('lead', 'leadTask.services', 'leadTask.serviceSatge')->where('reference_id', 0);
-        if ($request->leadId || $request->dateRange) {
+        if ($request->lead_id || $request->dateRange) {
             // Apply the lead_id filter
-            if ($request->leadId) {
-                $payment_details = $payment_details->where('lead_id', $request->leadId);
+            if ($request->lead_id) {
+                $payment_details = $payment_details->where('lead_id', $request->lead_id);
             }
             if (!empty($request->input('dateRange'))) {
                 
@@ -735,7 +750,7 @@ class LeadsController extends Controller
                 }
             }
         }
-        $selectedLead = $request->leadId;
+        $selectedLead = $request->lead_id;
         $selectedDate = $request->dateRange;
         $payment_details = $payment_details->paginate(env("PAGINATION_COUNT"));
         return view('leads.payment-details', compact('header_title_name', 'payment_details', 'lead', 'selectedLead', 'selectedDate'));

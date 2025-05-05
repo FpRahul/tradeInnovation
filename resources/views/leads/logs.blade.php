@@ -17,7 +17,7 @@
     <div class="mt-5 shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] mb-[20px] p-[23px]">
         <form id="filterForm" action="" class="w-full" method="GET">
             <div class="flex items-end gap-[10px] w-full">
-                <div class="w-[50%]">
+                <div class="w-[30%]">
                     <label class="flex text-[15px] text-[#000] mb-[5px]">Client Name<strong class="text-[#f83434]">*</strong></label>
                     <select name="lead_id" id="lead_id" class="allform-filter-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
                         <option value="">Select Lead ID</option>
@@ -25,6 +25,17 @@
                         <option value="{{ $leadDetails->id }}" @if(isset($requestParams['lead_id']) && $requestParams['lead_id']==$leadDetails->id) selected @endif> {{ $leadDetails->client_name }} - {{ $leadDetails->mobile_number }} </option>
                         @empty
                         <option value="" disabled>No leads available</option>
+                        @endforelse
+                    </select>
+                </div>
+                <div class="w-[30%]">
+                    <label class="flex text-[15px] text-[#000] mb-[5px]">Services<strong class="text-[#f83434]">*</strong></label>
+                    <select name="service_id" id="service_id" class="allform-filter-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
+                        <option value="">Select services ID</option>
+                        @forelse($service as $servicesDetails)
+                        <option value="{{ $servicesDetails->id }}" @if(isset($requestParams['service_id']) && $requestParams['service_id']==$servicesDetails->id) selected @endif> {{ $servicesDetails->serviceName }} </option>
+                        @empty
+                        <option value="" disabled>No services available</option>
                         @endforelse
                     </select>
                 </div>
@@ -171,6 +182,9 @@
                                     {{ $log->remark }}
                                     @endif
                                 </div>
+                                @if($log->description == 'Lead added in the system' || $log->description == 'Lead assigned to the user' || $log->remark == 'Assign'  )
+                               
+                                
                                 <div class="relative flex flex-col items-center group">
                                     <a href="#" data-rowId="{{$log->id}}" data-taskID="{{ $log->task_id }}" class=" viewLogDeatails flex items-center gap-[8px] text-[15px] font-[600]  text-[#000]">
                                         Action
@@ -179,7 +193,21 @@
                                         <span class="flex items-center justify-center relative rounded-md z-10 px-[2px]  w-[70px] h-[30px] text-xs leading-none text-[#f00000]  font-[22px] "><i class="ri-prohibited-line text-[25px] m-[5px]"></i></p></span>
                                        
                                     </div>
-                                </div>
+                                </div> 
+                                @else
+                                <div class="relative flex flex-col items-center group">
+                                    <a href="#" data-rowId="{{$log->id}}" data-taskID="{{ $log->task_id }}" class=" viewLogDeatails flex items-center gap-[8px] text-[15px] font-[600]  text-[#000]">
+                                        Action
+                                    </a>
+                                    <div class=" absolute bottom-0 flex flex-col items-center hidden mb-5 group-hover:flex">
+                                        <span class="flex items-center justify-center relative rounded-md z-10 px-[2px] w-[70px] h-[30px] text-xs leading-none bg-[#13103A]  text-white font-[22px]">
+                                            Log Details
+                                        </span>
+                                       
+                                    </div>
+                                </div> 
+                                @endif
+
                             </div>
                            
                             @php

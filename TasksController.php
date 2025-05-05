@@ -4658,8 +4658,37 @@ class TasksController extends Controller
 
                                             $newassignlog->description =  "Lead assigned for next task";
                                             if ($newassignlog->save()) {
-                                                return redirect()->route('task.index')
-                                                    ->with('success', 'payment status updated successfully');
+                                                if ($client_id == 0) {
+                                                    $type = 'Client';
+                                                    $mail = true;
+                                                    $randomNumber = substr(str_shuffle('9abcdefghijklmnopq045678rstuvwxyzABCDEFG123HIJKLMNOPQRSTUVWXYZ'), 0, 8);
+                                                    $hashedPassword = Hash::make($randomNumber);
+                                                    $newClient = new User();
+                                                    $newClient->uni_user_id =  $this->generateUniqueUserCode('C', '=', 2);
+                                                    $newClient->name = $existedLeaedTask->lead->client_name;
+                                                    $newClient->role = 2;
+                                                    $newClient->email = $existedLeaedTask->lead->email;
+                                                    $newClient->mobile = $existedLeaedTask->lead->mobile_number;
+                                                    $newClient->companyName = $existedLeaedTask->lead->company_name;
+                                                    $newClient->password = $hashedPassword;
+                                                    if ($newClient->save()) {
+                                                        $leadUpdate->client_id = $newClient->id;
+                                                        $leadUpdate->client_name = $newClient->name;
+                                                        if ($leadUpdate->save()) {
+                                                            if ($mail == true) {
+                                                                SendClientWelcomeEmail::dispatch($newClient, $randomNumber, $filePath = null, $type);
+                                                            }
+                                                            return redirect()->route('task.index')
+                                                                ->with('success', 'payment status updated successfully');
+                                                        } else {
+                                                            return redirect()->back()->with('error', 'there is something wrong while  updateing existed lead');
+                                                        }
+                                                    } else {
+                                                        return redirect()->back()->with('error', 'there is something wrong while  creating new client');
+                                                    }
+                                                } else {
+                                                    return redirect()->route('task.index')->with('success', 'payment status updated successfully');
+                                                }
                                             } else {
                                                 return redirect()->back()->with('error', 'there is something wrong while updating logs');
                                             }
@@ -9625,11 +9654,39 @@ class TasksController extends Controller
                                         $newassignlog->task_id = $newLeadtask->id;
                                         $newassignlog->assign_by = Auth::id();
                                         $newassignlog->remark = 'Assign';
-
                                         $newassignlog->description =  "Lead assigned for next task";
                                         if ($newassignlog->save()) {
-                                            return redirect()->route('task.index')
-                                                ->with('success', 'payment status updated successfully');
+                                            if ($client_id == 0) {
+                                                $type = 'Client';
+                                                $mail = true;
+                                                $randomNumber = substr(str_shuffle('9abcdefghijklmnopq045678rstuvwxyzABCDEFG123HIJKLMNOPQRSTUVWXYZ'), 0, 8);
+                                                $hashedPassword = Hash::make($randomNumber);
+                                                $newClient = new User();
+                                                $newClient->uni_user_id =  $this->generateUniqueUserCode('C', '=', 2);
+                                                $newClient->name = $existedLeaedTask->lead->client_name;
+                                                $newClient->role = 2;
+                                                $newClient->email = $existedLeaedTask->lead->email;
+                                                $newClient->mobile = $existedLeaedTask->lead->mobile_number;
+                                                $newClient->companyName = $existedLeaedTask->lead->company_name;
+                                                $newClient->password = $hashedPassword;
+                                                if ($newClient->save()) {
+                                                    $leadUpdate->client_id = $newClient->id;
+                                                    $leadUpdate->client_name = $newClient->name;
+                                                    if ($leadUpdate->save()) {
+                                                        if ($mail == true) {
+                                                            SendClientWelcomeEmail::dispatch($newClient, $randomNumber, $filePath = null, $type);
+                                                        }
+                                                        return redirect()->route('task.index')
+                                                            ->with('success', 'payment status updated successfully');
+                                                    } else {
+                                                        return redirect()->back()->with('error', 'there is something wrong while  updateing existed lead');
+                                                    }
+                                                } else {
+                                                    return redirect()->back()->with('error', 'there is something wrong while  creating new client');
+                                                }
+                                            } else {
+                                                return redirect()->route('task.index')->with('success', 'payment status updated successfully');
+                                            }
                                         } else {
                                             return redirect()->back()->with('error', 'there is something wrong while updating logs');
                                         }
@@ -14263,11 +14320,41 @@ class TasksController extends Controller
                                             $newassignlog->task_id = $newLeadtask->id;
                                             $newassignlog->assign_by = Auth::id();
                                             $newassignlog->remark = 'Assign';
-
+                                            
                                             $newassignlog->description =  "Lead assigned for next task";
                                             if ($newassignlog->save()) {
-                                                return redirect()->route('task.index')
-                                                    ->with('success', 'payment status updated successfully');
+                                                if ($client_id == 0) {
+                                                    $type = 'Client';
+                                                    $mail = true;
+                                                    $randomNumber = substr(str_shuffle('9abcdefghijklmnopq045678rstuvwxyzABCDEFG123HIJKLMNOPQRSTUVWXYZ'), 0, 8);
+                                                    $hashedPassword = Hash::make($randomNumber);
+                                                    $newClient = new User();
+                                                    $newClient->uni_user_id =  $this->generateUniqueUserCode('C', '=', 2);
+                                                    $newClient->name = $existedLeaedTask->lead->client_name;
+                                                    $newClient->role = 2;
+                                                    $newClient->email = $existedLeaedTask->lead->email;
+                                                    $newClient->mobile = $existedLeaedTask->lead->mobile_number;
+                                                    $newClient->companyName = $existedLeaedTask->lead->company_name;
+                                                    $newClient->password = $hashedPassword;
+                                                    if ($newClient->save()) {
+                                                        
+                                                        $leadUpdate->client_id = $newClient->id;
+                                                        $leadUpdate->client_name = $newClient->name;
+                                                        if ($leadUpdate->save()) {
+                                                            // if ($mail == true) {
+                                                            //     SendClientWelcomeEmail::dispatch($newClient, $randomNumber, $filePath = null, $type);
+                                                            // }
+                                                            return redirect()->route('task.index')
+                                                                ->with('success', 'payment status updated successfully');
+                                                        } else {
+                                                            return redirect()->back()->with('error', 'there is something wrong while  updateing existed lead');
+                                                        }
+                                                    } else {
+                                                        return redirect()->back()->with('error', 'there is something wrong while  creating new client');
+                                                    }
+                                                } else {
+                                                    return redirect()->route('task.index')->with('success', 'payment status updated successfully');
+                                                }
                                             } else {
                                                 return redirect()->back()->with('error', 'there is something wrong while updating logs');
                                             }

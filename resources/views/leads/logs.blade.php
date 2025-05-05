@@ -171,6 +171,9 @@
                                     {{ $log->remark }}
                                     @endif
                                 </div>
+                                @if($log->description == 'Lead added in the system' || $log->description == 'Lead assigned to the user' || $log->remark == 'Assign'  )
+                               
+                                
                                 <div class="relative flex flex-col items-center group">
                                     <a href="#" data-rowId="{{$log->id}}" data-taskID="{{ $log->task_id }}" class=" viewLogDeatails flex items-center gap-[8px] text-[15px] font-[600]  text-[#000]">
                                         Action
@@ -179,7 +182,21 @@
                                         <span class="flex items-center justify-center relative rounded-md z-10 px-[2px]  w-[70px] h-[30px] text-xs leading-none text-[#f00000]  font-[22px] "><i class="ri-prohibited-line text-[25px] m-[5px]"></i></p></span>
                                        
                                     </div>
-                                </div>
+                                </div> 
+                                @else
+                                <div class="relative flex flex-col items-center group">
+                                    <a href="#" data-rowId="{{$log->id}}" data-taskID="{{ $log->task_id }}" class=" viewLogDeatails flex items-center gap-[8px] text-[15px] font-[600]  text-[#000]">
+                                        Action
+                                    </a>
+                                    <div class=" absolute bottom-0 flex flex-col items-center hidden mb-5 group-hover:flex">
+                                        <span class="flex items-center justify-center relative rounded-md z-10 px-[2px] w-[70px] h-[30px] text-xs leading-none bg-[#13103A]  text-white font-[22px]">
+                                            Log Details
+                                        </span>
+                                       
+                                    </div>
+                                </div> 
+                                @endif
+
                             </div>
                            
                             @php

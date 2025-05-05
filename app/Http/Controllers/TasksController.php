@@ -36080,42 +36080,37 @@ class TasksController extends Controller
         })
         ->orderBy('id', 'desc')
         ->get();
-             $currentDateTime = Carbon::now();
-             if ($followUpTasks->count() > 0) {
-                foreach ($followUpTasks as $task) {
-                    $reminderDate = $task->reminderDate;
-                    $deadlineDate = $task->dead_line;
-            
-                    if ($reminderDate && strtotime($reminderDate) > time()) {
-                        $title = 'Reminder Alert';
-                        $description = 'Aapke task ke liye reminder set kiya gaya hai.';
-                    } else {
-                        $title = 'Deadline Alert';
-                        $description = 'Aapki plan ki vaidhata jald samapt hone wali hai. Kripya jaldi recharge karein.';
-                    }
-            
-                    $leadId = $task->leadTask->lead_id ?? null;
-            
-                    if ($leadId) {
-                        LeadNotification::create([
-                            'user_id'     => $task->task_id,
-                            'lead_id'     => $leadId,
-                            'title'       => $title,
-                            'description' => $description,
-                            'task_id'     => $task->task_id,
-                            'status'      => 0,
-                        ]);
-                    }
+        
+        $currentDateTime = Carbon::now();
+        if ($followUpTasks->count() > 0) {
+            foreach ($followUpTasks as $task) {
+                $reminderDate = $task->reminderDate;
+                $deadlineDate = $task->dead_line;
+        
+                if ($reminderDate && strtotime($reminderDate) > time()) {
+                    $title = 'Reminder Alert';
+                    $description = 'Aapke task ke liye reminder set kiya gaya hai.';
+                } else {
+                    $title = 'Deadline Alert';
+                    $description = 'Aapki plan ki vaidhata jald samapt hone wali hai. Kripya jaldi recharge karein.';
                 }
-            
-                return response()->json(['message' => 'Notifications sent.']);
+        
+                $leadId = $task->leadTask->lead_id ?? null;
+        
+                if ($leadId) {
+                    LeadNotification::create([
+                        'user_id'     => $task->task_id,
+                        'lead_id'     => $leadId,
+                        'title'       => $title,
+                        'description' => $description,
+                        'task_id'     => $task->task_id,
+                        'status'      => 0,
+                    ]);
+                }
             }
-            
-
-    return response()->json(['message' => 'No valid tasks found.']);
-            
-      
-    
+        
+            return response()->json(['message' => 'Notifications sent.']);
+        }
     }
     
 }

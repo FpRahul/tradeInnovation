@@ -6,21 +6,24 @@ use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\CheckPermission;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\TaskReminderMiddleware;
+use Illuminate\Console\Scheduling\Schedule;
 
+// Create the application
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         api: __DIR__.'/../routes/api.php',
         commands: __DIR__.'/../routes/console.php',
-        health: '/up',
+        health: '/up'
     )
     ->withMiddleware(function (Middleware $middleware) {
-
-       
         $middleware->alias([
             'CheckPermission' => CheckPermission::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
-    })->create();
+    })
+    ->create();
+
+    // Schedule::command('report:send-daily')->everySecond();

@@ -260,17 +260,27 @@ $paymentData = $taskList->payment[0];
       }).on('apply.daterangepicker', function(ev, picker) {
          console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
       });
+      $('.daterangepicker-taskdeadline').attr("placeholder", "DD/MM/YYYY HH:mm");
 
       $('.daterangepicker-taskdeadline').daterangepicker({
          singleDatePicker: true,
+         timePicker: true,
+         timePicker24Hour: true,        // 24-hour format (optional)
+         timePickerSeconds: false,      // set true if you want seconds
+         autoUpdateInput: false,        // prevent auto-filling
          opens: 'right',
          locale: {
-            format: 'DD MMM YYYY'
+            format: 'DD MMM YYYY HH:mm',   // Format for display and value
+            cancelLabel: 'Clear'
          },
-         minDate: moment().startOf('day'),
-
+         minDate: moment().startOf('minute'), // prevent past time selection
       }).on('apply.daterangepicker', function(ev, picker) {
-         console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+         // On selection, manually set the input value
+         $(this).val(picker.startDate.format('DD MMM YYYY HH:mm')); 
+         console.log("Date/time selected: " + picker.startDate.format('YYYY-MM-DD HH:mm'));
+      }).on('cancel.daterangepicker', function(ev, picker) {
+         // Optional: clear the input when cancel is clicked
+         $(this).val('');
       });
 
       $("#payment").on("change", function() {

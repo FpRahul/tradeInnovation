@@ -18,11 +18,11 @@
         <form id="filterForm" action="" class="w-full" method="GET">
             <div class="flex items-end gap-[10px] w-full">
                 <div class="w-[50%]">
-                    <label class="flex text-[15px] text-[#000] mb-[5px]">Lead ID<strong class="text-[#f83434]">*</strong></label>
+                    <label class="flex text-[15px] text-[#000] mb-[5px]">Client Name<strong class="text-[#f83434]">*</strong></label>
                     <select name="lead_id" id="lead_id" class="allform-filter-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
                         <option value="">Select Lead ID</option>
                         @forelse($leadData as $leadDetails)
-                        <option value="{{ $leadDetails->id }}" @if(isset($requestParams['lead_id']) && $requestParams['lead_id']==$leadDetails->id) selected @endif> {{ $leadDetails->lead_id }} - {{ $leadDetails->client_name }} </option>
+                        <option value="{{ $leadDetails->id }}" @if(isset($requestParams['lead_id']) && $requestParams['lead_id']==$leadDetails->id) selected @endif> {{ $leadDetails->client_name }} - {{ $leadDetails->mobile_number }} </option>
                         @empty
                         <option value="" disabled>No leads available</option>
                         @endforelse
@@ -176,8 +176,8 @@
                                         Action
                                     </a>
                                     <div class=" absolute bottom-0 flex flex-col items-center hidden mb-5 group-hover:flex">
-                                        <span class="flex items-center justify-center relative rounded-md z-10 px-[2px]  w-[70px] h-[30px] text-xs leading-none text-white whitespace-no-wrap bg-[#13103a] shadow-lg">Logs detail</p></span>
-                                        <div class="w-3 h-3 -mt-2 rotate-45 bg-black"></div>
+                                        <span class="flex items-center justify-center relative rounded-md z-10 px-[2px]  w-[70px] h-[30px] text-xs leading-none text-[#f00000]  font-[22px] "><i class="ri-prohibited-line text-[25px] m-[5px]"></i></p></span>
+                                       
                                     </div>
                                 </div>
                             </div>
@@ -229,18 +229,31 @@
         <!-- Modal content -->
         <div class="relative bg-white rounded-[20px] shadow">
             <!-- Modal header -->
-            <div class="flex items-center justify-between p-4 md:px-5 md:py-[20px] border-b border-[#f2f2f2]">
-                <h3 class="flex items-center gap-[8px] text-[24px] font-[600] leading-[17px] text-[#000]">
-                    Log Review<p id="rowLeadId" class="text-sky-500" val=""></p>
-
-                </h3>
-                <button type="button" class=" absolute top-[-10px] right-[-10px] w-[35px] h-[35px] bg-[#13103A] flex items-center justify-center text-[#fff] rounded-[60px]" data-modal-hide="assignUserModal">
-                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+            <div class="relative p-4 md:px-5 md:py-[20px] border-b border-[#f2f2f2]">
+                <div class="flex items-center justify-between">
+                    <!-- Left Side -->
+                    <h3 class="flex items-center gap-[8px] text-[24px] font-[600] leading-[17px] text-[#000]">
+                        Log Review
+                        <p id="rowLeadId" class="text-sky-500" val=""></p>
+                    </h3>
+            
+                    <!-- Right Side -->
+                    <span class="min-w-[210px] text-[16px] text-[#333] font-medium"><div class="inline-flex text-[#000]">Deadline:</div> </span>
+                </div>
+            
+                <!-- Close Button in top-right -->
+                <button type="button"
+                    class="absolute top-[-14px] right-[-14px] w-[35px] h-[35px] bg-[#13103A] flex items-center justify-center text-[#fff] rounded-[60px]"
+                    data-modal-hide="assignUserModal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                     </svg>
-`
                 </button>
             </div>
+            
+            
             <!-- Modal body -->
             <div class="p-[20px]">
                 <form method="POST" class="space-y-[20px]">

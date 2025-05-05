@@ -78,7 +78,7 @@ class LeadsController extends Controller
                 })
                 ;
         }
-        // dd($leadList->get());
+       
         $leadList = $leadList->latest()->paginate(env("PAGINATION_COUNT"));
         if (empty($requestType)) {
             $sourceList = Lead::where('user_id', auth()->user()->id)

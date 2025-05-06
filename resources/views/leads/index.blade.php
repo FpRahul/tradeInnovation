@@ -187,21 +187,26 @@
                                 {{ $status }}
                             </span>                                
                         </td>
-                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">     
-                            {{getUserNameBySource($leadData->leadTask->user_id)->name}}                        
+                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]"> 
+                            @if (!empty($leadData->leadTask))
+                            {{getUserNameBySource($leadData->leadTask->user_id)->name}} 
+                            @else
+                            N/A
+                            @endif    
+                                                   
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">     
                             @if ($leadData->leadTask && !empty($leadData->leadTask))
                             {{getStageData($leadData->leadTask)}}
                             @else
-                            NA
+                            N/A
                             @endif                         
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                             @if ($leadData->leadTask && !empty($leadData->leadTask))
                             {{getScopeOfBusinessData($leadData->business_scope)}}
                             @else
-                            NA
+                            N/A
                             @endif
                             
                         </td>

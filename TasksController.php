@@ -32,6 +32,7 @@ class TasksController extends Controller
     private $viewPath = "tasks.";
     public function index(Request $request, $request_type = null)
     {
+        dd("jksd");
 
         $leadParam = $request->leadId;
         $statusParam = $request->status;
@@ -53,7 +54,7 @@ class TasksController extends Controller
 
         $taskDetails = LeadTask::with(['user', 'lead', 'leadTaskDetails','serviceDetails','services', 'subService', 'serviceSatge'])->whereHas('lead', function ($q) {
             $q->where('status', 1);
-        })->orderBy('created_at', 'desc');
+        })->orderBy('created_at', 'desc')->get();
         // dd($taskDetails->get());
         if ($assignUser->role != 1) {
             $taskDetails = $taskDetails->where('user_id', $assignUser->id);

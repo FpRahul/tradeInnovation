@@ -39,10 +39,10 @@
                 <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Services</span>
                 <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize">
                 @if( $taskDetails->services)
-                              {{ $taskDetails->services->serviceName }}
-                            @else
-                            Not Available
-                            @endif
+                        {{ $taskDetails->services->serviceName }}
+                        @else
+                        Not Available
+                        @endif
                 </strong>
             </li>
             <li>
@@ -59,7 +59,7 @@
             </li>
           
             <li>
-                <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Referral</span>
+                <span class="block text-[14px] leading-[16px] font-[500] tracking-[-0.03em] text-[#666666] capitalize mb-1">Associate</span>
                 <strong class="block text-[16px] leading-[21px] font-[600] tracking-[-0.03em] text-[#1B1B1B] capitalize">
                     {{ $taskDetails->lead->referral->name ?? 'N/A' }}
                 </strong>

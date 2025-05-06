@@ -208,9 +208,9 @@
                                                         </div>
                                                     </div>
                                                     <div class="w-full  md:w-[32%] lg:w-[32%]">
-                                                        <label class="block mb-[5px] text-[14px] font-[400]">Assign To Users</label>
+                                                        <label class="block mb-[5px] text-[14px] font-[400]">Assign To Employee</label>
                                                         <select name="assign" id="assign" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
-                                                            <option value="">Assign To Users</option>
+                                                            <option value="">Assign To Employee</option>
                                                             @foreach ($userList as $userListData)
                                                                 <option 
                                                                     value="{{ $userListData->id }}" 
@@ -402,9 +402,9 @@
                                                 </div>
                                             </div>
                                             <div class="w-full  md:w-[32%] lg:w-[32%]">
-                                                <label class="block mb-[5px] text-[14px] font-[400]">Assign To Users</label>
+                                                <label class="block mb-[5px] text-[14px] font-[400]">Assign To Employee</label>
                                                 <select name="assign" id="assign" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
-                                                    <option value="">Assign To Users</option>
+                                                    <option value="">Assign To Employee</option>
                                                     @foreach ($userList as $userListData)
                                                         <option value="{{ $userListData->id }}" 
                                                             @selected(old('assign') == $userListData->id)>
@@ -619,7 +619,7 @@
                 
             </div>
             <div class="">
-                <button type="button" name="save" class="lead_submit_btn text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
+                {{-- <button type="button" name="save" class="lead_submit_btn text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button> --}}
                 <button type="button" name="saveAssign" class="lead_submit_btn text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save & Assign</button>
             </div>
             

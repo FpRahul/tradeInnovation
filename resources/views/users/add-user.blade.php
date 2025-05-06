@@ -21,24 +21,38 @@
                     @enderror
 
                 </div>
+                @php
+                    $authRole = auth()->user()->role;
+                @endphp
+
                 <div class="w-full md:w-1/2">
-                    <label for="role" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Role <strong class="text-[#f83434]">*</strong></label>
+                    <label for="role" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">
+                        Role <strong class="text-[#f83434]">*</strong>
+                    </label>
+
                     <select name="role" id="role" class="allform-select2 w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                         <option value="">Select Role</option>
+                        
                         @if (count($roleData) > 0)
                             @foreach ($roleData as $roles)
-                                <option value="{{ $roles->id }}" 
-                                    {{ old('role', $newUser->role ?? '') == $roles->id ? 'selected' : '' }}>
-                                    {{ $roles->name }}
-                                </option>
+                                @if (
+                                    ($authRole == 4 && $roles->id == 5) || 
+                                    ($authRole == 1)
+                                )
+                                    <option value="{{ $roles->id }}" 
+                                        {{ old('role', $newUser->role ?? '') == $roles->id ? 'selected' : '' }}>
+                                        {{ $roles->name }}
+                                    </option>
+                                @endif
                             @endforeach
                         @endif
                     </select>
-                    
+
                     @error('role')
                         <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
                     @enderror
                 </div>
+
             </div>
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">

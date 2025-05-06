@@ -14,7 +14,128 @@
     </div>
     <div>
         <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] overflow-hidden ">
-            <div class="flex items-center justify-end gap-[15px] pt-[20px] pr-[20px]">
+           
+
+            <div class="w-full py-[15px] md:py-[25px] px-[15px] md:px-[20px] gap-[10px] flex md:flex-wrap items-end justify-between mb-[40px]">
+                <form action="" id="filterForm" class="w-full flex  gap-[30px]">
+                    <div class="w-full flex items-center gap-[30px]">
+                        <div class="w-full flex  md:flex-wrap items-end gap-[30px]">
+                            
+
+                            <!-- Lead ID Select (Increased width to 5/12) -->
+
+
+                                <div class="w-full md:w-[32%]">
+                                    <label for="leadId" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Client Name</label>
+                                    <select name="leadId" id="leadId" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
+                                        <option value="">Select Client Name</option>
+                                        @if(!$DistinctleadId->isEmpty())
+                                            @foreach ($DistinctleadId as $leadID)
+                                                <option value="{{ $leadID->lead_id }}" @if($leadID->lead_id == $leadParam) selected @endif>
+                                                    {{ $leadID->lead->client_name }} - {{ $leadID->lead->mobile_number }}
+                                                </option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                                <!-- Status Select (Increased width to 5/12) -->
+                                <div class="w-full md:w-[32%]">
+                                    <label for="status" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
+                                    <select name="status" id="status" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
+                                        <option value="">Select Status</option>
+                                        <option value="0" @if($statusParam==0) selected @endif>Pending</option>
+                                        <option value="1" @if($statusParam==1) selected @endif>Completed</option>
+                                        <option value="2" @if($statusParam==2) selected @endif>On Hold</option>
+                                        <option value="3" @if($statusParam==3) selected @endif>Follow Up</option>
+                                        <option value="4" @if($statusParam==4) selected @endif>Rejected</option>
+                                    </select>
+                                </div>
+
+
+
+                                {{-- service --}}
+                                <div class="w-full md:w-[32%] hidden service_id ">
+                                    <label for="service_id" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Services</label>
+                                    <select name="service_id" id="service_id" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
+                                        <option value="">Select Service</option>
+                                        @if($filterdServices && $serviceParam)
+                                            @foreach ($filterdServices as $service)
+                                                <option value="{{ $service->id }}" {{ $serviceParam == $service->id ? 'selected' : '' }}>{{ $service->serviceName }}</option>
+                                            @endforeach
+                                        @endif
+                                        <!-- Options will be appended dynamically via jQuery -->
+                                    </select>
+                                </div>
+                                {{-- sub service --}}
+                                <div class="w-full md:w-[32%] hidden subService_id ">
+                                    <label for="subService_id" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Sub Services</label>
+                                    <select name="subService_id" id="subService_id" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
+                                        <option value="">Select Sub Service</option>
+                                        @if($filterdSubservices && $subServiceParam)
+                                            @foreach ($filterdSubservices as $subservice)
+                                                <option value="{{ $subservice->id }}" {{ $subServiceParam == $subservice->id ? 'selected' : '' }}>{{ $subservice->subServiceName }}</option>
+                                            @endforeach
+                                        @endif
+                                    
+                                    </select>
+                                </div>
+                                {{-- aplied for --}}
+                                <div class="w-full md:w-[32%] hidden applied_for_id ">
+                                    <label for="applied_for" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Applied For</label>
+                                    <select name="applied_for" id="applied_for" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
+                                        <option value="">Applied For</option>
+                                        @if($filterAppliedFor && $serviceDetailsParam)
+                                        @foreach ($filterAppliedFor as $applied_for)
+                                            <option value="{{ $applied_for->id }}" {{ $serviceDetailsParam == $applied_for->id ? 'selected' : '' }}>{{ $applied_for->applied_for }}</option>
+                                        @endforeach
+                                    @endif
+                                    </select>
+                                </div>
+
+                                
+
+                                <!-- User Select (visible only for roles 1 or 4, increased width to 5/12) -->
+                                @if (Auth::user()->role == 1 || Auth::user()->role == 4)
+                                <div class="w-full md:w-[32%]  user_id">
+                                    <label for="user" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">User</label>
+                                    <select name="user" id="user" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
+                                        @if(!$users->isEmpty())
+                                        <option value="">Select User</option>
+                                        @foreach($users as $user)
+                                        <option value="{{ $user->id }}"
+                                            @if($user->id == $userParam) selected @endif>
+                                            {{ $user->name }}
+                                        </option>
+                                        @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+
+                                @endif
+
+                            
+
+                            <!-- Filter Button -->
+                            <button id="filterButton" class="text-[14px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[12px] py-[16px] px-[35px]">
+                                Filter
+                            </button>
+
+                            <!-- Reset Button -->
+                            <button id="resetButton" class="  text-[14px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[12px] py-[16px] px-[35px]">
+                                Reset
+                            </button>
+                        
+                        </div>
+                    </div>
+                </form>
+             
+            </div>
+           
+        </div>
+    </div>
+    <div class="mt-4">
+        <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] overflow-hidden ">
+            <div class=" mb-4 flex items-center justify-end gap-[15px] pt-[20px] pr-[20px]">
                 <div class="relative w-full md:w-[217px] mt-[10px] md:mt-0">
                     <svg class="absolute top-[50%] left-[13px] translate-y-[-50%]" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M13.6381 12.2923C14.8254 10.761 15.385 8.83464 15.203 6.9052C15.021 4.97576 14.111 3.18816 12.6583 1.90607C11.2055 0.62398 9.31913 -0.0562918 7.38281 0.00364974C5.4465 0.0635913 3.60574 0.859243 2.23502 2.22874C0.863103 3.59918 0.0651678 5.44139 0.00381831 7.37995C-0.0575312 9.3185 0.622323 11.2075 1.90484 12.662C3.18735 14.1165 4.976 15.0271 6.90629 15.2081C8.83659 15.3892 10.7632 14.8271 12.2936 13.6364L12.3346 13.6792L16.3737 17.7209C16.4621 17.8094 16.5671 17.8796 16.6827 17.9275C16.7983 17.9753 16.9222 18 17.0473 18C17.1724 18 17.2963 17.9753 17.4119 17.9275C17.5275 17.8796 17.6325 17.8094 17.721 17.7209C17.8094 17.6324 17.8796 17.5273 17.9275 17.4117C17.9754 17.296 18 17.1721 18 17.0469C18 16.9218 17.9754 16.7978 17.9275 16.6822C17.8796 16.5666 17.8094 16.4615 17.721 16.373L13.6809 12.3323L13.6381 12.2923ZM11.6614 3.57658C12.199 4.1057 12.6266 4.73606 12.9194 5.43131C13.2123 6.12655 13.3646 6.87293 13.3677 7.62737C13.3708 8.38182 13.2245 9.12941 12.9373 9.82702C12.6501 10.5246 12.2277 11.1585 11.6944 11.6919C11.1612 12.2254 10.5276 12.648 9.83027 12.9353C9.13294 13.2226 8.38565 13.3689 7.6315 13.3658C6.87736 13.3628 6.13128 13.2104 5.43631 12.9174C4.74134 12.6244 4.11123 12.1967 3.58233 11.6589C2.52535 10.5841 1.93571 9.13508 1.94185 7.62737C1.94799 6.11967 2.5494 4.67547 3.61509 3.60936C4.68078 2.54325 6.1244 1.94159 7.6315 1.93545C9.13861 1.92931 10.5871 2.51919 11.6614 3.57658Z" fill="#6F6F6F" />
@@ -22,120 +143,12 @@
                     <input type="search" name="search" id="search" placeholder="Search" class="search !outline-none border border-[#0000001A] h-[40px] w-full p-[10px] pl-[42px] bg-transparent text-[#000000] placeholder:text-[#6F6F6F] rounded-[10px] text-[14px] font-[400] leading-[16px]">
                 </div>
             </div>
-
-            <div class="w-full py-[15px] md:py-[25px] px-[15px] md:px-[20px] gap-[10px] flex md:flex-wrap items-end justify-between mb-[40px]">
-                <form action="" id="filterForm" class="w-full flex  gap-[30px]">
-                    <div class="w-full flex items-center gap-[30px]">
-                        <div class="w-full flex  md:flex-wrap items-end gap-[30px]">
-                            <!-- Lead ID Select (Increased width to 5/12) -->
-
-
-                            <div class="w-full md:w-[32%]">
-                                <label for="leadId" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Client Name</label>
-                                <select name="leadId" id="leadId" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
-                                    <option value="">Select Client Name</option>
-                                    @if(!$DistinctleadId->isEmpty())
-                                        @foreach ($DistinctleadId as $leadID)
-                                            <option value="{{ $leadID->lead_id }}" @if($leadID->lead_id == $leadParam) selected @endif>
-                                                {{ $leadID->lead->client_name }} - {{ $leadID->lead->mobile_number }}
-                                            </option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                            </div>
-
-
-                            {{-- service --}}
-                            <div class="w-full md:w-[32%]">
-                                <label for="service_id" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Services</label>
-                                <select name="service_id" id="service_id" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
-                                    <option value="">Select Service</option>
-                                    @if($filterdServices && $serviceParam)
-                                        @foreach ($filterdServices as $service)
-                                            <option value="{{ $service->id }}" {{ $serviceParam == $service->id ? 'selected' : '' }}>{{ $service->serviceName }}</option>
-                                        @endforeach
-                                    @endif
-                                    <!-- Options will be appended dynamically via jQuery -->
-                                </select>
-                            </div>
-                            {{-- sub service --}}
-                            <div class="w-full md:w-[32%]">
-                                <label for="subService_id" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Sub Services</label>
-                                <select name="subService_id" id="subService_id" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
-                                    <option value="">Select Sub Service</option>
-                                    @if($filterdSubservices && $subServiceParam)
-                                        @foreach ($filterdSubservices as $subservice)
-                                            <option value="{{ $subservice->id }}" {{ $subServiceParam == $subservice->id ? 'selected' : '' }}>{{ $subservice->subServiceName }}</option>
-                                        @endforeach
-                                    @endif
-                                
-                                </select>
-                            </div>
-                            {{-- aplied for --}}
-                            <div class="w-full md:w-[32%]">
-                                <label for="applied_for" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Applied For</label>
-                                <select name="applied_for" id="applied_for" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
-                                    <option value="">Applied For</option>
-                                    
-                                </select>
-                            </div>
-
-                            <!-- Status Select (Increased width to 5/12) -->
-                            <div class="w-full md:w-[32%]">
-                                <label for="status" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
-                                <select name="status" id="status" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
-                                    <option value="">Select Status</option>
-                                    <option value="0" @if($statusParam==0) selected @endif>Pending</option>
-                                    <option value="1" @if($statusParam==1) selected @endif>Completed</option>
-                                    <option value="2" @if($statusParam==2) selected @endif>On Hold</option>
-                                    <option value="3" @if($statusParam==3) selected @endif>Follow Up</option>
-                                    <option value="4" @if($statusParam==4) selected @endif>Rejected</option>
-                                </select>
-                            </div>
-
-
-                            <!-- User Select (visible only for roles 1 or 4, increased width to 5/12) -->
-                            @if (Auth::user()->role == 1 || Auth::user()->role == 4)
-                            <div class="w-full md:w-[32%]">
-                                <label for="user" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">User</label>
-                                <select name="user" id="user" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
-                                    @if(!$users->isEmpty())
-                                    <option value="">Select User</option>
-                                    @foreach($users as $user)
-                                    <option value="{{ $user->id }}"
-                                        @if($user->id == $userParam) selected @endif>
-                                        {{ $user->name }}
-                                    </option>
-                                    @endforeach
-                                    @endif
-                                </select>
-                            </div>
-
-                            @endif
-
-                            <div class="w-full flex justify-end gap-[15px]">
-
-                            <!-- Filter Button -->
-                            <button class="text-[14px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[12px] py-[16px] px-[35px]">
-                                Filter
-                            </button>
-
-                            <!-- Reset Button -->
-                            <button id="resetButton" class="text-[14px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[12px] py-[16px] px-[35px]">
-                                Reset
-                            </button>
-                        </div>
-                        </div>
-                    </div>
-                </form>
-             
-            </div>
             <div class="overflow-x-auto " id="search_table_data">
                 <table width="100%" cellpadding="0" cellspacing="0" class="min-w-[900px]">
                     <thead>
                         <tr>
                             <th class="text-start w-[120px] bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
-                                SR. NO
+                                SR.NO
                             </th>
                            
                             <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
@@ -168,7 +181,9 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @if(auth()->user()->role == 1 || auth()->user()->role == 4)
                         @if(!$taskDetails->isEmpty())
+                        {{-- @dd(auth()->user()->role == 1) --}}
                         @foreach ($taskDetails as $task)
                         <tr>
                             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px] pl-[25px]">
@@ -234,33 +249,22 @@
                             </td>
                             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                                 @if($task->leadTaskDetails && !is_null($task->leadTaskDetails->status))
-                                @php
-                                $status = 'Other';
-                                switch ($task->leadTaskDetails->status) {
-                                case 0:
-                                $status = 'Pending';
-                                break;
-                                case 1:
-                                $status = 'Completed';
-                                break;
-                                case 2:
-                                $status = 'Hold';
-                                break;
-                                case 3:
-                                $status = 'Follow-up';
-                                break;
-                                case 4:
-                                $status = 'Rejected';
-                                break;
-                                case 5:
-                                $status = 'On Hold';
-                                }
-                                @endphp
-                                <span class="text-[#13103A] bg-[#ADD8E6] inline-block text-center min-w-[100px] py-[5px] px-[10px] rounded-[5px]">
-                                    {{ $status }}
-                                </span>
+                                    @php
+                                        $statusMap = [
+                                            0 => ['label' => 'Pending', 'color' => 'bg-yellow-100 text-yellow-800'],
+                                            1 => ['label' => 'Completed', 'color' => 'bg-green-100 text-green-800'],
+                                            2 => ['label' => 'Hold', 'color' => 'bg-orange-100 text-orange-800'],
+                                            3 => ['label' => 'Follow-up', 'color' => 'bg-blue-100 text-blue-800'],
+                                            4 => ['label' => 'Rejected', 'color' => 'bg-red-100 text-red-800'],
+                                            5 => ['label' => 'On Hold', 'color' => 'bg-gray-200 text-gray-800'],
+                                        ];
+                                        $status = $statusMap[$task->leadTaskDetails->status] ?? ['label' => 'Other', 'color' => 'bg-gray-100 text-gray-700'];
+                                    @endphp
+                                    <span class="{{ $status['color'] }} inline-block text-center min-w-[100px] py-[5px] px-[10px] rounded-[5px]">
+                                        {{ $status['label'] }}
+                                    </span>
                                 @else
-                                Not Available
+                                    Not Available
                                 @endif
                             </td>
                             <td class="text-center border-b-[1px] border-[#0000001A] py-[12px] px-[15px]">
@@ -288,6 +292,7 @@
                                             @php
                                             $leadId = $task->lead->id;
                                             @endphp
+
                                             @endif
                                             @if(in_array('leadLogs.index',$permissionDetails['accessableRoutes']) || auth()->user()->role == 1)
                                             <a href="{{route('leadLogs.index', ['lead_id' => $leadId])}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Logs</a>
@@ -297,6 +302,21 @@
                                             @if($task->leadTaskDetails->status != 1 && $task->leadTaskDetails->status != 4)
                                             <a href="#" class="hold-on-pop block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-taskId="{{$task->leadTaskDetails->task_id }}" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal">Hold</a>
                                             @endif
+                                            {{-- @php
+                                                $currentParams = request()->all(); // get all existing query params
+                                                $updatedParams = array_merge($currentParams, ['status' => 3]); // override status only
+                                            @endphp --}}
+
+                                            {{-- @if(in_array('task.index',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                                @if($task->leadTaskDetails->status != 1 && $task->leadTaskDetails->status != 4)
+                                                    <a href="{{ route('task.index', $updatedParams) }}" 
+                                                    class="hold-on-pop block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">
+                                                    Follow Up Status
+                                                    </a>
+                                                @endif
+                                            @endif --}}
+
+
                                             @endif
                                             @if(in_array('task.reject',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
                                             @if($task->leadTaskDetails->status != 1 && $task->leadTaskDetails->status != 4)
@@ -317,6 +337,7 @@
                         <tr>
                             <td colspan="8" class="text-center text-red-500 py-[12px]">No task found</td>
                         </tr>
+                        @endif
                         @endif
                     </tbody>
 
@@ -424,20 +445,20 @@
         $("#task_hidden_id").val(task_id);
         $('.daterangepicker-verified').attr("placeholder", "DD/MM/YYYY"); // Set placeholder
 
-$('.daterangepicker-verified').daterangepicker({
-    singleDatePicker: true,
-    autoUpdateInput: false,  // Prevent auto-update of input with selected date
-    opens: 'right',
-    locale: {
-        format: 'DD MMM YYYY'
-    },
-    minDate: null,
-    maxDate: moment().endOf('day'),
-}).on('apply.daterangepicker', function(ev, picker) {
-    // Set the selected date format when a date is picked
-    $(this).val(picker.startDate.format('DD MMM YYYY')); 
-    console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
-});
+    $('.daterangepicker-verified').daterangepicker({
+        singleDatePicker: true,
+        autoUpdateInput: false,  // Prevent auto-update of input with selected date
+        opens: 'right',
+        locale: {
+            format: 'DD MMM YYYY'
+        },
+        minDate: null,
+        maxDate: moment().endOf('day'),
+    }).on('apply.daterangepicker', function(ev, picker) {
+        // Set the selected date format when a date is picked
+        $(this).val(picker.startDate.format('DD MMM YYYY')); 
+        console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
+    });
 
 // Ensure no date is selected by default (it only shows placeholder)
 $('.daterangepicker-verified').val('');
@@ -523,9 +544,29 @@ $('.daterangepicker-verified').val('');
             })
         })
         
+            if ($('#service_id').val()) {
+                $('.service_id').removeClass('hidden');
+            }
+            if ($('#subService_id').val()) {
+                $('.subService_id').removeClass('hidden');
+            }
+            if ($('#applied_for').val()) {
+                $('.applied_for_id').removeClass('hidden');
+            }
+            $('#filterButton').on('click', function (e) {
+                // If any section is hidden, show them and prevent form submission
+                if ($('.service_id').hasClass('hidden') ||
+                    $('.subService_id').hasClass('hidden') ||
+                    $('.applied_for_id').hasClass('hidden')) {
 
+                    $('.service_id, .subService_id, .applied_for_id').removeClass('hidden');
+                    e.preventDefault(); // stop form from submitting
+                }
+                // Else, all visible → allow normal submission
+            });
         $("#leadId").on('change' , function (){
             var leadId = $(this).val();
+            $(".service_id").removeClass('hidden')
             $.ajax({
                 url: "{{ route('task.getServiceAcctoLead')  }}",
                 method: "POST",
@@ -551,6 +592,9 @@ $('.daterangepicker-verified').val('');
         $("#service_id").on('change' , function (){
             var service_id = $(this).val();
             var lead_id = $('#leadId').val(); 
+            $(".subService_id").removeClass('hidden')
+
+            
             $.ajax({
                 url: "{{ route('task.getSubServiceAccToService')  }}",
                 method: "POST",
@@ -578,6 +622,9 @@ $('.daterangepicker-verified').val('');
             var service_id = $("#service_id").val();
             var lead_id = $('#leadId').val(); 
             var subService_id = $(this).val();
+            $(".applied_for_id").removeClass('hidden')
+
+            
 
             $.ajax({
                 url: "{{ route('task.getAppliedFor')  }}",
@@ -605,6 +652,9 @@ $('.daterangepicker-verified').val('');
                 }
             })
         })
+
+        
+
     })
 </script>
 @stop

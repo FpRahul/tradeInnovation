@@ -170,17 +170,21 @@
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                             @php
-                            $status = 'Other';
-                            switch ($leadData->status) {
-                            case 0:
-                            $status = 'Open';
-                            break;
-                            case 1:
-                            $status = 'Assigned';
-                            break;
-                            }
+                                $status = 'Other';
+                                $bgColor = '#CCCCCC'; // default gray for "Other"
+                            
+                                switch ($leadData->status) {
+                                    case 0:
+                                        $status = 'Open';
+                                        $bgColor = '#90EE90'; // light green for Open
+                                        break;
+                                    case 1:
+                                        $status = 'Assigned';
+                                        $bgColor = '#ADD8E6'; // light blue for Assigned
+                                        break;
+                                }
                             @endphp
-                                <span class="text-[#13103A] bg-[#ADD8E6] inline-block text-center min-w-[100px] py-[5px] px-[10px] rounded-[5px]">
+                            <span class="text-[#13103A] inline-block text-center min-w-[100px] py-[5px] px-[10px] rounded-[5px]" style="background-color: {{ $bgColor }};">
                                 {{ $status }}
                             </span>                                
                         </td>

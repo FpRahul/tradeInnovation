@@ -38,9 +38,9 @@ class TasksController extends Controller
         ->groupBy('service_id')
         ->get(); 
         $service_id = $data->pluck('service_id');
-      
+        
         $serviceName = Service::whereIn('id', $service_id)->get();
-      
+        
         if (!$data->isEmpty()) {
             return response()->json(['data' => $data,'serviceName' => $serviceName , 'status' => 200], 200);
         } else {
@@ -221,12 +221,17 @@ class TasksController extends Controller
 
         $filterdSubservices = null;
         $filterdServices = null;
+        $filterAppliedFor = null;
 
         if($serviceParam && $request->leadId){
             $leadServices = LeadTask::whereLeadId($request->leadId)->pluck('service_id')->unique();
             $leadSubServices = LeadTask::whereLeadId($request->leadId)->pluck('subservice_id')->unique();
+            $serviceDetailsId = LeadTask::where('service_detail_id' , $request->applied_for)->pluck('service_detail_id')->unique();
             $filterdServices = Service::whereIn('id', $leadServices)->get();
             $filterdSubservices = SubService::where('serviceid', $request->service_id)->whereIn('id', $leadSubServices)->get();
+            $filterAppliedFor = ServiceDetail::whereIn('id', $serviceDetailsId)->get();
+           
+
         }
 
         $taskDetails = $taskDetails->paginate(env("PAGINATION_COUNT"));
@@ -246,7 +251,7 @@ class TasksController extends Controller
                 'serviceParam' => $serviceParam,
                 'subServiceParam' => $subServiceParam,
                 'serviceDetailsParam' => $serviceDetailsParam,
-
+                'filterAppliedFor' => $filterAppliedFor,
                 'filterdServices' => $filterdServices,
                 'filterdSubservices' => $filterdSubservices,
             ]);
@@ -729,7 +734,7 @@ class TasksController extends Controller
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         if ($request->paymentDeadline) {
 
-            $paymentDeadlineDate = Carbon::createFromFormat('d M Y H:i', $request->input('paymentDeadline'))->format('Y-m-d H:i:s');
+            $paymentDeadlineDate = Carbon::createFromFormat('d M Y', $request->input('paymentDeadline'))->format('Y-m-d');
         }
         if ($request->deadline) {
 

@@ -56,7 +56,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
 
         Route::match(['POST','GET'],'/sub-admin', 'subAdmin')->name('subAdmin.listing');
         Route::match(['POST','GET'], '/add-sub-admin/{id?}', 'addSubAdmin')->name('subAdmin.addAdmin'); 
-
+        
         Route::get('/delete/{id?}', 'deleteUser')->name('users.delete');
         Route::post('/deleterepeater', 'deleteRepeaterUser')->name('users.deleterepeater');
         Route::match(['POST','GET'], '/client', 'clients')->name('client.listing');

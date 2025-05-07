@@ -51,7 +51,13 @@ class UsersController extends Controller
                 ];                
                 $logActivity = new LogActivity($logActivity);
                 $logActivity->log();
-                return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
+                if(auth()->user()->role == 5){
+
+                    return redirect()->route('task.index')->withSuccess('You have successfully logged in!');
+                }else{
+                    return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
+
+                }
             }
             return redirect()->back()->with('error', 'The provided credentials do not match our records.');
         }

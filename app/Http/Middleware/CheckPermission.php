@@ -22,12 +22,12 @@ class CheckPermission
         $routeName = $request->route()->getName();
         $permissionDetails = [
             'status' => false,
-            'menuId' => [1],
+            'menuId' => [0],
             'accessableRoutes' => [
                 0 => 'user.logout', //default logout permission
                 1 => 'user.myprofile', //default profile permission
                 2 => 'chart.data', //default chat preview permission
-                3 => 'dashboard', //default dashboard permission
+                // 3 => 'dashboard', //default dashboard permission
                 4 => 'serviceStages', //default permission to get stages according to selected service on load add form
                 5 => 'lead.subservice',  //default permission to get sub service on lead add form
                 6 => 'lead.getsourcetypename', //default permission to get source name

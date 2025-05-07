@@ -56,7 +56,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
 
         Route::match(['POST','GET'],'/sub-admin', 'subAdmin')->name('subAdmin.listing');
         Route::match(['POST','GET'], '/add-sub-admin/{id?}', 'addSubAdmin')->name('subAdmin.addAdmin'); 
-
+        
         Route::get('/delete/{id?}', 'deleteUser')->name('users.delete');
         Route::post('/deleterepeater', 'deleteRepeaterUser')->name('users.deleterepeater');
         Route::match(['POST','GET'], '/client', 'clients')->name('client.listing');
@@ -134,6 +134,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/opposition-details', 'oppositionDetails')->name('lead.oppositionDetails');
 
         Route::get('/download-invoice/{id?}', 'downloadInvoice')->name('lead.downloadinvoice');
+        Route::post('get-service' , 'getServiceByLeadId')->name('lead.getServiceByLeadId');
 
         Route::match(['POST', 'GET'], '/business-scope' , 'scopeOfBusiness')->name('bussinessScope.index');
         Route::match(['POST', 'GET'], '/add-business-scope/{id?}', 'addScopeBusiness')->name('bussinessScope.add');

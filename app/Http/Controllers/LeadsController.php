@@ -476,6 +476,25 @@ class LeadsController extends Controller
         } 
         return view('leads.logs', compact('leadData', 'leadLogs', 'header_title_name', 'requestParams', 'service' , 'selectServiceID'));
     }
+    public function getServiceByLeadId(Request $request){
+       $lead_id = $request->lead_id;
+       $services = collect(); 
+
+        if ($request->lead_id) {
+            $serviceIds = LeadTask::where('lead_id', $lead_id)
+                ->groupBy('service_id')
+                ->pluck('service_id');
+
+            $services = Service::whereIn('id', $serviceIds)->get();
+        }
+        if($services){
+            return response()->json(['services' => $services  , 'status' => 200 ]);
+        }else {
+            return response()->json(['services' => []  , 'status' => 400 ]);
+
+        }
+
+    }
 
     public function getLogs(Request $request)
     {

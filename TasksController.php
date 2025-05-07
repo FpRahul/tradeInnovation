@@ -32,6 +32,7 @@ class TasksController extends Controller
     private $viewPath = "tasks.";
     public function index(Request $request, $request_type = null)
     {
+        dd("jksd");
 
         $leadParam = $request->leadId;
         $statusParam = $request->status;
@@ -47,13 +48,13 @@ class TasksController extends Controller
             $baseNotifyId = base64_decode($request->NotifyId);
             $notifyData = LeadNotification::where('id', $baseNotifyId)->update(['status' => 1]);
         }
-
+        
         $header_title_name = "Tasks";
         $assignUser = auth()->user();
 
         $taskDetails = LeadTask::with(['user', 'lead', 'leadTaskDetails','serviceDetails','services', 'subService', 'serviceSatge'])->whereHas('lead', function ($q) {
             $q->where('status', 1);
-        })->orderBy('created_at', 'desc');
+        })->orderBy('created_at', 'desc')->get();
         // dd($taskDetails->get());
         if ($assignUser->role != 1) {
             $taskDetails = $taskDetails->where('user_id', $assignUser->id);

@@ -136,6 +136,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/opposition-details', 'oppositionDetails')->name('lead.oppositionDetails');
 
         Route::get('/download-invoice/{id?}', 'downloadInvoice')->name('lead.downloadinvoice');
+        Route::post('get-service' , 'getServiceByLeadId')->name('lead.getServiceByLeadId');
 
     });
     //Tasks Routes

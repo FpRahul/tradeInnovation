@@ -48,7 +48,7 @@ class TasksController extends Controller
             $baseNotifyId = base64_decode($request->NotifyId);
             $notifyData = LeadNotification::where('id', $baseNotifyId)->update(['status' => 1]);
         }
-
+        
         $header_title_name = "Tasks";
         $assignUser = auth()->user();
 

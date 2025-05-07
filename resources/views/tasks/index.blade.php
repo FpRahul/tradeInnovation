@@ -144,7 +144,7 @@
                 </div>
             </div>
             <div class="overflow-x-auto " id="search_table_data">
-                <table width="100%" cellpadding="0" cellspacing="0" class="min-w-[900px]">
+                    <table width="100%" cellpadding="0" cellspacing="0" class="min-w-[900px]">
                     <thead>
                         <tr>
                             <th class="text-start w-[120px] bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
@@ -167,7 +167,7 @@
                                 Applied For
                             </th>
                             <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
-                                Service Type
+                                Service Type	
                             </th>
                             <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                                 Deadline
@@ -181,7 +181,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if(auth()->user()->role == 1 || auth()->user()->role == 4)
+                        
+                       
                         @if(!$taskDetails->isEmpty())
                         {{-- @dd(auth()->user()->role == 1) --}}
                         @foreach ($taskDetails as $task)
@@ -337,7 +338,6 @@
                         <tr>
                             <td colspan="8" class="text-center text-red-500 py-[12px]">No task found</td>
                         </tr>
-                        @endif
                         @endif
                     </tbody>
 

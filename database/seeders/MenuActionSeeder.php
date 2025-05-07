@@ -54,6 +54,8 @@ class MenuActionSeeder extends Seeder
             array('id' => '39','menuId' => '20','actionName' => 'Update Status','route' => 'firm.status','created_at' => NULL,'updated_at' => NULL),
             array('id' => '40','menuId' => '15','actionName' => 'Invoice','route' => 'lead.invoice','created_at' => NULL,'updated_at' => NULL),
             array('id' => '41','menuId' => '21','actionName' => 'Payment','route' => 'lead.paymentStatus','created_at' => NULL,'updated_at' => NULL),
+
+            array('id' => '42','menuId' => '1','actionName' => 'Dashboard','route' => 'dashboard','created_at' => NULL,'updated_at' => NULL),
           ));
     }
 }

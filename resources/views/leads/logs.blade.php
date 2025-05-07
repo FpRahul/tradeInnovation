@@ -19,7 +19,7 @@
             <div class="flex items-end gap-[10px] w-full">
                 <div class="w-[30%]">
                     <label class="flex text-[15px] text-[#000] mb-[5px]">Client Name<strong class="text-[#f83434]">*</strong></label>
-                    <select name="lead_id" id="lead_id" class="allform-filter-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
+                    <select name="lead_id" id="lead_id"  class="allform-filter-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
                         <option value="">Select Lead ID</option>
                         @forelse($leadData as $leadDetails)
                         <option value="{{ $leadDetails->id }}" @if(isset($requestParams['lead_id']) && $requestParams['lead_id']==$leadDetails->id) selected @endif> {{ $leadDetails->client_name }} - {{ $leadDetails->mobile_number }} </option>
@@ -27,19 +27,20 @@
                         <option value="" disabled>No leads available</option>
                         @endforelse
                     </select>
+                    <div class="leadIdError text-[#f83434]"></div>
                 </div>
                 <div class="w-[30%]">
                     <label class="flex text-[15px] text-[#000] mb-[5px]">Services<strong class="text-[#f83434]">*</strong></label>
-                    <select name="service_id" id="service_id" class="allform-filter-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
+                    <select name="service_id" id="service_id" class="allform-filter-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] " required>
                         <option value="">Select services ID</option>
-                        @forelse($service as $servicesDetails)
-                        <option value="{{ $servicesDetails->id }}" @if(isset($requestParams['service_id']) && $requestParams['service_id']==$servicesDetails->id) selected @endif> {{ $servicesDetails->serviceName }} </option>
-                        @empty
-                        <option value="" disabled>No services available</option>
-                        @endforelse
+                       
+                        <option value="" >  </option>
+                       
+                        
+                        
                     </select>
                 </div>
-                <button class=" text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[15px] px-[30px]">Filter</button>
+                <button id="submitButton" class=" text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[15px] px-[30px]">Filter</button>
                 <button id="resetButton" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[15px] px-[30px]">
                     Reset
                 </button>
@@ -342,6 +343,38 @@
 <script>
     $(document).ready(function() {
 
+        $("#lead_id").on('change' , function (){
+            const lead_id = $(this).val()
+            $.ajax({
+                url: "{{ route('lead.getServiceByLeadId') }}",
+                method: 'POST',
+                data: {lead_id: lead_id},
+                headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                success: function (response){
+
+                         if(response.status == 200){
+                            let serviceSelect = $('#service_id');
+                            serviceSelect.empty(); // Clear existing options
+
+                            // Add default option
+                            serviceSelect.append('<option value="">Select services ID</option>');
+
+                            // Check if services exist
+                            if (response.services && response.services.length > 0) {
+                                $.each(response.services, function(index, service) {
+                                    serviceSelect.append('<option value="' + service.id + '">' + service.serviceName + '</option>');
+                                });
+                            } else {
+                                serviceSelect.append('<option value="" disabled>No services available</option>');
+                            }
+                         }
+                }
+            })
+            
+        })
+      
+
+
         var urlParams = new URLSearchParams(window.location.search);
         if (!urlParams.has('lead_id') || urlParams.get('lead_id') === '') {
             $('#showLog').attr('hidden', true);
@@ -349,72 +382,72 @@
             $('#showLog').removeAttr('hidden');
         }
         $(document).on('click', '.viewLogDeatails', function(e) {
-    e.preventDefault(); // Prevent default action
+            e.preventDefault(); // Prevent default action
 
-    var logID = $(this).data('rowid');
+            var logID = $(this).data('rowid');
 
-    $.ajax({
-        url: "{{ route('leads.getLogs') }}",
-        method: 'POST',
-        data: { logID: logID },
-        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-        success: function (response) {
-                 console.log(response);
-                 
-            if (!response.data || !response.data.remark) {
-                console.error("Missing remark in response.");
-                return;
+        $.ajax({
+            url: "{{ route('leads.getLogs') }}",
+            method: 'POST',
+            data: { logID: logID },
+            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+            success: function (response) {
+                    console.log(response);
+                    
+                if (!response.data || !response.data.remark) {
+                    console.error("Missing remark in response.");
+                    return;
+                }
+
+                let remark = response.data.remark.toLowerCase(); 
+
+                if (remark.includes("assign")) {
+                    console.log("Remark contains 'assign', modal will NOT open.");
+                    return;
+                }
+            
+                if (response.task_description) {
+                    $("#remark").val(response.task_description);
+                } else {
+                    $("#remark").val(""); // Clear if no description found
+                }
+                let oldValue = {};
+                let newValue = {};
+
+                try {
+                    oldValue = response.data.old_value ? JSON.parse(response.data.old_value) : {};
+                } catch (error) {
+                    console.error("Error parsing old_value:", error);
+                }
+
+                try {
+                    newValue = response.data.new_value ? JSON.parse(response.data.new_value) : {};
+                } catch (error) {
+                    console.error("Error parsing new_value:", error);
+                }
+
+                console.log("Old Value (After Parsing):", oldValue);
+                console.log("New Value (After Parsing):", newValue);
+
+                $(".old-value-container").html(formatData(oldValue));
+                $(".new-value-container").html(formatData(newValue));
+
+                // ✅ Only show the modal if the remark is NOT 'assign'
+                $('#assignUserModal').removeClass('hidden');
             }
+        });
 
-            let remark = response.data.remark.toLowerCase(); 
-
-            if (remark.includes("assign")) {
-                console.log("Remark contains 'assign', modal will NOT open.");
-                return;
+        function formatData(data) {
+            if (!data || Object.keys(data).length === 0) {
+                return "<p>No Data Available</p>";
             }
-          
-            if (response.task_description) {
-                $("#remark").val(response.task_description);
-            } else {
-                $("#remark").val(""); // Clear if no description found
+            let html = "<ul class='w-full text-left'>";
+            for (let key in data) {
+                html += `<li class='py-1 '><strong>${key}:</strong> ${data[key]}</li>`;
             }
-            let oldValue = {};
-            let newValue = {};
-
-            try {
-                oldValue = response.data.old_value ? JSON.parse(response.data.old_value) : {};
-            } catch (error) {
-                console.error("Error parsing old_value:", error);
-            }
-
-            try {
-                newValue = response.data.new_value ? JSON.parse(response.data.new_value) : {};
-            } catch (error) {
-                console.error("Error parsing new_value:", error);
-            }
-
-            console.log("Old Value (After Parsing):", oldValue);
-            console.log("New Value (After Parsing):", newValue);
-
-            $(".old-value-container").html(formatData(oldValue));
-            $(".new-value-container").html(formatData(newValue));
-
-            // ✅ Only show the modal if the remark is NOT 'assign'
-            $('#assignUserModal').removeClass('hidden');
+            html += "</ul>";
+            return html;
         }
-    });
-
-    function formatData(data) {
-        if (!data || Object.keys(data).length === 0) {
-            return "<p>No Data Available</p>";
-        }
-        let html = "<ul class='w-full text-left'>";
-        for (let key in data) {
-            html += `<li class='py-1 '><strong>${key}:</strong> ${data[key]}</li>`;
-        }
-        html += "</ul>";
-        return html;
-    }
 });
 
 // ✅ Close modal when clicking the close button

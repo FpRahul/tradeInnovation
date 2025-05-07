@@ -26,15 +26,15 @@ use App\Models\MenuAction;
                     @foreach($serializeMenus as $menuKey => $menu)
                         <li class="item border-b-[1px] border-b-[#E8E7FF] py-[10px] active">
                             <a href="javascript:void(0)" data-id="tab{{ $menuKey }}" class=" bg-[#f3f3f5] text-[14px] font-[400] leading-[16px] text-[#000000] flex items-center justify-between px-[10px] py-[10px]  ">
-                                    @if($menuKey==1)
-                                        @php $isChecked = 'disabled checked';  @endphp
-                                    @else
+                                    {{-- @if($menuKey==1)
+                                        @php $isChecked = 'checked';  @endphp
+                                    @else --}}
                                         @if (isset($menuAddedAction[$menuKey]))
                                             @php $isChecked = 'checked';  @endphp
                                         @else
                                             @php $isChecked = '';  @endphp
                                         @endif
-                                    @endif
+                                    {{-- @endif --}}
 
 
                                     <div class="inline-flex items-center">

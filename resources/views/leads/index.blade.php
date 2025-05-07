@@ -58,7 +58,6 @@
                                 $serviceList = collect($serviceList)->unique();
                             @endphp
                             @if (!empty($serviceList))
-                            
                                 @foreach ($serviceList as $serviceK => $serviceV)
                                     @if($serviceV > 0)
                                         @php

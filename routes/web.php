@@ -81,9 +81,7 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/partner-status/{id}','partnerStatus')->name('partner.status');
 
 
-        Route::match(['POST', 'GET'], '/business-scope' , 'scopeOfBusiness')->name('bussinessScope.index');
-        Route::match(['POST', 'GET'], '/add-business-scope/{id?}', 'addScopeBusiness')->name('bussinessScope.add');
-        Route::get('/business-scope-status/{id}','scopeOfBusinessStatus')->name('bussinessScope.status');
+        
         // Route::get('/category-status/{id?}', 'categoryStatus')->name('users.category.status');
         // Route::get('/category-delete/{id?}', 'categoryDelete')->name('users.category.delete');
 
@@ -136,6 +134,16 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
         Route::get('/opposition-details', 'oppositionDetails')->name('lead.oppositionDetails');
 
         Route::get('/download-invoice/{id?}', 'downloadInvoice')->name('lead.downloadinvoice');
+
+        Route::match(['POST', 'GET'], '/business-scope' , 'scopeOfBusiness')->name('bussinessScope.index');
+        Route::match(['POST', 'GET'], '/add-business-scope/{id?}', 'addScopeBusiness')->name('bussinessScope.add');
+        Route::get('/business-scope-status/{id}','scopeOfBusinessStatus')->name('bussinessScope.status');
+
+        Route::match(['POST', 'GET'], '/filing-mode' , 'FilingMode')->name('filingMode.index');
+        Route::match(['POST', 'GET'], '/add-filing-mode/{id?}', 'addFilingMode')->name('filingMode.add');
+        Route::get('/filing-mode-status/{id}','filingModeStatus')->name('filingMode.status');
+
+       
 
     });
     //Tasks Routes

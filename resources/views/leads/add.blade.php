@@ -308,12 +308,26 @@
                                                             <div class="logoErrorMsg text-[12px] italic font-[400] text-[#e70e0e]"></div>                                             
                                                         </div>
                                                         <div class="w-full md:w-[32%] lg:w-[32%]">
-                                                            <label class="block mb-[5px] text-[14px] font-[400]">Filing Mode</label>
-                                                            <input type="text" name="filingmode" 
-                                                                value="{{ isset($serviceVal->serviceDetails) ? $serviceVal->serviceDetails->filing_mode : '' }}" 
-                                                                class="filingmode w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
-                                                                > 
-                                                                                                    
+                                                            <label class="block mb-[5px] text-[14px] font-[400]">Filing Mode</label>                                                           
+                                                                <select name="filingmode" id="filingmode"
+                                                                    class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"
+                                                                    required >
+                                                                    
+                                                                    <option disabled>Select Filing Mode</option>                    
+
+                                                                    @if (!empty($filingModeList) && $filingModeList->isNotEmpty())
+                                                                        @foreach ($filingModeList as $filingModeListDetails)
+                                                                            <option value="{{ $filingModeListDetails->id }}"
+                                                                                @if(isset($serviceVal->serviceDetails) && is_array($serviceVal->serviceDetails->filing_mode) && in_array($filingModeListDetails->id, $serviceVal->serviceDetails->filing_mode))
+                                                                                    selected
+                                                                                @endif>
+                                                                                {{ $filingModeListDetails->name }}
+                                                                            </option>
+                                                                        @endforeach                                                            
+                                                                    @endif
+
+                                                                </select>
+                                   
                                                         </div>   
                                                         <div class="w-full  md:w-[32%] lg:w-[32%]">  
                                                             <label class="block mb-[5px] text-[14px] font-[400]">Filing Date</label>                                                                      
@@ -475,10 +489,22 @@
                                                 </div>
                                                 <div class="w-full md:w-[32%] lg:w-[32%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Filing Mode</label>
-                                                    <input type="text" name="filingmode" 
-                                                        value="" 
-                                                        class="filingmode w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
-                                                        > 
+                                                    <select name="filingmode" id="filingmode"
+                                                    class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"
+                                                    required>
+                                                    
+                                                    <option disabled>Select Filing Mode</option>                    
+
+                                                    @if (!empty($filingModeList) && $filingModeList->isNotEmpty())
+                                                        @foreach ($filingModeList as $filingModeListDetails)
+                                                            <option value="{{ $filingModeListDetails->id }}"
+                                                                >
+                                                                {{ $filingModeListDetails->name }}
+                                                            </option>
+                                                        @endforeach                                                            
+                                                    @endif
+
+                                                </select>
                                                                                             
                                                 </div>  
                                                 <div class="w-full  md:w-[32%] lg:w-[32%]">  

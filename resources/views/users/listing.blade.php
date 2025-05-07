@@ -40,22 +40,25 @@
                         <th width="20%" class="text-start w-[200px] bg-[#D9D9D933] text-[12px] md:text-[14px] whitespace-nowrap font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
                             Sr No.
                         </th>
-                        <th width="18%" class="text-start w-[200px] bg-[#D9D9D933] text-[12px] md:text-[14px] whitespace-nowrap font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
+                        <th width="20%" class="text-start w-[200px] bg-[#D9D9D933] text-[12px] md:text-[14px] whitespace-nowrap font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
                             ID
                         </th>
-                        <th width="18%" class="text-start w-[200px] bg-[#D9D9D933] text-[12px] md:text-[14px] whitespace-nowrap font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
+                        <th width="20%" class="text-start w-[200px] bg-[#D9D9D933] text-[12px] md:text-[14px] whitespace-nowrap font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
                             Name
                         </th>
-                        <th width="18%" class="text-start bg-[#D9D9D933] text-[12px] md:text-[14px] whitespace-nowrap font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                        <th width="20%" class="text-start w-[200px] bg-[#D9D9D933] text-[12px] md:text-[14px] whitespace-nowrap font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
+                            Email
+                        </th>
+                        <th width="20%" class="text-start bg-[#D9D9D933] text-[12px] md:text-[14px] whitespace-nowrap font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                             Mobile Number
                         </th>
-                        <th width="18%" class="text-start bg-[#D9D9D933] text-[12px] md:text-[14px] whitespace-nowrap font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                        <th width="20%" class="text-start bg-[#D9D9D933] text-[12px] md:text-[14px] whitespace-nowrap font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                             Role
                         </th>
-                        <th width="18%" class="text-start bg-[#D9D9D933] text-[12px] md:text-[14px] whitespace-nowrap font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                        <th width="20%" class="text-start bg-[#D9D9D933] text-[12px] md:text-[14px] whitespace-nowrap font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                             Status
                         </th>
-                        <th width="18%" class="text-start bg-[#D9D9D933] text-[12px] md:text-[14px] whitespace-nowrap font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                        <th width="20%" class="text-start bg-[#D9D9D933] text-[12px] md:text-[14px] whitespace-nowrap font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                             Action
                         </th>
                     </tr>
@@ -73,6 +76,9 @@
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
                             {{$employeeListing->name}}
+                        </td>
+                        <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
+                            {{$employeeListing->email}}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                             {{$employeeListing->mobile}}

@@ -111,8 +111,7 @@ class TasksController extends Controller
         $taskDetails = LeadTask::with(['user', 'lead', 'leadTaskDetails','serviceDetails','services', 'subService', 'serviceSatge'])->whereHas('lead', function ($q) {
             $q->where('status', 1);
         })->orderBy('created_at', 'desc');
-        // dd($taskDetails->get());
-        if ($assignUser->role != 1) {
+        if ($assignUser->role != 1) {            
             $taskDetails = $taskDetails->where('user_id', $assignUser->id);
         }
         $searchKey = $request->input('key') ?? '';
@@ -752,10 +751,8 @@ class TasksController extends Controller
         $formattedCreatedDate = $existedLeaedTask->created_at->format('d M Y');
         $logVerifiedDate = Carbon::parse($verifiedDate)->format('d M Y');
         if($request->paymentDeadline){
-
             $logPaymentdeadline = Carbon::parse($paymentDeadlineDate)->format('d M Y');
         }
-
 
         if ($id) {
             if ($request->checkStatus == 0) {

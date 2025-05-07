@@ -111,7 +111,7 @@ class LeadsController extends Controller
     public function add(Request $request, $id = null)
     {       
       
-        if ($id > 0) {            
+        if ($id > 0) {
             $leadData = Lead::where('id', $id)->first();
             // if ($leadData) {
             //     if ($leadData->status == 1) {
@@ -250,7 +250,7 @@ class LeadsController extends Controller
                                 $image_name->move(public_path('uploads/leads/' . $leadData->id), $imageName);
                                 $serviceDetailData->service_logo = $imageName;
                             }
-
+                            $serviceDetailData->project_manager_id = $serviceVal['projectmanager'];
                             $serviceDetailData->filing_mode = $serviceVal['filingmode'];
                             $serviceDetailData->filing_date = date('Y-m-d',strtotime($serviceVal['filingdate']));
                             $serviceDetailData->applicant_name = $request->clientname;
@@ -266,7 +266,6 @@ class LeadsController extends Controller
                        
                         $leadTaskData->service_detail_id = $service_detail_id; 
                         $leadTaskData->lead_id = $leadData->id;                       
-                        $leadTaskData->project_manager_id = $serviceVal['projectmanager'];
                         $leadTaskData->service_id = $serviceVal['serviceid'];
                         $serviceidArray[] = $serviceVal['serviceid'];
                         $leadTaskData->subservice_id = $serviceVal['subserviceid'];
@@ -335,7 +334,6 @@ class LeadsController extends Controller
             }
         }
         $authDetails = auth()->user();
-        // dd($authDetails);
         $header_title_name = 'Lead';
         return view('leads/add', compact('header_title_name', 'firmList', 'sourceList', 'serviceList', 'projectManagerList', 'userList', 'clientList', 'leadData', 'leadAttachment', 'LeadTask', 'scopeOfBussinessList','filingModeList','authDetails'));
     }

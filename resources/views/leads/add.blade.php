@@ -136,6 +136,7 @@
                         <div data-repeater-list="leadRepeater" class="flex flex-col gap-[20px]">  
                             @if ($LeadTask && $LeadTask->isNotEmpty())
                                 @foreach ($LeadTask as $serviceKey => $serviceVal)
+                                
                                     @if ($serviceVal->leadTaskDetails->status == 0)
                                         <div data-repeater-item class="repeater-item flex flex-wrap items-end gap-[20px]">
                                             <div class="w-[calc(100%-75px)] ">
@@ -163,7 +164,7 @@
                                                             @foreach ($projectManagerList as $projectManagerListData)
                                                                 <option value="{{ $projectManagerListData->id }}" 
                                                                     @selected(
-                                                                        old('projectmanager', $serviceVal->project_manager_id) == $projectManagerListData->id ||
+                                                                        old('projectmanager', $serviceVal->serviceDetails->project_manager_id) == $projectManagerListData->id ||
                                                                         ($authDetails->role == 4 && $authDetails->id == $projectManagerListData->id)
                                                                     )
                                                                 >
@@ -318,9 +319,7 @@
                                                                     @if (!empty($filingModeList) && $filingModeList->isNotEmpty())
                                                                         @foreach ($filingModeList as $filingModeListDetails)
                                                                             <option value="{{ $filingModeListDetails->id }}"
-                                                                                @if(isset($serviceVal->serviceDetails) && is_array($serviceVal->serviceDetails->filing_mode) && in_array($filingModeListDetails->id, $serviceVal->serviceDetails->filing_mode))
-                                                                                    selected
-                                                                                @endif>
+                                                                                @selected(old('filingmode', $serviceVal->serviceDetails->filing_mode) == $filingModeListDetails->id)>
                                                                                 {{ $filingModeListDetails->name }}
                                                                             </option>
                                                                         @endforeach                                                            

@@ -185,12 +185,14 @@
             $('.leadServiceRepeater').repeater({
                 initEmpty: false,
                 show: function() {
-                    $(this).find('#client_type').prop("checked", true);
-                    $(this).find('.getSubService').html('<option value="">Service Type</option>');
-                    $(this).find('.getpreviewlogo').html('<option value="">Select Stage</option>');
-                    $(this).find('.getpreviewlogo').attr('src', '/assets/images/noimage.png');
+                    var $this = $(this); // Store $(this) in a variable for efficiency
 
-                    $(this).find('.daterangepicker-taskdeadline').daterangepicker({
+                    $this.find('#client_type').prop("checked", true);
+                    $this.find('.getSubService').html('<option value="">Service Type</option>');
+                    $this.find('.getpreviewlogo').html('<option value="">Select Stage</option>');
+                    $this.find('.getpreviewlogo').attr('src', '/assets/images/noimage.png');
+
+                    $this.find('.daterangepicker-taskdeadline').daterangepicker({
                         singleDatePicker: true,
                         opens: 'right',
                         locale: {
@@ -200,10 +202,15 @@
                         console.log("A new date selection was made: " + picker.startDate.format('YYYY-MM-DD'));
                     });
 
-                    $(this).slideDown();
+                    $this.slideDown();
                     toggleDeleteIcons();
-                },
 
+                    // Initialize Select2 for the newly added dropdown.  This is the CRITICAL CHANGE.
+                    $this.find('.allform-select2-service').select2({
+                        placeholder: 'Select',
+                        allowClear: true
+                    });
+                },
                 hide: function(deleteElement) {
                     if (confirm('Are you sure you want to delete this element?')) {
                         var $row = $(this);
@@ -238,9 +245,9 @@
                         }
                     }
                 },
-
                 isFirstItemUndeletable: false
             });
+
 
             toggleDeleteIcons();
         });
@@ -379,12 +386,10 @@
         });
 
         jQuery(document).on('click', '.accordian .item>a', function() {
-
             if (!jQuery(this).hasClass('nav-link')) {
                 jQuery(this).parent().children('.accordian_body').slideDown();
                 jQuery(this).parent().siblings().children('.accordian_body').slideUp();
-                let tabId = jQuery(this).attr('data-id');
-                
+                let tabId = jQuery(this).attr('data-id');                
                 jQuery(`#${tabId}`).removeClass('hidden');
                 jQuery(`#${tabId}`).siblings().addClass('hidden');
             } else {
@@ -407,14 +412,12 @@
 
         // Lead Tabbing
 
-        const tabs = document.querySelectorAll(".tabs");
-        const tab = document.querySelectorAll(".tab");
-        const panel = document.querySelectorAll(".tab-content");
+    const tabs = document.querySelectorAll(".tabs");
+    const tab = document.querySelectorAll(".tab");
+    const panel = document.querySelectorAll(".tab-content");
 
-        function onTabClick(event) {
-
+    function onTabClick(event) {
         // deactivate existing active tabs and panel
-
         for (let i = 0; i < tab.length; i++) {
         tab[i].classList.remove("active");
         }
@@ -422,23 +425,21 @@
         for (let i = 0; i < panel.length; i++) {
         panel[i].classList.remove("active");
         }
-
-
-        // activate new tabs and panel
+            // activate new tabs and panel
         event.target.classList.add('active');
         let classString = event.target.getAttribute('data-target');
         console.log(classString);
         document.getElementById('panels').getElementsByClassName(classString)[0].classList.add("active");
-        }
+    }
 
-        for (let i = 0; i < tab.length; i++) {
-        tab[i].addEventListener('click', onTabClick, false);
-        }
+    for (let i = 0; i < tab.length; i++) {
+    tab[i].addEventListener('click', onTabClick, false);
+    }
 
 
-        $(document).ready(function(){
-            const fileInput = $('#attachment');
-            const fileList = $('#file-list');
+    $(document).ready(function(){
+        const fileInput = $('#attachment');
+        const fileList = $('#file-list');
         fileInput.on('change', function(event) {
             fileList.empty();
             $.each(event.target.files, function(index, file) {
@@ -468,7 +469,7 @@
             fileInput[0].files = dt.files;
             fileItem.remove();
         }
-        })
+    })
 
 
 

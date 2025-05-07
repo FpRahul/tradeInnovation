@@ -30,7 +30,6 @@ class GetAssignedNotification extends Component
             $notificationData = $notificationData->where('user_id', $assignUser->id);
             $notifyCount = $notificationData->count();
         }
-        
         return view('components.get-assigned-notification',compact('notificationData','notifyCount'));
     }
 }

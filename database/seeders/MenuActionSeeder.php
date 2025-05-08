@@ -57,6 +57,6 @@ class MenuActionSeeder extends Seeder
             array('id' => '42','menuId' => '22','actionName' => 'Add / Edit','route' => 'filingMode.add','created_at' => NULL,'updated_at' => NULL),
             array('id' => '43','menuId' => '22','actionName' => 'Update Status','route' => 'filingMode.status','created_at' => NULL,'updated_at' => NULL),
             array('id' => '44','menuId' => '1','actionName' => 'Dashboard','route' => 'dashboard','created_at' => NULL,'updated_at' => NULL),
-          ));
+        ));
     }
 }

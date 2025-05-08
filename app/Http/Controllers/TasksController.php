@@ -111,8 +111,15 @@ class TasksController extends Controller
         $taskDetails = LeadTask::with(['user', 'lead', 'leadTaskDetails','serviceDetails','services', 'subService', 'serviceSatge'])->whereHas('lead', function ($q) {
             $q->where('status', 1);
         })->orderBy('created_at', 'desc');
-        if ($assignUser->role != 1) {            
-            $taskDetails = $taskDetails->where('user_id', $assignUser->id);
+        
+        if ($assignUser->role != 1) {   
+            if($assignUser->role == 4){
+                $taskDetails = $taskDetails->whereHas('serviceDetails',function($q) use ($assignUser){
+                    $q->where('project_manager_id', $assignUser->id);
+                });               
+            }else{
+                $taskDetails = $taskDetails->where('user_id', $assignUser->id);
+            }
         }
         $searchKey = $request->input('key') ?? '';
         $requestType = $request->input('requestType') ?? '';

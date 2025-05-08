@@ -12,7 +12,8 @@ use App\Models\CategoryOption;
 use App\Models\UserExperience;
 use App\Models\Role;
 use App\Models\Service;
-
+use App\Models\Menu;
+use App\Models\RoleMenu;
 use App\View\Components\LogActivity;
 use App\Models\Log;
 use App\Models\Firm;
@@ -51,13 +52,20 @@ class UsersController extends Controller
                 ];                
                 $logActivity = new LogActivity($logActivity);
                 $logActivity->log();
-                if(auth()->user()->role == 5){
+                $menuPermission = RoleMenu::with('menuid')->where('roleId',auth()->user()->role)->first(); 
+                if ($menuPermission && $menuPermission->menuid && $menuPermission->menuid->url) {
+                    return redirect()->route($menuPermission->menuid->url)
+                        ->with('success', 'You have successfully logged in!');
+                } else {
+                    return redirect()->back()->with('error', 'No menu permission found.');
+                } 
+                // if(auth()->user()->role == 5){
 
-                    return redirect()->route('task.index')->withSuccess('You have successfully logged in!');
-                }else{
-                    return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
+                //     return redirect()->route('task.index')->withSuccess('You have successfully logged in!');
+                // }else{
+                //     return redirect()->route('dashboard')->withSuccess('You have successfully logged in!');
 
-                }
+                // }
             }
             return redirect()->back()->with('error', 'The provided credentials do not match our records.');
         }

@@ -1,9 +1,12 @@
 <table width="100%" cellpadding="0" cellspacing="0" class="min-w-[900px]">
     <thead>
         <tr>
-            <th class="text-start w-[120px] bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
-                Lead id
+            <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                SR.NO
             </th>
+            {{-- <th class="text-start w-[120px] bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
+                Lead id
+            </th> --}}
             <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                 Source
             </th>
@@ -20,8 +23,11 @@
                 Services-Stages
             </th>
             <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
-                Created
+                Scope Of Business
             </th>
+            <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                Created
+            </th> 
             
             <th class="text-center bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                 Action
@@ -35,24 +41,27 @@
                             
            <tr>
             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px] pl-[25px]">
+                {{$loop->index + 1}}
+            </td> 
+            {{-- <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px] pl-[25px]">
                 #{{$leadData->lead_id}}
-            </td>
+            </td> --}}
             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                 <span class="inline-flex items-center gap-[10px]"> 
                 @if ($leadData->source > 0 )
-                     {{ getSourceData($leadData->source)->name }}
+                {{ ucwords(getSourceData($leadData->source)->name) }}
                 @endif
                 @if ($leadData->source == 17 || $leadData->source == 18 || $leadData->source == 19)
                     <button data-tooltip-target="tooltip-default{{$leadKey}}"><img src="{{ asset('assets/images/i-icon.png') }}" alt="icon"></button>
 
                     <div id="tooltip-default{{$leadKey}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-[#13103A] rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
-                        {{getUserNameBySource($leadData->source_id)->name}}
+                        {{ucwords(getSourceData($leadData->source)->name)}}
                         <div class="tooltip-arrow" data-popper-arrow></div>
                     </div>
                 @endif
             </td>
             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                {{$leadData->client_name}}
+                {{ucwords($leadData->client_name)}}
             </td>
             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                 @php
@@ -71,12 +80,20 @@
                 </span>                                
             </td>
             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">     
-                {{getUserNameBySource($leadData->leadTask->user_id)->name}}                    
+                {{ucwords(getUserNameBySource($leadData->leadTask->user_id)->name)}}                    
             </td>
             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">     
                 @if ($leadData->leadTask && !empty($leadData->leadTask))
-                {{getStageData($leadData->leadTask)}}
+                {{ucwords(getStageData($leadData->leadTask))}}
                 @endif                           
+            </td>
+            <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
+                @if ($leadData->leadTask && !empty($leadData->leadTask))
+                {{ucwords(getScopeOfBusinessData($leadData->business_scope))}}
+                @else
+                N/A
+                @endif
+                
             </td>
             <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                 {{ date('d M Y H:i:A', strtotime($leadData->created_at) ) }}

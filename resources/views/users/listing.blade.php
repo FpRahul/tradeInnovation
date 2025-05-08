@@ -75,16 +75,16 @@
                             #{{$employeeListing->uni_user_id ?? 0}}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
-                            {{$employeeListing->name}}
+                            {{ucwords($employeeListing->name)}}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
-                            {{$employeeListing->email}}
+                            {{ucwords($employeeListing->email)}}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
-                            {{$employeeListing->mobile}}
+                            {{ucwords($employeeListing->mobile)}}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
-                           {{ Role::find($employeeListing->role)->name ?? 'N/A'; }}
+                           {{ ucwords(Role::find($employeeListing->role)->name ?? 'N/A') }}
                             
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">

@@ -8,7 +8,7 @@
                 <li>User</li> /
                 <li class="text-gray">Manage Associates</li>
             </ul>
-        </div>
+        </div> 
         @if(in_array('users.addassociate',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
         <div>
             <a href="{{ route('users.addassociate')}}" class="w-[auto] inline-flex items-center gap-[10px] text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px] ">
@@ -68,7 +68,8 @@
                                 #{{$associateDetails->uni_user_id ?? 0}}
                             </td>
                             <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
-                                {{$associateDetails->name}}
+                                {{ucwords($associateDetails->name)}}
+
                             </td>
                             
                             <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">

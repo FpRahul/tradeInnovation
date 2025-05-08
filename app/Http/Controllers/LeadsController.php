@@ -453,7 +453,11 @@ class LeadsController extends Controller
         $leadData = lead::all();
         $service = Service::all();
         $selectServiceID = $request->service_id;
+       
+        
         $requestParams = $request->all();
+        
+        
         $leadLogs = LeadLog::with('leadTask', 'leadTask.leadTaskDetails', 'leadTask.serviceSatge')->get();
          if($request->service_id > 0 && $request->lead_id > 0){
 

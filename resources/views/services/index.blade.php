@@ -51,7 +51,7 @@
                     @foreach ($serviceData as $serviceListing)
                     <tr>
                         <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
-                            {{$serviceListing->serviceName}}
+                            {{ucwords($serviceListing->serviceName)}}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] [tr:last-child>&]:border-[transparent] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                             @if ($serviceListing->status == 1)
@@ -173,7 +173,9 @@
         let des = $(this).attr('data-des');
         let id = $(this).attr('data-id');
         $('#service_id').val(id);
-        $('#serviceName').val(name);
+        let cleaned = name.toLowerCase().replace(/\s+/g, ' ').trim();
+        let capitalized = cleaned.replace(/\b\w/g, char => char.toUpperCase());
+        $('#serviceName').val(capitalized);
         $('#serviceDes').text(des);
     });
 </script>

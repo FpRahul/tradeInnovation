@@ -158,7 +158,9 @@
                 @if($getStage->count() > 0)
                 <option value="" disabled selected>Select a user</option>
                 @foreach ($getStage as $stages)
-                <option value="{{ $stages->id }}">
+                <option value="{{ $stages->id }}" @if ($upcomeing->id == $stages->id)
+                    selected
+                @endif>
                     {{ $stages->title }}
                 </option>
                 @endforeach
@@ -166,7 +168,7 @@
                 <option value="" disabled>No users available</option>
                 @endif
             </select>
-            <p  class="infoStage" style="  color: skyblue; font-size: 14px; font-weight: 500;">
+            <p  class="infoStage" style="  color: skyblue; font-size: 14px; font-weight: 500;">Next Stage Will Be:{{ $upcomeing->title }}
             </p>
             @error('assignUser')
             <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
@@ -217,7 +219,7 @@
             </div>
          </div>
          <p class="infoUser" style="color: skyblue; font-size: 14px; font-weight: 500;">
-            
+            Set A Dead Line For:{{ $upcomeing->title }}
          </p>
       </div>
 

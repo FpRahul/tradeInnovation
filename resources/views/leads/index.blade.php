@@ -20,7 +20,7 @@
                     <path d="M8.75 5.625H5.625V8.75C5.625 9.09375 5.34375 9.375 5 9.375C4.65625 9.375 4.375 9.09375 4.375 8.75V5.625H1.25C0.90625 5.625 0.625 5.34375 0.625 5C0.625 4.65625 0.90625 4.375 1.25 4.375H4.375V1.25C4.375 0.90625 4.65625 0.625 5 0.625C5.34375 0.625 5.625 0.90625 5.625 1.25V4.375H8.75C9.09375 4.375 9.375 4.65625 9.375 5C9.375 5.34375 9.09375 5.625 8.75 5.625Z" fill="white" />
                 </svg>
                 Add Lead
-            </a> 
+            </a>  
         @endif
     </div>
     <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] overflow-hidden ">
@@ -110,9 +110,9 @@
                         <th class="text-start w-[120px] bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
                            SR NO.
                         </th>
-                        <th class="text-start w-[120px] bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
+                        {{-- <th class="text-start w-[120px] bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
                             Lead id
-                        </th>
+                        </th> --}}
                         <th class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                             Source
                         </th>
@@ -147,20 +147,20 @@
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px] pl-[25px]">
                             {{$loop->index+1}}
                         </td>
-                        <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px] pl-[25px]">
+                        {{-- <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px] pl-[25px]">
                             #{{$leadData->lead_id}}
-                        </td>
+                        </td> --}}
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                             <span class="inline-flex items-center gap-[10px]"> 
                             @if ($leadData->source > 0 )
-                                 {{ getSourceData($leadData->source)->name }}
+                                 {{ ucwords(getSourceData($leadData->source)->name) }}
                             @endif
                             @if ($leadData->source == 17 || $leadData->source == 18 || $leadData->source == 19)
                                 <button data-tooltip-target="tooltip-default{{$leadKey}}"><img src="{{ asset('assets/images/i-icon.png') }}" alt="icon"></button>
 
                                 <div id="tooltip-default{{$leadKey}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-[#13103A] rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
                                     <?php 
-                                    $user = getUserNameBySource($leadData->source_id);
+                                    $user = ucwords(getSourceData($leadData->source)->name);
                                     echo $user ? $user->name : 'N/A'; 
                                     ?>
                                     <div class="tooltip-arrow" data-popper-arrow></div>
@@ -168,7 +168,7 @@
                             @endif
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
-                            {{$leadData->client_name}}
+                            {{ucwords($leadData->client_name)}}
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                             @php
@@ -192,7 +192,7 @@
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]"> 
                             @if (!empty($leadData->leadTask))
-                            {{getUserNameBySource($leadData->leadTask->user_id)->name}} 
+                            {{ucwords(getUserNameBySource($leadData->leadTask->user_id)->name)}} 
                             @else
                             N/A
                             @endif    
@@ -200,14 +200,14 @@
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">     
                             @if ($leadData->leadTask && !empty($leadData->leadTask))
-                            {{getStageData($leadData->leadTask)}}
+                            {{ucwords(getStageData($leadData->leadTask))}}
                             @else
                             N/A
                             @endif                         
                         </td>
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                             @if ($leadData->leadTask && !empty($leadData->leadTask))
-                            {{getScopeOfBusinessData($leadData->business_scope)}}
+                            {{ucwords(getScopeOfBusinessData($leadData->business_scope))}}
                             @else
                             N/A
                             @endif

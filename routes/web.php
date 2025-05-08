@@ -548,18 +548,10 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
 
         Route::get('/patent/payment-verification-revocation/{id?}' , 'patentPaymentRevocation')->name('task.patentPaymentRevocation');
         Route::Post('/patent/payment-verification-revocation-submit/{id?}' , 'patentPaymentRevocationSubmit')->name('task.patentPaymentRevocationSubmit');
-
-
-      
-
         Route::get('/patent/revocation/{id?}' , 'patentRevocation')->name('task.patentRevocation');
         Route::Post('/patent/revocation-submit/{id?}' , 'patentRevocationSubmit')->name('task.patentRevocationSubmit');
-
         Route::get('/patent/restoration/{id?}' , 'patentRestoration')->name('task.patentRestoration');
         Route::Post('/patent/restoration-submit/{id?}' , 'patentRestorationSubmit')->name('task.patentRestorationSubmit');
-
-       
-     
     });
     //Services Routes
     Route::prefix('services')->controller(ServicesController::class)->group(function () {
@@ -572,9 +564,6 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
     });
     
 });
-
-
-
 Route::prefix('jobs')->name('jobs.')->group(function () {
     Route::get('/send-notifications',[TasksController::class, 'sendNotification']);
 });

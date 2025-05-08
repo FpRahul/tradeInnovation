@@ -85,11 +85,11 @@
             <div class="flex flex-col md:flex-row gap-[20px]">
                 <div class="w-full md:w-1/2">
                     <label for="clientname" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Client Name</label>
-                    <input type="text" name="clientname" id="clientname" value="{{ old('clientname') ? old('clientname') : (!empty($leadData) ? $leadData->client_name : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <input type="text" name="clientname" id="clientname" value="{{ ucwords(old('clientname') ? old('clientname') : (!empty($leadData) ? $leadData->client_name : ''))}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="companyname" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Company Name</label>
-                    <input type="text" name="companyname" id="companyname" value="{{ old('companyname') ? old('companyname') : (!empty($leadData) ? $leadData->company_name : '')}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
+                    <input type="text" name="companyname" id="companyname" value="{{ ucwords(old('companyname') ? old('companyname') : (!empty($leadData) ? $leadData->company_name : ''))}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" required>
                 </div>
                 <div class="w-full md:w-1/2">
                     <label for="scopeofbusiness" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Scope Of Business <strong class="text-[#f83434]">*</strong></label>
@@ -624,7 +624,7 @@
            
             <div class="">
                 <label for="description" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Description</label>
-                <textarea name="description" id="description" class="w-full h-[155px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">{{ old('description', !empty($leadData) ? $leadData->description : '') }}</textarea>
+                <textarea name="description" id="description" class="w-full h-[155px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">{{ ucwords(old('description', !empty($leadData) ? $leadData->description : '')) }}</textarea>
 
             </div>
             <div class="">

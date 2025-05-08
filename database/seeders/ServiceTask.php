@@ -5,13 +5,14 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ServiceTask extends Seeder
 {
     
     public function run(): void
     {
-        DB::table('service_stages')->insert([
+        $stages = [
             [
                 'service_id' => '1',                
                 'title' => 'Search trademark',
@@ -495,6 +496,7 @@ class ServiceTask extends Seeder
                
                 'stage' => '1',
             ],
+            // 
             [
                 'service_id' => '1',
                 'title' => 'Payment Confirmation (Applicant Address change)',
@@ -553,6 +555,7 @@ class ServiceTask extends Seeder
                
                 'stage' => '12',
             ],
+
             [
                 'service_id' => '1',
                 'title' => 'Execution of deeds and affidavits (Assignment/Registered User)',
@@ -1264,6 +1267,13 @@ class ServiceTask extends Seeder
             //     'stage' => '1',
             // ],
             
-        ]);
+        ];
+        foreach ($stages as &$stage) {
+            $stage['title'] = Str::title($stage['title']);
+            $stage['description'] = Str::title($stage['description']);
+        }
+
+        // Insert into the database
+        DB::table('service_stages')->insert($stages);
     }
 }

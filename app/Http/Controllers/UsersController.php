@@ -44,7 +44,7 @@ class UsersController extends Controller
                 $logActivity[] = [
                     'user_id' => auth()->user()->id,
                     'title' => 'Login',
-                    'description' => auth()->user()->name . 'has logged into the portal',
+                    'description' => auth()->user()->name .' '.'has logged into the portal',
                     'created_at' => date('Y-m-d H:i:s'),
                     'ip_address' => $clientIP,
                     'operating_system' => $operatingSystem

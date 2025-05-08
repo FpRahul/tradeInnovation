@@ -15,6 +15,7 @@
             <input type="hidden" name="serviceId" id="serviceId" value="{{ $task->serviceSatge->service_id ?? Null}}">
             @endforeach
             @endif
+            <input type="hidden" name="current_stage" value="{{ $stage_id }}">
             <div class="w-full md:w-1/2">
                 <label for="status" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
                 <select name="status" id="status" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">
@@ -103,7 +104,7 @@
                     @if($getStage->count() > 0)
                     <option value="" disabled selected>Select a user</option>
                     @foreach ($getStage as $stages)
-                    <option value="{{ $stages->id }}">
+                    <option value="{{ $stages->id }}" @if($upcomeing->id == $stages->id ) selected @endif>
                         {{ $stages->title }}
                     </option>
                     @endforeach
@@ -114,7 +115,7 @@
                 
                
                 <p  class="infoStage" style="  color: skyblue; font-size: 14px; font-weight: 500;">
-                    
+                    Next Stage Will Be:{{ $upcomeing->title }}
                 </p>
                 
                 
@@ -179,6 +180,7 @@
                 </div>
             </div>
             <p class="infoUser" style="color: skyblue; font-size: 14px; font-weight: 500;">
+                Set A Dead Line For:{{ $upcomeing->title }}
             </p>
         </div>
         <div class="flex justify-end gap-[15px]">

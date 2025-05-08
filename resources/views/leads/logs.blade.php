@@ -1,5 +1,9 @@
 @extends('layouts.default')
 @section('content')
+<?php 
+use App\Models\LeadTask;
+use App\Models\Service;
+?>
 <style>
     .modal-style {
         box-shadow: 0 5px 15px rgb(0 0 0 / 50%);
@@ -29,21 +33,32 @@
                     </select>
                     <div class="leadIdError text-[#f83434]"></div>
                 </div>
+               
+                
                 <div class="w-[30%]">
                     <label class="flex text-[15px] text-[#000] mb-[5px]">Services<strong class="text-[#f83434]">*</strong></label>
                     <select name="service_id" id="service_id" class="allform-filter-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] " required>
                         <option value="">Select services ID</option>
-                       
-                        <option value="" >  </option>
-                       
-                        
-                        
+                        @if(isset($requestParams['lead_id']) && $requestParams['lead_id'] > 0)
+                        @php                        
+                            $serviceIds = LeadTask::where('lead_id', $requestParams['lead_id'])
+                                ->groupBy('service_id')
+                                ->pluck('service_id');
+
+                            $services = Service::whereIn('id', $serviceIds)->get();
+                        @endphp
+                         @foreach($services as $servicesName)
+                         <option value="{{ $servicesName->id }}" @selected(isset($requestParams['service_id']) && $requestParams['service_id'] > 0 )>{{ $servicesName->serviceName }}  </option>
+                         @endforeach
+                        @endif
+                                                
                     </select>
                 </div>
+               
                 <button id="submitButton" class=" text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[15px] px-[30px]">Filter</button>
-                <button id="resetButton" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[15px] px-[30px]">
+                <a id="resetButton" href="{{ route('leadLogs.index') }}" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[15px] px-[30px]">
                     Reset
-                </button>
+                </a>
             </div>
         </form>
     </div>
@@ -93,7 +108,7 @@
             </tr>
 
             <tr>
-                <td class="bg-[#fff] px-[10px] py-[15px] border-t-[1px] border-t-[#f5f5f5] text-left text-[#000] text-[13px] font-[400] whitespace-nowrap">
+                <td class="bg-[#fff] px-[10px] py-[15px] border-t-[1px] border-t-[#f5f5f5] text-left text-[#000] text-[13px] font-[400] whitespace-nowrap">Download file
                     31 Mar 2025
                 </td>
 
@@ -192,12 +207,12 @@
                                     </a>
                                     <div class=" absolute bottom-0 flex flex-col items-center hidden mb-5 group-hover:flex">
                                         <span class="flex items-center justify-center relative rounded-md z-10 px-[2px]  w-[70px] h-[30px] text-xs leading-none text-[#f00000]  font-[22px] "><i class="ri-prohibited-line text-[25px] m-[5px]"></i></p></span>
-                                       
+                                        
                                     </div>
                                 </div> 
                                 @else
                                 <div class="relative flex flex-col items-center group">
-                                    <a href="#" data-rowId="{{$log->id}}" data-taskID="{{ $log->task_id }}" class=" viewLogDeatails flex items-center gap-[8px] text-[15px] font-[600]  text-[#000]">
+                                    <a href="#" data-rowId="{{$log->id}}" data-taskID="{{ $log->task_id }}" class=" viewLogDeatails flex items-center gap-[8px] text-[15px] font-[600] hover:text-sky-400 hover:underline transition-all duration-200  text-[#000]">
                                         Action
                                     </a>
                                     <div class=" absolute bottom-0 flex flex-col items-center hidden mb-5 group-hover:flex">
@@ -235,7 +250,7 @@
                                         <i class=" donwloadFile ri-download-2-line text-[22px]"></i>
                                     </a>
                                     <div class=" absolute bottom-[18px] flex flex-col items-center hidden mb-[15px] group-hover:flex">
-                                        <span class="flex items-center justify-center relative rounded-md z-10 px-[2px]  w-[70px] h-[30px] text-xs leading-none text-white whitespace-no-wrap bg-[#13103a] shadow-lg">Download file</p></span>
+                                        <span class="flex items-center justify-center relative rounded-md z-10 px-[2px]  w-[70px] h-[30px] text-xs leading-none text-white whitespace-no-wrap bg-[#13103a] shadow-lg">Download</p></span>
                                         <div class="w-3 h-3 -mt-2 rotate-45 bg-black"></div>
                                     </div>
                                 </div>
@@ -267,7 +282,9 @@
                     </h3>
             
                     <!-- Right Side -->
-                    <span class="min-w-[210px] text-[16px] text-[#333] font-medium"><div class="inline-flex text-[#000]">Deadline:</div> </span>
+                    <span id="deadlineDisplay" class="min-w-[210px] text-[16px] text-[#333] font-medium">
+                        <div class="inline-flex text-[#f32a2a]">Deadline:</div>
+                      </span>
                 </div>
             
                 <!-- Close Button in top-right -->
@@ -324,7 +341,7 @@
 
                     <div class="flex items-center justify-between p-4 md:px-5 md:py-[20px] border-b border-[#f2f2f2]">
                         <h3 class="text-[24px] font-[600] leading-[17px] text-[#000]">
-                            Remark
+                            Description
                         </h3>
                     </div>
 
@@ -392,7 +409,6 @@
             data: { logID: logID },
             headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
             success: function (response) {
-                    console.log(response);
                     
                 if (!response.data || !response.data.remark) {
                     console.error("Missing remark in response.");
@@ -425,14 +441,26 @@
                 } catch (error) {
                     console.error("Error parsing new_value:", error);
                 }
+                if (response.data && response.data.lead_task && response.data.lead_task.lead_task_details) {
+                    const deadlineRaw = response.data.lead_task.lead_task_details.dead_line;
+                    const dateObj = new Date(deadlineRaw);
 
-                console.log("Old Value (After Parsing):", oldValue);
-                console.log("New Value (After Parsing):", newValue);
+                    const day = dateObj.getDate();
+                    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                    const month = monthNames[dateObj.getMonth()];
+                    const year = dateObj.getFullYear();
 
+                    const formattedDeadline = `${day} ${month} ${year}`;
+
+                    // Remove previous deadline and insert formatted one
+                    $("#deadlineDisplay .deadline-value").remove();
+                    $("#deadlineDisplay .inline-flex").after(
+                        `<span class="deadline-value ml-1 text-[#555]">${formattedDeadline}</span>`
+                    );
+                }
                 $(".old-value-container").html(formatData(oldValue));
                 $(".new-value-container").html(formatData(newValue));
-
-                // ✅ Only show the modal if the remark is NOT 'assign'
                 $('#assignUserModal').removeClass('hidden');
             }
         });

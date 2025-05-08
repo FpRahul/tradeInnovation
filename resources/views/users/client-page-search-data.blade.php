@@ -16,9 +16,7 @@
             <th width="20%" class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                 Services
             </th>
-            <th width="20%" class="text-start bg-[#D9D9D933] text-[12px] md:text-[14px] whitespace-nowrap font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
-                Services
-            </th>
+           
             <th width="20%" class="text-start bg-[#D9D9D933] text-[12px] md:text-[14px] whitespace-nowrap font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                 Scope of business
             </th>
@@ -28,7 +26,7 @@
             <th width="20%" class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                 Action
             </th>
-        </tr>
+        </tr> 
     </thead>
     <tbody>
         @if (count($clientData) > 0)
@@ -40,11 +38,11 @@
                     <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
                         #{{$clientDetails->uni_user_id ?? 0}}
                     </td>
-                    <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
-                        {{$clientDetails->name}}
+                    <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
+                        {{ucwords($clientDetails->name) }}
                     </td>
-                    <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
-                        {{$clientDetails->mobile}}
+                    <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                        {{ucwords($clientDetails->mobile)}}
                     </td>
                     <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                         @php
@@ -60,14 +58,10 @@
                             $uniqueServices = array_unique($services);
                         @endphp
                     
-                        {{ count($uniqueServices) ? implode(', ', $uniqueServices) : 'N/A' }}
+                        {{ ucwords(count($uniqueServices) ? implode(', ', $uniqueServices) : 'N/A') }}
                     </td>
                     <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
-<<<<<<< HEAD
-                        {{getScopeOfBusinessData($clientDetails->userdetail->business_scope)}}
-=======
-                        {{ isset($clientDetails->userdetail) ? getScopeOfBusinessData($clientDetails->userdetail->business_scope) : 'N/A' }}
->>>>>>> 2276943bbb75d488c6cc749fb3c9f140b181d32a
+                        {{ ucwords(isset($clientDetails->userdetail) ? getScopeOfBusinessData($clientDetails->userdetail->business_scope) : 'N/A') }}
                     </td>
                     <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                         @if ($clientDetails->status == 1)

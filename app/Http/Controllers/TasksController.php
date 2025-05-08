@@ -134,12 +134,7 @@ class TasksController extends Controller
         }
         // service_id subService_id    applied_for status
         if (
-            isset($request->leadId) &&
-            isset($request->status) &&
-            isset($request->user) &&
-            isset($request->service_id) &&
-            isset($request->subService_id) &&
-            isset($request->applied_for)
+            isset($request->leadId) && isset($request->status) && isset($request->user) && isset($request->service_id) && isset($request->subService_id) &&  isset($request->applied_for)
         ){
             
             $taskDetails = $taskDetails->whereHas('leadTaskDetails', function ($q) use ($request) {
@@ -163,7 +158,22 @@ class TasksController extends Controller
             $taskDetails = $taskDetails->where('lead_id' , $request->leadId)->where('service_id' , $request->service_id )
             ->where('subservice_id' , $request->subService_id )->where('service_detail_id' , $request->applied_for );
         }
-        
+        else if($request->leadId &&  $request->service_id && $request->subservice_id && $request->status != null){
+            $taskDetails = $taskDetails->whereHas('leadTaskDetails', function ($q) use ($request) {
+                $q->where('status', $request->status);
+            })
+            ->where('lead_id' , $request->leadId)
+            ->where('service_id', $request->service_id)->where('subservice_id' , $request->subservice_id);
+            
+        }
+        else if($request->leadId &&  $request->service_id && $request->status != null){
+            $taskDetails = $taskDetails->whereHas('leadTaskDetails', function ($q) use ($request) {
+                $q->where('status', $request->status);
+            })
+            ->where('lead_id' , $request->leadId)
+            ->where('service_id', $request->service_id);
+            
+        }
         else if($request->leadId &&  $request->service_id && $request->subService_id ){
             $taskDetails = $taskDetails->where('lead_id' , $request->leadId)->where('service_id' , $request->service_id )->where('subservice_id' , $request->subService_id );
         }
@@ -184,6 +194,7 @@ class TasksController extends Controller
                 $q->where('status', $request->status);
             })
                 ->where('lead_id' , $request->leadId);
+               
         } 
         else if ($request->leadId && $request->user) {
             
@@ -205,6 +216,7 @@ class TasksController extends Controller
             $taskDetails = $taskDetails->whereHas('leadTaskDetails', function ($q) use ($request) {
                 $q->where('status', $request->status);
             });
+            // dd($taskDetails->toSql());
         } 
         else if ($request->user) {
             $taskDetails = $taskDetails->where('user_id', $request->user);
@@ -218,20 +230,9 @@ class TasksController extends Controller
 
         $taskDetailsDrp = $taskDetails->get();
 
-        $filterdSubservices = null;
-        $filterdServices = null;
-        $filterAppliedFor = null;
+        
 
-        if($serviceParam && $request->leadId){
-            $leadServices = LeadTask::whereLeadId($request->leadId)->pluck('service_id')->unique();
-            $leadSubServices = LeadTask::whereLeadId($request->leadId)->pluck('subservice_id')->unique();
-            $serviceDetailsId = LeadTask::where('service_detail_id' , $request->applied_for)->pluck('service_detail_id')->unique();
-            $filterdServices = Service::whereIn('id', $leadServices)->get();
-            $filterdSubservices = SubService::where('serviceid', $request->service_id)->whereIn('id', $leadSubServices)->get();
-            $filterAppliedFor = ServiceDetail::whereIn('id', $serviceDetailsId)->get();
-           
-
-        }
+        
 
         $taskDetails = $taskDetails->paginate(env("PAGINATION_COUNT"));
 
@@ -250,9 +251,7 @@ class TasksController extends Controller
                 'serviceParam' => $serviceParam,
                 'subServiceParam' => $subServiceParam,
                 'serviceDetailsParam' => $serviceDetailsParam,
-                'filterAppliedFor' => $filterAppliedFor,
-                'filterdServices' => $filterdServices,
-                'filterdSubservices' => $filterdSubservices,
+               
             ]);
         } else {
             $trData = view($this->viewPath . 'task_fillter_data_listing', compact('taskDetails', 'searchKey'))->render();
@@ -288,15 +287,17 @@ class TasksController extends Controller
             $serviceID = $value->serviceSatge->service_id;
             $stage_id = $value->service_stage_id;
         }
-        $getStage = ServiceStages::where('service_id', $serviceID)->get();
+        $upcomeing = ServiceStages::where('id','>', $stage_id)->first();
+        $getStage = ServiceStages::where('service_id' , $serviceID )->get();
+        
+
         $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
         $header_title_name = "search For Trademark";
-        return view('tasks/tradeMark/check_duplication', compact('header_title_name', 'taskID', 'taskDetails', 'users', 'getStage'));
+        return view('tasks/tradeMark/check_duplication', compact('header_title_name', 'taskID', 'taskDetails', 'users', 'getStage' ,'upcomeing', 'stage_id'));
     }
 
     public function duplicateVerified(Request $request, $id)
     {
-
         $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         if ($request->deadline) {
 
@@ -312,7 +313,10 @@ class TasksController extends Controller
         $lead_id = $existedTaskDetails->lead_id;
         $formattedCreatedDate = $existedTaskDetails->created_at->format('d M Y');
         $logVerifiedDate = Carbon::parse($verifiedDate)->format('d M Y');
-       
+        $currentSatgeTitle = ServiceStages::find($request->current_stage);
+        
+
+        
 
         if (!empty($request->input('assignUser'))) {
             $assignUser = $request->input('assignUser');
@@ -343,6 +347,8 @@ class TasksController extends Controller
             $newExistedTaskDetails->assign_by = Auth::id();
             $newExistedTaskDetails->task_title = $assignedStageName->description;
             $newExistedTaskDetails->service_stage_id = $request->stage_id;
+            $existedTaskDetails->task_description = $request->description;
+            $existedTaskDetails->save();
             if ($newExistedTaskDetails->save()) {
                 $existedLeadTaskDetails->status = 1;
                 $existedLeadTaskDetails->status_date = $verifiedDate ?? null;
@@ -393,11 +399,20 @@ class TasksController extends Controller
                                 'Assigned On' => $formattedCreatedDate,
                                 'Assigned By' => $existedTaskDetails->userAssignBy->name,
                             ];
-                            $newValue = [
-                                'Status' => 'Completed as' .' '.  $request->ifRegister,
-                                'Verified On' => $logVerifiedDate,
-                                'Assigned To' => $existedTaskDetails->user->name,
-                            ];
+                            if($request->status == 0){
+
+                                $newValue = [
+                                    'Status' => 'Completed as' .' '.  $request->ifRegister,
+                                    'Verified On' => $logVerifiedDate,
+                                    'Assigned To' => $existedTaskDetails->user->name,
+                                ];
+                            }else if($request->status == 1){
+                                $newValue = [
+                                    'Status' => 'Completed',
+                                    'Verified On' => $logVerifiedDate,
+                                    'Assigned To' => $existedTaskDetails->user->name,
+                                ];
+                            }
                             $LeadLog->old_value = json_encode($oldValue);
                             $LeadLog->new_value = json_encode($newValue);
 
@@ -456,10 +471,11 @@ class TasksController extends Controller
         foreach ($taskDetails as $value) {
             $stage_id = $value->service_stage_id;
         }
-        $getStage = ServiceStages::where('service_id', $serviceID)->get();
+        $upcomeing = ServiceStages::where('id','>', $stage_id)->first();
+        $getStage = ServiceStages::where('service_id' ,$serviceID )->get();
       
         $leadTaskdetials = LeadTaskDetail::find($taskDetailsId);
-        return view('tasks.tradeMark.send_quotation', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'serviceName', 'clientName'));
+        return view('tasks.tradeMark.send_quotation', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'serviceName', 'clientName' , 'upcomeing'));
     }
 
     public function negotiatePrice(Request $request, $id)
@@ -716,16 +732,18 @@ class TasksController extends Controller
         }
         foreach ($taskDetails as $task) {
             $taskDetailsId = $task->id;
+            $serviceID = $task->services->id;
         }
         $firstPaymentId = Payment::where('task_id', $taskDetailsId)->OrderBy('id', 'ASC')->first();
         $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
         foreach ($taskDetails as $value) {
             $stageId = $value->service_stage_id;
         }
-
-        $getStage = ServiceStages::where('service_id', 1)->get();
+        
+        $upcomeing = ServiceStages::where('id','>', $stageId)->first();
+        $getStage = ServiceStages::where('service_id', $serviceID)->get();
         $leadTaskdetials = LeadTaskDetail::find($taskDetailsId);
-        return view('tasks.tradeMark.payment_status', compact('id', 'taskDetailsId', 'firstPaymentId', 'payamentDetails', 'paymentId', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage'));
+        return view('tasks.tradeMark.payment_status', compact('id', 'taskDetailsId','upcomeing', 'firstPaymentId', 'payamentDetails', 'paymentId', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage'));
     }
 
     public function paymentStatus(Request $request, $id)

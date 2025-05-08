@@ -16,7 +16,7 @@
             </th>
         </tr>
     </thead>
-    <tbody id="get_dynamic_data">                    
+    <tbody id="get_dynamic_data">                     
         @if (!empty($partnerList)) 
             @foreach ($partnerList as $partnerListV)
                 <tr>
@@ -24,7 +24,7 @@
                         {{$loop->index+1}}
                     </td>
                     <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
-                        {{$partnerListV->name}}
+                        {{ucwords($partnerListV->name)}}
                     </td>
                     
                     <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">

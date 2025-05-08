@@ -16,7 +16,7 @@
             </svg>
             Add Partner
         </a>
-        @endif
+        @endif 
     </div>
     <div class="shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] ">
         <div class="py-[25px] px-[20px] flex items-center justify-end">
@@ -55,7 +55,7 @@
                                     {{$loop->index+1}}
                                 </td>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
-                                    {{$partnerListV->name}}
+                                    {{ucwords($partnerListV->name)}}
                                 </td>
                                 
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
@@ -150,7 +150,9 @@
         let name = $(this).attr('data-name');
         let id = $(this).attr('data-id');
         $('#partner_model_id').val(id);
-        $('#partnerModelName').val(name);
+        let cleaned = name.toLowerCase().replace(/\s+/g, ' ').trim();
+        let capitalized = cleaned.replace(/\b\w/g, char => char.toUpperCase());
+        $('#partnerModelName').val(capitalized);
     });
 
     $(document).on('keyup', '.search', function() {

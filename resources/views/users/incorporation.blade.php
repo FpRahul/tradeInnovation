@@ -57,7 +57,8 @@
                                     {{$loop->index+1}}
                                 </td>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
-                                    {{$newCategorylist->name}}
+                                    {{ucwords($newCategorylist->name)}}
+
                                 </td>
                                 
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
@@ -154,7 +155,9 @@
         let name = $(this).attr('data-name');
         let id = $(this).attr('data-id');
         $('#incorporation_id').val(id);
-        $('#incorporationName').val(name);
+        let cleaned = name.toLowerCase().replace(/\s+/g, ' ').trim();
+        let capitalized = cleaned.replace(/\b\w/g, char => char.toUpperCase());
+        $('#incorporationName').val(capitalized);
     });
 
     $(document).on('keyup', '.search', function() {
@@ -167,7 +170,7 @@
             },
             data: {
                 key: key,
-                requestType: 'ajax',
+                requestType: 'ajax', 
             },
             dataType: 'json',
             success: function(res) {

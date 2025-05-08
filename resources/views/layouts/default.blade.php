@@ -475,6 +475,17 @@
 
     </script>
 
+    {{-- Switch OnOff --}}
+
+    <script>
+        const toggle = document.querySelector('.toggle input')
+
+toggle.addEventListener('click', () => {
+    const onOff = toggle.parentNode.querySelector('.onoff')
+    onOff.textContent = toggle.checked ? 'Filter Show' : 'Filter Hide'
+})
+    </script>
+
     @stack('footer')
       
 </body>

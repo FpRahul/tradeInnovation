@@ -6,10 +6,16 @@
     <thead>
         <tr>
             <th width="18%" class="text-start w-[200px] bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
+                SR.NO
+            </th>
+            <th width="18%" class="text-start w-[200px] bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
                 ID
             </th>
             <th width="18%" class="text-start w-[200px] bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] pl-[25px] uppercase">
                 Name
+            </th>
+            <th width="18%" class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
+                Email
             </th>
             <th width="18%" class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                 Mobile Number
@@ -23,20 +29,26 @@
             <th width="18%" class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                 Action
             </th>
-        </tr>
+        </tr> 
     </thead>
     <tbody id="get_dynamic_data">
         @if (count($employeeData) > 0)
             @foreach ($employeeData as $employeeListing)
                 <tr>
                     <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
-                        #{{$employeeListing->uni_user_id ?? 0}}
+                        #{{$loop->index + 1}}
                     </td>
                     <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
-                        {{$employeeListing->name}}
+                        #{{$employeeListing->uni_user_id ?? 0}}
                     </td>
-                    <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
-                        {{$employeeListing->mobile}}
+                    <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
+                        {{ucwords($employeeListing->name)}}
+                    </td>
+                    <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
+                        {{ucwords($employeeListing->email)}}
+                    </td>
+                    <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
+                        {{ucwords($employeeListing->mobile)}}
                     </td>
                     <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                         @php

@@ -57,7 +57,7 @@
                                     {{$loop->index+1}}
                                 </td>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
-                                    {{$newCategorylist->name}}
+                                    {{ucwords($newCategorylist->name)}}
                                 </td>
                                 
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
@@ -159,7 +159,9 @@
             $('.business_add_edit_text').text('Create');
         }
         $('#bussinessScope_id').val(id);
-        $('#bussinessScopeName').val(name);
+        let cleaned = name.toLowerCase().replace(/\s+/g, ' ').trim();
+        let capitalized = cleaned.replace(/\b\w/g, char => char.toUpperCase());
+        $('#bussinessScopeName').val(capitalized);
     });
 
     $(document).on('keyup', '.search', function() {

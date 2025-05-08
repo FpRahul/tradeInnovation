@@ -350,6 +350,54 @@ button.swal-button:hover,button.swal-button:focus {
 .associateBx select:hover, .associateBx select:focus { outline: none; box-shadow: none;}
 
 
+
+/* Toggle */
+
+.switchOffBx .toggle {
+    position: relative; display: flex ; align-items: center; gap: 7px;
+  }
+  
+  .switchOffBx .toggle input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .switchOffBx .toggle .onoff {
+    color: #000; font-size: 14px; text-align: center; display: block; font-weight: 600; text-transform: uppercase;
+  }
+  
+  .switchOffBx .slider {
+    position: relative; display: block; cursor: pointer; background-color: #333; transition: 0.4s; width: 70px; height: 30px;
+  }
+  
+  .switchOffBx .slider:before {
+    content: ""; position: absolute; height: 20px; width: 20px; background-color: #fff; transition: 0.4s; top: 5px; left: 6px;
+  }
+  
+  .switchOffBx input:checked + .slider {
+    background-color: #121039;
+  }
+  
+  .switchOffBx input:checked + .slider:before {
+    transform: translateX(40px);
+  }
+  
+  .switchOffBx .slider.round {
+    border-radius: 60px;
+  }
+  .switchOffBx .slider.round::before {
+    border-radius: 20px;
+  }
+
+
+
+
+
+
+
+
 /* responsive */
 @media (max-width: 767px){
 .employee_repeater_wrapper .repeater-default > div > div:first-child { flex-direction: column; } 

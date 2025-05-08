@@ -107,10 +107,10 @@
                                     #{{$clientDetails->uni_user_id ?? 0}}
                                 </td>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
-                                    {{$clientDetails->name }}
+                                    {{ucwords($clientDetails->name) }}
                                 </td>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
-                                    {{$clientDetails->mobile}}
+                                    {{ucwords($clientDetails->mobile)}}
                                 </td>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                                     @php
@@ -126,10 +126,10 @@
                                         $uniqueServices = array_unique($services);
                                     @endphp
                                 
-                                    {{ count($uniqueServices) ? implode(', ', $uniqueServices) : 'N/A' }}
+                                    {{ ucwords(count($uniqueServices) ? implode(', ', $uniqueServices) : 'N/A') }}
                                 </td>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
-                                    {{ isset($clientDetails->userdetail) ? getScopeOfBusinessData($clientDetails->userdetail->business_scope) : 'N/A' }}
+                                    {{ ucwords(isset($clientDetails->userdetail) ? getScopeOfBusinessData($clientDetails->userdetail->business_scope) : 'N/A') }}
                                 </td>
                                 <td class="border-b-[1px] border-[#0000001A] text-start text-[12px] md:text-[14px] whitespace-nowrap font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">
                                     @if ($clientDetails->status == 1)
@@ -185,7 +185,7 @@
                     @endif
                 </tbody>
             </table>
-            <div class="py-[15px] px-[20px]">
+            <div class="py-[15px] px-[20px]"> 
                 {{-- {{ $clientData->appends(['key' => $searchKey])->links() }} --}}
             </div>
         </div>

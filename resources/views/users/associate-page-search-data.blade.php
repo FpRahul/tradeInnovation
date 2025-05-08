@@ -22,7 +22,7 @@
             <th width="18%" class="text-start bg-[#D9D9D933] text-[14px] font-[500] leading-[16px] text-[#000000] py-[15px] px-[15px] uppercase">
                 Action
             </th>
-        </tr>
+        </tr> 
     </thead> 
     <tbody>
         @if (count($associateData) > 0)
@@ -35,7 +35,7 @@
                     #{{$associateDetails->uni_user_id ?? 0}}
                 </td>
                 <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px] pl-[25px]">
-                    {{$associateDetails->name}}
+                    {{ucwords($associateDetails->name)}}
                 </td>
                 
                 <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#000000] py-[12px] px-[15px]">

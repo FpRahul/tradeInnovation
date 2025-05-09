@@ -136,7 +136,6 @@
                         <div data-repeater-list="leadRepeater" class="flex flex-col gap-[20px]">  
                             @if ($LeadTask && $LeadTask->isNotEmpty())
                                 @foreach ($LeadTask as $serviceKey => $serviceVal)
-                                
                                     @if ($serviceVal->leadTaskDetails->status == 0)
                                         <div data-repeater-item class="repeater-item flex flex-wrap items-end gap-[20px]">
                                             <div class="w-[calc(100%-75px)] ">

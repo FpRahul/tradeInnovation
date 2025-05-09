@@ -11,6 +11,7 @@ class LeadLog extends Model
         'lead_id',
         'user_id',
         'task_is',
+        'service_detail_id',
         'assign_by',
         'description',        
     ];

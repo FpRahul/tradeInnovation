@@ -314,9 +314,6 @@ class TasksController extends Controller
         $formattedCreatedDate = $existedTaskDetails->created_at->format('d M Y');
         $logVerifiedDate = Carbon::parse($verifiedDate)->format('d M Y');
         $currentSatgeTitle = ServiceStages::find($request->current_stage);
-        
-
-        
 
         if (!empty($request->input('assignUser'))) {
             $assignUser = $request->input('assignUser');
@@ -349,6 +346,7 @@ class TasksController extends Controller
             $newExistedTaskDetails->service_stage_id = $request->stage_id;
             $existedTaskDetails->task_description = $request->description;
             $existedTaskDetails->save();
+            
             if ($newExistedTaskDetails->save()) {
                 $existedLeadTaskDetails->status = 1;
                 $existedLeadTaskDetails->status_date = $verifiedDate ?? null;
@@ -393,6 +391,7 @@ class TasksController extends Controller
                             $LeadLog->user_id = $existedTaskDetails->user_id;
                             $LeadLog->lead_id =  $existedTaskDetails->lead_id;
                             $LeadLog->task_id = $existedTaskDetails->id;
+                            $LeadLog->service_detail_id = $existedTaskDetails->service_detail_id;
                             $LeadLog->remark = "Search Trademark";
                             $oldValue = [
                                 'Status' => 'Pending',
@@ -427,6 +426,7 @@ class TasksController extends Controller
                                 $newassignlog->user_id = $assignUser;
                                 $newassignlog->lead_id = $existedTaskDetails->lead_id;
                                 $newassignlog->task_id = $newExistedTaskDetails->id;
+                                $newassignlog->service_detail_id = $existedTaskDetails->service_detail_id;
                                 $newassignlog->remark =  'Assign';
                                 $newassignlog->assign_by = Auth::id();
                                 $newassignlog->description = "Lead assigned for next task";
@@ -652,6 +652,7 @@ class TasksController extends Controller
                                 $LeadLog = new LeadLog();
                                 $LeadLog->user_id =  $existedTask->user_id;
                                 $LeadLog->lead_id =  $existedTask->lead_id;
+                                $LeadLog->service_detail_id = $existedTask->service_detail_id;
                                 $LeadLog->task_id =  $existedTask->id;
                                 $LeadLog->assign_by = Auth::id();
                                 $LeadLog->remark = "Quotation sent";
@@ -679,6 +680,7 @@ class TasksController extends Controller
                                     $newassignlog->user_id = $request->assignUser ?? $existedTask->user_id;
                                     $newassignlog->lead_id = $existedTask->lead_id;
                                     $newassignlog->task_id = $newTaskAssigned->id;
+                                    $newassignlog->service_detail_id = $existedTask->service_detail_id;
                                     $newassignlog->assign_by = Auth::id();
                                     $newassignlog->remark = "Assign";
                                     $newassignlog->description =  "Lead assigned for next task";
@@ -883,6 +885,7 @@ class TasksController extends Controller
                             $newPayment->lead_id = $existedPayment->lead_id;
                             $newPayment->task_id = $existedPayment->task_id;
                             $newPayment->reference_id = $existedPayment->id;
+                            $newPayment->service_detail_id = $existedLeaedTask->service_detail_id;
                             $newPayment->service_price = $existedPayment->service_price;
                             $newPayment->govt_price = $existedPayment->govt_price;
                             $newPayment->gst = $existedPayment->gst;
@@ -899,7 +902,7 @@ class TasksController extends Controller
                                 $newPayment->submitted_amount = $existedPayment->total;
                             } else if ($request->payment == 3) {
                                 $newPayment->pending_amount = $existedPayment->pending_amount;
-                                $newPayment->submitted_amount = null;
+                                $newPayment->submitted_amount = 0;
                             }
                             if ($newPayment->save()) {
                                 $newLeadTaskDeatails->task_id = $newLeadtask->id;
@@ -919,6 +922,8 @@ class TasksController extends Controller
                                         $LeadLog->user_id =  $existedLeaedTask->user_id;
                                         $LeadLog->lead_id =  $existedLeaedTask->lead_id;
                                         $LeadLog->task_id =  $existedLeaedTask->id;
+                                        $LeadLog->service_detail_id = $existedLeaedTask->service_detail_id;
+
                                         $LeadLog->assign_by = Auth::id();
                                         $remark = "";
                                         $paidAmount = "";
@@ -931,14 +936,14 @@ class TasksController extends Controller
                                             $paidAmount = $newPayment->submitted_amount;
                                         } else if ($request->payment == 2 && $request->partial_payment == $existedPayment->total) {
                                             $remark = 'Partial Payment(Paid)';
-                                            $paidAmount = $newPayment->submitted_amount;
+                                            $paidAexistedTaskDetailsmount = $newPayment->submitted_amount;
                                         } else if ($request->payment == 3) {
                                             $remark = 'On Credit';
                                             $paidAmount = 0.00;
                                         }
                                         $LeadLog->remark = $remark;
                                         $oldValue = [
-                                            'Status' => 'Pending',
+                                            'StatuexistedTaskDetailss' => 'Pending',
                                             'Assigned On' => $formattedCreatedDate,
                                             'Assigned By' => $existedLeaedTask->userAssignBy->name,
                                             'Total Amount' => $existedPayment->total,
@@ -963,9 +968,9 @@ class TasksController extends Controller
                                             $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
                                             $newassignlog->lead_id = $existedLeaedTask->lead_id;
                                             $newassignlog->task_id = $newLeadtask->id;
+                                            $newassignlog->service_detail_id = $existedLeaedTask->service_detail_id;
                                             $newassignlog->assign_by = Auth::id();
                                             $newassignlog->remark = 'Assign';
-
                                             $newassignlog->description =  "Lead assigned for next task";
                                             if ($newassignlog->save()) {
                                                 if ($client_id == 0) {
@@ -1012,7 +1017,7 @@ class TasksController extends Controller
                                     return redirect()->back()->with('error', 'there is something worng while create new lead task details');
                                 }
                             } else {
-                                return redirect()->back()->with('eror', 'there is something wrong while updating payment status');
+                                return redirect()-existedTaskDetails>back()->with('eror', 'there is something wrong while updating payment status');
                             }
                         } else {
                             return redirect()->back()->with('eror', 'there is something wrong while updating exist task details');
@@ -1045,8 +1050,8 @@ class TasksController extends Controller
                 $newPayment = new Payment();
                 $newPayment->lead_id = $existedPayment->lead_id;
                 $newPayment->task_id = $existedPayment->task_id;
-                $newPayment->reference_id = $existedPayment->id;
-                $newPayment->reference_id = $existedPayment->id;
+                $newPayment->reference_id = $request->firstPaymentId;
+                $newPayment->service_detail_id = $existedLeaedTask->service_detail_id;
                 $newPayment->service_price = $existedPayment->service_price;
                 $newPayment->govt_price = $existedPayment->govt_price;
                 $newPayment->gst = $existedPayment->gst;
@@ -1084,6 +1089,7 @@ class TasksController extends Controller
                         $LeadLog->user_id =  $existedLeaedTask->user_id;
                         $LeadLog->lead_id =  $existedLeaedTask->lead_id;
                         $LeadLog->task_id =  $existedLeaedTask->id;
+                        $LeadLog->service_detail_id = $existedLeaedTask->service_detail_id;
                         $LeadLog->remark = "Paid";
                         $oldValue = [
                             'Status' => $logStatus,
@@ -1144,6 +1150,7 @@ class TasksController extends Controller
                 $newPayment->lead_id = $existedPayment->lead_id;
                 $newPayment->task_id = $existedPayment->task_id;
                 $newPayment->reference_id = $request->firstPaymentId;
+                $newPayment->service_detail_id = $existedLeaedTask->service_detail_id;
                 $newPayment->service_price = $existedPayment->service_price;
                 $newPayment->govt_price = $existedPayment->govt_price;
                 $newPayment->gst = $existedPayment->gst;
@@ -1185,6 +1192,8 @@ class TasksController extends Controller
                         $LeadLog->user_id =  $existedLeaedTask->user_id;
                         $LeadLog->lead_id =  $existedLeaedTask->lead_id;
                         $LeadLog->task_id =  $existedLeaedTask->id;
+                        $LeadLog->service_detail_id = $existedLeaedTask->service_detail_id;
+
                         $LeadLog->remark =  'Partial Payment';
                         $oldValue = [
                             'Status' => $logStatus,
@@ -1249,6 +1258,7 @@ class TasksController extends Controller
                 $newPayment->lead_id = $existedPayment->lead_id;
                 $newPayment->task_id = $existedPayment->task_id;
                 $newPayment->reference_id = $request->firstPaymentId;
+                $newPayment->service_detail_id = $existedLeaedTask->service_detail_id;
                 $newPayment->service_price = $existedPayment->service_price;
                 $newPayment->govt_price = $existedPayment->govt_price;
                 $newPayment->gst = $existedPayment->gst;
@@ -1290,6 +1300,7 @@ class TasksController extends Controller
                         $LeadLog->user_id =  $existedLeaedTask->user_id;
                         $LeadLog->lead_id =  $existedLeaedTask->lead_id;
                         $LeadLog->task_id =  $existedLeaedTask->id;
+                        $LeadLog->service_detail_id = $existedLeaedTask->service_detail_id;
                         $LeadLog->assign_by = Auth::id();
                         $LeadLog->remark = "On Credit";
                         $oldValue = [
@@ -1441,6 +1452,8 @@ class TasksController extends Controller
                         $newLog->user_id = $existedLeaedTask->user_id;
                         $newLog->lead_id = $existedLeaedTask->lead_id;
                         $newLog->task_id = $existedLeaedTask->id;
+                        $newLog->service_detail_id = $existedLeaedTask->service_detail_id;
+
                         $newLog->assign_by = Auth::id();
                         $newLog->remark = 'On Hold';
                         $oldValue = [
@@ -1534,6 +1547,7 @@ class TasksController extends Controller
                                 $LeadLog->user_id = $existedLeaedTask->user_id;
                                 $LeadLog->lead_id = $existedLeaedTask->lead_id;
                                 $LeadLog->task_id = $existedLeaedTask->id;
+                                $LeadLog->service_detail_id = $existedLeaedTask->service_detail_id;
                                 $LeadLog->assign_by = Auth::id();
                                 $LeadLog->remark = "Document Verified";
                                 $oldValue = [
@@ -1558,6 +1572,7 @@ class TasksController extends Controller
                                     $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
                                     $newassignlog->lead_id = $existedLeaedTask->lead_id;
                                     $newassignlog->task_id = $newLeadtask->id;
+                                    $newassignlog->service_detail_id = $existedLeaedTask->service_detail_id;
                                     $newassignlog->assign_by = Auth::id();
                                     $newassignlog->remark = "Assign";
                                     $newassignlog->description =  "Lead assigned for next task";
@@ -1701,6 +1716,7 @@ class TasksController extends Controller
                             $LeadLog->user_id = $existedLeaedTask->user_id;
                             $LeadLog->lead_id = $existedLeaedTask->lead_id;
                             $LeadLog->task_id = $existedLeaedTask->id;
+                            $LeadLog->service_detail_id = $existedLeaedTask->service_detail_id;
                             $LeadLog->assign_by = Auth::id();
                             $LeadLog->remark = 'Document Draft';
                             $oldValue = [
@@ -1722,6 +1738,7 @@ class TasksController extends Controller
                                 $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
                                 $newassignlog->lead_id = $existedLeaedTask->lead_id;
                                 $newassignlog->task_id = $newLeadtask->id;
+                                $newassignlog->service_detail_id = $existedLeaedTask->service_detail_id;
                                 $newassignlog->assign_by = Auth::id();
                                 $newassignlog->remark = 'Assign';
 
@@ -1870,6 +1887,7 @@ class TasksController extends Controller
                                 $LeadLog->user_id = $existedLeaedTask->user_id;
                                 $LeadLog->lead_id = $existedLeaedTask->lead_id;
                                 $LeadLog->task_id = $existedLeaedTask->id;
+                                $LeadLog->service_detail_id = $existedLeaedTask->service_detail_id;
                                 $LeadLog->assign_by = Auth::id();
                                 $LeadLog->remark = "Client Approval";
                                 $oldValue = [
@@ -1890,6 +1908,8 @@ class TasksController extends Controller
                                     $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
                                     $newassignlog->lead_id = $existedLeaedTask->lead_id;
                                     $newassignlog->task_id = $newLeadtask->id;
+                                    $newassignlog->service_detail_id = $existedLeaedTask->service_detail_id;
+                                    $newassignlog->service_detail_id = $existedLeaedTask->service_detail_id;
                                     $newassignlog->assign_by = Auth::id();
                                     $newassignlog->remark = 'Assign';
 
@@ -1954,6 +1974,7 @@ class TasksController extends Controller
                             $LeadLog->user_id = $existedLeaedTask->user_id;
                             $LeadLog->lead_id = $existedLeaedTask->lead_id;
                             $LeadLog->task_id = $existedLeaedTask->id;
+                            $LeadLog->service_detail_id = $existedLeaedTask->service_detail_id;
                             $LeadLog->assign_by = Auth::id();
                             $LeadLog->remark = "Client Approval";
                             $oldValue = [
@@ -1975,6 +1996,7 @@ class TasksController extends Controller
                                 $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
                                 $newassignlog->lead_id = $existedLeaedTask->lead_id;
                                 $newassignlog->task_id = $newLeadtask->id;
+                                $newassignlog->service_detail_id = $existedLeaedTask->service_detail_id;
                                 $newassignlog->assign_by = Auth::id();
                                 $newassignlog->remark = 'Assign';
                                 $newassignlog->description =  "Lead assigned for next task";
@@ -2091,6 +2113,7 @@ class TasksController extends Controller
                             $LeadLog->user_id = $existedLeaedTask->user_id;
                             $LeadLog->lead_id = $existedLeaedTask->lead_id;
                             $LeadLog->task_id = $existedLeaedTask->id;
+                            $LeadLog->service_detail_id = $existedLeaedTask->service_detail_id;
                             $LeadLog->assign_by = Auth::id();
                             $LeadLog->remark = 'Submit Application';
                             $oldValue = [
@@ -2112,6 +2135,7 @@ class TasksController extends Controller
                                 $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
                                 $newassignlog->lead_id = $existedLeaedTask->lead_id;
                                 $newassignlog->task_id = $newLeadtask->id;
+                                $newassignlog->service_detail_id = $existedLeaedTask->service_detail_id;
                                 $newassignlog->assign_by = Auth::id();
                                 $newassignlog->remark = 'Assign';
 
@@ -2155,14 +2179,15 @@ class TasksController extends Controller
             ->first();
         $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
         $stageId = $taskDetails->service_stage_id;
-        $getStage = ServiceStages::where('service_id', 1)->where('id', '>', $stageId)->first();
+        $getStage = ServiceStages::where('service_id', 1)->where('id', '>', $stageId)->get();
+        $upcomeing = ServiceStages::where('id','>', $stageId)->first();
         $leadTaskdetials = LeadTaskDetail::find($id);
         $header_title_name = $taskDetails->serviceSatge->title;
-        return view('tasks.tradeMark.formality_check', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'applicationNumber'));
+        return view('tasks.tradeMark.formality_check', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users','upcomeing', 'getStage', 'applicationNumber'));
     }
 
     public function formalityCheckStatus(Request $request, $id)
-    {
+    { 
         if ($request->verified) {
             $verifiedDate = Carbon::createFromFormat('d M Y', $request->input('verified'))->format('Y-m-d');
         }
@@ -2191,7 +2216,8 @@ class TasksController extends Controller
             'formality_check' => 'required',
             'verified' => 'required',
             'assignUser' => 'required',
-            'deadline' => 'nullable'
+            'deadline' => 'required',
+            'stage_id' => 'required'
         ];
         $validator = Validator::make($request->all(), $rule);
         if ($validator->fails()) {
@@ -2202,7 +2228,6 @@ class TasksController extends Controller
             $newLeadtask->lead_id = $existedLeaedTask->lead_id;
             $newLeadtask->service_detail_id = $existedLeaedTask->service_detail_id;
             $newLeadtask->service_id = $existedLeaedTask->service_id;
-
             $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
             $newLeadtask->service_stage_id = $request->stage_id;
             $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
@@ -2250,6 +2275,8 @@ class TasksController extends Controller
                             $LeadLog->user_id = $existedLeaedTask->user_id;
                             $LeadLog->lead_id = $existedLeaedTask->lead_id;
                             $LeadLog->task_id = $existedLeaedTask->id;
+                            $LeadLog->service_detail_id = $existedLeaedTask->service_detail_id;
+
                             $LeadLog->assign_by = Auth::id();
 
                             if ($request->formality_check == 1) {
@@ -2289,6 +2316,7 @@ class TasksController extends Controller
                                 $newassignlog->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
                                 $newassignlog->lead_id = $existedLeaedTask->lead_id;
                                 $newassignlog->task_id = $newLeadtask->id;
+                                $newassignlog->service_detail_id = $existedLeaedTask->service_detail_id;
                                 $newassignlog->assign_by = Auth::id();
                                 $newassignlog->remark = "Assign";
                                 $newassignlog->description =  "Lead assigned for next task";
@@ -36030,7 +36058,7 @@ class TasksController extends Controller
         $formattedCreatedDate = $taskDetails->leadTask->created_at->format('d M Y');
 
         $user_id =  $taskDetails->leadTask->user_id;
-        $taskDetails->status = 5;
+        $taskDetails->status = 2;
         $taskDetails->status_date = $verifiedDate;
         $taskDetails->reminderDate = $followUpDate ?? null;
         $taskDetails->comment = $request->comment;

@@ -327,7 +327,7 @@ use App\Models\ServiceDetail;
                                             @if(in_array('leadLogs.index',$permissionDetails['accessableRoutes']) || auth()->user()->role == 1)
                                             <a href="{{route('leadLogs.index', ['lead_id' => $leadId])}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Logs</a>
                                             @endif
-                                            @if($task->leadTaskDetails->status != 2 || $task->leadTaskDetails->status != 5 )
+                                            @if(!in_array($task->leadTaskDetails->status, [1, 2, 4, 6]))
                                             @if(in_array('task.hold',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
                                             @if($task->leadTaskDetails->status != 1 && $task->leadTaskDetails->status != 4)
                                             <a href="#" class="hold-on-pop block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-taskId="{{$task->leadTaskDetails->task_id }}" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal">Hold</a>

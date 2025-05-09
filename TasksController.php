@@ -174,9 +174,10 @@ class TasksController extends Controller
             $serviceID = $value->serviceSatge->service_id;
             $stage_id = $value->service_stage_id;
         }
+        $upcomeing = ServiceStages::where('id' ,'>', $stage_id)->first();
         $getStage = ServiceStages::where('service_id', $serviceID)->where('id', '>', $stage_id)->first();
         $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
-        return view('tasks/tradeMark/check_duplication', compact('header_title_name', 'taskID', 'taskDetails', 'users', 'getStage'));
+        return view('tasks/tradeMark/check_duplication', compact('header_title_name', 'taskID', 'taskDetails', 'users', 'getStage' , 'upcomeing'));
     }
 
     public function duplicateVerified(Request $request, $id)
@@ -652,6 +653,7 @@ class TasksController extends Controller
         foreach ($taskDetails as $value) {
             $stageId = $value->service_stage_id;
         }
+        upc
 
         $getStage = ServiceStages::where('service_id', 1)->where('id', '>', $stageId)->first();
         $leadTaskdetials = LeadTaskDetail::find($taskDetailsId);
@@ -35799,7 +35801,7 @@ class TasksController extends Controller
         $formattedCreatedDate = $taskDetails->leadTask->created_at->format('d M Y');
 
         $user_id =  $taskDetails->leadTask->user_id;
-        $taskDetails->status = 5;
+        $taskDetails->status = 2;
         $taskDetails->status_date = $verifiedDate;
         $taskDetails->reminderDate = $followUpDate ?? null;
         $taskDetails->comment = $request->comment;

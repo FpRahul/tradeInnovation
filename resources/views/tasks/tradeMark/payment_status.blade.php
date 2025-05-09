@@ -351,7 +351,7 @@
       });
 
       var status = $("#checkStatus").val();
-      if (status == 3) {
+      if (status == 5) {
          $(".hideOncredit").addClass('hidden');
       }
     $("#partial_payment").on("input", function () {

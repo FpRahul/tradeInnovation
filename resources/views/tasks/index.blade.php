@@ -103,9 +103,6 @@ use App\Models\ServiceDetail;
                                         @endif
                                     </select>
                                 </div>
-                                
-                                
-                                
                                 <div class="w-full md:w-[32%]">
                                    <label for="status" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
                                    <select name="status" id="status" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
@@ -114,7 +111,10 @@ use App\Models\ServiceDetail;
                                        <option value="1" @if($statusParam==1) selected @endif>Completed</option>
                                        <option value="2" @if($statusParam==2) selected @endif>On Hold</option>
                                        <option value="3" @if($statusParam==3) selected @endif>Follow Up</option>
+                                       <option value="4" @if($statusParam==5) selected @endif>Pending Payment</option>
+                                       <option value="4" @if($statusParam==6) selected @endif>Registered</option>
                                        <option value="4" @if($statusParam==4) selected @endif>Rejected</option>
+                                       
                                    </select>
                                </div>
                                 <!-- User Select (visible only for roles 1 or 4, increased width to 5/12) -->
@@ -285,7 +285,8 @@ use App\Models\ServiceDetail;
                                             2 => ['label' => 'Hold', 'color' => 'bg-orange-100 text-orange-800'],
                                             3 => ['label' => 'Follow-up', 'color' => 'bg-blue-100 text-blue-800'],
                                             4 => ['label' => 'Rejected', 'color' => 'bg-red-100 text-red-800'],
-                                            5 => ['label' => 'On Hold', 'color' => 'bg-gray-200 text-gray-800'],
+                                            5 => ['label' => 'Payment', 'color' => 'bg-purple-100 text-purple-800'],
+                                            6 => ['label' => 'Registered', 'color' => 'bg-teal-100 text-teal-800'],
                                         ];
                                         $status = $statusMap[$task->leadTaskDetails->status] ?? ['label' => 'Other', 'color' => 'bg-gray-100 text-gray-700'];
                                     @endphp
@@ -326,11 +327,13 @@ use App\Models\ServiceDetail;
                                             @if(in_array('leadLogs.index',$permissionDetails['accessableRoutes']) || auth()->user()->role == 1)
                                             <a href="{{route('leadLogs.index', ['lead_id' => $leadId])}}" class="block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">Logs</a>
                                             @endif
-                                            
+                                            @if($task->leadTaskDetails->status != 2 || $task->leadTaskDetails->status != 5 )
                                             @if(in_array('task.hold',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
                                             @if($task->leadTaskDetails->status != 1 && $task->leadTaskDetails->status != 4)
                                             <a href="#" class="hold-on-pop block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700" data-taskId="{{$task->leadTaskDetails->task_id }}" data-modal-target="assignUserModal" data-modal-toggle="assignUserModal">Hold</a>
                                             @endif
+                                            @endif
+
                                             {{-- @php
                                                 $currentParams = request()->all(); // get all existing query params
                                                 $updatedParams = array_merge($currentParams, ['status' => 3]); // override status only

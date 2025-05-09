@@ -161,7 +161,7 @@
                                 <div id="tooltip-default{{$leadKey}}" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-[#13103A] rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
                                     <?php 
                                     $user = ucwords(getSourceData($leadData->source)->name);
-                                    echo $user ? $user->name : 'N/A'; 
+                                    echo $user; 
                                     ?>
                                     <div class="tooltip-arrow" data-popper-arrow></div>
                                 </div>

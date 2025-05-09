@@ -28,17 +28,27 @@
                                     'serviceId' => $task->service_id,
                                     'stageId' => $task->service_stage_id
                                 ]) }}" class="w-full flex gap-[7px]">
-                                    Follow Up
+                                    {{--     --}}
                                 </a>
                             @endif
                             @endif
-                                <img src="{{asset('assets/images/bell.webp')}}" alt="profile" class="min-w-[35px] w-[35px] h-[35px] rounded-[100%] object-cover border-[1px] border-[#13103A] ">
-                                <div class="w-full flex flex-col">                        
-                                    <div class="w-full flex items-center justify-between">
-                                        <h4 class="text-sm font-semibold text-black mb-[5px]">{{ $notificationDataList->title}}</h4>
-                                        <div class="text-xs text-gray-900">{{ date('d M Y',strtotime($notificationDataList->created_at))}}</div>
+                            <div class="w-full flex flex-col">                        
+                                <div class="w-full">
+                                    <div class="flex items-center justify-between">
+                                        <!-- Bell icon and title on the left -->
+                                        <div class="flex items-center space-x-2">
+                                            <img src="{{ asset('assets/images/bell.webp') }}" alt="bell icon" class="w-[35px] h-[35px] rounded-full object-cover border border-[#13103A]">
+                                            <h4 class="text-sm font-semibold text-black">{{ $notificationDataList->title }}</h4>
+                                        </div>
+                                
+                                        <!-- Date on the right -->
+                                        <div class="text-xs text-gray-900">
+                                            {{ date('d M Y', strtotime($notificationDataList->created_at)) }}
+                                        </div>
                                     </div>
-                                    <p class="text-xs text-gray-900 line-clamp-2">{{ $notificationDataList->description}}</p>
+                                
+                                    <!-- Description below -->
+                                    <p class="text-xs text-gray-900 line-clamp-2 mt-1">{{ $notificationDataList->description }}</p>
                                 </div>
                             </a>
                         </li>

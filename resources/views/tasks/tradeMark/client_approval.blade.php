@@ -38,6 +38,7 @@
                   name="verified"
                   class="daterangepicker-verified w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
                   value=""
+                  required
                   id="verified"
                   autocomplete="off">
                <div class="absolute right-[10px] top-[10px]">
@@ -74,16 +75,27 @@
 
       <div class=" flex flex-col md:flex-row gap-[20px]">
 
-         <div class="w-full md:w-1/2 ">
-            <label for="stage" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
-            @if($getStage->count() > 0)
-            <input type="text" name="stage_id" id="stage_id" value="{{$onHideSatge->title}}" class="  w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" disabled>
-            <input type="hidden" name="stage_id" id = "SatgeID"  value="{{$onHideSatge->id}}">
-            @endif
-             <p id="nextTitle" style="color: skyblue; font-size: 14px; font-weight: 500;">
-                        Next stage will be: {{$onHideSatge->title}}
-                    </p> 
-         </div>
+         <div class="w-full md:w-1/2 onHoldHide">
+               <label for="stage_id" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Stage</label>
+               <select name="stage_id" id="stage_id"  required class="filterData assignUserData allform-select2 !outline-none h-[45px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]">
+                   @if($getStage->count() > 0)
+                   <option value="" disabled selected>Select a user</option>
+                   @foreach ($getStage as $stages)
+                   <option value="{{ $stages->id }}" @if($upcomeing->id == $stages->id ) selected @endif>
+                       {{ $stages->title }}
+                   </option>
+                   @endforeach
+                   @else
+                   <option value="" disabled>No users available</option>
+                   @endif
+               </select>
+               <p  class="infoStage" style="  color: skyblue; font-size: 14px; font-weight: 500;">
+                  Next Stage Will Be:{{ $upcomeing->title }}
+               </p>
+               @error('assignUser')
+               <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
+               @enderror
+           </div>
          
          @if($taskDetails->count() > 0)
          @php
@@ -125,16 +137,17 @@
                name="deadline"
                id="deadline"
                class="daterangepicker-taskdeadline w-[100%] h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] outline-none"
-               value=""
+               value="" 
+               required
 
                autocomplete="off">
             <div class="absolute right-[10px] top-[10px]">
                <i class="ri-calendar-line"></i>
             </div>
          </div>
-         <p id="showStage" style="color: skyblue; font-size: 14px; font-weight: 500;">
-            Set a dead line for {{ $onHideSatge->title }}.
-         </p>
+         <p class="infoUser" style="color: skyblue; font-size: 14px; font-weight: 500;">
+            Set A Dead Line For:{{ $upcomeing->title }}
+        </p>
       </div>
       <div class="flex justify-end gap-[15px]">
          <button type="submit" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button>
@@ -179,21 +192,15 @@
          var status = $(this).val();
          if (status == 1) {
            
-           $("#stage_id").val('{{ $getStage->title }}') 
-           $("#SatgeID").val('{{ $getStage->id }}') 
-           $("#nextTitle").text(' Next stage will be: ' + '{{ $getStage->title }}')
-           $('#showStage').text('Set a dead line for ' + '{{ $getStage->title }}');
+       
            $('.evidence_submit').removeClass('hidden');
            $("#verifiedDate label").text("Client Approved On");
            
          } else if (status == 3) {
-           $("#stage_id").val('{{ $onHideSatge->title }}'); 
-           $("#SatgeID").val('{{ $onHideSatge->id }}') 
-           $("#nextTitle").text(' Next stage will be: ' + '{{ $onHideSatge->title }}')
+           
            $('.evidence_submit').addClass('hidden');
            $("#verifiedDate label").text("Verified On");
            
-            $('#showStage').text('Set a dead line for ' + '{{ $onHideSatge->title }}');
            
 
          }
@@ -204,6 +211,14 @@
       }else if('.descriptionHidden'){
          $('.descriptionHidden').addClass('hidden');
       }
+      $("#stage_id").on('change', function () {
+            var selectedText = $("#stage_id option:selected").text();
+            var val = $("#stage_id option:selected").val(); 
+            $(".infoStage").text("Next Stage Will Be: " + selectedText);
+            $(".infoUser").text("Set A Dead Line For: " + selectedText);
+
+            
+        });
    });
 </script>
 @stop

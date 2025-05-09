@@ -288,7 +288,7 @@ class TasksController extends Controller
             $stage_id = $value->service_stage_id;
         }
         $upcomeing = ServiceStages::where('id','>', $stage_id)->first();
-        $getStage = ServiceStages::where('service_id' , $serviceID )->get();
+        $getStage = ServiceStages::where('service_id' , $serviceID )->where('id' , '>' , $stage_id )->get();
         
 
         $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
@@ -472,7 +472,7 @@ class TasksController extends Controller
             $stage_id = $value->service_stage_id;
         }
         $upcomeing = ServiceStages::where('id','>', $stage_id)->first();
-        $getStage = ServiceStages::where('service_id' ,$serviceID )->get();
+        $getStage = ServiceStages::where('service_id' ,$serviceID )->where('id' , '>' , $stage_id )->get();
       
         $leadTaskdetials = LeadTaskDetail::find($taskDetailsId);
         return view('tasks.tradeMark.send_quotation', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'serviceName', 'clientName' , 'upcomeing'));
@@ -715,7 +715,7 @@ class TasksController extends Controller
 
     public function checkPayment($id)
     {
-
+       
         if ($id) {
             $notifyData = LeadNotification::where('task_id', $id)->update(['status' => 1]);
         }
@@ -739,9 +739,16 @@ class TasksController extends Controller
         foreach ($taskDetails as $value) {
             $stageId = $value->service_stage_id;
         }
-        
+        $checkPreviousStage = LeadTask::where('service_stage_id', 2)
+        ->whereHas('leadTaskDetails', function ($query) {
+            $query->whereNotNull('status'); 
+        })
+        ->first();
+        if($checkPreviousStage->leadTaskDetails->status != 1 ){
+            return redirect()->route('task.index')->with('error', 'Please sent quotation first');
+        }
         $upcomeing = ServiceStages::where('id','>', $stageId)->first();
-        $getStage = ServiceStages::where('service_id', $serviceID)->get();
+        $getStage = ServiceStages::where('service_id', $serviceID)->where('id' , '>' , $stageId )->get();
         $leadTaskdetials = LeadTaskDetail::find($taskDetailsId);
         return view('tasks.tradeMark.payment_status', compact('id', 'taskDetailsId','upcomeing', 'firstPaymentId', 'payamentDetails', 'paymentId', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage'));
     }
@@ -776,7 +783,6 @@ class TasksController extends Controller
         if($request->paymentDeadline){
             $logPaymentdeadline = Carbon::parse($paymentDeadlineDate)->format('d M Y');
         }
-
         if ($id) {
             if ($request->checkStatus == 0) {
                 if($request->payment == 1){
@@ -829,6 +835,7 @@ class TasksController extends Controller
                     $newLeadtask->lead_id = $existedLeaedTask->lead_id;
                     $newLeadtask->service_detail_id = $existedLeaedTask->service_detail_id;
                     $newLeadtask->service_id = $existedLeaedTask->service_id;
+                    $newLeadtask->task_title = $assignedStageName->description;
                     $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
                     $newLeadtask->service_stage_id = $stageId;
                     $newLeadtask->sub_stage_id = null;
@@ -837,9 +844,9 @@ class TasksController extends Controller
                         if ($request->payment == 1) {
                             $existedLeaedTaskDetails->status = 1;
                         } else if ($request->payment == 2) {
-                            $existedLeaedTaskDetails->status = 3;
+                            $existedLeaedTaskDetails->status = 5;
                         } else if ($request->payment == 3) {
-                            $existedLeaedTaskDetails->status = 3;
+                            $existedLeaedTaskDetails->status = 5;
                         }
                         $existedLeaedTaskDetails->status_date = $verifiedDate;
                         if ($request->payment == 1) {
@@ -1014,7 +1021,7 @@ class TasksController extends Controller
                         return redirect()->back()->with('eror', 'there is something wrong while creating new task');
                     }
                 }
-            } else if ($request->checkStatus == 3 && $request->payment == 1) {
+            } else if ($request->checkStatus == 5 && $request->payment == 1) {
                 $rule = [
                     'payment' => 'required',
                     'verified' => 'required',
@@ -1110,7 +1117,7 @@ class TasksController extends Controller
                 } else {
                     return redirect()->back()->with('error', 'there is soemthing wrong while updating payment status');
                 }
-            } else if ($request->checkStatus == 3 && $request->payment == 2) {
+            } else if ($request->checkStatus == 5 && $request->payment == 2) {
                 $rule = [
                     'payment' => 'required',
                     'verified' => 'required',
@@ -1151,7 +1158,7 @@ class TasksController extends Controller
                         $existedLeaedTaskDetails->status = 1;
                         $existedLeaedTaskDetails->reminderDate = null;
                     } else {
-                        $existedLeaedTaskDetails->status = 3;
+                        $existedLeaedTaskDetails->status = 5;
                         $existedLeaedTaskDetails->reminderDate = $paymentDeadlineDate;
                     }
                     $existedLeaedTaskDetails->status_date = $verifiedDate;
@@ -1217,7 +1224,7 @@ class TasksController extends Controller
                 } else {
                     return redirect()->back()->with('error', 'while updating payment status');
                 }
-            } else if ($request->checkStatus == 3 && $request->payment == 3) {
+            } else if ($request->checkStatus == 5 && $request->payment == 3) {
                 $rule = [
                     'payment' => 'required',
                     'verified' => 'required',
@@ -1255,7 +1262,7 @@ class TasksController extends Controller
                     if ($newPayment->pending_amount == 0 || $newPayment->pending_amount == Null) {
                         $existedLeaedTaskDetails->status = 1;
                     } else {
-                        $existedLeaedTaskDetails->status = 3;
+                        $existedLeaedTaskDetails->status = 5;
                     }
                     $existedLeaedTaskDetails->status_date = $verifiedDate;
                     $existedLeaedTaskDetails->comment = "On Credit";
@@ -1335,10 +1342,12 @@ class TasksController extends Controller
             ->first();
         $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
         $stageId = $taskDetails->service_stage_id;
-        $getStage = ServiceStages::where('service_id', 1)->where('id', '>', $stageId)->first();
+        $upcomeing = ServiceStages::where('id','>', $stageId)->first();
+        // dd($upcomeing);
+        $getStage = ServiceStages::where('service_id', 1)->where('id' , '>' , $stageId )->get();
         $leadTaskdetials = LeadTaskDetail::find($id);
         $header_title_name = $taskDetails->serviceSatge->title;
-        return view('tasks.tradeMark.document_verfication', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage'));
+        return view('tasks.tradeMark.document_verfication', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage' , 'upcomeing'));
     }
 
     public function documenStatus(Request $request, $id)
@@ -1590,10 +1599,11 @@ class TasksController extends Controller
             ->first();
 
         $stageId = $taskDetails->service_stage_id;
-        $getStage = ServiceStages::where('service_id', 1)->where('id', '>', $stageId)->first();
+        $upcomeing = ServiceStages::where('id', '>', $stageId)->first();
+        $getStage = ServiceStages::where('service_id', 1)->where('id', '>', $stageId)->get();
         $leadTaskdetials = LeadTaskDetail::find($id);
         $header_title_name = $taskDetails->serviceSatge->title;
-        return view('tasks.tradeMark.sent_draft', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'applicationNumber'));
+        return view('tasks.tradeMark.sent_draft', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'applicationNumber' , 'upcomeing'));
     }
 
     public function DocumentDraftStatus(Request $request, $id)
@@ -1633,7 +1643,8 @@ class TasksController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
         if ($id) {
-
+            $existedLeaedTask->task_description = $request->description;
+            $existedLeaedTask->save();
             $newLeadtask->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
             $newLeadtask->lead_id = $existedLeaedTask->lead_id;
             $newLeadtask->service_detail_id = $existedLeaedTask->service_detail_id;
@@ -1741,7 +1752,8 @@ class TasksController extends Controller
     }
 
     public function clientApproval($id)
-    {
+    {   
+
         if ($id) {
             LeadNotification::where('task_id', $id)->update(['status' => 1]);
         }
@@ -1762,13 +1774,14 @@ class TasksController extends Controller
 
         $stageId = $taskDetails->service_stage_id ?? null;
         $getStage = ServiceStages::where('service_id', 1)
-            ->where('id', '>', $stageId)
+            
+            ->get();
+        
+        $leadTaskdetials = LeadTaskDetail::find($id);
+        $upcomeing = ServiceStages::where('service_id', 1)
+            ->where('id','>', $stageId)
             ->first();
 
-        $leadTaskdetials = LeadTaskDetail::find($id);
-        $onHideSatge = ServiceStages::where('service_id', 1)
-            ->where('id', 5)
-            ->first();
 
         $header_title_name = $taskDetails->serviceSatge->title ?? 'Default Title';
 
@@ -1779,7 +1792,7 @@ class TasksController extends Controller
             'leadTaskdetials',
             'users',
             'getStage',
-            'onHideSatge'
+            'upcomeing'
         ));
     }
     public function clientApprovalStatus(Request $request, $id)
@@ -1904,11 +1917,14 @@ class TasksController extends Controller
                 $newLeadtask->user_id = $request->assignUser ?? $existedLeaedTask->user_id;
                 $newLeadtask->lead_id = $existedLeaedTask->lead_id;
                 $newLeadtask->service_id = $existedLeaedTask->service_id;
+                $newLeadtask->service_detail_id = $existedLeaedTask->service_detail_id;
                 $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
                 $newLeadtask->service_stage_id = $request->stage_id;
                 $newLeadtask->subservice_id = $existedLeaedTask->subservice_id;
                 $newLeadtask->assign_by = Auth::id();
                 $newLeadtask->task_title = $newTaskTitle->title;
+                $existedLeaedTask->task_description = $request->description;
+                $existedLeaedTask->save();
 
                 if ($newLeadtask->save()) {
                     $newLeadTaskDeatails->task_id = $newLeadtask->id;
@@ -1997,10 +2013,12 @@ class TasksController extends Controller
             ->first();
         $users = User::where('role', '>', '4')->where('archive', 1)->where('status', 1)->get();
         $stageId = $taskDetails->service_stage_id;
-        $getStage = ServiceStages::where('service_id', 1)->where('id', '>', $stageId)->first();
+
+        $getStage = ServiceStages::where('service_id', 1)->where('id', '>', $stageId)->get();
+        $upcomeing = ServiceStages::where('id','>', $stageId)->first();
         $leadTaskdetials = LeadTaskDetail::find($id);
         $header_title_name = $taskDetails->serviceSatge->title;
-        return view('tasks.tradeMark.draft_application', compact('id', 'header_title_name', 'taskDetails', 'leadTaskdetials', 'users', 'getStage', 'applicationNumber'));
+        return view('tasks.tradeMark.draft_application', compact('id', 'header_title_name', 'taskDetails','upcomeing' , 'leadTaskdetials', 'users', 'getStage', 'applicationNumber'));
     }
 
     public function draftApplicationStatus(Request $request, $id)

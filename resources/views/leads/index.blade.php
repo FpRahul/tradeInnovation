@@ -41,15 +41,22 @@
                     </div>
                     <div class="w-[100%] md:w-[40%]">
                         <label>Source</label>
-                        <select name="source"  class="sourceData allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
+                        <select name="source" class="sourceData allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]">
                             <option value="">Select Source</option>
                             @if (!empty($sourceList))
-                                @foreach ($sourceList as $sourceVal)      
-                                    <option value="{{ $sourceVal['categoryOptions']['id']}}" @selected($sourceVal['categoryOptions']['id'] == $sourceKey)>{{ $sourceVal['categoryOptions']['name']}}</option>
-                                @endforeach                      
-                            @endif                    
+                                @foreach ($sourceList as $sourceVal)
+                                    @if (!empty($sourceVal['categoryOptions']))
+                                        <option value="{{ $sourceVal['categoryOptions']['id'] }}"
+                                            @selected($sourceVal['categoryOptions']['id'] == $sourceKey)>
+                                            {{ $sourceVal['categoryOptions']['name'] }}
+                                        </option>
+                                    @endif
+                                @endforeach
+                            @endif
                         </select>
                     </div>
+                    
+                    
                     <div class="w-[100%] md:w-[40%]">
                         <label>Service</label>
                         <select name="service" class="serviceData allform-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[98px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
@@ -152,8 +159,10 @@
                         </td> --}}
                         <td class="border-b-[1px] border-[#0000001A] text-start text-[14px] font-[400] leading-[16px] text-[#6F6F6F] py-[12px] px-[15px]">
                             <span class="inline-flex items-center gap-[10px]"> 
-                            @if ($leadData->source > 0 )
-                                 {{ ucwords(getSourceData($leadData->source)->name) }}
+                                @if (!empty($leadData->source) && getSourceData($leadData->source))
+                                {{ ucwords(getSourceData($leadData->source)->name) }}
+                            @else
+                                NA
                             @endif
                             @if ($leadData->source == 17 || $leadData->source == 18 || $leadData->source == 19)
                                 <button data-tooltip-target="tooltip-default{{$leadKey}}"><img src="{{ asset('assets/images/i-icon.png') }}" alt="icon"></button>

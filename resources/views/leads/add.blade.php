@@ -257,12 +257,25 @@
 
                                                         <h2 class="w-full text-[22px] leading-[25px] mb-[5px] font-[600]">Details</h2>
                                                         <div class="w-full md:w-[32%] lg:w-[32%]">
-                                                            <label class="block mb-[5px] text-[14px] font-[400]">Risk Class</label>
+                                                            <label class="appliedForText block mb-[5px] text-[14px] font-[400]">
+                                                                @if ($serviceVal->service_id == 1)
+                                                                Trademark Applied For
+                                                                @elseif ($serviceVal->service_id == 2)
+                                                                Patent Applied For
+                                                                @endif
+                                                            </label>
+                                                            <input type="text" name="appliedfor" 
+                                                            value="{{ isset($serviceVal->serviceDetails) ? $serviceVal->serviceDetails->applied_for : '' }}" 
+                                                            class="appliedfor w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                            >                                                
+                                                        </div>
+                                                        <div class="w-full md:w-[32%] lg:w-[32%]">
+                                                            <label class="block mb-[5px] text-[14px] font-[400]">Nice Class</label>
                                                             <select name="classrule"
                                                                     class="classrule w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
                                                                     >
                                                             
-                                                                <option value="">Risk Class</option>
+                                                                <option value="">Nice Class</option>
                                                                 @php
                                                                     $selectedValues = explode(',', old('classrule', $serviceVal->serviceDetails->class_rule ?? ''));
                                                                 @endphp
@@ -273,19 +286,6 @@
                                                             </select>
                                                                                                     
                                                         </div>                                                
-                                                        <div class="w-full md:w-[32%] lg:w-[32%]">
-                                                            <label class="appliedForText block mb-[5px] text-[14px] font-[400]">
-                                                                @if ($serviceVal->service_id == 1)
-                                                                Trademark Applied For
-                                                                @elseif ($serviceVal->service_id == 2)
-                                                                Patent Applied For
-                                                                @endif
-                                                                </label>
-                                                            <input type="text" name="appliedfor" 
-                                                                value="{{ isset($serviceVal->serviceDetails) ? $serviceVal->serviceDetails->applied_for : '' }}" 
-                                                                class="appliedfor w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
-                                                                >                                                
-                                                        </div>
                                                         <div class="applicationNumberHide w-full md:w-[32%] lg:w-[32%] {{$serviceVal->subservice_id == 1 || $serviceVal->subservice_id == 10 ? 'hidden':''}}">
                                                             <label class="block mb-[5px] text-[14px] font-[400]">Application Number</label>
                                                             <input type="text" name="applicationNumber" 
@@ -452,20 +452,20 @@
                                             <div class="eachServiceDetails flex flex-wrap w-full gap-[15px] border-[1px] border-[#ccc] outline-[#ccc] p-[10px] rounded-[5px] hidden">
                                                 <h2 class="w-full text-[22px] leading-[25px] mb-[5px] font-[600]">Details</h2>
                                                 <div class="w-full md:w-[32%] lg:w-[32%]">
-                                                    <label class="block mb-[5px] text-[14px] font-[400]">Risk Class</label>
+                                                    <label class="appliedForText block mb-[5px] text-[14px] font-[400]">Trademark Applied For</label>
+                                                    <input type="text" name="appliedfor" id="appliedfor" value="" class="appliedfor w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" >                                                
+                                                </div>      
+                                                <div class="w-full md:w-[32%] lg:w-[32%]">
+                                                    <label class="block mb-[5px] text-[14px] font-[400]">Nice Class</label>
                                                     <select name="classrule" 
                                                             class="classrule w-full h-[55px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
                                                             >
-                                                        <option value="">Risk Class</option>
+                                                        <option value="">Nice Class</option>
                                                         @for ($i=1;$i <= 45;$i++)
                                                         <option value="{{$i}}">{{$i}}</option>
                                                         @endfor                         
                                                     </select>                                                
                                                 </div>
-                                                <div class="w-full md:w-[32%] lg:w-[32%]">
-                                                    <label class="appliedForText block mb-[5px] text-[14px] font-[400]">Trademark Applied For</label>
-                                                    <input type="text" name="appliedfor" id="appliedfor" value="" class="appliedfor w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" >                                                
-                                                </div>      
                                                 <div class="applicationNumberHide w-full md:w-[32%] lg:w-[32%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Application Number</label>
                                                     <input type="text" name="applicationNumber" 
@@ -547,6 +547,36 @@
                 </div>
                 {{-- service repeater end --}}               
             </div>            
+            <div class="">
+                <label for="start_up" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Registered under startup scheme</label>
+                <div class="flex flex-wrap gap-[20px]">
+                    <div>
+                        <input type="radio" name="start_up" id="start_up1" value="1"  @checked(old('start_up', $leadData->startup_scheme) == 1)>
+
+                        <label for="start_up" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Yes</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="start_up" id="start_up2" value='0' @checked(old('start_up', $leadData->startup_scheme) == 0) >
+                        <label for="registered2" class="text-[12px] font-[400] leading-[14px] text-[#000000]">No</label>
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <label for="msmem" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">MSME Registered Unit</label>
+                <div class="flex flex-wrap gap-[20px]">
+                    <div>
+                        <input type="radio" name="msmem" id="msmem" value="1" 
+                            @checked(old('msmem', $leadData->msmem) == 1)>
+                        <label for="msmem" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Yes</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="msmem" id="msmem2" value="0" 
+                            @checked(old('msmem', $leadData->msmem) == 0)>
+                        <label for="msmem2" class="text-[12px] font-[400] leading-[14px] text-[#000000]">No</label>
+                    </div>
+                </div>
+                
+            </div>
             {{-- multi attachment --}}
             <div>
                 <label class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Attachments <span class="text-[12px] italic font-[400] text-[#e70e0e]"> (only jpg,jpeg png and pdf format supported & max:2 MB)</span></label>
@@ -626,22 +656,7 @@
                 <textarea name="description" id="description" class="w-full h-[155px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none">{{ ucwords(old('description', !empty($leadData) ? $leadData->description : '')) }}</textarea>
 
             </div>
-            <div class="">
-                <label for="msmem" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">MSME Registered Unit</label>
-                <div class="flex flex-wrap gap-[20px]">
-                    <div>
-                        <input type="radio" name="msmem" id="msmem" value="1" 
-                            @checked(old('msmem', $leadData->msmem) == 1)>
-                        <label for="msmem" class="text-[12px] font-[400] leading-[14px] text-[#000000]">Yes</label>
-                    </div>
-                    <div>
-                        <input type="radio" name="msmem" id="msmem2" value="0" 
-                            @checked(old('msmem', $leadData->msmem) == 0)>
-                        <label for="msmem2" class="text-[12px] font-[400] leading-[14px] text-[#000000]">No</label>
-                    </div>
-                </div>
-                
-            </div>
+            
             <div class="">
                 {{-- <button type="button" name="save" class="lead_submit_btn text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save</button> --}}
                 <button type="button" name="saveAssign" class="lead_submit_btn text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[12px] px-[30px]">Save & Assign</button>
@@ -693,6 +708,16 @@
     </div>
 </div>
 <script>
+    $(document).ready(function (){
+        $('#clientId').on('change', function () {
+        if ($(this).val() !== '') {
+            if (!confirm('Are you sure you want to create a new lead for this existing client?')) {
+                location.reload();
+            }
+            // If confirmed, allow normal behavior (no further action needed)
+        }
+    });
+    })
    
     $(document).on('click','.lead_submit_btn',function(){
 
@@ -952,7 +977,14 @@
                     $('.sourceNameLoader').addClass('hidden');
                 }
             })
-        }else{
+        }else{ $('#clientId').on('change', function () {
+        if ($(this).val() !== '') {
+            if (!confirm('Are you sure you want to create a new lead for this existing client?')) {
+                location.reload();
+            }
+            // If confirmed, allow normal behavior (no further action needed)
+        }
+    });
             $('.sourceTypeNameDiv').css('display','none');
         }
     });
@@ -1028,6 +1060,8 @@
             hiddenDiv.addClass('hidden');
         }
     });
+
+    
     
   
 

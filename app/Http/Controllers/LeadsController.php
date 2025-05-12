@@ -110,7 +110,6 @@ class LeadsController extends Controller
 
     public function add(Request $request, $id = null)
     {       
-      
         if ($id > 0) {
             $leadData = Lead::where('id', $id)->first();
             // if ($leadData) {
@@ -142,7 +141,8 @@ class LeadsController extends Controller
         $clientList = User::where('role', 2)->where('status', 1)->get();
         $projectManagerList = User::where('role', 4)->where('status', 1)->get();
         $firmList = Firm::where('status', 1)->get();
-        if ($request->isMethod('POST')) {    
+        if ($request->isMethod('POST')) {  
+
             $scopeOfBusinessArray = $request->scopeofbusiness;
             if (in_array('other', $request->scopeofbusiness)) {
                 $scopeOfBusinessArray = array_diff($scopeOfBusinessArray, ['other']);
@@ -187,6 +187,7 @@ class LeadsController extends Controller
             $leadData->mobile_number = $request->mobilenumber;
             $leadData->email = $request->email;
             $leadData->description = $request->description;
+            $leadData->startup_scheme = $request->start_up;
             $leadData->msmem = $request->msmem;
             $leadData->business_scope = implode(',', $scopeOfBusinessArray);
             $leadData->status = $request->savetype;

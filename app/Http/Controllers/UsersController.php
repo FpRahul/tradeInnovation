@@ -445,6 +445,7 @@ class UsersController extends Controller
                 'email' => $email,
             ]);
             $newClient->name = $request->name;
+            $newClient->last_name = $request->last_name;
             $newClient->role = $request->role;
             $newClient->email = $request->email;
             $newClient->altEmail = $request->alternateEmail;

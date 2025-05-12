@@ -11,9 +11,16 @@
             <input type="hidden" name="role" id="role" value="2">
             <div class="flex flex-col md:flex-row gap-[20px] !mt-0">
                 <div class="w-full md:w-1/2">
-                    <label for="name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Name <strong class="text-[#f83434]">*</strong></label>
+                    <label for="name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">First Name <strong class="text-[#f83434]">*</strong></label>
                     <input type="text" name="name" id="name" value="{{ ucwords(old('name') ? old('name') : $newClient->name)}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Name" required>
                     @error('name')
+                    <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="w-full md:w-1/2">
+                    <label for="name" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Last Name <strong class="text-[#f83434]">*</strong></label>
+                    <input type="text" name="last_name" id="last_name" value="{{ ucwords(old('last_name') ? old('last_name') : $newClient->last_name)}}" class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter Name" required>
+                    @error('last_name')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>

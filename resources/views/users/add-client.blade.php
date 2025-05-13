@@ -73,11 +73,12 @@
                     $displaypartnerClass = 'hidden';
                 @endphp
                 @if (!empty($partnerDataList))
-                @if (optional($newClientDetails)->incorporationType == 7 || is_null(optional($newClientDetails)->incorporationType))
+                @if (in_array(optional($newClientDetails)->incorporationType, [7, 8]) || is_null(optional($newClientDetails)->incorporationType))
                     @php
                         $displaypartnerClass = '';
                     @endphp
                 @endif
+
                                   
                 @endif
                 <div class="partnerNameDiv w-full md:w-1/2 {{$displaypartnerClass}}" id="source_type">
@@ -333,7 +334,7 @@
     });
 
     $(document).on('change','.showPartnerListName',function(){ 
-        if($(this).val() == 7){
+        if($(this).val() == 7 || $(this).val() == 8){
             $('.partnerNameDiv').removeClass('hidden');
         }else{
             $('.partnerNameDiv').addClass('hidden');

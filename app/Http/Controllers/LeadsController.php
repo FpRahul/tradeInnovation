@@ -24,6 +24,8 @@ use App\Models\LeadTaskDetail;
 use App\Models\ServiceStages;
 use App\Models\ServiceDetail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+
 use Mpdf\Mpdf;
 use Illuminate\Support\Facades\View;
 
@@ -142,7 +144,6 @@ class LeadsController extends Controller
         $projectManagerList = User::where('role', 4)->where('status', 1)->get();
         $firmList = Firm::where('status', 1)->get();
         if ($request->isMethod('POST')) {  
-
             $scopeOfBusinessArray = $request->scopeofbusiness;
             if (in_array('other', $request->scopeofbusiness)) {
                 $scopeOfBusinessArray = array_diff($scopeOfBusinessArray, ['other']);
@@ -251,6 +252,9 @@ class LeadsController extends Controller
                                 $image_name->move(public_path('uploads/leads/' . $leadData->id), $imageName);
                                 $serviceDetailData->service_logo = $imageName;
                             }
+                            $serviceDetailData->trademark_type = $serviceVal['trademark_type'];
+                            $serviceDetailData->trademark_service_label = $serviceVal['service_label'];
+                            $serviceDetailData->trademark_goods = $serviceVal['goods_and_services'];
                             $serviceDetailData->project_manager_id = $serviceVal['projectmanager'];
                             $serviceDetailData->filing_mode = $serviceVal['filingmode'];
                             $serviceDetailData->filing_date = date('Y-m-d',strtotime($serviceVal['filingdate']));
@@ -451,29 +455,36 @@ class LeadsController extends Controller
     public function leadLogs(Request $request)
     {
         $header_title_name = 'Lead logs';
-        $leadData = lead::all();
+        $leadData = Lead::select(
+            'client_id',
+            DB::raw('MAX(client_name) as client_name'),
+            DB::raw('MAX(mobile_number) as mobile_number')
+        )
+        ->groupBy('client_id')
+        ->get();
+        
         $service = Service::all();
         $selectServiceID = $request->service_id;
        
         
         $requestParams = $request->all();
         
-        
         $leadLogs = LeadLog::with('leadTask', 'leadTask.leadTaskDetails', 'leadTask.serviceSatge')->get();
-         if($request->service_id > 0 && $request->lead_id > 0){
+         if( $request->lead_id > 0 && $request->service_id > 0){
+            $lead_ids = Lead::where('client_id', $request->lead_id)->pluck('id');
 
             $leadLogs = LeadLog::with([
-                'leadAttch', 
-                'leadTask', 
-                'leadTask.leadTaskDetails', 
-                'leadTask.serviceSatge'
-            ])
-            ->where('lead_id', $request->lead_id)
-            ->whereHas('leadTask', function($query) use ($request) {
-                $query->where('service_id', $request->service_id);
-            })
-            ->orderBy('id', 'desc')
-            ->get();
+                    'leadAttch', 
+                    'leadTask', 
+                    'leadTask.leadTaskDetails', 
+                    'leadTask.serviceSatge'
+                ])
+                ->whereIn('lead_id', $lead_ids) 
+                ->whereHas('leadTask', function($query) use ($request) {
+                    $query->where('service_id', $request->service_id);
+                })
+                ->orderBy('id', 'desc')
+                ->get();
         }
        else if ($request->lead_id > 0) {
            
@@ -486,11 +497,13 @@ class LeadsController extends Controller
        $services = collect(); 
 
         if ($request->lead_id) {
-            $serviceIds = LeadTask::where('lead_id', $lead_id)
+            $lead_ids = Lead::where('client_id', $request->lead_id)->pluck('id');
+            $serviceIds = LeadTask::whereIn('lead_id', $lead_ids)
                 ->groupBy('service_id')
                 ->pluck('service_id');
-
-            $services = Service::whereIn('id', $serviceIds)->get();
+                
+                $services = Service::whereIn('id', $serviceIds)->get();
+                
         }
         if($services){
             return response()->json(['services' => $services  , 'status' => 200 ]);

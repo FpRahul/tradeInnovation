@@ -26,7 +26,8 @@ use App\Models\Service;
                     <select name="lead_id" id="lead_id"  class="allform-filter-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
                         <option value="">Select Lead ID</option>
                         @forelse($leadData as $leadDetails)
-                        <option value="{{ $leadDetails->id }}" @if(isset($requestParams['lead_id']) && $requestParams['lead_id']==$leadDetails->id) selected @endif> {{ $leadDetails->client_name }} - {{ $leadDetails->mobile_number }} </option>
+                        
+                        <option value="{{ $leadDetails->client_id }}" @if(isset($requestParams['lead_id']) && $requestParams['lead_id']==$leadDetails->client_id) selected @endif> {{ $leadDetails->client_name }} - {{ $leadDetails->mobile_number }} </option>
                         @empty
                         <option value="" disabled>No leads available</option>
                         @endforelse
@@ -40,15 +41,19 @@ use App\Models\Service;
                     <select name="service_id" id="service_id" class="allform-filter-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] " required>
                         <option value="">Select services ID</option>
                         @if(isset($requestParams['lead_id']) && $requestParams['lead_id'] > 0)
-                        @php                        
-                            $serviceIds = LeadTask::where('lead_id', $requestParams['lead_id'])
-                                ->groupBy('service_id')
-                                ->pluck('service_id');
-
-                            $services = Service::whereIn('id', $serviceIds)->get();
-                        @endphp
+                        @php
+                                
+                                $client_id = Lead::select('id')
+                                                ->where('client_id', $requestParams['lead_id']) 
+                                                ->get();
+                                dd($client_id);
+                                $serviceIds = LeadTask::where('client_id', $requestParams['lead_id'])
+                                                    ->groupBy('service_id')
+                                                    ->pluck('service_id');
+                                $services = Service::whereIn('id', $serviceIds)->get();
+                            @endphp
                          @foreach($services as $servicesName)
-                         <option value="{{ $servicesName->id }}" @selected(isset($requestParams['service_id']) && $requestParams['service_id'] > 0 )>{{ $servicesName->serviceName }}  </option>
+                         <option value = "{{ $servicesName->id }}" @selected(isset($requestParams['service_id']) && $requestParams['service_id'] > 0 )>{{ $servicesName->serviceName }}  </option>
                          @endforeach
                         @endif
                                                 

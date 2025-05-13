@@ -268,7 +268,29 @@
                                                             value="{{ isset($serviceVal->serviceDetails) ? $serviceVal->serviceDetails->applied_for : '' }}" 
                                                             class="appliedfor w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
                                                             >                                                
-                                                        </div>
+                                                        </div> 
+                                                        @php
+                                                            $tradeTypeHide = '';
+                                                            if($serviceVal->service_id == 2){
+                                                                $tradeTypeHide = 'hidden';
+                                                            }
+                                                        @endphp                                           
+                                                        <div class="{{ $tradeTypeHide }} trademark_type_div w-full md:w-[32%] lg:w-[32%]">
+                                                            <label class="block mb-[5px] text-[14px] font-[400]">Trademark Type</label>
+                                                            <select name="trademark_type" 
+                                                                    class="trademark_type w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                                    >
+                                                            
+                                                                <option value="" >Trademark Type</option>
+                                                                <option value="1" {{ $serviceVal->serviceDetails->trademark_type == 1 ? 'selected':'' }}>Wordmark</option>
+                                                                <option value="2" {{ $serviceVal->serviceDetails->trademark_type == 2 ? 'selected':'' }}>Logomark</option>
+                                                                <option value="3" {{ $serviceVal->serviceDetails->trademark_type == 3 ? 'selected':'' }}>Logo/Label</option>
+
+                                                                                    
+                                                            </select>
+                                                                                                    
+                                                        </div>   
+
                                                         <div class="w-full md:w-[32%] lg:w-[32%]">
                                                             <label class="block mb-[5px] text-[14px] font-[400]">Nice Class</label>
                                                             <select name="classrule"
@@ -298,14 +320,39 @@
                                                                 $logoPath = !empty($serviceVal->serviceDetails->service_logo) ? 'uploads/leads/'.$leadData->id.'/'.$serviceVal->serviceDetails->service_logo : 'assets/images/noimage.png';
                                                             @endphp
                                                         
-                                                                <label class="block mb-[5px] text-[14px] font-[400]">Logo</label>
-                                                                <div class="flex w-full items-center gap-[5px]">
+                                                                <label class=" logohide block mb-[5px] text-[14px] font-[400]">Logo</label>
+                                                                <div class=" logohide flex w-full items-center gap-[5px]">
                                                                     <img src="{{ asset($logoPath)}}" class="getpreviewlogo w-[30px] h-[30px] max-w-[30px] max-h-[30px] object-cover border-[1px] border-[#999] rounded-[5px]" />   
                                                                     <div class="relative prviewServ">
                                                                         <input class="previewServiceLogo  max-w-[80%] text-[14px] p-[8px]" type="file" name="serviceLogo" >                                                            
                                                                     </div>       
                                                                 </div>                                                         
                                                             <div class="logoErrorMsg text-[12px] italic font-[400] text-[#e70e0e]"></div>                                             
+                                                        </div>
+                                                        @php
+                                                            $trademarkLableHide = '';
+                                                            if($serviceVal->service_id == 2){
+                                                                $trademarkLableHide = 'hidden';
+                                                            }
+                                                        @endphp
+                                                        <div class=" wordmarkHide {{ $trademarkLableHide }} service_label_div w-full md:w-[32%] lg:w-[32%]">
+                                                            <label class="block mb-[5px] text-[14px] font-[400]">Trademark Label</label>
+                                                            <div class="relative">
+                                                                <input class="service_label w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" type="text" name="service_label"  value="{{ isset($serviceVal->serviceDetails->trademark_service_label) ? $serviceVal->serviceDetails->trademark_service_label :''}}">                                                            
+                                                            </div>                                                 
+                                                        </div>
+        
+                                                        @php
+                                                            $goodServiceHide = '';
+                                                            if($serviceVal->service_id == 2){
+                                                                $goodServiceHide = 'hidden';
+                                                            }
+                                                        @endphp
+                                                        <div class="{{ $goodServiceHide }} goods_and_services_div w-full md:w-[32%] lg:w-[32%]">
+                                                            <label class="block mb-[5px] text-[14px] font-[400]">Goods and Services</label>
+                                                            <div class="relative">
+                                                                <textarea class="goods_and_services w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" type="text" name="goods_and_services">{{ isset($serviceVal->serviceDetails->trademark_goods) ? $serviceVal->serviceDetails->trademark_goods :''}}</textarea>                                                        
+                                                            </div>                                                 
                                                         </div>
                                                         <div class="w-full md:w-[32%] lg:w-[32%]">
                                                             <label class="block mb-[5px] text-[14px] font-[400]">Filing Mode</label>                                                           
@@ -454,11 +501,56 @@
                                                 <div class="w-full md:w-[32%] lg:w-[32%]">
                                                     <label class="appliedForText block mb-[5px] text-[14px] font-[400]">Trademark Applied For</label>
                                                     <input type="text" name="appliedfor" id="appliedfor" value="" class="appliedfor w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" >                                                
-                                                </div>      
+                                                </div>    
+                                                <div class="trademark_type_div w-full md:w-[32%] lg:w-[32%]">
+                                                    <label class="block mb-[5px] text-[14px] font-[400]">Trademark Type</label>
+                                                    <select name="trademark_type" 
+                                                            class="trademark_type w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                            >
+                                                    
+                                                        <option value="">Trademark Type</option>
+                                                        <option value="1">Wordmark</option>
+                                                        <option value="2">Logomark</option>
+                                                        <option value="3">Logo/Label</option>
+
+                                                                                
+                                                    </select>
+                                                                                            
+                                                </div>     
+                                                
+                                                <div class="w-full md:w-[32%] lg:w-[32%]">
+                                                    <label class="logohide block mb-[5px] text-[14px] font-[400]">Logo</label>
+                                                    <div class=" logohide flex items-center gap-[5px]">
+                                                        <img src="{{ asset('assets/images/noimage.png')}}" class="getpreviewlogo w-[30px] h-[30px] max-w-[30px] max-h-[30px] object-cover border-[1px] border-[#999] rounded-[5px]" />   
+                                                        <div class="relative prviewServ">
+                                                            <input class="previewServiceLogo  max-w-[80%] text-[14px] p-[8px]" type="file" name="serviceLogo" >                                                            
+                                                        </div>       
+                                                    </div>                                             
+                                                
+                                                    <div class="logoErrorMsg text-[12px] italic font-[400] text-[#e70e0e]"></div>                                             
+                                                </div>
+
+                                                <div class=" wordmarkHide service_label_div w-full md:w-[32%] lg:w-[32%]">
+                                                    <label class="block mb-[5px] text-[14px] font-[400]">Trademark Label</label>
+                                                    <div class="relative"> 
+                                                        <input class="wordmarkInput service_label w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"  type="text" name="service_label" >                                                            
+                                                    </div>                                                 
+                                                </div>
+
+
+                                                <div class="goods_and_services_div w-full md:w-[32%] lg:w-[32%]">
+                                                    <label class="block mb-[5px] text-[14px] font-[400]">Goods and Services</label>
+                                                    <div class="relative">
+                                                        <textarea class="goods_and_services w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" type="text" name="goods_and_services" ></textarea>                                                        
+                                                    </div>                                                 
+                                                </div>
+                                                
+                                                
+
                                                 <div class="w-full md:w-[32%] lg:w-[32%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Nice Class</label>
                                                     <select name="classrule" 
-                                                            class="classrule w-full h-[55px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                            class="classrule w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
                                                             >
                                                         <option value="">Nice Class</option>
                                                         @for ($i=1;$i <= 45;$i++)
@@ -474,17 +566,7 @@
                                                         > 
                                                                                             
                                                 </div>                                      
-                                                <div class="w-full md:w-[32%] lg:w-[32%]">
-                                                    <label class="block mb-[5px] text-[14px] font-[400]">Logo</label>
-                                                    <div class="flex items-center gap-[5px]">
-                                                        <img src="{{ asset('assets/images/noimage.png')}}" class="getpreviewlogo w-[30px] h-[30px] max-w-[30px] max-h-[30px] object-cover border-[1px] border-[#999] rounded-[5px]" />   
-                                                        <div class="relative prviewServ">
-                                                            <input class="previewServiceLogo  max-w-[80%] text-[14px] p-[8px]" type="file" name="serviceLogo" >                                                            
-                                                        </div>       
-                                                    </div>                                             
                                                 
-                                                    <div class="logoErrorMsg text-[12px] italic font-[400] text-[#e70e0e]"></div>                                             
-                                                </div>
                                                 <div class="w-full md:w-[32%] lg:w-[32%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Filing Mode</label>
                                                     <select name="filingmode" id="filingmode"
@@ -535,7 +617,6 @@
                                             </svg>
                                         </span>
                                     </div>
-                                   
                                 </div> 
                             @endif                            
                               
@@ -835,13 +916,35 @@
         }                  
        
     });
-    $(document).on('change','.setSubService',function(){    
+    $(document).on('change','.setSubService',function(){  
         var serviceId = $(this).val();
         let clientType = $(this).parent().parent().find('input[name^="leadRepeater"][name$="[client_type]"]:checked').val();
-        if(serviceId == 1 || serviceId == 2){
+        if(serviceId == 1){
+            $(this).parent().parent().find('.goods_and_services_div').removeClass('hidden');
+            
+            $(this).parent().parent().find('.service_label_div').removeClass('hidden');
+            $(this).parent().parent().find('.trademark_type_div').removeClass('hidden');
+            $(this).parent().parent().find('.goods_and_services').attr('required',true);
+            $(this).parent().parent().find('.service_label').attr('required',true);
+            $(this).parent().parent().find('.trademark_type').attr('required',true);
             $(this).parent().parent().find('.classrule').attr('required',true);
             $(this).parent().parent().find('.appliedfor').attr('required',true);
-            $(this).parent().parent().find('.previewServiceLogo').attr('required',true);
+            $(this).parent().parent().find('.filingmode').attr('required',true);
+            $(this).parent().parent().find('.filingdate').attr('required',true);
+            $(this).parent().parent().find('.eachServiceDetails').removeClass('hidden');
+        }
+        else if(serviceId == 2){
+            $(this).parent().parent().find('.goods_and_services_div').addClass('hidden');
+            $(this).parent().parent().find('.goods_and_services').val('');
+            $(this).parent().parent().find('.service_label').val('');
+            $(this).parent().parent().find('.trademark_type').val('');
+            $(this).parent().parent().find('.service_label_div').addClass('hidden');
+            $(this).parent().parent().find('.trademark_type_div').addClass('hidden');
+            $(this).parent().parent().find('.goods_and_services').attr('required',false);
+            $(this).parent().parent().find('.service_label').attr('required',false);
+            $(this).parent().parent().find('.trademark_type').attr('required',false);
+            $(this).parent().parent().find('.classrule').attr('required',true);
+            $(this).parent().parent().find('.appliedfor').attr('required',true);
             $(this).parent().parent().find('.filingmode').attr('required',true);
             $(this).parent().parent().find('.filingdate').attr('required',true);
             $(this).parent().parent().find('.eachServiceDetails').removeClass('hidden');
@@ -1060,7 +1163,26 @@
             hiddenDiv.addClass('hidden');
         }
     });
+    
 
+    $(document).on('change','.trademark_type',function(){
+        var value = $(this).val()
+        if(value == 1){
+            $(this).parent().parent().find('.previewServiceLogo').val(null);
+            $(this).parent().parent().find('.logohide').addClass('hidden');
+            $(this).parent().parent().find('.wordmarkHide').removeClass('hidden');
+            
+        }else if (value == 2){
+            $(this).parent().parent().find('.wordmarkInput').val('');
+            $(this).parent().parent().find('.wordmarkHide').addClass('hidden');
+            $(this).parent().parent().find('.logohide').removeClass('hidden');
+            
+            
+        }else if(value == 3){
+            $(this).parent().parent().find('.wordmarkHide').removeClass('hidden');
+            $(this).parent().parent().find('.logohide').removeClass('hidden');           
+        }
+    });
     
     
   

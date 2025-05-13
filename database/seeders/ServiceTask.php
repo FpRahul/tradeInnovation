@@ -658,7 +658,7 @@ class ServiceTask extends Seeder
             //patnet
             [
                 'service_id' => '2',
-                'title' => 'Send quotation',
+                'title' => 'Send quotation (Patent)',
                 'sub_service_id'=> 10,
                 'description' => 'Send Quotation to the client for the requested services.',
                

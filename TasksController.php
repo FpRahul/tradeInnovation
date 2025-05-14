@@ -35854,6 +35854,7 @@ class TasksController extends Controller
             ]);
         }
     }
+
     public function rejecttask(Request $request)
     {
         $leadData = LeadTaskDetail::where(['task_id' => $request->taskId])->first();

@@ -6,7 +6,7 @@ use App\Models\Service;
 use App\Models\Lead;
 use App\Models\SubService;
 use App\Models\ServiceDetail;
-?>
+?> 
 <style>
     .modal-style {
         box-shadow: 0 5px 15px rgb(0 0 0 / 50%);
@@ -80,8 +80,11 @@ use App\Models\ServiceDetail;
                         @endif
                     </select>
                 </div>
+
+                
+
                 <div class="w-[100%] md:w-[30%]">
-                    <label class="flex text-[15px] text-[#000] mb-[5px]">Applied For<strong class="text-[#f83434]">*</strong></label>
+                    <label class="flex text-[15px] text-[#000] mb-[5px]">Applied For <strong class="text-[#f83434]">*</strong></label>
                     <select name="applied_for" id="applied_for"  class="allform-filter-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
                         <option value="">Select Lead ID</option>
                         @if (isset($requestParams['applied_for']) && $requestParams['applied_for'])
@@ -89,12 +92,12 @@ use App\Models\ServiceDetail;
                             $lead_ids = Lead::where('client_id', $requestParams['lead_id'])
                             ->pluck('id');
                             $service_detail_id = LeadTask::whereIn('lead_id', $lead_ids  )->pluck('service_detail_id')->unique();
-                            $appliedFor = ServiceDetail::where('id', $requestParams['service_id'])->whereIn('id', $leadSubServices)->get();
+                              $appliedFor = ServiceDetail::wherein('id', $service_detail_id)->get();
                         @endphp
                         @foreach($appliedFor as $appliedForDetials)
                         <option value="{{ $appliedForDetials->id }}"
                             @selected(isset($requestParams['applied_for']) && $requestParams['applied_for'] == $appliedForDetials->id)>
-                            {{ $appliedForDetials->applied_for }}
+                            {{ $appliedForDetials->applied_for }} 
                         </option>
                         @endforeach
                         @endif

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+ 
 use App\Models\CategoryOption;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Service;
@@ -484,19 +484,21 @@ class LeadsController extends Controller
                     $query->where('service_id', $request->service_id);
                 })->whereHas('leadTask', function($query) use ($request) {
                     $query->where('subservice_id', $request->sub_services);
-                })
+                })->where('service_detail_id' , $request->applied_for)
                 ->orderBy('id', 'desc')
                 ->get();
         }
         else if ($request->lead_id > 0) {           
             $leadLogs = LeadLog::with('leadAttch', 'leadTask', 'leadTask.leadTaskDetails', 'leadTask.serviceSatge')->where('lead_id', $request->lead_id)->orderBy('id', 'desc')->get();
         } 
+        // dd($requestParams);
         return view('leads.logs', compact('leadData', 'leadLogs', 'header_title_name', 'requestParams', 'service' , 'selectServiceID'));
     }
     public function getServiceByLeadId(Request $request){
        $lead_id = $request->lead_id;
        $services = collect(); 
-        if ($request->lead_id) {
+       if ($request->lead_id) {
+            
             $lead_ids = Lead::where('client_id', $request->lead_id)->pluck('id');
             $serviceIds = LeadTask::whereIn('lead_id', $lead_ids)
                 ->groupBy('service_id')

@@ -135,6 +135,11 @@ Route::middleware(['auth', CheckPermission::class])->group(function () {
 
         Route::get('/download-invoice/{id?}', 'downloadInvoice')->name('lead.downloadinvoice');
         Route::post('get-service' , 'getServiceByLeadId')->name('lead.getServiceByLeadId');
+        Route::post('get-sub-service' , 'getSubServiceByService')->name('lead.getSubServiceByService');
+        Route::post('get-applied-for' , 'getAppliedFor')->name('lead.getAppliedFor');
+
+        
+
 
         Route::match(['POST', 'GET'], '/business-scope' , 'scopeOfBusiness')->name('bussinessScope.index');
         Route::match(['POST', 'GET'], '/add-business-scope/{id?}', 'addScopeBusiness')->name('bussinessScope.add');

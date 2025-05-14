@@ -470,9 +470,9 @@ class LeadsController extends Controller
         $requestParams = $request->all();
         
         $leadLogs = LeadLog::with('leadTask', 'leadTask.leadTaskDetails', 'leadTask.serviceSatge')->get();
-         if( $request->lead_id > 0 && $request->service_id > 0){
+        // dd($request);
+         if( $request->lead_id > 0 && $request->service_id > 0 && $request->sub_services > 0 && $request->applied_for > 0){
             $lead_ids = Lead::where('client_id', $request->lead_id)->pluck('id');
-
             $leadLogs = LeadLog::with([
                     'leadAttch', 
                     'leadTask', 
@@ -482,12 +482,13 @@ class LeadsController extends Controller
                 ->whereIn('lead_id', $lead_ids) 
                 ->whereHas('leadTask', function($query) use ($request) {
                     $query->where('service_id', $request->service_id);
+                })->whereHas('leadTask', function($query) use ($request) {
+                    $query->where('subservice_id', $request->sub_services);
                 })
                 ->orderBy('id', 'desc')
                 ->get();
         }
-       else if ($request->lead_id > 0) {
-           
+        else if ($request->lead_id > 0) {           
             $leadLogs = LeadLog::with('leadAttch', 'leadTask', 'leadTask.leadTaskDetails', 'leadTask.serviceSatge')->where('lead_id', $request->lead_id)->orderBy('id', 'desc')->get();
         } 
         return view('leads.logs', compact('leadData', 'leadLogs', 'header_title_name', 'requestParams', 'service' , 'selectServiceID'));
@@ -495,7 +496,6 @@ class LeadsController extends Controller
     public function getServiceByLeadId(Request $request){
        $lead_id = $request->lead_id;
        $services = collect(); 
-
         if ($request->lead_id) {
             $lead_ids = Lead::where('client_id', $request->lead_id)->pluck('id');
             $serviceIds = LeadTask::whereIn('lead_id', $lead_ids)
@@ -512,6 +512,41 @@ class LeadsController extends Controller
 
         }
 
+    }
+
+    public function getSubServiceByService(Request $request){
+        $client_id = $request->lead_id; //Lead::where('client_id' , $request->client_id)->pluck('id')->get();
+        $service_id = $request->service_id;
+        $lead_ids = Lead::where('client_id', $client_id)
+                                            ->pluck('id');
+        $subServiceId = LeadTask::whereIn('lead_id', $lead_ids)->where('service_id' , $service_id)
+                            ->groupBy('subservice_id')
+                            ->pluck('subservice_id');
+        $subServiceName = SubService::whereIn('id' ,$subServiceId)->get();
+        
+        if($subServiceName){
+            return response()->json(['data' => $subServiceName , 'status' => 200 ]);
+        }else{
+            return response()->json(['data' => '' , 'status' => 400 ]);
+
+        }
+    }
+    public function getAppliedFor(Request $request){
+        $client_id = $request->lead_id; 
+        $service_id = $request->service_id;
+        $sub_service_id = $request->sub_services;
+        $lead_ids = Lead::where('client_id', $client_id)
+                                            ->pluck('id');
+        $service_detail_id = LeadTask::select('service_detail_id')->whereIn('lead_id', $lead_ids)->where('service_id' , $service_id)->where('subservice_id' , $sub_service_id)
+                            ->groupBy('service_detail_id')
+                            ->get();
+        $appliedFor = ServiceDetail::whereIn('id' , $service_detail_id)->get();
+        if($appliedFor){
+            return response()->json(['applied_for' => $appliedFor  , 'status' => 200]);
+        }else{
+            return response()->json(['applied_for' => $appliedFor  , 'status' => 200]);
+
+        }
     }
 
     public function getLogs(Request $request)

@@ -3,6 +3,9 @@
 <?php 
 use App\Models\LeadTask;
 use App\Models\Service;
+use App\Models\Lead;
+use App\Models\SubService;
+use App\Models\ServiceDetail;
 ?>
 <style>
     .modal-style {
@@ -20,13 +23,12 @@ use App\Models\Service;
     </div>
     <div class="mt-5 shadow-[0px_0px_13px_5px_#0000000f] bg-white rounded-[20px] mb-[20px] p-[23px]">
         <form id="filterForm" action="" class="w-full" method="GET">
-            <div class="flex items-end gap-[10px] w-full">
-                <div class="w-[30%]">
+            <div class="flex items-end gap-[10px] w-full flex-wrap">
+                <div class="w-[100%] md:w-[30%]">
                     <label class="flex text-[15px] text-[#000] mb-[5px]">Client Name<strong class="text-[#f83434]">*</strong></label>
                     <select name="lead_id" id="lead_id"  class="allform-filter-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
-                        <option value="">Select Lead ID</option>
+                        <option value="">Select Client ID</option>
                         @forelse($leadData as $leadDetails)
-                        
                         <option value="{{ $leadDetails->client_id }}" @if(isset($requestParams['lead_id']) && $requestParams['lead_id']==$leadDetails->client_id) selected @endif> {{ $leadDetails->client_name }} - {{ $leadDetails->mobile_number }} </option>
                         @empty
                         <option value="" disabled>No leads available</option>
@@ -35,31 +37,70 @@ use App\Models\Service;
                     <div class="leadIdError text-[#f83434]"></div>
                 </div>
                
-                
-                <div class="w-[30%]">
+                <div class="w-[100%] md:w-[30%]">
                     <label class="flex text-[15px] text-[#000] mb-[5px]">Services<strong class="text-[#f83434]">*</strong></label>
                     <select name="service_id" id="service_id" class="allform-filter-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] " required>
                         <option value="">Select services ID</option>
-                        @if(isset($requestParams['lead_id']) && $requestParams['lead_id'] > 0)
+                        @if(isset($requestParams['lead_id'])) 
                         @php
-                                
-                                $client_id = Lead::select('id')
-                                                ->where('client_id', $requestParams['lead_id']) 
-                                                ->get();
-                                dd($client_id);
-                                $serviceIds = LeadTask::where('client_id', $requestParams['lead_id'])
-                                                    ->groupBy('service_id')
-                                                    ->pluck('service_id');
-                                $services = Service::whereIn('id', $serviceIds)->get();
-                            @endphp
-                         @foreach($services as $servicesName)
-                         <option value = "{{ $servicesName->id }}" @selected(isset($requestParams['service_id']) && $requestParams['service_id'] > 0 )>{{ $servicesName->serviceName }}  </option>
-                         @endforeach
-                        @endif
-                                                
+                            $client_ids = Lead::where('client_id', $requestParams['lead_id'])
+                                            ->pluck('id');
+                            $serviceIds = LeadTask::whereIn('lead_id', $client_ids)
+                                                ->groupBy('service_id')
+                                                ->pluck('service_id');
+                            $services = Service::whereIn('id', $serviceIds)->get();
+                        @endphp
+
+                        @foreach($services as $servicesName)
+                            <option value="{{ $servicesName->id }}"
+                                @selected(isset($requestParams['service_id']) && $requestParams['service_id'] == $servicesName->id)>
+                                {{ $servicesName->serviceName }}
+                            </option>
+                        @endforeach
+                    @endif               
                     </select>
                 </div>
-               
+                <div class="w-[100%] md:w-[30%]">
+                    <label class="flex text-[15px] text-[#000] mb-[5px]">Sub Services<strong class="text-[#f83434]">*</strong></label>
+                    <select name="sub_services" id="sub_services"  class="allform-filter-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
+                    <option value="">Select Sub Services </option>
+                        @if (isset($requestParams['service_id']) && $requestParams['service_id'])
+                        @php
+                            $lead_ids = Lead::where('client_id', $requestParams['lead_id'])
+                            ->pluck('id');
+                            $leadSubServices = LeadTask::whereIn('lead_id', $lead_ids  )->pluck('subservice_id')->unique();
+                            $filterdSubservices = SubService::where('serviceid', $requestParams['service_id'])->whereIn('id', $leadSubServices)->get();
+                        @endphp
+                        @foreach($filterdSubservices as $SubservicesName)
+                        <option value="{{ $SubservicesName->id }}"
+                            @selected(isset($requestParams['sub_services']) && $requestParams['sub_services'] == $SubservicesName->id)>
+                            {{ $SubservicesName->subServiceName }}
+                        </option>
+                        @endforeach
+                        @endif
+                    </select>
+                </div>
+                <div class="w-[100%] md:w-[30%]">
+                    <label class="flex text-[15px] text-[#000] mb-[5px]">Applied For<strong class="text-[#f83434]">*</strong></label>
+                    <select name="applied_for" id="applied_for"  class="allform-filter-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
+                        <option value="">Select Lead ID</option>
+                        @if (isset($requestParams['applied_for']) && $requestParams['applied_for'])
+                        @php
+                            $lead_ids = Lead::where('client_id', $requestParams['lead_id'])
+                            ->pluck('id');
+                            $service_detail_id = LeadTask::whereIn('lead_id', $lead_ids  )->pluck('service_detail_id')->unique();
+                            $appliedFor = ServiceDetail::where('id', $requestParams['service_id'])->whereIn('id', $leadSubServices)->get();
+                        @endphp
+                        @foreach($appliedFor as $appliedForDetials)
+                        <option value="{{ $appliedForDetials->id }}"
+                            @selected(isset($requestParams['applied_for']) && $requestParams['applied_for'] == $appliedForDetials->id)>
+                            {{ $appliedForDetials->applied_for }}
+                        </option>
+                        @endforeach
+                        @endif
+                    </select>
+                    <div class="leadIdError text-[#f83434]"></div>
+                </div>
                 <button id="submitButton" class=" text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[15px] px-[30px]">Filter</button>
                 <a id="resetButton" href="{{ route('leadLogs.index') }}" class="text-[13px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[10px] py-[15px] px-[30px]">
                     Reset
@@ -373,7 +414,7 @@ use App\Models\Service;
                 data: {lead_id: lead_id},
                 headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
                 success: function (response){
-
+                        
                          if(response.status == 200){
                             let serviceSelect = $('#service_id');
                             serviceSelect.empty(); // Clear existing options
@@ -393,6 +434,59 @@ use App\Models\Service;
                 }
             })
             
+        })
+
+        $('#service_id').on('change' , function (){
+            var service_id = $(this).val();
+            var lead_id = $('#lead_id').val(); 
+
+            $.ajax({
+                url: "{{ route('lead.getSubServiceByService') }}",
+                method: 'POST',
+                data: {service_id: service_id , lead_id:lead_id},
+                headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                success: function (response){
+                    console.log(response);
+                    
+                    if(response.status == 200){
+                            let subServiceSelect = $('#sub_services');
+                            subServiceSelect.empty(); 
+                            subServiceSelect.append('<option value="">Select Sub Services ID</option>');
+                            if (response.data && response.data.length > 0) {
+                                $.each(response.data, function(index, subService) {
+                                    subServiceSelect.append('<option value="' + subService.id + '">' + subService.subServiceName + '</option>');
+                                });
+                            } else {
+                                subServiceSelect.append('<option value="" disabled>No Sub services available</option>');
+                            }
+                         }
+                }
+            })
+        })
+
+        $("#sub_services").on('change' , function (){
+            var sub_services = $(this).val();
+            var service_id = $("#service_id").val();
+            var lead_id = $('#lead_id').val(); 
+
+            $.ajax({
+                url: "{{ route('lead.getAppliedFor') }}",
+                method: 'POST',
+                data: {service_id: service_id , lead_id:lead_id , sub_services: sub_services},
+                headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                success: function(response){
+                    let applied_for = $('#applied_for');
+                            applied_for.empty(); 
+                            applied_for.append('<option value="">Select applied for</option>');
+                            if (response.applied_for && response.applied_for.length > 0) {
+                                $.each(response.applied_for, function(index, applied_for_detail) {
+                                    applied_for.append('<option value="' + applied_for_detail.id + '">' + applied_for_detail.applied_for + '</option>');
+                                });
+                            } else {
+                                applied_for.append('<option value="" disabled>No Applied For Found</option>');
+                            }
+                }
+            })
         })
       
 
@@ -498,6 +592,7 @@ $(document).on('click', '[data-modal-hide="assignUserModal"]', function() {
       })
 
     })
+    
 </script>
 @stop
 

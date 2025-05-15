@@ -292,8 +292,12 @@
                                                         </div>   
 
                                                         <div class="w-full md:w-[32%] lg:w-[32%]">
-                                                            <label class="block mb-[5px] text-[14px] font-[400]">Nice Class</label>
-                                                            <select name="classrule"
+                                                            <label class="block mb-[5px] text-[14px] font-[400]">Nice Class <span class="text-[12px] font-[300]">(Please enter nice classes, separated by commas)</span></label>
+                                                            <input type="text" name="classrule" placeholder="Enter nice class  ex:- 1,2,3" 
+                                                        value="{{$serviceVal->serviceDetails->class_rule}}" 
+                                                        class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
+                                                        > 
+                                                            <!-- <select name="classrule"
                                                                     class="classrule w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
                                                                     >
                                                             
@@ -305,7 +309,7 @@
                                                                 @for ($i = 1; $i <= 45; $i++)
                                                                     <option value="{{$i}}" @if(in_array($i, $selectedValues)) selected @endif>{{$i}}</option>
                                                                 @endfor                         
-                                                            </select>
+                                                            </select> -->
                                                                                                     
                                                         </div>                                                
                                                         <div class="applicationNumberHide w-full md:w-[32%] lg:w-[32%] {{$serviceVal->subservice_id == 1 || $serviceVal->subservice_id == 10 ? 'hidden':''}}">
@@ -329,7 +333,7 @@
                                                                 </div>                                                         
                                                             <div class="logoErrorMsg text-[12px] italic font-[400] text-[#e70e0e]"></div>                                             
                                                         </div>
-                                                        @php
+                                                        <!-- @php
                                                             $trademarkLableHide = '';
                                                             if($serviceVal->service_id == 2){
                                                                 $trademarkLableHide = 'hidden';
@@ -340,7 +344,7 @@
                                                             <div class="relative">
                                                                 <input class="service_label w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" type="text" name="service_label"  value="{{ isset($serviceVal->serviceDetails->trademark_service_label) ? $serviceVal->serviceDetails->trademark_service_label :''}}">                                                            
                                                             </div>                                                 
-                                                        </div>
+                                                        </div> -->
         
                                                         @php
                                                             $goodServiceHide = '';
@@ -354,7 +358,7 @@
                                                                 <textarea class="goods_and_services w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" type="text" name="goods_and_services">{{ isset($serviceVal->serviceDetails->trademark_goods) ? $serviceVal->serviceDetails->trademark_goods :''}}</textarea>                                                        
                                                             </div>                                                 
                                                         </div>
-                                                        <div class="w-full md:w-[32%] lg:w-[32%]">
+                                                        <!-- <div class="w-full md:w-[32%] lg:w-[32%]">
                                                             <label class="block mb-[5px] text-[14px] font-[400]">Filing Mode</label>                                                           
                                                                 <select name="filingmode" id="filingmode"
                                                                     class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"
@@ -373,8 +377,8 @@
 
                                                                 </select>
                                    
-                                                        </div>   
-                                                        <div class="w-full  md:w-[32%] lg:w-[32%]">  
+                                                        </div>    -->
+                                                        <!-- <div class="w-full  md:w-[32%] lg:w-[32%]">  
                                                             <label class="block mb-[5px] text-[14px] font-[400]">Filing Date</label>                                                                      
                                                             <div class="w-[100%] relative">                                                            
                                                                 <input 
@@ -386,7 +390,7 @@
                                                                     autocomplete="off"
                                                                 >                                                            
                                                             </div>     
-                                                        </div>
+                                                        </div> -->
                                                     
                                                     </div>
                                                     {{-- end service details --}}
@@ -530,12 +534,12 @@
                                                     <div class="logoErrorMsg text-[12px] italic font-[400] text-[#e70e0e]"></div>                                             
                                                 </div>
 
-                                                <div class=" wordmarkHide service_label_div w-full md:w-[32%] lg:w-[32%]">
+                                                <!-- <div class=" wordmarkHide service_label_div w-full md:w-[32%] lg:w-[32%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Trademark Label</label>
                                                     <div class="relative"> 
                                                         <input class="wordmarkInput service_label w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"  type="text" name="service_label" >                                                            
                                                     </div>                                                 
-                                                </div>
+                                                </div> -->
 
 
                                                 <div class="goods_and_services_div w-full md:w-[32%] lg:w-[32%]">
@@ -548,15 +552,20 @@
                                                 
 
                                                 <div class="w-full md:w-[32%] lg:w-[32%]">
-                                                    <label class="block mb-[5px] text-[14px] font-[400]">Nice Class</label>
-                                                    <select name="classrule" 
+                                                  <label class="block mb-[5px] text-[14px] font-[400]"> Nice Class <span class="text-[12px] font-[300]">(Please enter nice classes, separated by commas)</span>
+                                                </label>
+                                                    <input type="text" name="classrule" 
+                                                        value="" 
+                                                        class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" placeholder="Enter nice class  ex:- 1,2,3"
+                                                        > 
+                                                    <!-- <select name="classrule" 
                                                             class="classrule w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none" 
                                                             >
                                                         <option value="">Nice Class</option>
                                                         @for ($i=1;$i <= 45;$i++)
                                                         <option value="{{$i}}">{{$i}}</option>
                                                         @endfor                         
-                                                    </select>                                                
+                                                    </select>                                                 -->
                                                 </div>
                                                 <div class="applicationNumberHide w-full md:w-[32%] lg:w-[32%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Application Number</label>
@@ -567,7 +576,7 @@
                                                                                             
                                                 </div>                                      
                                                 
-                                                <div class="w-full md:w-[32%] lg:w-[32%]">
+                                                <!-- <div class="w-full md:w-[32%] lg:w-[32%]">
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Filing Mode</label>
                                                     <select name="filingmode" id="filingmode"
                                                     class="w-full h-[45px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[15px] py-[10px] rounded-[10px] !outline-none"
@@ -586,8 +595,8 @@
 
                                                 </select>
                                                                                             
-                                                </div>  
-                                                <div class="w-full  md:w-[32%] lg:w-[32%]">  
+                                                </div>   -->
+                                                <!-- {{-- <div class="w-full  md:w-[32%] lg:w-[32%]">  
                                                     <label class="block mb-[5px] text-[14px] font-[400]">Filing Date</label>                                                                      
                                                     <div class="w-[100%] relative">
                                                         
@@ -600,7 +609,7 @@
                                                             autocomplete="off"
                                                         >
                                                         
-                                                    </div>     
+                                                    </div>      --}} -->
                                                 </div>
                                                
                                             </div>
@@ -925,12 +934,12 @@
             $(this).parent().parent().find('.service_label_div').removeClass('hidden');
             $(this).parent().parent().find('.trademark_type_div').removeClass('hidden');
             $(this).parent().parent().find('.goods_and_services').attr('required',true);
-            $(this).parent().parent().find('.service_label').attr('required',true);
+            $(this).parent().parent().find('.service_label').attr('required',false);
             $(this).parent().parent().find('.trademark_type').attr('required',true);
             $(this).parent().parent().find('.classrule').attr('required',true);
             $(this).parent().parent().find('.appliedfor').attr('required',true);
-            $(this).parent().parent().find('.filingmode').attr('required',true);
-            $(this).parent().parent().find('.filingdate').attr('required',true);
+            // $(this).parent().parent().find('.filingmode').attr('required',true);
+            // $(this).parent().parent().find('.filingdate').attr('required',true);
             $(this).parent().parent().find('.eachServiceDetails').removeClass('hidden');
         }
         else if(serviceId == 2){
@@ -945,15 +954,15 @@
             $(this).parent().parent().find('.trademark_type').attr('required',false);
             $(this).parent().parent().find('.classrule').attr('required',true);
             $(this).parent().parent().find('.appliedfor').attr('required',true);
-            $(this).parent().parent().find('.filingmode').attr('required',true);
-            $(this).parent().parent().find('.filingdate').attr('required',true);
+            // $(this).parent().parent().find('.filingmode').attr('required',true);
+            // $(this).parent().parent().find('.filingdate').attr('required',true);
             $(this).parent().parent().find('.eachServiceDetails').removeClass('hidden');
         }else{
             $(this).parent().parent().find('.classrule').attr('required',false);
             $(this).parent().parent().find('.appliedfor').attr('required',false);
             $(this).parent().parent().find('.previewServiceLogo').attr('required',false);
-            $(this).parent().parent().find('.filingmode').attr('required',false);
-            $(this).parent().parent().find('.filingdate').attr('required',false);
+            // $(this).parent().parent().find('.filingmode').attr('required',false);
+            // $(this).parent().parent().find('.filingdate').attr('required',false);
             $(this).parent().parent().find('.eachServiceDetails').addClass('hidden');
         }
         if(serviceId == 1 ){

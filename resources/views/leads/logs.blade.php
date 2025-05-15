@@ -26,7 +26,7 @@ use App\Models\ServiceDetail;
             <div class="flex items-end gap-[10px] w-full flex-wrap">
                 <div class="w-[100%] md:w-[30%]">
                     <label class="flex text-[15px] text-[#000] mb-[5px]">Client Name<strong class="text-[#f83434]">*</strong></label>
-                    <select name="lead_id" id="lead_id"  class="allform-filter-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
+                    <select name="lead_id" id="lead_id"  class="allform-filter-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A]  " required>
                         <option value="">Select Client ID</option>
                         @forelse($leadData as $leadDetails)
                         <option value="{{ $leadDetails->client_id }}" @if(isset($requestParams['lead_id']) && $requestParams['lead_id']==$leadDetails->client_id) selected @endif> {{ $leadDetails->client_name }} - {{ $leadDetails->mobile_number }} </option>
@@ -36,7 +36,6 @@ use App\Models\ServiceDetail;
                     </select>
                     <div class="leadIdError text-[#f83434]"></div>
                 </div>
-               
                 <div class="w-[100%] md:w-[30%]">
                     <label class="flex text-[15px] text-[#000] mb-[5px]">Services<strong class="text-[#f83434]">*</strong></label>
                     <select name="service_id" id="service_id" class="allform-filter-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] " required>
@@ -50,7 +49,6 @@ use App\Models\ServiceDetail;
                                                 ->pluck('service_id');
                             $services = Service::whereIn('id', $serviceIds)->get();
                         @endphp
-
                         @foreach($services as $servicesName)
                             <option value="{{ $servicesName->id }}"
                                 @selected(isset($requestParams['service_id']) && $requestParams['service_id'] == $servicesName->id)>
@@ -62,7 +60,7 @@ use App\Models\ServiceDetail;
                 </div>
                 <div class="w-[100%] md:w-[30%]">
                     <label class="flex text-[15px] text-[#000] mb-[5px]">Sub Services<strong class="text-[#f83434]">*</strong></label>
-                    <select name="sub_services" id="sub_services"  class="allform-filter-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
+                    <select name="sub_services" id="sub_services"  class="allform-filter-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] " required>
                     <option value="">Select Sub Services </option>
                         @if (isset($requestParams['service_id']) && $requestParams['service_id'])
                         @php
@@ -80,19 +78,16 @@ use App\Models\ServiceDetail;
                         @endif
                     </select>
                 </div>
-
-                
-
                 <div class="w-[100%] md:w-[30%]">
                     <label class="flex text-[15px] text-[#000] mb-[5px]">Applied For <strong class="text-[#f83434]">*</strong></label>
-                    <select name="applied_for" id="applied_for"  class="allform-filter-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] ">
+                    <select name="applied_for" id="applied_for"  class="allform-filter-select2 !outline-none h-[40px] border border-[#0000001A] w-full md:w-[95px] rounded-[10px] p-[10px] text-[14px] font-[400] leading-[16px] text-[#13103A] " required>
                         <option value="">Select Lead ID</option>
-                        @if (isset($requestParams['applied_for']) && $requestParams['applied_for'])
+                        @if (isset($requestParams['sub_services']))
                         @php
                             $lead_ids = Lead::where('client_id', $requestParams['lead_id'])
                             ->pluck('id');
                             $service_detail_id = LeadTask::whereIn('lead_id', $lead_ids  )->pluck('service_detail_id')->unique();
-                              $appliedFor = ServiceDetail::wherein('id', $service_detail_id)->get();
+                              $appliedFor = ServiceDetail::wherein('id', $service_detail_id)->where('service_id' , $requestParams['service_id'])->where('sub_service_id' ,$requestParams['sub_services'] )->get();
                         @endphp
                         @foreach($appliedFor as $appliedForDetials)
                         <option value="{{ $appliedForDetials->id }}"

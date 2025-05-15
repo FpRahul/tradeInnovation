@@ -3,11 +3,9 @@
 <?php 
 use App\Models\LeadTask;
 use App\Models\Service;
+use App\Models\Lead;
 use App\Models\SubService;
 use App\Models\ServiceDetail;
-
-
-
 ?>
 <div>
 
@@ -32,24 +30,19 @@ use App\Models\ServiceDetail;
 
                             <!-- Lead ID Select (Increased width to 5/12) -->
 
-
                                 <div class="w-full md:w-[32%]">
                                     <label for="leadId" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Client Name</label>
                                     <select name="leadId" id="leadId" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
-                                        <option value="">Select Client Name</option>
+                                        <option value="" selected>Select Client Name</option>
                                         @if(!$DistinctleadId->isEmpty())
                                             @foreach ($DistinctleadId as $leadID)
-                                                <option value="{{ $leadID->lead_id }}" @if($leadID->lead_id == $leadParam) selected @endif>
-                                                    {{ $leadID->lead->client_name }} - {{ $leadID->lead->mobile_number }}
+                                               <option value="{{ $leadID->client_id }}" @selected(isset($leadParam) && $leadParam == $leadID->client_id)>  
+                                                    {{ $leadID->client_name }} - {{ $leadID->mobile_number }}
                                                 </option>
                                             @endforeach
                                         @endif
                                     </select>
                                 </div>
-                               
-
-
-
                                 {{-- service --}}
                                 <div class="w-full md:w-[32%]  service_id ">
                                     <label for="service_id" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Services</label>
@@ -57,10 +50,14 @@ use App\Models\ServiceDetail;
                                         <option value="">Select Service</option>
                                         @if(isset($leadParam))
                                         @php
-                                            $leadServices = LeadTask::whereLeadId($leadParam)->pluck('service_id')->unique();
-                                            $filterdServices = Service::whereIn('id', $leadServices)->get();
+                                            $lead_ids = Lead::where('client_id', $leadParam)
+                                                            ->pluck('id');
+                                            $serviceIds = LeadTask::whereIn('lead_id', $lead_ids)
+                                                                ->groupBy('service_id')
+                                                                ->pluck('service_id');
+                                            $services = Service::whereIn('id', $serviceIds)->get();
                                         @endphp
-                                        @foreach($filterdServices as $service)
+                                        @foreach($services as $service)
                                         <option value="{{ $service->id }}" {{ $serviceParam == $service->id ? 'selected' : '' }}>{{ $service->serviceName }}</option>
 
                                         @endforeach
@@ -76,8 +73,10 @@ use App\Models\ServiceDetail;
                                          <option value="">Select Sub Service</option>
                                          @if(isset($serviceParam))
                                          @php
-                                        $leadSubServices = LeadTask::whereLeadId($leadParam)->pluck('subservice_id')->unique();
-                                        $filterdSubservices = SubService::where('serviceid', $serviceParam)->whereIn('id', $leadSubServices)->get();
+                                            $lead_ids = Lead::where('client_id', $leadParam)
+                                            ->pluck('id');
+                                            $leadSubServices = LeadTask::whereIn('lead_id', $lead_ids  )->pluck('subservice_id')->unique();
+                                            $filterdSubservices = SubService::where('serviceid', $serviceParam)->whereIn('id', $leadSubServices)->get();
                                         @endphp
                                             @foreach ($filterdSubservices as $subservice)
                                             <option value="{{ $subservice->id }}" {{ $subServiceParam == $subservice->id ? 'selected' : '' }}>{{ $subservice->subServiceName }}</option>
@@ -91,13 +90,14 @@ use App\Models\ServiceDetail;
                                         <label for="applied_for" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Applied For</label>
                                         <select name="applied_for" id="applied_for" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
                                             <option value="">Applied For</option>
-                                            @if(isset($serviceDetailsParam))
+                                            @if(isset($subServiceParam))
                                             @php
-                                        $serviceDetailsId = LeadTask::where('service_detail_id' , $serviceDetailsParam)->pluck('service_detail_id')->unique();
-                                        $filterAppliedFor = ServiceDetail::whereIn('id', $serviceDetailsId)->get();
-                                        
-                                        @endphp
-                                        @foreach ($filterAppliedFor as $applied_for)
+                                                $lead_ids = Lead::where('client_id', $leadParam)
+                                                ->pluck('id');
+                                                $service_detail_id = LeadTask::whereIn('lead_id', $lead_ids  )->pluck('service_detail_id')->unique();
+                                                $appliedFor = ServiceDetail::wherein('id', $service_detail_id)->where('service_id' , $serviceParam)->where('sub_service_id' ,$subServiceParam )->get();
+                                            @endphp
+                                        @foreach ($appliedFor as $applied_for)
                                         <option value="{{ $applied_for->id }}" {{ $serviceDetailsParam == $applied_for->id ? 'selected' : '' }}>{{ $applied_for->applied_for }}</option>
                                         @endforeach
                                         @endif
@@ -106,7 +106,7 @@ use App\Models\ServiceDetail;
                                 <div class="w-full md:w-[32%]">
                                    <label for="status" class="block text-[14px] font-[400] leading-[16px] text-[#000000] mb-[5px]">Status</label>
                                    <select name="status" id="status" class="allform-select2 showSourceListName w-full h-[50px] border-[1px] border-[#0000001A] text-[14px] font-[400] leading-[16px] text-[#000000] tracking-[0.01em] px-[20px] py-[12px] rounded-[12px] !outline-none">
-                                       <option value="">Select Status</option>
+                                       <option value="10" selected>Select Status</option>
                                        <option value="0" @if($statusParam==0) selected @endif>Pending</option>
                                        <option value="1" @if($statusParam==1) selected @endif>Completed</option>
                                        <option value="2" @if($statusParam==2) selected @endif>On Hold</option>
@@ -133,10 +133,7 @@ use App\Models\ServiceDetail;
                                         @endif
                                     </select>
                                 </div>
-
                                 @endif
-
-                            
                         <div class="w-full flex justify-end gap-[15px] mt-[10px]">
                             <button id="filterButton" class="text-[14px] font-[500] leading-[15px] text-[#ffffff] tracking-[0.01em] bg-[#13103A] rounded-[12px] py-[16px] px-[35px]">
                                 Filter
@@ -334,19 +331,19 @@ use App\Models\ServiceDetail;
                                             @endif
                                             @endif
 
-                                            {{-- @php
+                                            @php
                                                 $currentParams = request()->all(); // get all existing query params
-                                                $updatedParams = array_merge($currentParams, ['status' => 3]); // override status only
-                                            @endphp --}}
+                                                $updatedParams = array_merge($currentParams, ['status' => 5]); // override status only
+                                            @endphp 
 
-                                            {{-- @if(in_array('task.index',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
+                                             @if(in_array('task.index',$permissionDetails['accessableRoutes']) || auth()->user()->role==1)
                                                 @if($task->leadTaskDetails->status != 1 && $task->leadTaskDetails->status != 4)
                                                     <a href="{{ route('task.index', $updatedParams) }}" 
                                                     class="hold-on-pop block border-b-[1px] border-[#0000001A] hover:bg-[#f7f7f7] px-3 py-1 text-[12px] text-gray-700">
                                                     Follow Up Status
                                                     </a>
                                                 @endif
-                                            @endif --}}
+                                            @endif 
 
 
                                             @endif
@@ -604,12 +601,12 @@ $('.daterangepicker-verified').val('');
             });
 
         $("#leadId").on('change' , function (){
-            var leadId = $(this).val();
+            var client_id = $(this).val(); // here this lead id is not exact lead id this is client id nomenclature is wrong here
             // $(".service_id").removeClass('hidden')
             $.ajax({
                 url: "{{ route('task.getServiceAcctoLead')  }}",
                 method: "POST",
-                data: {leadId: leadId},
+                data: {client_id: client_id},
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')  
                 },
@@ -630,15 +627,14 @@ $('.daterangepicker-verified').val('');
 
         $("#service_id").on('change' , function (){
             var service_id = $(this).val();
-            var lead_id = $('#leadId').val(); 
-            // $(".subService_id").removeClass('hidden')
+            var client_id = $('#leadId').val();  
 
             
             $.ajax({
                 url: "{{ route('task.getSubServiceAccToService')  }}",
                 method: "POST",
                 data: {service_id: service_id,
-                    lead_id:lead_id
+                    client_id:client_id
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 
@@ -659,7 +655,7 @@ $('.daterangepicker-verified').val('');
         })
         $("#subService_id").on('change' , function (){
             var service_id = $("#service_id").val();
-            var lead_id = $('#leadId').val(); 
+            var client_id = $('#leadId').val(); 
             var subService_id = $(this).val();
             // $(".applied_for_id").removeClass('hidden')
 
@@ -669,7 +665,7 @@ $('.daterangepicker-verified').val('');
                 url: "{{ route('task.getAppliedFor')  }}",
                 method: "POST",
                 data: {service_id: service_id,
-                    lead_id:lead_id,
+                    client_id:client_id,
                     subService_id:subService_id
                 },
                 headers: {

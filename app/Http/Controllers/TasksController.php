@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Jobs\SendTaskCommanMailJob;
 use App\Jobs\CommanDraftSend;
@@ -32,55 +32,8 @@ class TasksController extends Controller
 {
     private $viewPath = "tasks.";
 
-    public function getServiceAcctoLead(Request  $request){
-        $leadID = $request->leadId;
-        $data = LeadTask::select('service_id')->where('lead_id', $leadID)
-        ->groupBy('service_id')
-        ->get(); 
-        $service_id = $data->pluck('service_id');
-        
-        $serviceName = Service::whereIn('id', $service_id)->get();
-        
-        if (!$data->isEmpty()) {
-            return response()->json(['data' => $data,'serviceName' => $serviceName , 'status' => 200], 200);
-        } else {
-            return response()->json(['data' => [], 'status' => 200], 200);
-        }
-        
-    }
-    public function getSubServiceAccToService(Request $request){
-        $lead_id = $request->lead_id;
-        $service_id = $request->service_id;
-        $data = LeadTask::select('subservice_id')->where('lead_id', $lead_id)->where('service_id' , $service_id)
-        ->groupBy('subservice_id')
-        ->get(); 
-      $subservice_id =  $data->pluck('subservice_id');
-      $subservice_name = SubService::whereIn('id', $subservice_id)->get();
-      if (!$data->isEmpty()) {
-        return response()->json(['data' => $data,'serviceName' => $subservice_name , 'status' => 200], 200);
-    } else {
-        return response()->json(['data' => [], 'status' => 200], 200);
-    }
-    }
 
-    public function getAppliedFor(Request $request){
-        $lead_id = $request->lead_id;
-        $service_id = $request->service_id;
-        $sub_service_id = $request->subService_id;    
-        $data = LeadTask::select('service_detail_id')->where('lead_id', $lead_id)->where('service_id' , $service_id)->where('subservice_id' , $sub_service_id)
-        ->groupBy('service_detail_id')
-        ->get(); 
-
-        $service_details_id =  $data->pluck('service_detail_id');
-        
-        $serviceDetaislId = ServiceDetail::whereIn('id', $service_details_id)->get();
-        if (!$data->isEmpty()) {
-            return response()->json(['data' => $data,'serviceName' => $serviceDetaislId , 'status' => 200], 200);
-        } else {
-            return response()->json(['data' => [], 'status' => 200], 200);
-        }
-    }
-    public function index(Request $request, $request_type = null)
+     public function index(Request $request, $request_type = null)
     {
 
         $leadParam = $request->leadId;
@@ -92,10 +45,11 @@ class TasksController extends Controller
 
 
 
-        $DistinctleadId = LeadTask::with('lead')
-        ->select('lead_id')
-        ->groupBy('lead_id')
-        ->get();
+       $DistinctleadId = DB::table('leads')
+                        ->select('client_id', 'mobile_number', DB::raw('MIN(client_name) as client_name'))
+                        ->groupBy('client_id', 'mobile_number')
+                        ->get();
+        
         $users =  User::get();
         
 
@@ -116,100 +70,146 @@ class TasksController extends Controller
         }
         $searchKey = $request->input('key') ?? '';
         $requestType = $request->input('requestType') ?? '';
-
-
-
+        
+        
+        
         if ($request->key) {
             $taskDetails->where(function ($query) use ($searchKey) {
                 $query->whereHas('lead', function ($q) use ($searchKey) {
                     $q->where('client_name', 'LIKE', '%' . $searchKey . '%');
                 })
-                    ->orWhereHas('services', function ($q) use ($searchKey) {
-                        $q->where('serviceName', 'LIKE', '%' . $searchKey . '%');
-                    })
-                    ->orWhereHas('subService', function ($q) use ($searchKey) {
-                        $q->where('subServiceName', 'LIKE', '%' . $searchKey . '%');
-                    });
+                ->orWhereHas('services', function ($q) use ($searchKey) {
+                    $q->where('serviceName', 'LIKE', '%' . $searchKey . '%');
+                })
+                ->orWhereHas('subService', function ($q) use ($searchKey) {
+                    $q->where('subServiceName', 'LIKE', '%' . $searchKey . '%');
+                });
             });
         }
+        
         // service_id subService_id    applied_for status
         if (
-            isset($request->leadId) && isset($request->status) && isset($request->user) && isset($request->service_id) && isset($request->subService_id) &&  isset($request->applied_for)
-        ){
-            
-            $taskDetails = $taskDetails->whereHas('leadTaskDetails', function ($q) use ($request) {
-                $q->where('status', $request->status);
+            isset($request->leadId) &&
+            isset($request->status) &&
+            isset($request->user) &&
+            isset($request->service_id) &&
+            isset($request->subService_id) &&
+            isset($request->applied_for)
+            ) {   
+             
+                $taskDetails = $taskDetails->whereHas('leadTaskDetails', function ($q) use ($request) {
+                    $q->where('status', $request->status);
+                })
+                ->whereHas('lead', function ($q) use ($request) {
+                    $q->where('client_id', $request->leadId);
+                })
+                
+                    ->where('user_id', $request->user)
+                    ->where('service_id', $request->service_id)
+                    ->where('subservice_id', $request->subService_id)
+                    ->where('service_detail_id', $request->applied_for);
+                }
+                
+                else if ((
+                            isset($request->leadId) && 
+                            isset($request->service_id) && 
+                            isset($request->subService_id) && 
+                            isset($request->applied_for) && 
+                            isset($request->status)
+                        ) || $request->leadId === 0
+                    ){
+           
+
+                    $taskDetails = $taskDetails->whereHas('leadTaskDetails', function ($q) use ($request) {
+                        $q->where('status', $request->status);
+                    })
+                    ->whereHas('lead', function ($q) use ($request) {
+                        $q->where('client_id', $request->leadId);
+                    })->where('service_id' , $request->service_id )
+                    ->where('subservice_id' , $request->subService_id )->where('service_detail_id' , $request->applied_for );
+                }
+        else if( ($request->leadId !== null && $request->leadId !== '') &&
+                ($request->service_id && $request->subService_id && $request->applied_for)
+                    ){
+               
+              
+            $taskDetails = $taskDetails->whereHas('lead', function ($q) use ($request) {
+                $q->where('client_id', $request->leadId);
             })
-                ->where('lead_id' , $request->leadId)
-                ->where('user_id', $request->user)
-                ->where('service_id' , $request->service_id )
-                ->where('subservice_id' , $request->subService_id )
-                ->where('service_detail_id' , $request->applied_for );
-        }
-        else if(isset($request->leadId) && isset($request->service_id) && isset($request->subService_id) && isset($request->applied_for) && isset($request->status) 
-        ){
-            $taskDetails = $taskDetails->whereHas('leadTaskDetails', function ($q) use ($request) {
-                $q->where('status', $request->status);
-            })
-            ->where('lead_id' , $request->leadId)->where('service_id' , $request->service_id )
+            ->where('service_id' , $request->service_id )
             ->where('subservice_id' , $request->subService_id )->where('service_detail_id' , $request->applied_for );
         }
-        else if($request->leadId &&  $request->service_id && $request->subService_id && $request->applied_for){
-            $taskDetails = $taskDetails->where('lead_id' , $request->leadId)->where('service_id' , $request->service_id )
-            ->where('subservice_id' , $request->subService_id )->where('service_detail_id' , $request->applied_for );
-        }
-        else if($request->leadId &&  $request->service_id && $request->subservice_id && $request->status != null){
+        else if(($request->leadId &&  $request->service_id && $request->subservice_id && $request->status != null) ||  $request->leadId === 0){
+
             $taskDetails = $taskDetails->whereHas('leadTaskDetails', function ($q) use ($request) {
+                
                 $q->where('status', $request->status);
             })
-            ->where('lead_id' , $request->leadId)
+            ->whereHas('lead', function ($q) use ($request) {
+                $q->where('client_id', $request->leadId);
+            })
             ->where('service_id', $request->service_id)->where('subservice_id' , $request->subservice_id);
             
         }
-        else if($request->leadId &&  $request->service_id && $request->status != null){
+        else if(($request->leadId &&  $request->service_id && $request->status != null) || $request->leadId === 0){
+           
             $taskDetails = $taskDetails->whereHas('leadTaskDetails', function ($q) use ($request) {
                 $q->where('status', $request->status);
             })
-            ->where('lead_id' , $request->leadId)
-            ->where('service_id', $request->service_id);
-            
-        }
-        else if($request->leadId &&  $request->service_id && $request->subService_id ){
-            $taskDetails = $taskDetails->where('lead_id' , $request->leadId)->where('service_id' , $request->service_id )->where('subservice_id' , $request->subService_id );
-        }
-        else if($request->leadId &&  $request->service_id){
-            $taskDetails = $taskDetails->where('lead_id' , $request->leadId)->where('service_id' , $request->service_id );
-        } 
-        else if ($request->leadId  && $request->status != null && $request->user) {
-            
-            $taskDetails = $taskDetails->whereHas('leadTaskDetails', function ($q) use ($request) {
-                $q->where('status', $request->status);
-            })
-            ->where('lead_id' , $request->leadId)
-            ->where('user_id', $request->user);
+            ->whereHas('lead', function ($q) use ($request) {
+                    $q->where('client_id', $request->leadId);
+                })
+                ->where('service_id', $request->service_id);
+                
+            }
+            else if(($request->leadId &&  $request->service_id && $request->subService_id) || $request->leadId === 0 ){
+                $taskDetails = $taskDetails  ->whereHas('lead', function ($q) use ($request) {
+                    $q->where('client_id', $request->leadId);
+                })->where('service_id' , $request->service_id )->where('subservice_id' , $request->subService_id );
+            }
+            else if(($request->leadId &&  $request->service_id) || $request->leadId === 0){
+
+                $taskDetails = $taskDetails  ->whereHas('lead', function ($q) use ($request) {
+                    $q->where('client_id', $request->leadId);
+                })->where('service_id' , $request->service_id );
             } 
-        else if ($request->leadId && $request->status != null) {
-            // dd('shfudjk');
-            $taskDetails = $taskDetails->whereHas('leadTaskDetails', function ($q) use ($request) {
-                $q->where('status', $request->status);
-            })
-                ->where('lead_id' , $request->leadId);
+            else if (($request->leadId  && $request->status != null && $request->user) || $request->leadId === 0) {
+                
+                $taskDetails = $taskDetails->whereHas('leadTaskDetails', function ($q) use ($request) {
+                    $q->where('status', $request->status);
+                })
+                ->whereHas('lead', function ($q) use ($request) {
+                    $q->where('client_id', $request->leadId);
+                })
+                ->where('user_id', $request->user);
+            } 
+            else if (($request->leadId && $request->status != null) || $request->leadId === 0) {
+                $taskDetails = $taskDetails->whereHas('leadTaskDetails', function ($q) use ($request) {
+                    $q->where('status', $request->status);
+                })
+                ->whereHas('lead', function ($q) use ($request) {
+                    $q->where('client_id', $request->leadId);
+                });
+                
+            } 
+            else if (($request->leadId && $request->user) || $request->leadId === 0) {
+                
+                $taskDetails = $taskDetails  ->whereHas('lead', function ($q) use ($request) {
+                    $q->where('client_id', $request->leadId);
+                })
+                ->where('user_id', $request->user);
+            } 
+            else if ($request->status && $request->user) {
+                $taskDetails = $taskDetails->whereHas('leadTaskDetails', function ($q) use ($request) {
+                    $q->where('status', $request->status);
+                })
+                ->where('user_id', $request->user);
+            } 
+            else if ($request->leadId || $request->leadId === 0) {
                
-        } 
-        else if ($request->leadId && $request->user) {
-            
-            $taskDetails = $taskDetails->where('lead_id', $request->leadId)
-                ->where('user_id', $request->user);
-        } 
-        else if ($request->status && $request->user) {
-            // dd('dhjf');
-            $taskDetails = $taskDetails->whereHas('leadTaskDetails', function ($q) use ($request) {
-                $q->where('status', $request->status);
-            })
-                ->where('user_id', $request->user);
-        } 
-        else if ($request->leadId) {
-            $taskDetails = $taskDetails->where('lead_id', $request->leadId);
+            $taskDetails = $taskDetails  ->whereHas('lead', function ($q) use ($request) {
+                $q->where('client_id', $request->leadId);
+            });
             
         } 
         else if ($request->status) {
@@ -226,16 +226,10 @@ class TasksController extends Controller
                 $query->where('status', '!=', 1)->where('status', '!=', 4);
             });
         }
-
-
+        
         $taskDetailsDrp = $taskDetails->get();
-
-        
-
-        
-
         $taskDetails = $taskDetails->paginate(env("PAGINATION_COUNT"));
-
+        
         if (empty($request_type) && $request_type != 'ajax') {
             $header_title_name = 'User';
             return view($this->viewPath . 'index', [
@@ -261,6 +255,54 @@ class TasksController extends Controller
             return response()->json($dataArray);
         }
     }
+    public function getServiceAcctoLead(Request  $request){
+        $client_id = $request->client_id; 
+        if($client_id == 0 || $client_id != 0){
+            $lead_ids = Lead::where('client_id', $client_id)->pluck('id');
+            
+            $serviceIds = LeadTask::whereIn('lead_id', $lead_ids)
+                        ->groupBy('service_id')
+                        ->pluck('service_id');
+                        $serviceName = Service::whereIn('id', $serviceIds)->get();
+                        return response()->json(['serviceName' => $serviceName , 'status' => 200], 200);
+        }else {
+            return response()->json(['serviceName' => [], 'status' => 400], 400);
+        }
+
+    }
+    public function getSubServiceAccToService(Request $request){
+        $client_id = $request->client_id; 
+        $service_id = $request->service_id;
+        
+        $lead_ids = Lead::where('client_id', $client_id)->pluck('id');
+        $subServiceId = LeadTask::whereIn('lead_id', $lead_ids)->where('service_id' , $service_id)
+                                    ->groupBy('subservice_id')
+                                     ->pluck('subservice_id');
+        $subservice_name = SubService::whereIn('id' ,$subServiceId)->get();
+        if (!$subservice_name->isEmpty()) {
+            return response()->json(['serviceName' => $subservice_name , 'status' => 200], 200);
+        } else {
+            return response()->json(['serviceName' => [], 'status' => 400], 400);
+        }
+    }
+
+    public function getAppliedFor(Request $request){
+        $client_id = $request->client_id;
+        $service_id = $request->service_id;
+        $sub_service_id = $request->subService_id;    
+        $lead_ids = Lead::where('client_id', $client_id)
+                                            ->pluck('id');
+        $service_detail_id = LeadTask::select('service_detail_id')->whereIn('lead_id', $lead_ids)->where('service_id' , $service_id)->where('subservice_id' , $sub_service_id)
+                            ->groupBy('service_detail_id')
+                            ->get();
+        $serviceDetaislId = ServiceDetail::whereIn('id' , $service_detail_id)->get();
+        if (!$serviceDetaislId->isEmpty()) {
+            return response()->json(['serviceName' => $serviceDetaislId , 'status' => 200], 200);
+        } else {
+            return response()->json(['serviceName' => [], 'status' => 200], 200);
+        }
+    }
+   
     public function logs()
     {
         $header_title_name = "Lead Logs";

@@ -144,6 +144,7 @@ class LeadsController extends Controller
         $projectManagerList = User::where('role', 4)->where('status', 1)->get();
         $firmList = Firm::where('status', 1)->get();
         if ($request->isMethod('POST')) {  
+            // dd($request->all());
             $scopeOfBusinessArray = $request->scopeofbusiness;
             if (in_array('other', $request->scopeofbusiness)) {
                 $scopeOfBusinessArray = array_diff($scopeOfBusinessArray, ['other']);
@@ -238,11 +239,12 @@ class LeadsController extends Controller
                         $service_detail_id = 0;
                         if(isset($serviceVal['classrule'])){
                             $serviceDetailData->lead_id = $leadData->id;
-                            if (is_array($serviceVal['classrule'])) {
-                                $serviceDetailData->class_rule = implode(',', $serviceVal['classrule']);
-                            } else {
-                                $serviceDetailData->class_rule = $serviceVal['classrule'];
-                            }
+                             $serviceDetailData->class_rule = $serviceVal['classrule'];
+                            // if (is_array($serviceVal['classrule'])) {
+                            //     $serviceDetailData->class_rule = implode(',', $serviceVal['classrule']);
+                            // } else {
+                            //     $serviceDetailData->class_rule = $serviceVal['classrule'];
+                            // }
                                 $serviceDetailData->applied_for = $serviceVal['appliedfor'];
                            
                             if (isset($serviceVal['serviceLogo']) && $serviceVal['serviceLogo'] instanceof \Illuminate\Http\UploadedFile) {
@@ -253,11 +255,11 @@ class LeadsController extends Controller
                                 $serviceDetailData->service_logo = $imageName;
                             }
                             $serviceDetailData->trademark_type = $serviceVal['trademark_type'];
-                            $serviceDetailData->trademark_service_label = $serviceVal['service_label'];
+                            // $serviceDetailData->trademark_service_label = $serviceVal['service_label'];
                             $serviceDetailData->trademark_goods = $serviceVal['goods_and_services'];
                             $serviceDetailData->project_manager_id = $serviceVal['projectmanager'];
-                            $serviceDetailData->filing_mode = $serviceVal['filingmode'];
-                            $serviceDetailData->filing_date = date('Y-m-d',strtotime($serviceVal['filingdate']));
+                            // $serviceDetailData->filing_mode = $serviceVal['filingmode'];
+                            // $serviceDetailData->filing_date = date('Y-m-d',strtotime($serviceVal['filingdate']));
                             $serviceDetailData->applicant_name = $request->clientname;
                             $serviceDetailData->application_number = $serviceVal['applicationNumber'];
                             $serviceDetailData->service_id = $serviceVal['serviceid'];
@@ -471,7 +473,8 @@ class LeadsController extends Controller
         
         $leadLogs = LeadLog::with('leadTask', 'leadTask.leadTaskDetails', 'leadTask.serviceSatge')->get();
         // dd($request);
-         if( $request->lead_id > 0 && $request->service_id > 0 && $request->sub_services > 0 && $request->applied_for > 0){
+         if( $request->lead_id  && $request->service_id && $request->sub_services  && $request->applied_for || $request->lead_id == 0 ){
+            
             $lead_ids = Lead::where('client_id', $request->lead_id)->pluck('id');
             $leadLogs = LeadLog::with([
                     'leadAttch', 
@@ -497,14 +500,13 @@ class LeadsController extends Controller
     public function getServiceByLeadId(Request $request){
        $lead_id = $request->lead_id;
        $services = collect(); 
-       if ($request->lead_id) {
-            
-            $lead_ids = Lead::where('client_id', $request->lead_id)->pluck('id');
+       if ($lead_id == 0 || $request->lead_id !=0 ) {
+           $lead_ids = Lead::where('client_id', $request->lead_id)->pluck('id');
             $serviceIds = LeadTask::whereIn('lead_id', $lead_ids)
                 ->groupBy('service_id')
                 ->pluck('service_id');
-                
                 $services = Service::whereIn('id', $serviceIds)->get();
+                
                 
         }
         if($services){
@@ -517,13 +519,13 @@ class LeadsController extends Controller
     }
 
     public function getSubServiceByService(Request $request){
-        $client_id = $request->lead_id; //Lead::where('client_id' , $request->client_id)->pluck('id')->get();
+        $client_id = $request->lead_id;  //Lead::where('client_id' , $request->client_id)->pluck('id')->get();
         $service_id = $request->service_id;
         $lead_ids = Lead::where('client_id', $client_id)
                                             ->pluck('id');
         $subServiceId = LeadTask::whereIn('lead_id', $lead_ids)->where('service_id' , $service_id)
-                            ->groupBy('subservice_id')
-                            ->pluck('subservice_id');
+                                    ->groupBy('subservice_id')
+                                    ->pluck('subservice_id');
         $subServiceName = SubService::whereIn('id' ,$subServiceId)->get();
         
         if($subServiceName){
